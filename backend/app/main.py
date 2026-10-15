@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import get_settings
 from app.core.logging import configure_logging
-from app.routers import auth, health, users
+from app.routers import admin_opportunities, auth, health, opportunities, users
 
 configure_logging()
 logger = logging.getLogger(__name__)
@@ -45,3 +45,5 @@ app.add_middleware(
 app.include_router(health.router)
 app.include_router(auth.router, prefix=settings.API_V1_PREFIX)
 app.include_router(users.router, prefix=settings.API_V1_PREFIX)
+app.include_router(opportunities.router, prefix=settings.API_V1_PREFIX)
+app.include_router(admin_opportunities.router, prefix=settings.API_V1_PREFIX)
