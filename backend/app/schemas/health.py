@@ -1,0 +1,10 @@
+from pydantic import BaseModel
+
+
+class RootResponse(BaseModel):
+    name: str
+    env: str
+
+
+class HealthResponse(BaseModel):
+    status: str
