@@ -44,8 +44,8 @@ def test_seed_is_idempotent(db_session):
 
 def test_seeded_student_can_log_in_through_the_api(client, db_session):
     seed(db_session, student_password="student-pass-123")
-    resp = client.post("/auth/login", data={"username": STUDENT_EMAIL, "password": "student-pass-123"})
+    resp = client.post("/api/v1/auth/login", data={"username": STUDENT_EMAIL, "password": "student-pass-123"})
     assert resp.status_code == 200
     token = resp.json()["access_token"]
-    me = client.get("/users/me", headers={"Authorization": f"Bearer {token}"}).json()
+    me = client.get("/api/v1/users/me", headers={"Authorization": f"Bearer {token}"}).json()
     assert me["email"] == STUDENT_EMAIL and me["role"] == "user"

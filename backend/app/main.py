@@ -43,5 +43,5 @@ app.add_middleware(
 # Route modules get registered here. Each router owns one domain and stays
 # thin — parsing input, calling a service, returning a schema.
 app.include_router(health.router)
-app.include_router(auth.router)
-app.include_router(users.router)
+app.include_router(auth.router, prefix=settings.API_V1_PREFIX)
+app.include_router(users.router, prefix=settings.API_V1_PREFIX)
