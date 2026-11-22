@@ -69,6 +69,37 @@ body {
   background-size: 200% 100%;
 }
 
+/* Space Grid Pattern */
+.bg-space-grid {
+  background-image: 
+    linear-gradient(to right, rgba(139, 92, 246, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(139, 92, 246, 0.08) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+@keyframes star-twinkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+.animate-star-twinkle {
+  animation: star-twinkle 4s ease-in-out infinite;
+}
+
+.animate-star-twinkle-delayed {
+  animation: star-twinkle 5s ease-in-out 2s infinite;
+}
+
+.animate-star-twinkle-slow {
+  animation: star-twinkle 6s ease-in-out 3.5s infinite;
+}
+
 /* Respect user's motion preferences */
 @media (prefers-reduced-motion: reduce) {
   *,

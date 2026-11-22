@@ -1,26 +1,19 @@
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { Github, Twitter, Linkedin, Heart } from "lucide-react";
+import { Sparkles, Github, Twitter, Linkedin } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-purple-900/20 bg-[#070716] text-slate-400 text-sm py-14">
+    <footer className="border-t border-violet-900/20 bg-[#050510] text-slate-400 text-sm py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-purple-950/40">
-          <div className="md:col-span-2 space-y-4">
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="relative w-8 h-8 flex items-center justify-center">
-                <Image
-                  src="/brand/launchbyte-icon.png"
-                  alt="LaunchByte Logo"
-                  width={32}
-                  height={32}
-                  className="w-full h-full object-contain filter drop-shadow-[0_0_10px_rgba(101,31,255,0.6)]"
-                />
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8 border-b border-violet-900/20">
+          <div className="md:col-span-2 space-y-3">
+            <Link href="/" className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#4F46E5] to-[#8B5CF6] flex items-center justify-center text-white">
+                <Sparkles className="w-4 h-4" />
               </div>
-              <span className="font-bold text-xl text-white font-display">
-                Launch<span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-400">Byte</span>
+              <span className="font-bold text-lg text-white">
+                Launch<span className="text-[#A78BFA]">Byte</span>
               </span>
             </Link>
             <p className="text-slate-400 max-w-sm text-sm leading-relaxed">
@@ -31,49 +24,35 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold text-white mb-3 text-xs uppercase tracking-wider text-purple-400">
-              Platform
-            </h4>
-            <ul className="space-y-2.5 text-sm">
+            <h4 className="font-semibold text-white mb-3">Explore</h4>
+            <ul className="space-y-2">
               <li>
-                <Link href="/hackathons" className="hover:text-purple-300 transition">
-                  Hackathons
-                </Link>
-              </li>
-              <li>
-                <Link href="/opportunities" className="hover:text-purple-300 transition">
+                <Link href="/opportunities" className="hover:text-white transition">
                   All Opportunities
                 </Link>
               </li>
               <li>
-                <Link href="/teams" className="hover:text-purple-300 transition">
-                  Teammate Match
+                <Link href="/hackathons" className="hover:text-white transition">
+                  Hackathons
                 </Link>
               </li>
               <li>
-                <Link href="/projects" className="hover:text-purple-300 transition">
-                  Project Showcase
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="hover:text-purple-300 transition">
-                  About LaunchByte
+                <Link href="/about" className="hover:text-white transition">
+                  About & Team
                 </Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-semibold text-white mb-3 text-xs uppercase tracking-wider text-purple-400">
-              Community & Social
-            </h4>
+            <h4 className="font-semibold text-white mb-3">Community</h4>
             <div className="flex gap-3 text-slate-400">
               <a
                 href="https://github.com"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="GitHub"
-                className="w-9 h-9 rounded-xl bg-slate-900/80 border border-purple-900/30 flex items-center justify-center hover:text-white hover:border-purple-500/50 hover:bg-slate-800 transition shadow-sm"
+                className="w-9 h-9 rounded-lg bg-slate-900 flex items-center justify-center hover:text-white hover:bg-slate-800 transition"
               >
                 <Github className="w-4 h-4" />
               </a>
@@ -82,7 +61,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Twitter / X"
-                className="w-9 h-9 rounded-xl bg-slate-900/80 border border-purple-900/30 flex items-center justify-center hover:text-white hover:border-purple-500/50 hover:bg-slate-800 transition shadow-sm"
+                className="w-9 h-9 rounded-lg bg-slate-900 flex items-center justify-center hover:text-white hover:bg-slate-800 transition"
               >
                 <Twitter className="w-4 h-4" />
               </a>
@@ -91,7 +70,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="LinkedIn"
-                className="w-9 h-9 rounded-xl bg-slate-900/80 border border-purple-900/30 flex items-center justify-center hover:text-white hover:border-purple-500/50 hover:bg-slate-800 transition shadow-sm"
+                className="w-9 h-9 rounded-lg bg-slate-900 flex items-center justify-center hover:text-white hover:bg-slate-800 transition"
               >
                 <Linkedin className="w-4 h-4" />
               </a>
@@ -101,11 +80,11 @@ export default function Footer() {
 
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
           <p>© {new Date().getFullYear()} LaunchByte Technologies Inc. All rights reserved.</p>
-          <div className="flex gap-6">
-            <Link href="/about" className="hover:text-slate-300 transition">
+          <div className="flex gap-4">
+            <Link href="/about" className="hover:text-slate-400">
               Privacy Policy
             </Link>
-            <Link href="/about" className="hover:text-slate-300 transition">
+            <Link href="/about" className="hover:text-slate-400">
               Terms of Service
             </Link>
           </div>
