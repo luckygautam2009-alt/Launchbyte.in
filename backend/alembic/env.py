@@ -18,6 +18,13 @@ config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
 target_metadata = Base.metadata
 
 
+def include_object(object, name, type_, reflected, compare_to):
+    # Expression indexes differ in formatting between models and pg_catalog pretty printing
+    if type_ == "index" and name == "uq_connections_canonical_pair":
+        return False
+    return True
+
+
 def run_migrations_offline() -> None:
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
@@ -26,6 +33,7 @@ def run_migrations_offline() -> None:
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
         compare_type=True,
+        include_object=include_object,
     )
     with context.begin_transaction():
         context.run_migrations()
@@ -36,6 +44,7 @@ def _run_with_connection(connection) -> None:
         connection=connection,
         target_metadata=target_metadata,
         compare_type=True,
+        include_object=include_object,
         # SQLite can't ALTER constraints in place; batch mode recreates the
         # table there and is a no-op wrapper on Postgres.
         render_as_batch=connection.dialect.name == "sqlite",

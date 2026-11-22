@@ -4,14 +4,39 @@ App entry point. Run with:
     uvicorn app.main:app --reload
 """
 import logging
+import uuid
 from contextlib import asynccontextmanager
+from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Request, status
+from fastapi.encoders import jsonable_encoder
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.core.config import get_settings
 from app.core.logging import configure_logging
-from app.routers import admin_opportunities, auth, health, opportunities, users
+from app.routers import (
+    admin_events,
+    admin_moderation,
+    admin_opportunities,
+    applications,
+    auth,
+    connections,
+    conversations,
+    events,
+    health,
+    me,
+    notifications,
+    opportunities,
+    profiles,
+    projects,
+    team,
+    teams,
+    uploads,
+    users,
+)
 
 configure_logging()
 logger = logging.getLogger(__name__)
@@ -32,6 +57,8 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# --- Middlewares ---
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,
@@ -40,10 +67,98 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Route modules get registered here. Each router owns one domain and stays
-# thin — parsing input, calling a service, returning a schema.
+
+@app.middleware("http")
+async def security_and_request_id_middleware(request: Request, call_next):
+    request_id = request.headers.get("X-Request-ID") or str(uuid.uuid4())
+    response = await call_next(request)
+    response.headers["X-Request-ID"] = request_id
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Content-Security-Policy"] = "default-src 'self'"
+    if settings.ENV not in {"local", "test"}:
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+    return response
+
+
+# --- Exception Handlers for Consistent Error Responses ---
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    code_map = {
+        400: "BAD_REQUEST",
+        401: "UNAUTHORIZED",
+        403: "FORBIDDEN",
+        404: "NOT_FOUND",
+        409: "CONFLICT",
+        422: "UNPROCESSABLE_ENTITY",
+        429: "TOO_MANY_REQUESTS",
+    }
+    code = exc.headers.get("X-Error-Code") if exc.headers else None
+    message = exc.detail if isinstance(exc.detail, str) else str(exc.detail)
+    if isinstance(exc.detail, dict) and "error" in exc.detail:
+        err = exc.detail["error"]
+        if isinstance(err, dict):
+            code = err.get("code") or code
+            message = err.get("message") or message
+
+    if not code:
+        code = code_map.get(exc.status_code, "ERROR")
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "detail": exc.detail,
+            "error": {
+                "code": code,
+                "message": message,
+            },
+        },
+        headers=exc.headers,
+    )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    errors = exc.errors()
+    msg = errors[0].get("msg", "Validation error") if errors else "Validation error"
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        content={
+            "detail": jsonable_encoder(errors),
+            "error": {
+                "code": "VALIDATION_ERROR",
+                "message": msg,
+            },
+        },
+    )
+
+
+# --- Static files for local image uploads ---
+upload_path = Path(settings.STORAGE_LOCAL_DIR).resolve()
+upload_path.mkdir(parents=True, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=str(upload_path)), name="uploads")
+
+
+# --- Route Modules ---
 app.include_router(health.router)
 app.include_router(auth.router, prefix=settings.API_V1_PREFIX)
 app.include_router(users.router, prefix=settings.API_V1_PREFIX)
 app.include_router(opportunities.router, prefix=settings.API_V1_PREFIX)
 app.include_router(admin_opportunities.router, prefix=settings.API_V1_PREFIX)
+app.include_router(events.router, prefix=settings.API_V1_PREFIX)
+app.include_router(admin_events.router, prefix=settings.API_V1_PREFIX)
+app.include_router(applications.router, prefix=settings.API_V1_PREFIX)
+app.include_router(me.router, prefix=settings.API_V1_PREFIX)
+app.include_router(notifications.router, prefix=settings.API_V1_PREFIX)
+app.include_router(uploads.router, prefix=settings.API_V1_PREFIX)
+app.include_router(team.router, prefix=settings.API_V1_PREFIX)
+app.include_router(connections.router, prefix=settings.API_V1_PREFIX)
+app.include_router(conversations.router, prefix=settings.API_V1_PREFIX)
+app.include_router(projects.router, prefix=settings.API_V1_PREFIX)
+app.include_router(teams.router, prefix=settings.API_V1_PREFIX)
+app.include_router(profiles.router, prefix=settings.API_V1_PREFIX)
+app.include_router(admin_moderation.router, prefix=settings.API_V1_PREFIX)
+
+# Also expose /ws directly at root for standard client connection
+app.add_api_websocket_route("/ws", conversations.websocket_endpoint)

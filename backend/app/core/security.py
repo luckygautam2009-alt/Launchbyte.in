@@ -30,12 +30,22 @@ def verify_password(plain: str, hashed: str) -> bool:
     return bcrypt.checkpw(plain_bytes, hashed.encode("utf-8"))
 
 
-def create_access_token(subject: str, expires_delta: timedelta | None = None) -> str:
+def create_access_token(
+    subject: str,
+    role: str = "user",
+    token_version: int = 1,
+    expires_delta: timedelta | None = None,
+) -> str:
     settings = get_settings()
     expire = datetime.now(timezone.utc) + (
         expires_delta or timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     )
-    to_encode = {"sub": subject, "exp": expire}
+    to_encode = {
+        "sub": subject,
+        "role": role,
+        "token_version": token_version,
+        "exp": expire,
+    }
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
 
 

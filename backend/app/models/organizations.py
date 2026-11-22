@@ -2,7 +2,17 @@ import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import DateTime, ForeignKey, Index, String, Text, text
+from sqlalchemy import (
+    CheckConstraint,
+    DateTime,
+    ForeignKey,
+    Index,
+    String,
+    Text,
+    UniqueConstraint,
+    func,
+    text,
+)
 from sqlalchemy import Uuid as SAUuid
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -12,6 +22,7 @@ from app.models.types import SoftDeleteMixin, TimestampMixin, UUIDPrimaryKeyMixi
 
 if TYPE_CHECKING:
     from app.models.opportunities import Opportunity
+    from app.models.users import User
     from app.models.verification import VerificationRequest
 
 
@@ -59,3 +70,32 @@ class Organization(UUIDPrimaryKeyMixin, TimestampMixin, SoftDeleteMixin, Base):
     verification_requests: Mapped[list["VerificationRequest"]] = relationship(
         back_populates="organization", cascade="all, delete-orphan", passive_deletes=True
     )
+    members: Mapped[list["OrganizationMember"]] = relationship(
+        back_populates="organization", cascade="all, delete-orphan", passive_deletes=True
+    )
+
+
+class OrganizationMember(UUIDPrimaryKeyMixin, Base):
+    """Membership of users in an organization (owners, editors)."""
+
+    __tablename__ = "organization_members"
+    __table_args__ = (
+        UniqueConstraint("organization_id", "user_id", name="uq_organization_members_org_user"),
+        CheckConstraint("role IN ('owner', 'editor')", name="ck_organization_members_role"),
+    )
+
+    organization_id: Mapped[uuid.UUID] = mapped_column(
+        SAUuid(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        SAUuid(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), index=True, nullable=False
+    )
+    role: Mapped[str] = mapped_column(
+        String(32), default="editor", server_default=text("'editor'"), nullable=False
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+
+    organization: Mapped["Organization"] = relationship(back_populates="members")
+    user: Mapped["User"] = relationship()

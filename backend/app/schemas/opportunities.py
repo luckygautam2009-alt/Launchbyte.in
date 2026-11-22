@@ -9,6 +9,7 @@ from app.models.enums import (
     LocationType,
     OpportunityStatus,
     OpportunityType,
+    ReportReason,
     VerificationStatus,
 )
 
@@ -18,6 +19,7 @@ class OrganizationBrief(BaseModel):
     id: uuid.UUID
     name: str
     slug: str
+    logo_url: str | None = None
     verification_status: VerificationStatus
 
 
@@ -25,6 +27,15 @@ class TagRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     name: str
     slug: str
+
+
+class TagWithCount(TagRead):
+    count: int
+
+
+class TypeWithCount(BaseModel):
+    type: OpportunityType
+    count: int
 
 
 class OpportunityListItem(BaseModel):
@@ -60,6 +71,7 @@ class OpportunityDetail(OpportunityListItem):
     starts_at: datetime | None
     ends_at: datetime | None
     view_count: int
+    status: OpportunityStatus | None = None
 
 
 class OpportunityAdminRead(OpportunityDetail):
@@ -129,6 +141,52 @@ class OpportunityCreate(_Checks):
     publish: bool = False
 
 
+class OpportunityOrganizerCreate(_Checks):
+    title: str = Field(min_length=3, max_length=255)
+    type: OpportunityType
+    summary: str | None = Field(None, max_length=500)
+    description: str | None = None
+    eligibility: str | None = None
+    requirements: list[str] | None = None
+    location_type: LocationType | None = None
+    location_text: str | None = Field(None, max_length=255)
+    country_code: str | None = None
+    application_url: str | None = Field(None, max_length=1000)
+    deadline_at: datetime | None = None
+    is_rolling: bool = False
+    starts_at: datetime | None = None
+    ends_at: datetime | None = None
+    compensation_type: CompensationType = CompensationType.UNSPECIFIED
+    compensation_min: Decimal | None = Field(None, ge=0)
+    compensation_max: Decimal | None = Field(None, ge=0)
+    compensation_currency: str | None = None
+    compensation_note: str | None = Field(None, max_length=255)
+    tags: list[str] = Field(default_factory=list, max_length=10)
+
+
+class OpportunityOrganizerUpdate(_Checks):
+    title: str | None = Field(None, min_length=3, max_length=255)
+    type: OpportunityType | None = None
+    summary: str | None = Field(None, max_length=500)
+    description: str | None = None
+    eligibility: str | None = None
+    requirements: list[str] | None = None
+    location_type: LocationType | None = None
+    location_text: str | None = Field(None, max_length=255)
+    country_code: str | None = None
+    application_url: str | None = Field(None, max_length=1000)
+    deadline_at: datetime | None = None
+    is_rolling: bool | None = None
+    starts_at: datetime | None = None
+    ends_at: datetime | None = None
+    compensation_type: CompensationType | None = None
+    compensation_min: Decimal | None = Field(None, ge=0)
+    compensation_max: Decimal | None = Field(None, ge=0)
+    compensation_currency: str | None = None
+    compensation_note: str | None = Field(None, max_length=255)
+    tags: list[str] | None = Field(None, max_length=10)
+
+
 class OpportunityUpdate(_Checks):
     organization_id: uuid.UUID | None = None
     title: str | None = Field(None, min_length=3, max_length=255)
@@ -163,3 +221,38 @@ class OpportunityUpdate(_Checks):
 
 class OpportunityStatusUpdate(BaseModel):
     status: OpportunityStatus
+
+
+class OpportunityApproveRequest(BaseModel):
+    verification_status: VerificationStatus | None = None
+    trust_score: int | None = Field(None, ge=0, le=100)
+
+
+class OpportunityRejectRequest(BaseModel):
+    reason: str = Field(min_length=3, max_length=500)
+
+
+class ReportCreate(BaseModel):
+    reason: ReportReason
+    details: str | None = Field(None, max_length=1000)
+
+
+class ReportRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: uuid.UUID
+    opportunity_id: uuid.UUID
+    reason: ReportReason
+    details: str | None
+    status: str
+    created_at: datetime
+
+
+class NotificationRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: uuid.UUID
+    type: str
+    title: str
+    body: str | None
+    data: dict | None
+    read_at: datetime | None
+    created_at: datetime

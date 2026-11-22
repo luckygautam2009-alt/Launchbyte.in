@@ -1,14 +1,22 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 
+from app.core.config import get_settings
+from app.core.rate_limit import rate_limit
 from app.dependencies.auth import CurrentUser
 from app.dependencies.db import DBSession
 from app.schemas.users import UserCreate, UserRead
 from app.services.users import service as users_service
 
 router = APIRouter(prefix="/users", tags=["users"])
+settings = get_settings()
 
 
-@router.post("", response_model=UserRead, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "",
+    response_model=UserRead,
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(rate_limit(max_requests=settings.RATE_LIMIT_AUTH_PER_MINUTE, window_seconds=60))],
+)
 def register_user(db: DBSession, user_in: UserCreate) -> UserRead:
     try:
         return users_service.create_user(db, user_in)

@@ -1,6 +1,6 @@
 from sqlalchemy import func, select
 
-from app.db.seed import ADMIN_EMAIL, STUDENT_EMAIL, seed
+from app.db.seed import ADMIN_EMAIL, ORGANIZER_EMAIL, STUDENT_EMAIL, seed
 from app.models import (
     Application,
     ApplicationEvent,
@@ -20,11 +20,23 @@ def _counts(db):
 
 
 def test_seed_populates_every_domain(db_session):
-    creds = seed(db_session, admin_password="admin-pass-123", student_password="student-pass-123")
-    assert creds == {ADMIN_EMAIL: "admin-pass-123", STUDENT_EMAIL: "student-pass-123"}
+    creds = seed(
+        db_session,
+        admin_password="admin-pass-123",
+        student_password="student-pass-123",
+        organizer_password="organizer-pass-123",
+    )
+    assert creds == {
+        ADMIN_EMAIL: "admin-pass-123",
+        STUDENT_EMAIL: "student-pass-123",
+        ORGANIZER_EMAIL: "organizer-pass-123",
+    }
 
     admin = db_session.scalar(select(User).where(User.email == ADMIN_EMAIL))
     assert admin.role == UserRole.ADMIN
+
+    organizer = db_session.scalar(select(User).where(User.email == ORGANIZER_EMAIL))
+    assert organizer.role == UserRole.ORGANIZER
 
     statuses = {o.status for o in db_session.scalars(select(Opportunity))}
     assert statuses == set(OpportunityStatus) - {OpportunityStatus.ARCHIVED, OpportunityStatus.REJECTED}

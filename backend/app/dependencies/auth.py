@@ -12,6 +12,7 @@ from app.models.users import User
 from app.services.users.service import get_user_by_id
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{get_settings().API_V1_PREFIX}/auth/login")
+oauth2_scheme_optional = OAuth2PasswordBearer(tokenUrl=f"{get_settings().API_V1_PREFIX}/auth/login", auto_error=False)
 
 
 def get_current_user(db: DBSession, token: Annotated[str, Depends(oauth2_scheme)]) -> User:
@@ -35,6 +36,12 @@ def get_current_user(db: DBSession, token: Annotated[str, Depends(oauth2_scheme)
         raise credentials_exception
     if not user.is_active:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Inactive user")
+
+    # Invalidate token if token_version has been bumped (e.g. password changed/reset)
+    token_version = payload.get("token_version")
+    if token_version is not None and token_version != user.token_version:
+        raise credentials_exception
+
     return user
 
 
@@ -52,5 +59,37 @@ def require_role(*roles: UserRole):
     return checker
 
 
+def require_verified_email(user: CurrentUser) -> User:
+    """Requires the current user to have verified their email."""
+    if not user.is_email_verified:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Email verification required")
+    return user
+
+
 AdminUser = Annotated[User, Depends(require_role(UserRole.ADMIN))]
 StaffUser = Annotated[User, Depends(require_role(UserRole.MODERATOR, UserRole.ADMIN))]
+OrganizerUser = Annotated[User, Depends(require_role(UserRole.ORGANIZER, UserRole.MODERATOR, UserRole.ADMIN))]
+VerifiedUser = Annotated[User, Depends(require_verified_email)]
+
+
+def get_optional_user(db: DBSession, token: Annotated[str | None, Depends(oauth2_scheme_optional)]) -> User | None:
+    if not token:
+        return None
+    try:
+        payload = decode_access_token(token)
+        raw_sub = payload.get("sub")
+        if not raw_sub:
+            return None
+        user_id = uuid.UUID(raw_sub)
+        user = get_user_by_id(db, user_id)
+        if not user or not user.is_active:
+            return None
+        token_version = payload.get("token_version")
+        if token_version is not None and token_version != user.token_version:
+            return None
+        return user
+    except Exception:
+        return None
+
+
+OptionalUser = Annotated[User | None, Depends(get_optional_user)]

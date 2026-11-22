@@ -4,6 +4,7 @@ from sqlalchemy import create_engine, event
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
+from app.core.rate_limit import limiter
 from app.db.base import Base
 from app.db.session import get_db
 from app.main import app
@@ -28,6 +29,11 @@ def _enable_sqlite_foreign_keys(dbapi_connection, _):
 
 
 TestingSessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False, future=True)
+
+
+@pytest.fixture(autouse=True)
+def _reset_rate_limiter():
+    limiter.reset()
 
 
 @pytest.fixture()
