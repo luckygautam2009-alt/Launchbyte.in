@@ -100,6 +100,36 @@ body {
   animation: star-twinkle 6s ease-in-out 3.5s infinite;
 }
 
+/* Continuous smooth rotation for the planet globe */
+@keyframes planet-spin {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: -200% 0%;
+  }
+}
+
+.animate-planet-spin {
+  animation: planet-spin 32s linear infinite;
+  will-change: background-position;
+}
+
+@keyframes globe-glow-pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.02);
+  }
+}
+
+.animate-globe-glow {
+  animation: globe-glow-pulse 5s ease-in-out infinite;
+}
+
 /* Respect user's motion preferences */
 @media (prefers-reduced-motion: reduce) {
   *,
