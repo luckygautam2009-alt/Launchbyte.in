@@ -28,12 +28,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest httpx pillow nh3 alembic
+          pip install pytest httpx
 
       - name: Verify Migration Integrity & Zero Drift
         env:
           DATABASE_URL: "sqlite:///./ci_test.db"
           ENV: "test"
+          PYTHONPATH: "."
         run: |
           alembic upgrade head
           alembic check
@@ -45,8 +46,9 @@ jobs:
           DATABASE_URL: "sqlite:///:memory:"
           SECRET_KEY: "ci-insecure-test-secret-key-must-be-long-enough-32bytes"
           QR_SIGNING_KEY: "ci-qr-test-secret-key-must-be-long-enough-32bytes"
+          PYTHONPATH: "."
         run: |
-          pytest -v
+          python -m pytest -v
 
   frontend-build:
     name: Frontend Typecheck & Build
@@ -73,4 +75,6 @@ jobs:
         run: npx tsc --noEmit
 
       - name: Build Next.js Production Bundle
+        env:
+          NEXT_PUBLIC_API_URL: "http://localhost:8000/api/v1"
         run: npm run build

@@ -1,3 +1,4 @@
+import os
 from logging.config import fileConfig
 
 from alembic import context
@@ -12,8 +13,8 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-settings = get_settings()
-config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+db_url = os.environ.get("DATABASE_URL") or get_settings().DATABASE_URL
+config.set_main_option("sqlalchemy.url", db_url)
 
 target_metadata = Base.metadata
 

@@ -14,3 +14,4 @@ python-multipart>=0.0.9,<1.0
 pillow>=10.0,<14.0
 qrcode[pil]>=7.4,<9.0
 nh3>=0.2.17,<1.0
+websockets>=12.0,<18.0
