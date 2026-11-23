@@ -96,67 +96,29 @@ export default function HeroSection() {
       {/* CENTER VISUAL: ASTRONAUT HOLDING GLOWING PLANET           */}
       {/* ========================================================= */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[340px] sm:w-[480px] md:w-[580px] lg:w-[680px] xl:w-[740px] max-w-[95vw] pointer-events-none select-none z-20 flex flex-col items-center">
-        {/* Ambient atmospheric glow halo behind the planet */}
-        <div className="absolute top-[55.86%] left-[50.78%] -translate-x-1/2 -translate-y-1/2 w-44 h-44 sm:w-60 sm:h-60 rounded-full bg-violet-500/25 blur-[50px] pointer-events-none animate-globe-glow" />
-        <div className="absolute top-[55.86%] left-[50.78%] -translate-x-1/2 -translate-y-1/2 w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-cyan-400/20 blur-[30px] pointer-events-none" />
+        {/* Glow halo behind the glowing planet */}
+        <div className="absolute top-[48%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 sm:w-64 sm:h-64 rounded-full bg-violet-500/25 blur-[60px] pointer-events-none" />
+        <div className="absolute top-[48%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-cyan-400/15 blur-[40px] pointer-events-none" />
 
-        {/* Astronaut image container (completely stationary) */}
-        <div className="relative w-full aspect-square flex items-end justify-center">
-          {/* Base astronaut image */}
+        {/* Astronaut image with gentle floating animation */}
+        <motion.div
+          animate={{ y: [-6, 6, -6] }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="relative w-full aspect-square flex items-end justify-center"
+        >
           <Image
             src="/brand/hero-astronaut-holding-planet.png"
-            alt="Astronaut holding a glowing rotating planet representing boundless opportunity"
+            alt="Astronaut holding a glowing planet representing boundless opportunity"
             width={1024}
             height={1024}
             priority
             className="w-full h-auto object-contain object-bottom drop-shadow-[0_10px_35px_rgba(139,92,246,0.25)]"
           />
-
-          {/* Rotating Planetary Globe nestled between the astronaut's hands */}
-          <div
-            className="absolute rounded-full overflow-hidden pointer-events-none select-none shadow-[0_0_25px_rgba(167,139,250,0.6),0_0_50px_rgba(139,92,246,0.3)]"
-            style={{
-              left: "50.78%",
-              top: "55.86%",
-              width: "14.65%",
-              height: "14.65%",
-              transform: "translate(-50%, -50%)",
-            }}
-          >
-            {/* Spinning surface texture layer */}
-            <div
-              className="absolute inset-0 w-full h-full animate-planet-spin"
-              style={{
-                backgroundImage: "url('/brand/planet-map.png')",
-                backgroundSize: "200% 100%",
-                backgroundRepeat: "repeat-x",
-              }}
-            />
-
-            {/* 3D Spherical curvature, atmosphere, and rim lighting lens overlay */}
-            <div
-              className="absolute inset-0 rounded-full pointer-events-none"
-              style={{
-                background:
-                  "radial-gradient(circle at 35% 30%, rgba(255,255,255,0.45) 0%, rgba(167,139,250,0.2) 28%, rgba(5,5,16,0.6) 72%, rgba(34,211,238,0.55) 100%)",
-                boxShadow:
-                  "inset 4px 0 10px rgba(5,5,16,0.85), inset -4px 0 10px rgba(139,92,246,0.5), inset 0 0 8px rgba(34,211,238,0.4)",
-              }}
-            />
-          </div>
-
-          {/* Forefront stationary hands/gloves overlay ensuring hands cup the front of the globe */}
-          <div className="absolute inset-0 w-full h-full pointer-events-none">
-            <Image
-              src="/brand/hero-astronaut-hands.png"
-              alt=""
-              width={1024}
-              height={1024}
-              priority
-              className="w-full h-auto object-contain object-bottom"
-            />
-          </div>
-        </div>
+        </motion.div>
 
         {/* Seamless bottom fade mask to blend with the background */}
         <div className="absolute bottom-0 inset-x-0 h-24 sm:h-32 bg-gradient-to-t from-[#050510] via-[#050510]/80 to-transparent pointer-events-none z-30" />
