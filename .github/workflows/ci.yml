@@ -72,7 +72,7 @@ jobs:
         run: npm ci
 
       - name: Typecheck TypeScript
-        run: npx tsc --noEmit
+        run: npm run typecheck
 
       - name: Build Next.js Production Bundle
         env:
