@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import * as THREE from "three";
-import { ArrowRight, Compass, Sparkles, ExternalLink } from "lucide-react";
+import { Compass } from "lucide-react";
 
 export interface PlanetData {
   id: string;
@@ -11,729 +11,891 @@ export interface PlanetData {
   category: string;
   description: string;
   route: string;
-  orbitRadius: number;
+  ring: number;
+  angle: number;
   size: number;
-  speed: number; // orbital angular velocity in rad/sec
+  spin: number;
   color: string;
   glowColor: string;
-  initialAngle: number;
-  tilt: number;
+  surface: "banded" | "earth" | "storm" | "rust" | "teal" | "ice" | "violet";
   hasRing?: boolean;
 }
 
+/**
+ * Single source of truth for the universe. Every planet, label, and route
+ * is rendered from this list exactly once.
+ */
 export const PLANETS: PlanetData[] = [
   {
     id: "hackathons",
-    name: "HACKATHONS",
+    name: "Hackathons",
     category: "Competitive Builds",
-    description: "Compete, collaborate and turn your ideas into reality.",
+    description: "Compete, collaborate, and ship ideas with other builders.",
     route: "/hackathons",
-    orbitRadius: 12,
-    size: 1.3,
-    speed: 0.34,
-    color: "#8B5CF6",
+    ring: 1,
+    angle: 0.42,
+    size: 1.22,
+    spin: 0.28,
+    color: "#7C3AED",
     glowColor: "#C4B5FD",
-    initialAngle: 0.6,
-    tilt: 0.18,
+    surface: "violet",
   },
   {
     id: "internships",
-    name: "INTERNSHIPS",
+    name: "Internships",
     category: "Career Launchpad",
-    description: "Explore internships and grow your career with leading tech teams.",
+    description: "Find internships and grow with teams already building.",
     route: "/opportunities",
-    orbitRadius: 18.5,
-    size: 1.55,
-    speed: 0.25,
-    color: "#6366F1",
-    glowColor: "#22D3EE",
-    initialAngle: 2.3,
-    tilt: 0.28,
+    ring: 2,
+    angle: 3.55,
+    size: 1.7,
+    spin: 0.18,
+    color: "#2563EB",
+    glowColor: "#7DD3FC",
+    surface: "earth",
   },
   {
     id: "opportunities",
-    name: "OPPORTUNITIES",
-    category: "Fellowships & Grants",
-    description: "Find programs, competitions and new possibilities across Web3 and AI.",
+    name: "Opportunities",
+    category: "Fellowships and Grants",
+    description: "Programs, grants, and open calls across the ecosystem.",
     route: "/opportunities",
-    orbitRadius: 27,
-    size: 2.2,
-    speed: 0.18,
-    color: "#7C3AED",
-    glowColor: "#A78BFA",
-    initialAngle: 4.1,
-    tilt: 0.45,
+    ring: 0,
+    angle: 1.05,
+    size: 0.96,
+    spin: 0.32,
+    color: "#6D28D9",
+    glowColor: "#DDD6FE",
+    surface: "banded",
+  },
+  {
+    id: "workshops",
+    name: "Workshops",
+    category: "Hands-on Learning",
+    description: "Short, practical sessions you can join and apply immediately.",
+    route: "/events",
+    ring: 2,
+    angle: 5.45,
+    size: 0.84,
+    spin: 0.4,
+    color: "#0284C7",
+    glowColor: "#67E8F9",
+    surface: "teal",
     hasRing: true,
   },
   {
-    id: "community",
-    name: "COMMUNITY",
-    category: "Builder Network",
-    description: "Connect with developers, builders and innovators across universities.",
+    id: "events",
+    name: "Events",
+    category: "Live Gatherings",
+    description: "Meetups, launches, and live builder events.",
+    route: "/events",
+    ring: 1,
+    angle: 4.35,
+    size: 1.08,
+    spin: 0.24,
+    color: "#EA580C",
+    glowColor: "#FDBA74",
+    surface: "rust",
+  },
+  {
+    id: "ambassadors",
+    name: "Ambassador Programs",
+    category: "Campus Leadership",
+    description: "Represent LaunchByte and grow a local builder community.",
     route: "/people",
-    orbitRadius: 36,
-    size: 1.65,
-    speed: 0.13,
-    color: "#A78BFA",
-    glowColor: "#DDD6FE",
-    initialAngle: 1.4,
-    tilt: 0.12,
+    ring: 2,
+    angle: 1.2,
+    size: 1.16,
+    spin: 0.22,
+    color: "#0F766E",
+    glowColor: "#5EEAD4",
+    surface: "teal",
+  },
+  {
+    id: "teams",
+    name: "Team Building",
+    category: "Crews and Collaborators",
+    description: "Form a crew and build with people who match your pace.",
+    route: "/teams",
+    ring: 3,
+    angle: 0.72,
+    size: 1.56,
+    spin: 0.16,
+    color: "#1D4ED8",
+    glowColor: "#93C5FD",
+    surface: "banded",
+    hasRing: true,
+  },
+  {
+    id: "networking",
+    name: "Networking",
+    category: "Connections",
+    description: "Meet founders, mentors, and peers beyond your campus.",
+    route: "/network",
+    ring: 1,
+    angle: 2.55,
+    size: 0.74,
+    spin: 0.36,
+    color: "#0E7490",
+    glowColor: "#67E8F9",
+    surface: "ice",
+  },
+  {
+    id: "courses",
+    name: "Free Courses",
+    category: "Self-paced Learning",
+    description: "Start learning with free courses picked for builders.",
+    route: "/opportunities",
+    ring: 0,
+    angle: 3.35,
+    size: 0.68,
+    spin: 0.42,
+    color: "#6366F1",
+    glowColor: "#C7D2FE",
+    surface: "ice",
+  },
+  {
+    id: "certifications",
+    name: "Certifications",
+    category: "Proof of Skill",
+    description: "Earn credentials you can show with your projects.",
+    route: "/opportunities",
+    ring: 0,
+    angle: 5.15,
+    size: 0.72,
+    spin: 0.38,
+    color: "#7E22CE",
+    glowColor: "#E9D5FF",
+    surface: "violet",
   },
   {
     id: "projects",
-    name: "PROJECTS",
+    name: "Projects",
     category: "Collaborative Labs",
-    description: "Discover projects and collaborate with other builders worldwide.",
+    description: "Discover projects and contribute with other builders.",
     route: "/projects",
-    orbitRadius: 46,
-    size: 1.85,
-    speed: 0.08,
-    color: "#4F46E5",
-    glowColor: "#818CF8",
-    initialAngle: 5.2,
-    tilt: 0.32,
+    ring: 3,
+    angle: 2.75,
+    size: 1.05,
+    spin: 0.26,
+    color: "#4338CA",
+    glowColor: "#A5B4FC",
+    surface: "storm",
+  },
+  {
+    id: "community",
+    name: "Community",
+    category: "Builder Network",
+    description: "A home for developers, designers, and campus innovators.",
+    route: "/people",
+    ring: 3,
+    angle: 4.55,
+    size: 1.02,
+    spin: 0.2,
+    color: "#6D28D9",
+    glowColor: "#DDD6FE",
+    surface: "earth",
   },
 ];
 
-// Helper: Generate procedural planet textures on in-memory 2D canvas
-function createPlanetTexture(type: string): THREE.CanvasTexture {
+const RINGS = [
+  { radius: 9.6, speed: 0.045, tilt: 0.05, roll: 0.02, color: "#A78BFA", opacity: 0.2 },
+  { radius: 13.4, speed: 0.034, tilt: -0.06, roll: -0.025, color: "#818CF8", opacity: 0.16 },
+  { radius: 17.4, speed: 0.026, tilt: 0.08, roll: 0.03, color: "#67E8F9", opacity: 0.14 },
+  { radius: 21.6, speed: 0.018, tilt: -0.045, roll: 0.015, color: "#C4B5FD", opacity: 0.12 },
+];
+
+function makeTexture(draw: (ctx: CanvasRenderingContext2D, size: number) => void, size = 512) {
   const canvas = document.createElement("canvas");
-  canvas.width = 512;
-  canvas.height = 256;
-  const ctx = canvas.getContext("2d")!;
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("Canvas 2D unavailable");
+  draw(ctx, size);
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.anisotropy = 4;
+  return texture;
+}
 
-  if (type === "hackathons") {
-    // Deep violet with high-energy bands
-    const grad = ctx.createLinearGradient(0, 0, 0, 256);
-    grad.addColorStop(0, "#1E0B36");
-    grad.addColorStop(0.25, "#4C1D95");
-    grad.addColorStop(0.5, "#7C3AED");
-    grad.addColorStop(0.75, "#6D28D9");
-    grad.addColorStop(1, "#2E1065");
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, 512, 256);
+function createSunTexture() {
+  return makeTexture((ctx, size) => {
+    const mid = size / 2;
+    const base = ctx.createRadialGradient(mid, mid, size * 0.08, mid, mid, mid);
+    base.addColorStop(0, "#A78BFA");
+    base.addColorStop(0.28, "#7C3AED");
+    base.addColorStop(0.62, "#4C1D95");
+    base.addColorStop(1, "#1E1B4B");
+    ctx.fillStyle = base;
+    ctx.fillRect(0, 0, size, size);
 
-    for (let i = 0; i < 24; i++) {
-      const y = Math.random() * 256;
-      ctx.fillStyle = i % 2 === 0 ? "rgba(167, 139, 250, 0.45)" : "rgba(221, 214, 254, 0.3)";
-      ctx.fillRect(0, y, 512, Math.random() * 7 + 2);
-    }
-  } else if (type === "internships") {
-    // Blue-violet gas giant with cyan swirls
-    const grad = ctx.createLinearGradient(0, 0, 0, 256);
-    grad.addColorStop(0, "#0F172A");
-    grad.addColorStop(0.35, "#1E1B4B");
-    grad.addColorStop(0.65, "#312E81");
-    grad.addColorStop(1, "#0F172A");
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, 512, 256);
-
-    for (let i = 0; i < 20; i++) {
-      const y = Math.random() * 256;
-      ctx.fillStyle = "rgba(34, 211, 238, 0.35)";
-      ctx.beginPath();
-      ctx.ellipse(Math.random() * 512, y, Math.random() * 80 + 30, Math.random() * 8 + 2, 0, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  } else if (type === "opportunities") {
-    // Ringed planet surface (lavender & royal purple banding)
-    const grad = ctx.createLinearGradient(0, 0, 0, 256);
-    grad.addColorStop(0, "#2E1065");
-    grad.addColorStop(0.2, "#581C87");
-    grad.addColorStop(0.4, "#7E22CE");
-    grad.addColorStop(0.6, "#9333EA");
-    grad.addColorStop(0.8, "#6B21A8");
-    grad.addColorStop(1, "#1E0B36");
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, 512, 256);
-
-    for (let y = 0; y < 256; y += 3) {
-      ctx.fillStyle = y % 6 === 0 ? "rgba(255, 255, 255, 0.22)" : "rgba(168, 85, 247, 0.25)";
-      ctx.fillRect(0, y, 512, 2);
-    }
-  } else if (type === "community") {
-    // Glowing lavender terrestrial world with continents & city lights
-    ctx.fillStyle = "#1E1B4B";
-    ctx.fillRect(0, 0, 512, 256);
-
-    ctx.fillStyle = "#6D28D9";
-    for (let i = 0; i < 32; i++) {
-      ctx.beginPath();
-      ctx.arc(Math.random() * 512, Math.random() * 256, Math.random() * 36 + 12, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    ctx.fillStyle = "#DDD6FE";
-    for (let i = 0; i < 110; i++) {
-      ctx.fillRect(Math.random() * 512, Math.random() * 256, 2, 2);
-    }
-  } else {
-    // Dark indigo crystalline tech planet
-    const grad = ctx.createLinearGradient(0, 0, 512, 256);
-    grad.addColorStop(0, "#09091B");
-    grad.addColorStop(0.5, "#1E1B4B");
-    grad.addColorStop(1, "#2E1065");
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, 512, 256);
-
-    ctx.strokeStyle = "rgba(167, 139, 250, 0.4)";
-    ctx.lineWidth = 1.5;
-    for (let x = 0; x < 512; x += 28) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, 256);
-      ctx.stroke();
-    }
-    for (let y = 0; y < 256; y += 28) {
+    for (let i = 0; i < 14; i++) {
+      const y = (i + 0.5) * (size / 14);
+      ctx.strokeStyle = i % 3 === 0 ? "rgba(125, 211, 252, 0.16)" : "rgba(221, 214, 254, 0.14)";
+      ctx.lineWidth = 10;
       ctx.beginPath();
       ctx.moveTo(0, y);
-      ctx.lineTo(512, y);
+      for (let x = 0; x <= size; x += 12) {
+        ctx.lineTo(x, y + Math.sin(x * 0.02 + i * 1.4) * 12 + Math.sin(x * 0.008) * 6);
+      }
       ctx.stroke();
     }
-  }
 
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.wrapS = THREE.RepeatWrapping;
-  texture.wrapT = THREE.ClampToEdgeWrapping;
-  return texture;
+    const vignette = ctx.createRadialGradient(mid, mid, size * 0.18, mid, mid, mid * 0.98);
+    vignette.addColorStop(0, "rgba(8, 6, 24, 0)");
+    vignette.addColorStop(1, "rgba(8, 6, 24, 0.62)");
+    ctx.fillStyle = vignette;
+    ctx.fillRect(0, 0, size, size);
+  });
 }
 
-// Helper: Generate procedural planetary ring texture
-function createRingTexture(): THREE.CanvasTexture {
-  const canvas = document.createElement("canvas");
-  canvas.width = 512;
-  canvas.height = 64;
-  const ctx = canvas.getContext("2d")!;
-
-  const grad = ctx.createLinearGradient(0, 0, 512, 0);
-  grad.addColorStop(0, "rgba(139, 92, 246, 0.05)");
-  grad.addColorStop(0.18, "rgba(167, 139, 250, 0.75)");
-  grad.addColorStop(0.42, "rgba(221, 214, 254, 0.95)");
-  grad.addColorStop(0.52, "rgba(5, 5, 16, 0.15)"); // Cassini division gap
-  grad.addColorStop(0.62, "rgba(139, 92, 246, 0.8)");
-  grad.addColorStop(0.82, "rgba(34, 211, 238, 0.5)");
-  grad.addColorStop(1, "rgba(139, 92, 246, 0)");
-
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, 512, 64);
-
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.wrapS = THREE.ClampToEdgeWrapping;
-  texture.wrapT = THREE.ClampToEdgeWrapping;
-  return texture;
+function createCoronaTexture(inner: string, mid: string) {
+  return makeTexture((ctx, size) => {
+    const c = size / 2;
+    const glow = ctx.createRadialGradient(c, c, size * 0.16, c, c, c);
+    glow.addColorStop(0, "rgba(0,0,0,0)");
+    glow.addColorStop(0.22, inner);
+    glow.addColorStop(0.5, mid);
+    glow.addColorStop(1, "rgba(5, 5, 16, 0)");
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, size, size);
+  }, 256);
 }
 
-// Helper: Generate Sun Corona Radial Glow Sprite Texture
-function createSunCoronaTexture(): THREE.CanvasTexture {
-  const canvas = document.createElement("canvas");
-  canvas.width = 256;
-  canvas.height = 256;
-  const ctx = canvas.getContext("2d")!;
+function createStarTexture() {
+  return makeTexture((ctx, size) => {
+    const c = size / 2;
+    const glow = ctx.createRadialGradient(c, c, 0, c, c, c);
+    glow.addColorStop(0, "rgba(255,255,255,1)");
+    glow.addColorStop(0.35, "rgba(255,255,255,0.75)");
+    glow.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, size, size);
+  }, 64);
+}
 
-  const grad = ctx.createRadialGradient(128, 128, 10, 128, 128, 128);
-  grad.addColorStop(0, "rgba(255, 255, 255, 1)");
-  grad.addColorStop(0.2, "rgba(221, 214, 254, 0.85)");
-  grad.addColorStop(0.45, "rgba(139, 92, 246, 0.45)");
-  grad.addColorStop(0.7, "rgba(79, 70, 229, 0.18)");
-  grad.addColorStop(1, "rgba(5, 5, 16, 0)");
+function createPlanetTexture(planet: PlanetData) {
+  return makeTexture((ctx, size) => {
+    const rand = mulberry32(planet.id.split("").reduce((sum, char) => sum + char.charCodeAt(0), 0));
+    const paintBase = (stops: [number, string][]) => {
+      const gradient = ctx.createLinearGradient(0, 0, 0, size);
+      stops.forEach(([offset, color]) => gradient.addColorStop(offset, color));
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, size, size);
+    };
 
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, 256, 256);
+    if (planet.surface === "earth") {
+      paintBase([
+        [0, "#0B1D4A"],
+        [0.45, "#1D4ED8"],
+        [1, "#172554"],
+      ]);
+      for (let i = 0; i < 18; i++) {
+        ctx.fillStyle = i % 2 ? "rgba(45, 212, 191, 0.55)" : "rgba(74, 222, 128, 0.4)";
+        ctx.beginPath();
+        ctx.ellipse(rand() * size, rand() * size, 30 + rand() * 70, 18 + rand() * 36, rand() * Math.PI, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    } else if (planet.surface === "rust") {
+      paintBase([
+        [0, "#7C2D12"],
+        [0.4, "#C2410C"],
+        [0.7, "#EA580C"],
+        [1, "#431407"],
+      ]);
+      for (let i = 0; i < 10; i++) {
+        ctx.fillStyle = "rgba(67, 20, 7, 0.45)";
+        ctx.beginPath();
+        ctx.arc(rand() * size, rand() * size, 16 + rand() * 40, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    } else if (planet.surface === "teal") {
+      paintBase([
+        [0, "#042F2E"],
+        [0.35, "#0F766E"],
+        [0.62, "#14B8A6"],
+        [1, "#083344"],
+      ]);
+      for (let y = 0; y < size; y += 18) {
+        ctx.fillStyle = y % 36 === 0 ? "rgba(204, 251, 241, 0.16)" : "rgba(8, 47, 73, 0.18)";
+        ctx.fillRect(0, y + Math.sin(y) * 4, size, 8);
+      }
+    } else if (planet.surface === "ice") {
+      paintBase([
+        [0, "#1E1B4B"],
+        [0.4, "#6366F1"],
+        [0.7, "#818CF8"],
+        [1, "#312E81"],
+      ]);
+      ctx.strokeStyle = "rgba(224, 231, 255, 0.28)";
+      ctx.lineWidth = 2;
+      for (let i = 0; i < 7; i++) {
+        ctx.beginPath();
+        ctx.moveTo(rand() * size, rand() * size);
+        ctx.bezierCurveTo(rand() * size, rand() * size, rand() * size, rand() * size, rand() * size, rand() * size);
+        ctx.stroke();
+      }
+    } else if (planet.surface === "storm") {
+      paintBase([
+        [0, "#1E1B4B"],
+        [0.5, "#3730A3"],
+        [1, "#1E1B4B"],
+      ]);
+      for (let i = 0; i < 8; i++) {
+        ctx.fillStyle = "rgba(165, 180, 252, 0.2)";
+        ctx.beginPath();
+        ctx.ellipse(rand() * size, rand() * size, 40 + rand() * 80, 10 + rand() * 16, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    } else if (planet.surface === "violet") {
+      paintBase([
+        [0, "#2E1065"],
+        [0.35, "#6D28D9"],
+        [0.68, "#8B5CF6"],
+        [1, "#1E1B4B"],
+      ]);
+      for (let y = 0; y < size; y += 16) {
+        ctx.fillStyle = "rgba(237, 233, 254, 0.13)";
+        ctx.fillRect(0, y, size, 6);
+      }
+    } else {
+      paintBase([
+        [0, "#312E81"],
+        [0.3, "#4C1D95"],
+        [0.55, "#7C3AED"],
+        [0.78, "#C4B5FD"],
+        [1, "#2E1065"],
+      ]);
+      for (let y = 0; y < size; y += 14) {
+        ctx.fillStyle = y % 28 === 0 ? "rgba(255,255,255,0.08)" : "rgba(30, 27, 75, 0.18)";
+        ctx.fillRect(0, y, size, 7);
+      }
+    }
 
-  return new THREE.CanvasTexture(canvas);
+    const shade = ctx.createLinearGradient(0, 0, size, 0);
+    shade.addColorStop(0, "rgba(5, 5, 16, 0.35)");
+    shade.addColorStop(0.45, "rgba(5, 5, 16, 0)");
+    shade.addColorStop(1, "rgba(255, 255, 255, 0.08)");
+    ctx.fillStyle = shade;
+    ctx.fillRect(0, 0, size, size);
+  }, 512);
+}
+
+function mulberry32(seed: number) {
+  let value = seed >>> 0;
+  return () => {
+    value |= 0;
+    value = (value + 0x6d2b79f5) | 0;
+    let t = Math.imul(value ^ (value >>> 15), 1 | value);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
 }
 
 interface ProjectedLabel {
   id: string;
-  name: string;
-  category: string;
   x: number;
   y: number;
-  visible: boolean;
+  w: number;
   depth: number;
 }
 
 export default function SolarSystemCanvas() {
   const mountRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
-
-  // Active hovered/tapped planet state
-  const [hoveredPlanetIndex, setHoveredPlanetIndex] = useState<number | null>(null);
-  const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(null);
-  const [labels, setLabels] = useState<ProjectedLabel[]>([]);
-  const [webglSupported, setWebglSupported] = useState<boolean>(true);
-
-  // References to keep event handlers fresh and avoid recreate overhead
-  const hoveredIndexRef = useRef<number | null>(null);
-  hoveredIndexRef.current = hoveredPlanetIndex;
+  const routerRef = useRef(router);
+  routerRef.current = router;
+  const [webglSupported, setWebglSupported] = useState(true);
 
   useEffect(() => {
     const container = mountRef.current;
-    if (!container) return;
+    const root = container?.parentElement;
+    if (!container || !root) return;
 
-    // Check WebGL availability
+    let renderer: THREE.WebGLRenderer | null = null;
     try {
-      const testCanvas = document.createElement("canvas");
-      const gl = testCanvas.getContext("webgl") || testCanvas.getContext("experimental-webgl");
-      if (!gl) {
+      const test = document.createElement("canvas");
+      if (!test.getContext("webgl2") && !test.getContext("webgl")) {
         setWebglSupported(false);
         return;
       }
+      renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: false,
+        powerPreference: "high-performance",
+      });
     } catch {
       setWebglSupported(false);
       return;
     }
 
-    let width = container.clientWidth;
-    let height = container.clientHeight;
+    const webgl = renderer;
+    let disposed = false;
+    container.replaceChildren();
 
-    // 1. SCENE & CAMERA (Slightly elevated three-quarter perspective matching reference image)
+    let width = container.clientWidth || root.clientWidth || 800;
+    let height = container.clientHeight || 780;
+
     const scene = new THREE.Scene();
     scene.background = new THREE.Color("#050510");
 
-    // Camera with 45 degree FOV positioned to give a majestic, sweeping perspective of the orbital plane
-    const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 1000);
-    camera.position.set(-8, 30, 52);
-    camera.lookAt(0, -2, 0);
+    const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 400);
+    const pointer = new THREE.Vector2(0, 0);
+    const pan = { x: 0, y: 0 };
+    const panTarget = { x: 0, y: 0 };
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let motionEnabled = !reduceMotion.matches;
 
-    // 2. RENDERER
-    const renderer = new THREE.WebGLRenderer({
-      antialias: true,
-      powerPreference: "high-performance",
-      alpha: false,
-    });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-    container.appendChild(renderer.domElement);
+    const onMotionChange = () => {
+      motionEnabled = !reduceMotion.matches;
+    };
+    reduceMotion.addEventListener("change", onMotionChange);
 
-    // Master Solar System Group with slight dramatic tilt
-    const solarSystemGroup = new THREE.Group();
-    solarSystemGroup.rotation.z = -0.06;
-    solarSystemGroup.rotation.x = 0.08;
-    scene.add(solarSystemGroup);
+    const system = new THREE.Group();
+    system.rotation.x = -0.58;
+    system.rotation.z = -0.05;
+    scene.add(system);
 
-    // 3. LIGHTING
-    // Central PointLight at (0,0,0) simulating intense Sun illumination
-    const sunLight = new THREE.PointLight(0xfaf5ff, 5.5, 260, 1.0);
-    sunLight.position.set(0, 0, 0);
-    solarSystemGroup.add(sunLight);
+    const fitSystem = () => {
+      const aspect = width / Math.max(height, 1);
+      const scale = THREE.MathUtils.clamp(aspect * 0.78, 0.5, 1);
+      system.scale.setScalar(scale);
+      const distance = aspect < 0.85 ? 64 : aspect < 1.2 ? 56 : 50;
+      camera.fov = aspect < 0.85 ? 40 : 35;
+      camera.aspect = aspect;
+      camera.position.set(pan.x, distance * 0.2 + pan.y, distance);
+      camera.lookAt(0, -0.2, 0);
+      camera.updateProjectionMatrix();
+    };
 
-    // Secondary subtle violet ambient fill so back sides of planets show soft purple depth
-    const ambientLight = new THREE.AmbientLight(0x2e1065, 0.55);
-    scene.add(ambientLight);
+    scene.add(new THREE.AmbientLight(0x3b0764, 0.7));
+    const sunLight = new THREE.PointLight(0xc4b5fd, 28, 140, 2);
+    system.add(sunLight);
+    const rim = new THREE.DirectionalLight(0x67e8f9, 1.1);
+    rim.position.set(-18, 24, 20);
+    scene.add(rim);
 
-    // Directional rim light from top
-    const dirLight = new THREE.DirectionalLight(0x8b5cf6, 0.9);
-    dirLight.position.set(25, 45, 25);
-    scene.add(dirLight);
+    const textures: THREE.Texture[] = [];
+    const sunTexture = createSunTexture();
+    const coronaTexture = createCoronaTexture("rgba(167, 139, 250, 0.42)", "rgba(79, 70, 229, 0.12)");
+    const coronaOuter = createCoronaTexture("rgba(56, 189, 248, 0.16)", "rgba(49, 46, 129, 0.05)");
+    const starTexture = createStarTexture();
+    textures.push(sunTexture, coronaTexture, coronaOuter, starTexture);
 
-    // 4. CENTRAL GLOWING SUN (LaunchByte Core)
     const sunGroup = new THREE.Group();
-    solarSystemGroup.add(sunGroup);
+    system.add(sunGroup);
+    const sunMaterial = new THREE.MeshBasicMaterial({ map: sunTexture });
+    const sunMesh = new THREE.Mesh(new THREE.SphereGeometry(2.05, 48, 48), sunMaterial);
+    sunGroup.add(sunMesh);
 
-    // Core incandescent sphere
-    const sunCoreGeo = new THREE.SphereGeometry(3.6, 48, 48);
-    const sunCoreMat = new THREE.MeshBasicMaterial({
-      color: 0xffffff,
-    });
-    const sunCoreMesh = new THREE.Mesh(sunCoreGeo, sunCoreMat);
-    sunGroup.add(sunCoreMesh);
-
-    // Inner vibrant energy shell
-    const aura1Geo = new THREE.SphereGeometry(4.6, 32, 32);
-    const aura1Mat = new THREE.MeshBasicMaterial({
-      color: 0x8b5cf6,
-      transparent: true,
-      opacity: 0.4,
-      blending: THREE.AdditiveBlending,
-      side: THREE.BackSide,
-    });
-    const aura1Mesh = new THREE.Mesh(aura1Geo, aura1Mat);
-    sunGroup.add(aura1Mesh);
-
-    const aura2Geo = new THREE.SphereGeometry(5.8, 32, 32);
-    const aura2Mat = new THREE.MeshBasicMaterial({
-      color: 0x4f46e5,
-      transparent: true,
-      opacity: 0.22,
-      blending: THREE.AdditiveBlending,
-      side: THREE.BackSide,
-    });
-    const aura2Mesh = new THREE.Mesh(aura2Geo, aura2Mat);
-    sunGroup.add(aura2Mesh);
-
-    // Large Soft Corona Glow Billboard Sprite
-    const coronaTex = createSunCoronaTexture();
-    const coronaMat = new THREE.SpriteMaterial({
-      map: coronaTex,
-      transparent: true,
-      blending: THREE.AdditiveBlending,
-      opacity: 0.85,
-    });
-    const coronaSprite = new THREE.Sprite(coronaMat);
-    coronaSprite.scale.set(24, 24, 1);
-    sunGroup.add(coronaSprite);
-
-    // Central LaunchByte Icon Billboard inside the Sun core
-    const textureLoader = new THREE.TextureLoader();
-    textureLoader.load(
-      "/brand/launchbyte-icon.png",
-      (brandTex) => {
-        brandTex.colorSpace = THREE.SRGBColorSpace;
-        const brandGeo = new THREE.PlaneGeometry(3.8, 3.8);
-        const brandMat = new THREE.MeshBasicMaterial({
-          map: brandTex,
-          transparent: true,
-          opacity: 0.9,
-          blending: THREE.AdditiveBlending,
-          depthWrite: false,
-        });
-        const brandMesh = new THREE.Mesh(brandGeo, brandMat);
-        brandMesh.position.set(0, 0, 0.2);
-        brandMesh.quaternion.copy(camera.quaternion);
-        sunGroup.add(brandMesh);
-      },
-      undefined,
-      (err) => console.warn("Sun brand icon fallback", err)
+    const innerGlow = new THREE.Sprite(
+      new THREE.SpriteMaterial({
+        map: coronaTexture,
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        opacity: 0.9,
+      })
     );
+    innerGlow.scale.set(11, 11, 1);
+    sunGroup.add(innerGlow);
 
-    // 5. DISTANT SUBTLE STARFIELD
-    const starCount = 550;
-    const starGeo = new THREE.BufferGeometry();
+    const outerGlow = new THREE.Sprite(
+      new THREE.SpriteMaterial({
+        map: coronaOuter,
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        opacity: 0.75,
+      })
+    );
+    outerGlow.scale.set(18, 18, 1);
+    sunGroup.add(outerGlow);
+
+    const starCount = 420;
     const starPositions = new Float32Array(starCount * 3);
     const starColors = new Float32Array(starCount * 3);
-
-    const colorViolet = new THREE.Color("#A78BFA");
-    const colorCyan = new THREE.Color("#22D3EE");
-    const colorWhite = new THREE.Color("#F8FAFC");
-
+    const palette = [new THREE.Color("#F8FAFC"), new THREE.Color("#C4B5FD"), new THREE.Color("#67E8F9")];
     for (let i = 0; i < starCount; i++) {
-      const r = 130 + Math.random() * 220;
+      const radius = 90 + Math.random() * 160;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(Math.random() * 2 - 1);
-      starPositions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-      starPositions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-      starPositions[i * 3 + 2] = r * Math.cos(phi);
-
-      const chosenColor = Math.random() < 0.65 ? colorWhite : Math.random() < 0.82 ? colorViolet : colorCyan;
-      starColors[i * 3] = chosenColor.r;
-      starColors[i * 3 + 1] = chosenColor.g;
-      starColors[i * 3 + 2] = chosenColor.b;
+      starPositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+      starPositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta) * 0.55;
+      starPositions[i * 3 + 2] = radius * Math.cos(phi);
+      const color = palette[i % 9 === 0 ? 2 : i % 4 === 0 ? 1 : 0];
+      starColors[i * 3] = color.r;
+      starColors[i * 3 + 1] = color.g;
+      starColors[i * 3 + 2] = color.b;
     }
+    const starGeometry = new THREE.BufferGeometry();
+    starGeometry.setAttribute("position", new THREE.BufferAttribute(starPositions, 3));
+    starGeometry.setAttribute("color", new THREE.BufferAttribute(starColors, 3));
+    const stars = new THREE.Points(
+      starGeometry,
+      new THREE.PointsMaterial({
+        map: starTexture,
+        size: 1.15,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.85,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        sizeAttenuation: true,
+      })
+    );
+    scene.add(stars);
 
-    starGeo.setAttribute("position", new THREE.BufferAttribute(starPositions, 3));
-    starGeo.setAttribute("color", new THREE.BufferAttribute(starColors, 3));
-
-    const starMat = new THREE.PointsMaterial({
-      size: 1.5,
-      vertexColors: true,
-      transparent: true,
-      opacity: 0.7,
-    });
-    const starField = new THREE.Points(starGeo, starMat);
-    scene.add(starField);
-
-    // 6. CONCENTRIC ELLIPTICAL ORBITAL PATHS & 3D PLANETS
     interface PlanetRuntime {
       data: PlanetData;
-      group: THREE.Group;
-      mesh: THREE.Mesh;
-      hitMesh: THREE.Mesh;
-      orbitLine: THREE.Line;
-      orbitMaterial: THREE.LineBasicMaterial;
-      currentAngle: number;
-      targetScale: number;
-      currentScale: number;
-      rotationSpeed: number;
-      ringMesh?: THREE.Mesh;
+      anchor: THREE.Group;
+      spin: THREE.Group;
+      material: THREE.MeshStandardMaterial;
+      angle: number;
+      scale: number;
     }
 
-    const planetRuntimes: PlanetRuntime[] = [];
-    const interactiveMeshes: THREE.Mesh[] = [];
+    const runtimes: PlanetRuntime[] = [];
+    const hitMeshes: THREE.Mesh[] = [];
+    const orbitMaterials: THREE.LineBasicMaterial[] = [];
 
-    PLANETS.forEach((p, idx) => {
-      // Orbit Ring (Flat circular path on XZ plane, appears elliptical in perspective)
-      const orbitPoints: THREE.Vector3[] = [];
-      const segments = 160;
-      for (let i = 0; i <= segments; i++) {
-        const theta = (i / segments) * Math.PI * 2;
-        orbitPoints.push(new THREE.Vector3(Math.cos(theta) * p.orbitRadius, 0, Math.sin(theta) * p.orbitRadius));
+    RINGS.forEach((ring, ringIndex) => {
+      const ringGroup = new THREE.Group();
+      ringGroup.rotation.x = ring.tilt;
+      ringGroup.rotation.z = ring.roll;
+      system.add(ringGroup);
+
+      const points: THREE.Vector3[] = [];
+      for (let i = 0; i <= 160; i++) {
+        const theta = (i / 160) * Math.PI * 2;
+        points.push(new THREE.Vector3(Math.cos(theta) * ring.radius, 0, Math.sin(theta) * ring.radius));
       }
-      const orbitGeo = new THREE.BufferGeometry().setFromPoints(orbitPoints);
-      const orbitMat = new THREE.LineBasicMaterial({
-        color: new THREE.Color(p.color),
+      const orbitMaterial = new THREE.LineBasicMaterial({
+        color: new THREE.Color(ring.color),
         transparent: true,
-        opacity: 0.32,
-        linewidth: 1,
+        opacity: ring.opacity,
+        depthWrite: false,
       });
-      const orbitLine = new THREE.Line(orbitGeo, orbitMat);
-      solarSystemGroup.add(orbitLine);
+      orbitMaterials.push(orbitMaterial);
+      ringGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), orbitMaterial));
 
-      // Planet Group
-      const pGroup = new THREE.Group();
-      solarSystemGroup.add(pGroup);
+      PLANETS.filter((planet) => planet.ring === ringIndex).forEach((planet) => {
+        const anchor = new THREE.Group();
+        ringGroup.add(anchor);
+        const spin = new THREE.Group();
+        spin.rotation.z = (ringIndex - 1.5) * 0.08;
+        anchor.add(spin);
 
-      // 3D Planet Mesh
-      const pGeo = new THREE.SphereGeometry(p.size, 40, 40);
-      const pTex = createPlanetTexture(p.id);
-      const pMat = new THREE.MeshStandardMaterial({
-        map: pTex,
-        roughness: 0.55,
-        metalness: 0.25,
-      });
-      const pMesh = new THREE.Mesh(pGeo, pMat);
-      pMesh.rotation.z = p.tilt;
-      pGroup.add(pMesh);
-
-      // Ring for Planet 3 (Opportunities)
-      let ringMesh: THREE.Mesh | undefined;
-      if (p.hasRing) {
-        const rGeo = new THREE.RingGeometry(p.size * 1.45, p.size * 2.65, 64);
-        const rTex = createRingTexture();
-        const rMat = new THREE.MeshStandardMaterial({
-          map: rTex,
-          side: THREE.DoubleSide,
-          transparent: true,
-          opacity: 0.9,
-          roughness: 0.35,
+        const texture = createPlanetTexture(planet);
+        textures.push(texture);
+        const material = new THREE.MeshStandardMaterial({
+          map: texture,
+          color: new THREE.Color("#ffffff"),
+          roughness: 0.62,
+          metalness: 0.08,
+          emissive: new THREE.Color(planet.color),
+          emissiveIntensity: 0.28,
         });
-        ringMesh = new THREE.Mesh(rGeo, rMat);
-        ringMesh.rotation.x = Math.PI / 2.35;
-        ringMesh.rotation.y = 0.25;
-        pGroup.add(ringMesh);
-      }
+        const mesh = new THREE.Mesh(new THREE.SphereGeometry(planet.size, 40, 32), material);
+        spin.add(mesh);
 
-      // Invisible enlarged hit sphere for comfortable hover and click detection
-      const hitGeo = new THREE.SphereGeometry(p.size * 1.6, 16, 16);
-      const hitMat = new THREE.MeshBasicMaterial({
-        visible: false,
-      });
-      const hitMesh = new THREE.Mesh(hitGeo, hitMat);
-      hitMesh.userData = { planetIndex: idx };
-      pGroup.add(hitMesh);
-      interactiveMeshes.push(hitMesh);
+        if (planet.hasRing) {
+          const ringMesh = new THREE.Mesh(
+            new THREE.RingGeometry(planet.size * 1.38, planet.size * 1.92, 64),
+            new THREE.MeshBasicMaterial({
+              color: new THREE.Color(planet.glowColor),
+              side: THREE.DoubleSide,
+              transparent: true,
+              opacity: 0.42,
+              depthWrite: false,
+            })
+          );
+          ringMesh.rotation.x = Math.PI / 2.35;
+          spin.add(ringMesh);
+        }
 
-      planetRuntimes.push({
-        data: p,
-        group: pGroup,
-        mesh: pMesh,
-        hitMesh,
-        orbitLine,
-        orbitMaterial: orbitMat,
-        currentAngle: p.initialAngle,
-        targetScale: 1,
-        currentScale: 1,
-        rotationSpeed: 0.85,
-        ringMesh,
+        const hit = new THREE.Mesh(
+          new THREE.SphereGeometry(planet.size * 1.45, 16, 12),
+          new THREE.MeshBasicMaterial({ visible: false })
+        );
+        hit.userData = { id: planet.id };
+        spin.add(hit);
+        hitMeshes.push(hit);
+
+        runtimes.push({
+          data: planet,
+          anchor,
+          spin,
+          material,
+          angle: planet.angle,
+          scale: 1,
+        });
       });
     });
 
-    // 7. RAYCASTING & INTERACTION
+    webgl.setPixelRatio(Math.min(window.devicePixelRatio || 1, width < 800 ? 1.5 : 1.75));
+    webgl.setSize(width, height);
+    webgl.outputColorSpace = THREE.SRGBColorSpace;
+    webgl.toneMapping = THREE.ACESFilmicToneMapping;
+    webgl.toneMappingExposure = 1.05;
+    webgl.domElement.style.display = "block";
+    webgl.domElement.style.width = "100%";
+    webgl.domElement.style.height = "100%";
+    container.appendChild(webgl.domElement);
+    fitSystem();
+
+    const labels = new Map<string, HTMLButtonElement>();
+    const hoveredId = { current: null as string | null };
     const raycaster = new THREE.Raycaster();
-    const pointer = new THREE.Vector2(-999, -999);
+    const ndc = new THREE.Vector2(-10, -10);
+    const world = new THREE.Vector3();
+    const projected = new THREE.Vector3();
 
-    const onPointerMove = (e: MouseEvent) => {
-      const rect = container.getBoundingClientRect();
-      pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-
-      raycaster.setFromCamera(pointer, camera);
-      const intersects = raycaster.intersectObjects(interactiveMeshes);
-
-      if (intersects.length > 0) {
-        const hit = intersects[0];
-        const idx = hit.object.userData.planetIndex as number;
-        if (hoveredIndexRef.current !== idx) {
-          setHoveredPlanetIndex(idx);
-          container.style.cursor = "pointer";
-        }
-        setTooltipPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-      } else {
-        if (hoveredIndexRef.current !== null) {
-          setHoveredPlanetIndex(null);
-          setTooltipPos(null);
-          container.style.cursor = "default";
-        }
-      }
+    const setHover = (id: string | null) => {
+      hoveredId.current = id;
+      container.style.cursor = id ? "pointer" : "default";
     };
 
-    const onClick = (e: MouseEvent) => {
+    const onPointerMove = (event: PointerEvent) => {
       const rect = container.getBoundingClientRect();
-      pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-
-      raycaster.setFromCamera(pointer, camera);
-      const intersects = raycaster.intersectObjects(interactiveMeshes);
-      if (intersects.length > 0) {
-        const idx = intersects[0].object.userData.planetIndex as number;
-        const targetRoute = PLANETS[idx].route;
-        router.push(targetRoute);
-      }
+      ndc.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      ndc.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+      pointer.x = ndc.x;
+      pointer.y = ndc.y;
+      raycaster.setFromCamera(ndc, camera);
+      const hits = raycaster.intersectObjects(hitMeshes, false);
+      setHover(hits.length ? (hits[0].object.userData.id as string) : null);
     };
 
-    container.addEventListener("mousemove", onPointerMove);
+    const onPointerLeave = (event: PointerEvent) => {
+      pointer.x = 0;
+      pointer.y = 0;
+      const next = event.relatedTarget;
+      if (next instanceof Element && next.closest("[data-planet-id]")) return;
+      setHover(null);
+    };
+
+    const onClick = () => {
+      if (!hoveredId.current) return;
+      const planet = PLANETS.find((item) => item.id === hoveredId.current);
+      if (planet) routerRef.current.push(planet.route);
+    };
+
+    const buttonCleanups: Array<() => void> = [];
+    PLANETS.forEach((planet) => {
+      const button = root.querySelector<HTMLButtonElement>(`[data-planet-id="${planet.id}"]`);
+      if (!button) return;
+      labels.set(planet.id, button);
+      const enter = () => setHover(planet.id);
+      const leave = () => {
+        if (hoveredId.current === planet.id) setHover(null);
+      };
+      button.addEventListener("pointerenter", enter);
+      button.addEventListener("pointerleave", leave);
+      button.addEventListener("focus", enter);
+      button.addEventListener("blur", leave);
+      buttonCleanups.push(() => {
+        button.removeEventListener("pointerenter", enter);
+        button.removeEventListener("pointerleave", leave);
+        button.removeEventListener("focus", enter);
+        button.removeEventListener("blur", leave);
+      });
+    });
+
+    container.addEventListener("pointermove", onPointerMove);
+    container.addEventListener("pointerleave", onPointerLeave);
     container.addEventListener("click", onClick);
 
-    // 8. PAUSE WHEN TAB IS HIDDEN OR NOT IN VIEWPORT (100% GPU optimization)
-    let isVisible = true;
+    let visible = true;
     const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          isVisible = entry.isIntersecting;
-        });
+      ([entry]) => {
+        visible = entry.isIntersecting;
       },
-      { threshold: 0.05 }
+      { threshold: 0.02 }
     );
     observer.observe(container);
 
-    const onVisibilityChange = () => {
-      isVisible = !document.hidden;
-    };
-    document.addEventListener("visibilitychange", onVisibilityChange);
+    const resizeObserver = new ResizeObserver(() => {
+      width = container.clientWidth || width;
+      height = container.clientHeight || height;
+      webgl.setPixelRatio(Math.min(window.devicePixelRatio || 1, width < 800 ? 1.5 : 1.75));
+      webgl.setSize(width, height);
+      fitSystem();
+    });
+    resizeObserver.observe(container);
 
-    // 9. ANIMATION LOOP WITH DELTA TIME
-    let lastTime = performance.now();
-    let animFrameId: number;
+    let frame = 0;
+    let last = performance.now();
+    const scratch: ProjectedLabel[] = [];
 
     const animate = (now: number) => {
-      animFrameId = requestAnimationFrame(animate);
-      if (!isVisible) {
-        lastTime = now;
-        return;
+      if (disposed) return;
+      frame = requestAnimationFrame(animate);
+      const delta = Math.min((now - last) / 1000, 0.05);
+      last = now;
+      if (!visible) return;
+
+      if (motionEnabled) {
+        panTarget.x = pointer.x * 1.4;
+        panTarget.y = pointer.y * 0.7;
+        pan.x += (panTarget.x - pan.x) * 1.6 * delta;
+        pan.y += (panTarget.y - pan.y) * 1.6 * delta;
+        const distance = camera.position.z;
+        camera.position.x = pan.x;
+        camera.position.y = distance * 0.2 + pan.y;
+        camera.lookAt(0, -0.2, 0);
+        sunMesh.rotation.y += delta * 0.08;
+        const pulse = 1 + Math.sin(now * 0.0006) * 0.025;
+        innerGlow.scale.setScalar(11 * pulse);
+        outerGlow.scale.setScalar(18 * (1 + Math.sin(now * 0.0004) * 0.02));
+        stars.rotation.y += delta * 0.004;
       }
 
-      const delta = Math.min((now - lastTime) / 1000, 0.1);
-      lastTime = now;
+      scratch.length = 0;
+      const activeRing = runtimes.find((item) => item.data.id === hoveredId.current)?.data.ring;
+      sunGroup.getWorldPosition(world);
+      projected.copy(world).project(camera);
+      const sunX = (projected.x * 0.5 + 0.5) * width;
+      const sunY = (-projected.y * 0.5 + 0.5) * height;
 
-      // Sun subtle core pulsation and slow rotation
-      sunCoreMesh.rotation.y += 0.25 * delta;
-      aura1Mesh.rotation.y -= 0.18 * delta;
-      aura2Mesh.rotation.z += 0.12 * delta;
+      runtimes.forEach((runtime) => {
+        const ring = RINGS[runtime.data.ring];
+        if (motionEnabled) runtime.angle += ring.speed * delta;
+        const bob = motionEnabled ? Math.sin(now * 0.00045 + runtime.data.angle) * 0.16 : 0;
+        runtime.anchor.position.set(Math.cos(runtime.angle) * ring.radius, bob, Math.sin(runtime.angle) * ring.radius);
+        if (motionEnabled) runtime.spin.rotation.y += runtime.data.spin * delta;
 
-      // Update planets along orbital paths
-      const currentHover = hoveredIndexRef.current;
-      const updatedLabels: ProjectedLabel[] = [];
+        const hovered = hoveredId.current === runtime.data.id;
+        const targetScale = hovered ? 1.14 : 1;
+        runtime.scale += (targetScale - runtime.scale) * (motionEnabled ? 6 * delta : 1);
+        runtime.spin.scale.setScalar(runtime.scale);
+        const targetGlow = hovered ? 0.72 : 0.28;
+        runtime.material.emissiveIntensity += (targetGlow - runtime.material.emissiveIntensity) * (motionEnabled ? 6 * delta : 1);
 
-      planetRuntimes.forEach((pr, i) => {
-        const isHovered = currentHover === i;
-
-        // Orbital revolution: move angle by speed * delta
-        pr.currentAngle += pr.data.speed * delta;
-        const x = Math.cos(pr.currentAngle) * pr.data.orbitRadius;
-        const z = Math.sin(pr.currentAngle) * pr.data.orbitRadius;
-        pr.group.position.set(x, 0, z);
-
-        // Axial spin on own tilted axis (accelerate slightly on hover)
-        const spinMultiplier = isHovered ? 2.6 : 1;
-        pr.mesh.rotation.y += pr.rotationSpeed * spinMultiplier * delta;
-
-        // Smooth scale lerp
-        pr.targetScale = isHovered ? 1.3 : 1.0;
-        pr.currentScale += (pr.targetScale - pr.currentScale) * 10 * delta;
-        pr.group.scale.setScalar(pr.currentScale);
-
-        // Highlight orbital path when hovered
-        const targetOpacity = isHovered ? 0.9 : 0.3;
-        pr.orbitMaterial.opacity += (targetOpacity - pr.orbitMaterial.opacity) * 8 * delta;
-
-        // Project 3D planet coordinate to 2D screen coordinate for HTML label overlay
-        const worldPos = new THREE.Vector3();
-        pr.group.getWorldPosition(worldPos);
-
-        const projected = worldPos.clone().project(camera);
-        const screenX = (projected.x * 0.5 + 0.5) * width;
-        const screenY = (-projected.y * 0.5 + 0.5) * height;
-
-        // Check if visible within camera frustum and facing
-        const inFront = projected.z < 1;
-        updatedLabels.push({
-          id: pr.data.id,
-          name: pr.data.name,
-          category: pr.data.category,
-          x: screenX,
-          y: screenY,
-          visible: inFront && screenX > 20 && screenX < width - 20 && screenY > 20 && screenY < height - 20,
+        runtime.anchor.getWorldPosition(world);
+        projected.copy(world).project(camera);
+        const x = (projected.x * 0.5 + 0.5) * width;
+        const y = (-projected.y * 0.5 + 0.5) * height;
+        const dx = x - sunX;
+        const dy = y - sunY;
+        const length = Math.hypot(dx, dy) || 1;
+        const nudge = 34 + runtime.data.size * 16;
+        scratch.push({
+          id: runtime.data.id,
+          x: x + (dx / length) * nudge,
+          y: y + (dy / length) * nudge,
+          w: Math.min(188, runtime.data.name.length * 6.5 + 28),
           depth: projected.z,
         });
       });
 
-      setLabels(updatedLabels);
-      renderer.render(scene, camera);
-    };
-
-    animFrameId = requestAnimationFrame(animate);
-
-    // 10. RESIZE OBSERVER
-    const handleResize = () => {
-      if (!container) return;
-      width = container.clientWidth;
-      height = container.clientHeight;
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    // 11. CLEANUP ON UNMOUNT (Prevent WebGL memory leaks)
-    return () => {
-      cancelAnimationFrame(animFrameId);
-      observer.disconnect();
-      document.removeEventListener("visibilitychange", onVisibilityChange);
-      window.removeEventListener("resize", handleResize);
-      container.removeEventListener("mousemove", onPointerMove);
-      container.removeEventListener("click", onClick);
-
-      scene.traverse((obj) => {
-        if (obj instanceof THREE.Mesh || obj instanceof THREE.Line || obj instanceof THREE.Points || obj instanceof THREE.Sprite) {
-          if (obj.geometry) obj.geometry.dispose();
-          if (Array.isArray(obj.material)) {
-            obj.material.forEach((m) => m.dispose());
-          } else if (obj.material) {
-            obj.material.dispose();
-          }
-        }
+      orbitMaterials.forEach((material, index) => {
+        const target = activeRing === index ? 0.42 : RINGS[index].opacity;
+        material.opacity += (target - material.opacity) * (motionEnabled ? 5 * delta : 1);
       });
 
-      coronaTex.dispose();
-      renderer.dispose();
-      if (renderer.domElement.parentNode) {
-        renderer.domElement.parentNode.removeChild(renderer.domElement);
+      const padBottom = Math.max(108, height * 0.2);
+      for (let pass = 0; pass < 7; pass++) {
+        for (let i = 0; i < scratch.length; i++) {
+          for (let j = i + 1; j < scratch.length; j++) {
+            const a = scratch[i];
+            const b = scratch[j];
+            const dx = b.x - a.x;
+            const dy = b.y - a.y;
+            const gapX = (a.w + b.w) / 2 + 10;
+            const gapY = 30;
+            if (Math.abs(dx) < gapX && Math.abs(dy) < gapY) {
+              const overlapX = gapX - Math.abs(dx);
+              const overlapY = gapY - Math.abs(dy);
+              if (overlapX < overlapY) {
+                const push = overlapX * 0.5 + 0.4;
+                const sign = dx === 0 ? (i % 2 === 0 ? -1 : 1) : Math.sign(dx);
+                a.x -= sign * push;
+                b.x += sign * push;
+              } else {
+                const push = overlapY * 0.5 + 0.4;
+                const sign = dy === 0 ? 1 : Math.sign(dy);
+                a.y -= sign * push;
+                b.y += sign * push;
+              }
+            }
+          }
+        }
+        scratch.forEach((label) => {
+          const half = label.w / 2 + 8;
+          label.x = THREE.MathUtils.clamp(label.x, half, width - half);
+          label.y = THREE.MathUtils.clamp(label.y, 18, height - padBottom);
+        });
       }
-    };
-  }, [router]);
 
-  // Navigate on label click or keyboard selection
-  const handleSelectPlanet = useCallback(
-    (route: string) => {
-      router.push(route);
-    },
-    [router]
-  );
+      scratch.forEach((label, index) => {
+        const button = labels.get(label.id);
+        if (!button) return;
+        const hovered = hoveredId.current === label.id;
+        const opacity = label.depth > 1 ? 0 : hovered ? 1 : 0.92;
+        button.style.transform = `translate3d(${label.x}px, ${label.y}px, 0) translate(-50%, -50%) scale(${hovered ? 1.05 : 1})`;
+        button.style.opacity = String(opacity);
+        button.style.zIndex = String(20 + Math.round((1 - label.depth) * 10) + (hovered ? 5 : 0));
+        button.style.borderColor = hovered ? "rgba(196, 181, 253, 0.85)" : "rgba(255, 255, 255, 0.16)";
+        button.style.boxShadow = hovered ? "0 0 22px rgba(139, 92, 246, 0.45)" : "0 8px 24px rgba(0, 0, 0, 0.18)";
+        button.dataset.ready = "true";
+        if (index === 0) button.dataset.frame = "live";
+      });
+
+      webgl.render(scene, camera);
+    };
+
+    frame = requestAnimationFrame(animate);
+
+    return () => {
+      disposed = true;
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      resizeObserver.disconnect();
+      reduceMotion.removeEventListener("change", onMotionChange);
+      container.removeEventListener("pointermove", onPointerMove);
+      container.removeEventListener("pointerleave", onPointerLeave);
+      container.removeEventListener("click", onClick);
+      buttonCleanups.forEach((cleanup) => cleanup());
+
+      scene.traverse((object) => {
+        const mesh = object as THREE.Mesh;
+        if (mesh.geometry) mesh.geometry.dispose();
+        const material = mesh.material;
+        if (Array.isArray(material)) material.forEach((item) => item.dispose());
+        else if (material) material.dispose();
+      });
+      textures.forEach((texture) => texture.dispose());
+      webgl.dispose();
+      webgl.domElement.remove();
+    };
+  }, []);
 
   return (
-    <div className="relative w-full h-[640px] sm:h-[740px] lg:h-[840px] overflow-hidden select-none">
-      {/* 3D WebGL Canvas Container */}
-      <div ref={mountRef} className="absolute inset-0 w-full h-full" />
+    <div className="relative w-full h-[700px] sm:h-[800px] lg:h-[900px] overflow-hidden bg-[#050510]">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -left-16 top-8 h-72 w-72 rounded-full bg-violet-700/20 blur-3xl" />
+        <div className="absolute right-0 top-16 h-80 w-80 rounded-full bg-sky-500/10 blur-3xl" />
+      </div>
 
-      {/* WebGL Fallback Banner if unsupported */}
+      <div ref={mountRef} className="absolute inset-0" />
+
       {!webglSupported && (
-        <div className="absolute inset-0 flex items-center justify-center bg-[#050510] text-center p-6">
-          <div className="max-w-md p-6 rounded-2xl bg-slate-900 border border-violet-500/30 space-y-3">
-            <Compass className="w-8 h-8 text-violet-400 mx-auto" />
-            <h4 className="text-lg font-bold text-white">Interactive 3D Solar System</h4>
-            <p className="text-sm text-slate-400">
-              Your browser does not have WebGL enabled. You can still explore all LaunchByte destinations below.
+        <div className="absolute inset-0 flex items-center justify-center p-6">
+          <div className="max-w-lg rounded-2xl border border-violet-500/30 bg-[#09091B] p-6 text-center">
+            <Compass className="mx-auto mb-3 h-7 w-7 text-violet-300" />
+            <p className="text-sm text-slate-300">
+              This browser cannot render the interactive universe. The destinations are still available below.
             </p>
-            <div className="flex flex-wrap gap-2 justify-center pt-2">
-              {PLANETS.map((p) => (
+            <div className="mt-4 flex flex-wrap justify-center gap-2">
+              {PLANETS.map((planet) => (
                 <button
-                  key={p.id}
-                  onClick={() => router.push(p.route)}
-                  className="px-3 py-1.5 rounded-lg bg-violet-600/30 hover:bg-violet-600/60 text-xs text-white border border-violet-500/40"
+                  key={planet.id}
+                  type="button"
+                  onClick={() => router.push(planet.route)}
+                  className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-white"
                 >
-                  {p.name}
+                  {planet.name}
                 </button>
               ))}
             </div>
@@ -741,88 +903,42 @@ export default function SolarSystemCanvas() {
         </div>
       )}
 
-      {/* Real-time Anchored HTML Overlay Labels for 3D Planets */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {labels.map((lbl, idx) => {
-          const isHovered = hoveredPlanetIndex === idx;
-          if (!lbl.visible) return null;
-
-          // Fade label slightly when planet travels to the far back of the orbit
-          const opacity = isHovered ? 1 : Math.max(0.4, 1 - (lbl.depth - 0.7) * 2.2);
-
-          return (
-            <div
-              key={lbl.id}
-              style={{
-                transform: `translate3d(${lbl.x}px, ${lbl.y}px, 0)`,
-                opacity,
-              }}
-              className="absolute left-0 top-0 transition-opacity duration-200 pointer-events-auto"
+      {webglSupported && (
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          {PLANETS.map((planet) => (
+            <button
+              key={planet.id}
+              type="button"
+              data-planet-id={planet.id}
+              aria-label={`${planet.name}. ${planet.description}`}
+              onClick={() => router.push(planet.route)}
+              className="absolute left-0 top-0 whitespace-nowrap rounded-full border border-white/15 bg-[#0b0b1d]/55 px-2.5 py-1 text-[11px] font-semibold tracking-wide text-white opacity-0 shadow-lg backdrop-blur-md transition-[border-color,box-shadow] duration-300 pointer-events-auto sm:text-xs"
             >
-              <button
-                type="button"
-                onClick={() => handleSelectPlanet(PLANETS[idx].route)}
-                onMouseEnter={() => setHoveredPlanetIndex(idx)}
-                onMouseLeave={() => setHoveredPlanetIndex(null)}
-                aria-label={`Explore ${lbl.name}`}
-                className={`group flex items-center gap-1.5 px-3 py-1 rounded-full backdrop-blur-md transition-all -translate-x-1/2 -translate-y-9 ${
-                  isHovered
-                    ? "bg-violet-950/95 border border-violet-400 shadow-xl shadow-violet-500/50 scale-110"
-                    : "bg-slate-950/70 border border-violet-500/25 hover:border-violet-400/60"
-                }`}
-              >
-                <span
-                  className="w-1.5 h-1.5 rounded-full"
-                  style={{ backgroundColor: PLANETS[idx].glowColor }}
-                />
-                <span className="text-[11px] font-bold tracking-wider text-slate-100 group-hover:text-white uppercase">
-                  {lbl.name}
-                </span>
-              </button>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Floating Interactive Hover Information Panel */}
-      {hoveredPlanetIndex !== null && tooltipPos && (
-        <div
-          style={{
-            left: Math.min(Math.max(tooltipPos.x + 20, 20), (mountRef.current?.clientWidth || 800) - 290),
-            top: Math.max(tooltipPos.y - 75, 20),
-          }}
-          className="absolute z-30 pointer-events-auto w-64 p-4 rounded-2xl bg-[#09091B]/95 border border-violet-500/40 shadow-2xl shadow-violet-950/80 backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150"
-        >
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="text-[10px] font-mono font-bold tracking-widest text-[#A78BFA] uppercase">
-              {PLANETS[hoveredPlanetIndex].category}
-            </span>
-            <span
-              className="w-2 h-2 rounded-full animate-ping"
-              style={{ backgroundColor: PLANETS[hoveredPlanetIndex].glowColor }}
-            />
-          </div>
-
-          <h4 className="text-base font-extrabold text-white tracking-tight flex items-center gap-1.5">
-            <span>{PLANETS[hoveredPlanetIndex].name}</span>
-          </h4>
-
-          <p className="text-xs text-[#B8BAD0] leading-relaxed my-2 font-normal">
-            {PLANETS[hoveredPlanetIndex].description}
-          </p>
-
-          <button
-            onClick={() => handleSelectPlanet(PLANETS[hoveredPlanetIndex].route)}
-            className="w-full mt-1 px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#4F46E5] to-[#8B5CF6] hover:from-[#4338CA] hover:to-[#7C3AED] text-white text-xs font-semibold shadow-md shadow-violet-500/20 transition-all flex items-center justify-center gap-1.5 group"
-          >
-            <span>Explore {PLANETS[hoveredPlanetIndex].name}</span>
-            <ArrowRight className="w-3.5 h-3.5 text-violet-200 group-hover:translate-x-0.5 transition-transform" />
-          </button>
+              {planet.name}
+            </button>
+          ))}
         </div>
       )}
 
-      {/* Bottom Subtle Gradient Blend */}
-      <div className="absolute bottom-0 inset-x-0 h-28 bg-gradient-to-t from-[#050510] to-transparent pointer-events-none" />
+      <div
+        className="pointer-events-none absolute bottom-0 left-1/2 z-30 w-[min(520px,78vw)] -translate-x-1/2 overflow-hidden"
+        style={{
+          height: "clamp(156px, 24vw, 220px)",
+          maskImage:
+            "linear-gradient(to top, #000 68%, transparent), linear-gradient(to right, transparent, #000 10%, #000 90%, transparent)",
+          WebkitMaskImage:
+            "linear-gradient(to top, #000 68%, transparent), linear-gradient(to right, transparent, #000 10%, #000 90%, transparent)",
+          maskComposite: "intersect",
+          WebkitMaskComposite: "source-in",
+        }}
+      >
+        <img
+          src="/brand/universe-foreground-astronaut.png"
+          alt=""
+          draggable={false}
+          className="absolute bottom-0 left-1/2 h-full w-auto max-w-none -translate-x-1/2 select-none"
+        />
+      </div>
     </div>
   );
 }

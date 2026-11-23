@@ -2,15 +2,13 @@
 
 import React from "react";
 import dynamic from "next/dynamic";
-import Link from "next/link";
-import { Sparkles, ArrowRight, Compass } from "lucide-react";
-import { PLANETS } from "./SolarSystemCanvas";
+import { Sparkles, Compass } from "lucide-react";
 
 // Client-only dynamic import of the Three.js WebGL canvas (zero SSR hydration errors)
 const SolarSystemCanvas = dynamic(() => import("./SolarSystemCanvas"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-[640px] sm:h-[740px] lg:h-[840px] flex items-center justify-center bg-[#050510]">
+    <div className="w-full h-[700px] sm:h-[800px] lg:h-[900px] flex items-center justify-center bg-[#050510]">
       <div className="flex flex-col items-center gap-3 text-violet-400 animate-pulse">
         <Compass className="w-8 h-8 animate-spin" />
         <span className="text-xs font-mono uppercase tracking-widest text-[#A78BFA]">
@@ -50,23 +48,9 @@ export default function SolarSystemSection() {
         </h2>
 
         <p className="max-w-2xl mx-auto text-base sm:text-lg text-[#B8BAD0] leading-relaxed font-normal">
-          Your Universe of Possibilities. Hover or tap any planetary orbit to explore hackathons,
+          Your Universe of Possibilities. Hover or tap a planet to explore hackathons,
           fellowships, community networks, and live builder projects.
         </p>
-
-        {/* Accessible Keyboard Controls / Quick Pills */}
-        <div className="flex flex-wrap items-center justify-center gap-2 pt-2" role="navigation" aria-label="Quick planet destinations">
-          {PLANETS.map((planet) => (
-            <Link
-              key={planet.id}
-              href={planet.route}
-              className="px-3 py-1 rounded-lg bg-slate-900/80 hover:bg-violet-950/60 border border-slate-800 hover:border-violet-500/40 text-[11px] font-semibold text-slate-300 hover:text-white transition-all"
-            >
-              <span className="inline-block w-1.5 h-1.5 rounded-full mr-1.5" style={{ backgroundColor: planet.glowColor }} />
-              {planet.name}
-            </Link>
-          ))}
-        </div>
       </div>
 
       {/* Genuine 3D Interactive Three.js Planetary Scene */}

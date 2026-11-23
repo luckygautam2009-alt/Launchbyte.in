@@ -87,6 +87,7 @@ async function start() {
     env: {
       ...process.env,
       PORT: "3000",
+      PATH: `${path.join(FRONTEND_DIR, "node_modules", ".bin")}:${process.env.PATH || ""}`,
     },
   });
 
