@@ -6,7 +6,7 @@ import { api } from "@/lib/api";
 import { OpportunityListItem } from "@/lib/types";
 import OpportunityCard from "@/components/OpportunityCard";
 import HeroSection from "@/components/home/HeroSection";
-import LogoIdentitySection from "@/components/home/LogoIdentitySection";
+import OrbitalBrandSection from "@/components/home/OrbitalBrandSection";
 import {
   Sparkles,
   ArrowRight,
@@ -55,8 +55,8 @@ export default function HomePage() {
       {/* Cinematic Opening Hero Section */}
       <HeroSection />
 
-      {/* Cinematic LaunchByte Exploded Identity Section */}
-      <LogoIdentitySection />
+      {/* Phase 2: Orbital Brand Showcase Section */}
+      <OrbitalBrandSection />
 
       {/* Featured Hackathons Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
