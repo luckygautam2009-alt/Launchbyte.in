@@ -1,43 +1,27 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import { Sparkles, ArrowRight, Compass } from "lucide-react";
 import HeroCosmicScene from "./HeroCosmicScene";
 
 export default function CosmicExplorerSection() {
-  const [imageLoaded, setImageLoaded] = useState(false);
-
   return (
-    <section className="relative w-full min-h-[640px] sm:min-h-[760px] lg:min-h-[860px] flex flex-col justify-between overflow-hidden bg-[#050510]">
+    <section className="relative w-full min-h-[580px] sm:min-h-[680px] lg:min-h-[760px] flex flex-col justify-between overflow-hidden bg-[#050510]">
       {/* Top Transition Blend with Previous Section */}
-      <div className="absolute top-0 inset-x-0 h-32 sm:h-44 bg-gradient-to-b from-[#050510] via-[#050510]/80 to-transparent z-20 pointer-events-none" />
+      <div className="absolute top-0 inset-x-0 h-28 sm:h-36 bg-gradient-to-b from-[#050510] via-[#050510]/80 to-transparent z-20 pointer-events-none" />
 
-      {/* Primary Visual Background: Astronaut on Alien Planet Reference Asset */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src="/brand/alien-planet-universe.jpg"
-          alt="Astronaut looking out across the cosmic universe on an alien planet"
-          onLoad={() => setImageLoaded(true)}
-          className={`w-full h-full object-cover object-bottom select-none transition-opacity duration-1000 ${
-            imageLoaded ? "opacity-100" : "opacity-0"
-          }`}
-          style={{
-            // Keep the composition authentic without stretching or distorting
-            objectPosition: "center 75%",
-          }}
-        />
-
-        {/* Ambient Cosmic Violet & Electric Blue Glow Enhancements */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#050510] via-transparent to-[#050510]/60 pointer-events-none" />
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-violet-600/10 rounded-full blur-3xl pointer-events-none animate-pulse" />
-        <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none animate-pulse" />
+      {/* Ambient Cosmic Radial Violet & Electric Blue Lighting (Clean dark space, no external photo bg) */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-violet-600/10 rounded-full blur-[130px]" />
+        <div className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[130px]" />
+        <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-indigo-600/10 rounded-full blur-[120px]" />
       </div>
 
-      {/* Hero Cosmic Scene: 3 Floating CSS/SVG Planets, Floating Vector Astronaut, Starfield & Parallax */}
+      {/* Hero Cosmic Scene: Floating CSS/SVG Planets, Twinkling Stars & Subtle Parallax */}
       <HeroCosmicScene />
 
-      {/* Safe Upper Zone: Content and Headlines positioned strictly in the upper nebula sky */}
+      {/* Content & Headlines */}
       <div className="relative z-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 text-center space-y-6">
         {/* Editorial Pill Badge */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-violet-950/60 border border-violet-500/30 text-[11px] sm:text-xs font-mono uppercase tracking-widest text-[#A78BFA] backdrop-blur-md shadow-lg shadow-violet-950/40">
@@ -78,29 +62,11 @@ export default function CosmicExplorerSection() {
         </div>
       </div>
 
-      {/* Atmospheric Mid-Level Subtle Horizon Telemetry (Left & Right margins only, keeping center astronaut pristine) */}
-      <div className="relative z-20 max-w-7xl mx-auto w-full px-6 lg:px-8 pb-8 sm:pb-12 flex items-end justify-between pointer-events-none">
-        {/* Left Telemetry */}
-        <div className="hidden sm:flex flex-col gap-1 text-[11px] font-mono text-[#B8BAD0]/70">
-          <div className="flex items-center gap-1.5 text-violet-400">
-            <span className="w-2 h-2 rounded-full bg-violet-400 animate-pulse" />
-            <span className="uppercase tracking-wider">Sector: LaunchByte</span>
-          </div>
-          <span className="text-[10px] text-slate-500">Coordinates: 01.LB // 2026.EXP</span>
-        </div>
-
-        {/* Center Space */}
-        <div className="w-1" />
-
-        {/* Right Telemetry */}
-        <div className="hidden sm:flex flex-col items-end gap-1 text-[11px] font-mono text-[#B8BAD0]/70">
-          <span className="text-[10px] text-slate-500">Autonomous Ecosystem</span>
-          <span className="text-cyan-400 font-semibold uppercase tracking-wider">Zero Barriers • 100% Student Driven</span>
-        </div>
-      </div>
+      {/* Spacer to give room for the floating planets */}
+      <div className="h-44 sm:h-52 pointer-events-none" />
 
       {/* Bottom Gradient Blend with Next Section */}
-      <div className="absolute bottom-0 inset-x-0 h-32 sm:h-44 bg-gradient-to-t from-[#050510] via-[#050510]/80 to-transparent z-20 pointer-events-none" />
+      <div className="absolute bottom-0 inset-x-0 h-28 sm:h-36 bg-gradient-to-t from-[#050510] via-[#050510]/80 to-transparent z-20 pointer-events-none" />
     </section>
   );
 }

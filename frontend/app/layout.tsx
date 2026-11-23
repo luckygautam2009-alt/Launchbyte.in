@@ -6,6 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { CommandPalette } from "@/components/ui/CommandPalette";
+import GlobalCosmicParticles from "@/components/GlobalCosmicParticles";
 
 export const metadata: Metadata = {
   title: "LaunchByte — The High-Trust Platform for Hackathons & Opportunities",
@@ -51,11 +52,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className="bg-slate-950 text-slate-100 flex flex-col min-h-screen antialiased selection:bg-brand-500 selection:text-white pb-16 md:pb-0">
+      <body className="bg-[#050510] text-slate-100 flex flex-col min-h-screen antialiased selection:bg-brand-500 selection:text-white pb-16 md:pb-0 relative">
         <AuthProvider>
           <ToastProvider>
+            {/* Global animated particles from top to bottom across the entire page */}
+            <GlobalCosmicParticles />
             <Navbar />
-            <main className="flex-1">{children}</main>
+            <main className="flex-1 relative z-10">{children}</main>
             <Footer />
             <MobileBottomNav />
             <CommandPalette />
