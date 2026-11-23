@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Sparkles, ArrowRight, Compass, Shield, Terminal, Users } from "lucide-react";
+import { Sparkles, ArrowRight, Compass } from "lucide-react";
+import HeroCosmicScene from "./HeroCosmicScene";
 
 export default function CosmicExplorerSection() {
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -33,15 +34,8 @@ export default function CosmicExplorerSection() {
         <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none animate-pulse" />
       </div>
 
-      {/* Atmospheric Space Particles Overlay */}
-      <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
-        <div className="absolute top-16 left-[15%] w-1.5 h-1.5 rounded-full bg-violet-200/80 animate-star-twinkle" />
-        <div className="absolute top-28 right-[20%] w-2 h-2 rounded-full bg-cyan-200/90 animate-star-twinkle-delayed" />
-        <div className="absolute top-44 left-[35%] w-1 h-1 rounded-full bg-indigo-200/70 animate-star-twinkle-slow" />
-        <div className="absolute top-36 right-[38%] w-1.5 h-1.5 rounded-full bg-violet-300/80 animate-star-twinkle" />
-        <div className="absolute top-52 right-[12%] w-1 h-1 rounded-full bg-cyan-100/60 animate-star-twinkle-delayed" />
-        <div className="absolute top-20 left-[48%] w-1 h-1 rounded-full bg-white/70 animate-star-twinkle-slow" />
-      </div>
+      {/* Hero Cosmic Scene: 3 Floating CSS/SVG Planets, Floating Vector Astronaut, Starfield & Parallax */}
+      <HeroCosmicScene />
 
       {/* Safe Upper Zone: Content and Headlines positioned strictly in the upper nebula sky */}
       <div className="relative z-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 text-center space-y-6">
@@ -95,7 +89,7 @@ export default function CosmicExplorerSection() {
           <span className="text-[10px] text-slate-500">Coordinates: 01.LB // 2026.EXP</span>
         </div>
 
-        {/* Center Space Left Strictly Blank: The Astronaut Stands Uncovered */}
+        {/* Center Space */}
         <div className="w-1" />
 
         {/* Right Telemetry */}
