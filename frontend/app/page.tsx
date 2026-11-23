@@ -7,6 +7,7 @@ import { OpportunityListItem } from "@/lib/types";
 import OpportunityCard from "@/components/OpportunityCard";
 import HeroSection from "@/components/home/HeroSection";
 import OrbitalBrandSection from "@/components/home/OrbitalBrandSection";
+import MissionStorySection from "@/components/home/MissionStorySection";
 import {
   Sparkles,
   ArrowRight,
@@ -51,12 +52,15 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="space-y-24 pb-28 overflow-hidden bg-[#050510]">
+    <div className="space-y-24 pb-28 bg-[#050510] overflow-x-clip">
       {/* Cinematic Opening Hero Section */}
       <HeroSection />
 
       {/* Phase 2: Orbital Brand Showcase Section */}
       <OrbitalBrandSection />
+
+      {/* Phase 3: Mission & Scroll Storytelling Section */}
+      <MissionStorySection />
 
       {/* Featured Hackathons Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
