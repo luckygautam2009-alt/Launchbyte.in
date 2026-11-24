@@ -61,6 +61,7 @@ export interface CoreTeamMember {
   linkedin?: string;
   github?: string;
   twitter?: string;
+  focus?: string[];
 }
 
 export const SITE_CONTENT = {
@@ -238,35 +239,39 @@ export const SITE_CONTENT = {
   // 8. Core Team (Fallback data when backend /about/team is empty)
   coreTeam: [
     {
-      name: "Alex Vance", // SAMPLE - replace
+      name: "Alex Vance", // SAMPLE - replace with real team
       role: "Founder & Product Lead",
       bio: "Systems architect and collegiate hackathon organizer passionate about democratizing student tech.",
       photo: "/team/alex.jpg",
       github: "https://github.com",
       linkedin: "https://linkedin.com",
+      focus: ["System Architecture", "Developer Tooling", "Community Velocity"],
     },
     {
-      name: "Sophia Zhang", // SAMPLE - replace
+      name: "Sophia Zhang", // SAMPLE - replace with real team
       role: "Lead Platform Engineer",
       bio: "Distributed systems engineer building high-concurrency event pipelines and cryptographic check-in passes.",
       photo: "/team/sophia.jpg",
       github: "https://github.com",
       linkedin: "https://linkedin.com",
+      focus: ["High-Concurrency Backends", "Distributed Consensus", "Security Protocols"],
     },
     {
-      name: "Devon Reed", // SAMPLE - replace
+      name: "Devon Reed", // SAMPLE - replace with real team
       role: "Design & Creative Director",
       bio: "Crafting atmospheric interfaces, motion design systems, and developer-first user experiences.",
       photo: "/team/devon.jpg",
       github: "https://github.com",
       twitter: "https://x.com",
+      focus: ["Cinematic UI/UX", "Motion Design Systems", "Spatial Interactions"],
     },
     {
-      name: "Mira Patel", // SAMPLE - replace
+      name: "Mira Patel", // SAMPLE - replace with real team
       role: "Ecosystem & Partnerships",
       bio: "Connecting university clubs, collegiate hackathons, and developer grants across global campuses.",
       photo: "/team/mira.jpg",
       linkedin: "https://linkedin.com",
+      focus: ["University Ecosystems", "Collegiate Hackathons", "Venture Grants"],
     },
   ] as CoreTeamMember[],
 };

@@ -53,8 +53,10 @@ export const JOURNEY_5_STAGES: JourneyStageDot[] = [
 
 function LeftProgressRail({
   scrollYProgress,
+  isHidden = false,
 }: {
   scrollYProgress: MotionValue<number>;
+  isHidden?: boolean;
 }) {
   const [currentProgress, setCurrentProgress] = useState(0);
 
@@ -75,8 +77,12 @@ function LeftProgressRail({
   return (
     <motion.nav
       style={{ opacity: railOpacity }}
+      animate={{ opacity: isHidden ? 0 : 1 }}
+      transition={{ duration: 0.4, ease: "easeInOut" }}
       aria-label="Journey Progress Rail"
-      className="hidden xl:flex fixed left-4 2xl:left-6 top-1/2 -translate-y-1/2 z-40 flex-col items-center gap-4 py-4 px-2.5 rounded-full glass-card border border-violet-500/30 bg-[#050510]/85 backdrop-blur-md shadow-2xl shadow-black/60"
+      className={`hidden xl:flex fixed left-4 2xl:left-6 top-1/2 -translate-y-1/2 z-40 flex-col items-center gap-4 py-4 px-2.5 rounded-full glass-card border border-violet-500/30 bg-[#050510]/85 backdrop-blur-md shadow-2xl shadow-black/60 transition-all duration-300 ${
+        isHidden ? "pointer-events-none opacity-0 invisible" : ""
+      }`}
     >
       <span className="text-[9px] font-mono text-cyan-400 font-bold -rotate-90 my-2 select-none tracking-widest">
         STAGES
@@ -135,6 +141,22 @@ export default function AstronautJourney({
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const shouldReduceMotion = useReducedMotion();
+  const [hideJourney, setHideJourney] = useState(false);
+
+  useEffect(() => {
+    const target = document.querySelector("[data-hide-journey='true']");
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setHideJourney(entry.isIntersecting);
+      },
+      { threshold: 0.05, rootMargin: "-5% 0px -5% 0px" }
+    );
+
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, []);
 
   // Scroll tracking bound strictly to the wrapper container (Sections 3 to 9)
   const { scrollYProgress } = useScroll({
@@ -185,11 +207,13 @@ export default function AstronautJourney({
   return (
     <div ref={containerRef} className="relative w-full">
       {/* Left-edge Progress Rail (Desktop >= 1280px only) */}
-      <LeftProgressRail scrollYProgress={scrollYProgress} />
+      <LeftProgressRail scrollYProgress={scrollYProgress} isHidden={hideJourney} />
 
       {/* SVG S-Curve Glowing Trail (Constrained to margins, Desktop >= 1280px only) */}
       {!shouldReduceMotion && (
-        <svg
+        <motion.svg
+          animate={{ opacity: hideJourney ? 0 : 1 }}
+          transition={{ duration: 0.4 }}
           className="absolute inset-0 w-full h-full pointer-events-none hidden xl:block z-10"
           preserveAspectRatio="none"
           viewBox="0 0 100 100"
@@ -230,7 +254,7 @@ export default function AstronautJourney({
             filter="url(#trailGlow)"
             style={{ pathLength: smoothProgress }}
           />
-        </svg>
+        </motion.svg>
       )}
 
       {/* 
@@ -239,6 +263,8 @@ export default function AstronautJourney({
       */}
       {!shouldReduceMotion && (
         <motion.div
+          animate={{ opacity: hideJourney ? 0 : 1 }}
+          transition={{ duration: 0.4 }}
           style={{
             left: posX,
             top: posY,
