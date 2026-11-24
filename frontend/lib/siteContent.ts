@@ -63,6 +63,7 @@ export interface TeamHighlight {
 export interface CoreTeamMember {
   name: string;
   role: string;
+  title?: string;
   tagline?: string;
   bio: string;
   photo?: string;
@@ -250,64 +251,38 @@ export const SITE_CONTENT = {
   coreTeam: [
     {
       name: "Yash Gautam",
-      role: "Founder & Chief Executive Officer — LaunchByte",
-      tagline: "Building products, communities, and opportunities for the next generation of builders.",
-      bio: "Product architect, full-stack developer, and founder dedicated to building real-world products and student-focused technology initiatives. Experienced in full-stack web engineering, dispute intelligence systems, and marketplace platforms, with a strong focus on AI/ML, intelligent automation, and community ecosystem leadership.",
+      role: "Founder & Chief Executive Officer",
+      title: "Full-Stack Developer | Product Builder | AI/ML Enthusiast",
+      bio: "I build technology-driven products at the intersection of full-stack development, AI/ML, and product engineering. My focus is turning ideas into functional products, solving real-world problems through technology, and building platforms that create meaningful opportunities for students and developers.",
       photo: "/team/yash-gautam.jpg",
       highlights: [
         {
           id: "01",
-          title: "LAUNCHBYTE",
-          role: "Founder & CEO",
-          description: "Building a student-driven technology and opportunity ecosystem.",
+          title: "INQUEST",
+          role: "Product Builder",
+          description: "Cross-platform dispute intelligence and complaint investigation system.",
         },
         {
           id: "02",
-          title: "INQUEST",
+          title: "SpareRoute",
           role: "Product Builder",
-          description: "Dispute intelligence and customer support investigation platform.",
-        },
-        {
-          id: "03",
-          title: "SPAREROUTE",
-          role: "Product Builder",
-          description: "Spare-parts marketplace ecosystem.",
-        },
-        {
-          id: "04",
-          title: "FULL-STACK DEVELOPMENT",
-          role: "Core Systems",
-          description: "Building web applications, scalable product experiences, and complete frontend/backend systems.",
+          description: "Automotive spare-parts marketplace platform.",
         },
       ],
-      skills: [
-        "Full-Stack Web Systems",
-        "AI/ML & Intelligent Systems",
+      focus: [
+        "Full-Stack Development",
         "Product Engineering",
-        "Hackathon & Ecosystem Leadership",
+        "AI/ML",
+        "System Design",
+        "Community Building",
       ],
     },
     {
       name: "Shobhit",
       role: "Co-Founder",
-      tagline: "Driving strategic initiatives, team coordination, and ecosystem growth.",
-      bio: "Co-founding partner spearheading strategic direction, team alignment, and operational execution across LaunchByte initiatives. Focused on turning product vision into organized, scalable community systems.",
+      bio: "Co-founding partner driving operational alignment, product strategy, and organizational execution across LaunchByte initiatives.",
       photo: "/team/shobhit.jpg",
-      highlights: [
-        {
-          id: "01",
-          title: "OPERATIONAL EXECUTION",
-          role: "Co-Founder",
-          description: "Aligning team initiatives and student community roadmaps.",
-        },
-        {
-          id: "02",
-          title: "STRATEGIC GROWTH",
-          role: "Leadership",
-          description: "Expanding partnerships and collaborative ecosystem opportunities.",
-        },
-      ],
-      skills: [
+      focus: [
         "Product Strategy",
         "Operations",
         "Team Execution",
@@ -317,55 +292,25 @@ export const SITE_CONTENT = {
     {
       name: "Vidhyansh",
       role: "Head of Community & Event Management",
-      tagline: "Cultivating high-energy developer communities and flagship tech gatherings.",
-      bio: "Leading student community engagement, ambassador initiatives, and event operations. Passionate about empowering collegiate developers, coordinating hackathons, and fostering inclusive tech spaces.",
+      bio: "Responsible for community engagement, event coordination, participant experience, and community initiatives.",
       photo: "/team/vidhyansh.jpg",
-      highlights: [
-        {
-          id: "01",
-          title: "EVENT ORCHESTRATION",
-          role: "Lead",
-          description: "Managing hackathons, sprints, and technical workshops.",
-        },
-        {
-          id: "02",
-          title: "COMMUNITY ENGAGEMENT",
-          role: "Leadership",
-          description: "Scaling collegiate builder squads and developer networks.",
-        },
-      ],
-      skills: [
-        "Community Building",
-        "Hackathon Management",
-        "Developer Outreach",
-        "Team Coordination",
+      focus: [
+        "Community Engagement",
+        "Event Coordination",
+        "Participant Experience",
+        "Community Initiatives",
       ],
     },
     {
       name: "Sreyansh Dixit",
       role: "Technical Head",
-      tagline: "Overseeing technical infrastructure, software quality, and engineering standards.",
-      bio: "Directing technical architecture, developer standards, and platform reliability across LaunchByte's codebase. Dedicated to building secure, performant software systems and guiding engineering initiatives.",
+      bio: "Focused on technical direction, engineering execution, platform development, and technical coordination.",
       photo: "/team/sreyansh-dixit.jpg",
-      highlights: [
-        {
-          id: "01",
-          title: "SYSTEM ARCHITECTURE",
-          role: "Technical Head",
-          description: "Overseeing application architecture, data pipelines, and API reliability.",
-        },
-        {
-          id: "02",
-          title: "ENGINEERING STANDARDS",
-          role: "Core Systems",
-          description: "Enforcing clean code, developer workflows, and secure deployments.",
-        },
-      ],
-      skills: [
-        "System Architecture",
-        "Cloud Infrastructure",
-        "API Design",
-        "Security & Reliability",
+      focus: [
+        "Technical Direction",
+        "Engineering Execution",
+        "Platform Development",
+        "Technical Coordination",
       ],
     },
   ] as CoreTeamMember[],

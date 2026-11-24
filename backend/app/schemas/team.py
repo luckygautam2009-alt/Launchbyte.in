@@ -19,8 +19,8 @@ class TeamMemberBase(BaseModel):
     def _validate_urls(cls, v):
         if v is not None and v != "":
             v = str(v).strip()
-            if not (v.startswith("http://") or v.startswith("https://") or v.startswith("/uploads/")):
-                raise ValueError("URL must start with http:// or https://")
+            if not (v.startswith("http://") or v.startswith("https://") or v.startswith("/")):
+                raise ValueError("URL must start with http://, https://, or /")
         return v or None
 
 
@@ -43,8 +43,8 @@ class TeamMemberUpdate(BaseModel):
     def _validate_urls(cls, v):
         if v is not None and v != "":
             v = str(v).strip()
-            if not (v.startswith("http://") or v.startswith("https://") or v.startswith("/uploads/")):
-                raise ValueError("URL must start with http:// or https://")
+            if not (v.startswith("http://") or v.startswith("https://") or v.startswith("/")):
+                raise ValueError("URL must start with http://, https://, or /")
         return v or None
 
 

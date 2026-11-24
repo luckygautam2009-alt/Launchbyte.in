@@ -226,6 +226,11 @@ function TeamMemberBlock({
             <p className="font-mono text-xs sm:text-sm uppercase tracking-wider font-semibold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-indigo-300 to-cyan-300">
               {member.role}
             </p>
+            {member.title && (
+              <p className="font-mono text-xs sm:text-sm text-cyan-300/90 font-medium tracking-wide">
+                {member.title}
+              </p>
+            )}
           </div>
 
           {/* Tagline / Core Quote */}
@@ -245,7 +250,7 @@ function TeamMemberBlock({
             <div className="pt-2 space-y-3">
               <div className="text-[11px] font-mono uppercase tracking-widest text-slate-400/90 flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-400/70" />
-                <span>KEY INITIATIVES & PRODUCTS</span>
+                <span>PROJECTS & PLATFORMS</span>
               </div>
               <div className="space-y-3 pt-1">
                 {member.highlights.map((h) => (
@@ -277,13 +282,13 @@ function TeamMemberBlock({
             </div>
           )}
 
-          {/* Relevant Skills / Expertise Domains */}
-          {member.skills && member.skills.length > 0 && (
+          {/* Relevant Focus Areas / Expertise Domains */}
+          {((member.focus && member.focus.length > 0) || (member.skills && member.skills.length > 0)) && (
             <div className="pt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs font-mono text-slate-300/90">
               <span className="text-[11px] uppercase tracking-wider text-slate-400 mr-1 select-none">
-                DOMAINS:
+                FOCUS AREAS:
               </span>
-              {member.skills.map((s, idx) => (
+              {(member.focus || member.skills)!.map((s, idx) => (
                 <span key={idx} className="inline-flex items-center gap-2">
                   {idx > 0 && (
                     <span className="text-cyan-400/60 font-bold select-none">
@@ -351,27 +356,42 @@ export default function CoreTeamSection({
   title?: string;
   subtitle?: string;
 }) {
-  const [members, setMembers] = useState<CoreTeamMember[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [members, setMembers] = useState<CoreTeamMember[]>(SITE_CONTENT.coreTeam);
+  const [loading, setLoading] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     async function loadTeam() {
       try {
         const publicTeam: TeamMember[] = await api.getPublicTeam();
-        if (publicTeam && publicTeam.length > 0) {
-          const mapped: CoreTeamMember[] = publicTeam.map((m) => {
+        const BANNED_DEMO_NAMES = [
+          "sarah chen",
+          "david kalu",
+          "maya patel",
+          "alex rivera",
+          "alex vance",
+          "sophia zhang",
+          "devon reed",
+        ];
+        const validPublicTeam = (publicTeam || []).filter(
+          (m) => !BANNED_DEMO_NAMES.includes(m.name.toLowerCase().trim())
+        );
+
+        if (validPublicTeam.length > 0) {
+          const mapped: CoreTeamMember[] = validPublicTeam.map((m) => {
             const fallback = SITE_CONTENT.coreTeam.find(
               (c) => c.name.toLowerCase() === m.name.toLowerCase()
             );
             return {
               name: m.name,
-              role: m.designation,
-              bio: m.bio || fallback?.bio || "",
+              role: fallback?.role || m.designation,
+              title: fallback?.title,
+              bio: fallback?.bio || m.bio || "",
               tagline: fallback?.tagline,
-              photo: m.photo_url || fallback?.photo,
+              photo: fallback?.photo || m.photo_url || "/team/yash-gautam.jpg",
               linkedin: m.linkedin_url || fallback?.linkedin,
               github: m.github_url || fallback?.github,
+              twitter: fallback?.twitter,
               highlights: fallback?.highlights,
               skills: fallback?.skills,
               focus: fallback?.focus,
