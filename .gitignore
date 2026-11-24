@@ -50,5 +50,6 @@ Thumbs.db
 *.swo
 
 # Uploads / Local Media
+uploads/
 backend/uploads/*
 !backend/uploads/.gitkeep

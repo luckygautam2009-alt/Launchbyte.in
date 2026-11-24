@@ -225,9 +225,9 @@ def seed(
             opp.tags = [tags[t] for t in tag_list if t in tags]
         return opp
 
-    # 1. Internship
+    # 1. Sample Internship
     intern = make_opp(
-        "acme-ml-intern-summer", acme, "Machine Learning Intern (Summer)", OpportunityType.INTERNSHIP,
+        "acme-ml-intern-summer", acme, "Sample Internship: Machine Learning Intern", OpportunityType.INTERNSHIP,
         OpportunityStatus.PUBLISHED, ["AI", "Remote"],
         summary="12-week paid ML internship on the perception team.",
         description="Work with senior engineers on production perception models.",
@@ -240,22 +240,9 @@ def seed(
         verification_status=VerificationStatus.VERIFIED, trust_score=92, verified_at=now, is_featured=True,
     )
 
-    # 2. Hackathon 1
+    # 2. Sample Hackathon
     hack = make_opp(
-        "state-uni-hackathon-2026", uni, "State University Open Hackathon", OpportunityType.HACKATHON,
-        OpportunityStatus.PUBLISHED, ["Web", "Open Source"],
-        summary="48-hour hackathon open to all students.",
-        location_type=LocationType.ONSITE, location_text="Main Campus, Delhi", country_code="IN",
-        application_url="https://stateuniversity.edu/hack",
-        deadline_at=now + timedelta(days=9), starts_at=now + timedelta(days=30),
-        ends_at=now + timedelta(days=32),
-        compensation_type=CompensationType.PRIZE, compensation_note="Prize pool for top 3 teams",
-        verification_status=VerificationStatus.VERIFIED, trust_score=88, verified_at=now,
-    )
-
-    # 3. Hackathon 2
-    make_opp(
-        "bytehacks-global-2026", byte_org, "ByteHacks Global Virtual Hackathon", OpportunityType.HACKATHON,
+        "bytehacks-global-2026", byte_org, "Sample Hackathon: ByteHacks Global", OpportunityType.HACKATHON,
         OpportunityStatus.PUBLISHED, ["AI", "Web", "Remote"],
         summary="Join 3,000+ developers worldwide building next-gen developer tooling and AI agents.",
         description="LaunchByte's flagship annual virtual hackathon with mentors from Google, OpenAI, and Stripe.",
@@ -269,162 +256,24 @@ def seed(
         verification_status=VerificationStatus.VERIFIED, trust_score=95, verified_at=now, is_featured=True,
     )
 
-    # 4. Hackathon 3
-    make_opp(
-        "ai-agents-autonomous-hack", acme, "Autonomous AI Agents Sprint", OpportunityType.HACKATHON,
-        OpportunityStatus.PUBLISHED, ["AI", "Open Source", "Remote"],
-        summary="Build autonomous agents that interact with APIs and browser environments.",
-        location_type=LocationType.REMOTE, country_code="US",
-        application_url="https://acme-robotics.com/agents-sprint",
-        deadline_at=now + timedelta(days=7), starts_at=now + timedelta(days=10),
-        ends_at=now + timedelta(days=12),
-        compensation_type=CompensationType.PRIZE, compensation_min=Decimal("10000"),
-        compensation_currency="USD", compensation_note="$10,000 top prize",
-        verification_status=VerificationStatus.VERIFIED, trust_score=91, verified_at=now,
-    )
-
-    # 5. Hackathon 4
-    make_opp(
-        "web3-zero-knowledge-hack", byte_org, "ZK Proofs & Privacy Hackathon", OpportunityType.HACKATHON,
-        OpportunityStatus.PUBLISHED, ["Web3", "Remote"],
-        summary="Explore cryptography and zero-knowledge identity protocols in a 3-day challenge.",
+    # 3. Sample Fellowship
+    fellow = make_opp(
+        "sample-emerging-fellowship", byte_org, "Sample Fellowship: Emerging Founders", OpportunityType.FELLOWSHIP,
+        OpportunityStatus.PUBLISHED, ["Founders", "Remote"],
+        summary="10-week equity-free grant and residency for technical student founders.",
+        description="Mentorship from venture partners and experienced serial founders.",
+        requirements=["Enrolled student or recent grad", "Technical prototype ready"],
         location_type=LocationType.REMOTE,
-        application_url="https://bytelabs.org/zk-hack",
-        deadline_at=now + timedelta(days=25),
-        compensation_type=CompensationType.PRIZE, compensation_min=Decimal("15000"),
-        compensation_currency="USD",
-        verification_status=VerificationStatus.VERIFIED, trust_score=85, verified_at=now,
+        application_url="https://bytelabs.org/fellowship",
+        deadline_at=now + timedelta(days=30),
+        compensation_type=CompensationType.STIPEND, compensation_min=Decimal("5000"),
+        compensation_currency="USD", compensation_note="$5,000 grant",
+        verification_status=VerificationStatus.VERIFIED, trust_score=94, verified_at=now,
     )
 
-    # 6. Hackathon 5
-    make_opp(
-        "clean-energy-climate-hack", found, "Global Climate Tech Challenge", OpportunityType.HACKATHON,
-        OpportunityStatus.PUBLISHED, ["Climate", "Open Source"],
-        summary="Design software to accelerate decarbonization, clean grid scheduling, and carbon tracking.",
-        location_type=LocationType.HYBRID, location_text="London, UK & Virtual", country_code="GB",
-        application_url="https://brightfutures.org/climate-tech",
-        deadline_at=now + timedelta(days=35),
-        compensation_type=CompensationType.PRIZE, compensation_min=Decimal("20000"),
-        compensation_currency="GBP",
-        verification_status=VerificationStatus.VERIFIED, trust_score=89, verified_at=now,
-    )
 
-    # 7. Internship 2
-    make_opp(
-        "fullstack-swe-intern", acme, "Full-Stack Software Engineering Intern", OpportunityType.INTERNSHIP,
-        OpportunityStatus.PUBLISHED, ["Web", "Cloud"],
-        summary="Build scalable telemetry and cloud control planes for robotics hardware.",
-        location_type=LocationType.HYBRID, location_text="Boston, MA", country_code="US",
-        application_url="https://acme-robotics.com/careers/fullstack",
-        deadline_at=now + timedelta(days=40),
-        compensation_type=CompensationType.PAID, compensation_min=Decimal("3500"),
-        compensation_max=Decimal("4500"), compensation_currency="USD",
-        verification_status=VerificationStatus.VERIFIED, trust_score=87, verified_at=now,
-    )
 
-    # 8. Internship 3
-    make_opp(
-        "product-design-intern", found, "Product Design & UX Research Intern", OpportunityType.INTERNSHIP,
-        OpportunityStatus.PUBLISHED, ["Design", "Remote"],
-        summary="Join our team creating accessible educational portals for underprivileged youth.",
-        location_type=LocationType.REMOTE, country_code="GB",
-        application_url="https://brightfutures.org/careers/ux-intern",
-        deadline_at=now + timedelta(days=18),
-        compensation_type=CompensationType.STIPEND, compensation_min=Decimal("2000"),
-        compensation_currency="GBP",
-        verification_status=VerificationStatus.UNVERIFIED, trust_score=75,
-    )
 
-    # 9. Workshop 1
-    make_opp(
-        "distributed-systems-workshop", uni, "Hands-on Distributed Systems & Consensus Workshop", OpportunityType.EVENT,
-        OpportunityStatus.PUBLISHED, ["Cloud", "Open Source"],
-        summary="A 4-part masterclass on Raft consensus, distributed logs, and fault-tolerant storage.",
-        location_type=LocationType.REMOTE, country_code="IN",
-        application_url="https://stateuniversity.edu/workshops/dist-sys",
-        deadline_at=now + timedelta(days=5), starts_at=now + timedelta(days=8),
-        compensation_type=CompensationType.UNPAID,
-        verification_status=VerificationStatus.VERIFIED, trust_score=90, verified_at=now,
-    )
-
-    # 10. Workshop 2
-    make_opp(
-        "cloud-native-k8s-workshop", acme, "Cloud-Native Microservices on Kubernetes", OpportunityType.EVENT,
-        OpportunityStatus.PUBLISHED, ["Cloud", "Remote"],
-        summary="Learn container orchestration, service meshes, and observability hands-on.",
-        location_type=LocationType.REMOTE, country_code="US",
-        application_url="https://acme-robotics.com/k8s-workshop",
-        deadline_at=now + timedelta(days=12),
-        compensation_type=CompensationType.UNPAID,
-        verification_status=VerificationStatus.VERIFIED, trust_score=86, verified_at=now,
-    )
-
-    # 11. Workshop 3
-    make_opp(
-        "production-llm-workshop", byte_org, "Building Production LLM Applications & Eval Systems", OpportunityType.EVENT,
-        OpportunityStatus.PUBLISHED, ["AI", "Web"],
-        summary="Deep dive into prompt optimization, RAG retrieval caching, and LLM evaluation pipelines.",
-        location_type=LocationType.ONSITE, location_text="San Francisco, CA", country_code="US",
-        application_url="https://bytelabs.org/llm-workshop",
-        deadline_at=now + timedelta(days=15), starts_at=now + timedelta(days=20),
-        compensation_type=CompensationType.UNPAID,
-        verification_status=VerificationStatus.VERIFIED, trust_score=93, verified_at=now, is_featured=True,
-    )
-
-    # 12. Fellowship
-    make_opp(
-        "emerging-founders-fellowship", byte_org, "Emerging Founders Venture Fellowship", OpportunityType.FELLOWSHIP,
-        OpportunityStatus.PUBLISHED, ["Founders", "AI", "Cloud"],
-        summary="Equity-free $50,000 grant and 6 months of mentorship for student and early-career founders.",
-        description="Backing exceptional technical builders solving hard problems with cutting-edge software.",
-        location_type=LocationType.REMOTE,
-        application_url="https://bytelabs.org/founders",
-        deadline_at=now + timedelta(days=60),
-        compensation_type=CompensationType.FUNDED, compensation_min=Decimal("50000"),
-        compensation_currency="USD", compensation_note="$50,000 equity-free grant",
-        verification_status=VerificationStatus.VERIFIED, trust_score=96, verified_at=now, is_featured=True,
-    )
-
-    # 13. Scholarship (pending)
-    make_opp(
-        "bright-futures-scholarship", found, "Bright Futures STEM Scholarship", OpportunityType.SCHOLARSHIP,
-        OpportunityStatus.PUBLISHED, ["Women in Tech", "Climate"],
-        summary="Full tuition support for women pursuing STEM degrees.",
-        is_rolling=True, location_type=LocationType.REMOTE, country_code="GB",
-        compensation_type=CompensationType.FUNDED,
-        verification_status=VerificationStatus.PENDING,
-    )
-
-    # 14. Scam (flagged)
-    scam = make_opp(
-        "quickhire-earn-5k-weekly", shady, "Earn $5,000 weekly — no experience needed", OpportunityType.JOB,
-        OpportunityStatus.PUBLISHED, ["Remote"],
-        summary="Guaranteed income. Pay a small onboarding fee to begin.",
-        location_type=LocationType.REMOTE,
-        application_url="https://bit.ly/quick-hire-now",
-        verification_status=VerificationStatus.FLAGGED, trust_score=8,
-    )
-
-    # 15. Pending review
-    make_opp(
-        "acme-data-fellowship", acme, "Data Science Fellowship", OpportunityType.FELLOWSHIP,
-        OpportunityStatus.PENDING_REVIEW, ["Data Science", "AI"],
-        summary="Awaiting moderator review.",
-        deadline_at=now + timedelta(days=45),
-    )
-
-    # 16. Draft
-    make_opp(
-        "state-uni-design-workshop", uni, "Product Design Workshop", OpportunityType.EVENT,
-        OpportunityStatus.DRAFT, ["Design"],
-    )
-
-    # 17. Closed
-    make_opp(
-        "acme-2025-winter-intern", acme, "Winter Robotics Intern (2025)", OpportunityType.INTERNSHIP,
-        OpportunityStatus.CLOSED, ["AI"],
-        deadline_at=now - timedelta(days=120), verification_status=VerificationStatus.VERIFIED, trust_score=90,
-    )
 
     # ----------------------------------------------------------- bookmarks
     for opp in (hack, intern):
@@ -476,29 +325,9 @@ def seed(
         db.add(AuditLog(actor_id=admin.id, action="verification.approve", entity_type="organization",
                         entity_id=str(acme.id), changes={"verification_status": ["pending", "verified"]}))
 
-    vr2, created = _get_or_create(
-        db, VerificationRequest, {"opportunity_id": scam.id},
-        {"status": VerificationRequestStatus.IN_REVIEW, "reviewer_id": admin.id},
-    )
-    if created:
-        db.add_all([
-            VerificationCheck(request_id=vr2.id, check_type=VerificationCheckType.DOMAIN_MATCH,
-                              result=VerificationCheckResult.FAILED, score=0,
-                              details={"reason": "shortened link, no organization domain"}),
-            VerificationCheck(request_id=vr2.id, check_type=VerificationCheckType.CONTACT_EMAIL,
-                              result=VerificationCheckResult.FAILED, score=10,
-                              details={"reason": "free-mail address"}),
-        ])
-
-    _get_or_create(
-        db, OpportunityReport,
-        {"opportunity_id": scam.id, "reporter_id": student.id, "reason": ReportReason.SCAM},
-        {"details": "Asked me to pay an onboarding fee."},
-    )
-
     # ------------------------------------------------------ notifications
     _get_or_create(
-        db, Notification, {"user_id": student.id, "title": "Deadline in 9 days: State University Open Hackathon"},
+        db, Notification, {"user_id": student.id, "title": "Deadline in 14 days: Sample Hackathon: ByteHacks Global"},
         {"type": NotificationType.DEADLINE_REMINDER, "body": "Register before the deadline.",
          "data": {"opportunity_id": str(hack.id)}},
     )
@@ -557,10 +386,10 @@ def seed(
 
     now = datetime.now(timezone.utc)
     if org_for_events and organizer_user:
-        evt1_lookup = {"slug": "hackquantum-2026"}
+        evt1_lookup = {"slug": "sample-hackquantum-2026"}
         evt1_defaults = {
             "organization_id": org_for_events.id,
-            "title": "HackQuantum 2026: Global AI & Quantum Hackathon",
+            "title": "Sample Hackathon: HackQuantum 2026",
             "tagline": "Build the future of quantum-resistant cryptography, AI agents, and quantum algorithms.",
             "banner_url": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=1200&h=400&fit=crop",
             "thumbnail_url": "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=300&fit=crop",
@@ -619,6 +448,32 @@ def seed(
             "created_by_id": organizer_user.id,
         }
         event1, _ = _get_or_create(db, Event, evt1_lookup, evt1_defaults)
+
+        # Event 2: Sample Workshop
+        evt2_lookup = {"slug": "sample-devops-summit-2026"}
+        evt2_defaults = {
+            "organization_id": org_for_events.id,
+            "title": "Sample Workshop: DevOps Summit 2026",
+            "tagline": "Master modern CI/CD, Kubernetes deployments, and cloud telemetry.",
+            "banner_url": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&h=400&fit=crop",
+            "thumbnail_url": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&h=300&fit=crop",
+            "description": "A 1-day deep dive workshop into cloud infrastructure and observability.",
+            "starts_at": now + timedelta(days=20),
+            "ends_at": now + timedelta(days=20, hours=6),
+            "timezone": "UTC",
+            "mode": EventMode.ONLINE,
+            "online_url": "https://discord.gg/launchbyte",
+            "capacity": 100,
+            "registration_opens_at": now - timedelta(days=1),
+            "registration_closes_at": now + timedelta(days=19),
+            "requires_approval": False,
+            "waitlist_enabled": True,
+            "theme_accent": "#22D3EE",
+            "status": EventStatus.PUBLISHED,
+            "published_at": now - timedelta(days=1),
+            "created_by_id": organizer_user.id,
+        }
+        event2, _ = _get_or_create(db, Event, evt2_lookup, evt2_defaults)
 
         # Staff manager
         staff_lookup = {"event_id": event1.id, "user_id": organizer_user.id}
