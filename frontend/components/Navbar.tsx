@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import {
@@ -69,14 +70,22 @@ export default function Navbar() {
       <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-violet-500/30 to-transparent pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#4F46E5] to-[#8B5CF6] flex items-center justify-center text-white shadow-md shadow-violet-500/25 group-hover:scale-105 group-hover:shadow-violet-500/40 transition-all">
-            <Sparkles className="w-5 h-5 text-cyan-200" />
+        {/* Official Logo */}
+        <Link
+          href="/"
+          className="flex items-center gap-2 group transition-transform duration-200 hover:scale-[1.03] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 rounded-lg py-1"
+          aria-label="LaunchByte Home"
+        >
+          <div className="relative h-10 sm:h-[46px] w-auto aspect-[1024/939] flex items-center justify-center">
+            <Image
+              src="/brand/launchbyte-navbar-logo.png"
+              alt="LaunchByte"
+              width={1024}
+              height={939}
+              priority
+              className="h-full w-auto object-contain select-none filter drop-shadow-[0_0_12px_rgba(139,92,246,0.35)]"
+            />
           </div>
-          <span className="font-bold text-xl tracking-tight text-white group-hover:text-slate-100 transition-colors">
-            Launch<span className="text-[#A78BFA]">Byte</span>
-          </span>
         </Link>
 
         {/* Desktop Navigation */}
