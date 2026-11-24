@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
-import Image from "next/image";
 import {
   motion,
   useScroll,
@@ -319,12 +318,10 @@ export default function AstronautJourney({
             }}
             className="relative"
           >
-            <Image
-              src="/brand/journey-astronaut.webp"
+            <img
+              src="/brand/journey-astronaut.png"
               alt=""
               aria-hidden="true"
-              width={186}
-              height={186}
               className="w-24 sm:w-28 h-auto select-none pointer-events-none drop-shadow-[0_0_24px_rgba(167,139,250,0.55)]"
             />
           </motion.div>

@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import Image from "next/image";
 import Link from "next/link";
 import { Sparkles, ArrowRight, Compass, Trophy, Users } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
@@ -12,12 +11,10 @@ const SolarSystemCanvas = dynamic(() => import("./SolarSystemCanvas"), {
   ssr: false,
   loading: () => (
     <div className="absolute inset-0 w-full h-full overflow-hidden bg-[#050510]">
-      <Image
-        src="/brand/universe-cosmic-backdrop.webp"
+      <img
+        src="/brand/universe-cosmic-backdrop.jpg"
         alt="Cosmic universe backdrop"
-        fill
-        sizes="100vw"
-        className="object-cover select-none opacity-60"
+        className="w-full h-full object-cover select-none opacity-60"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-[#050510] via-transparent to-[#050510]" />
     </div>

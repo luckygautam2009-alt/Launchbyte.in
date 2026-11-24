@@ -890,7 +890,7 @@ export default function SolarSystemCanvas({
       {!webglSupported && (
         <div className="absolute inset-0">
           <img
-            src="/brand/universe-cosmic-backdrop.webp"
+            src="/brand/universe-cosmic-backdrop.jpg"
             alt="Cosmic backdrop"
             className="w-full h-full object-cover"
           />
@@ -929,7 +929,7 @@ export default function SolarSystemCanvas({
           }}
         >
           <img
-            src="/brand/universe-foreground-astronaut.webp"
+            src="/brand/universe-foreground-astronaut.png"
             alt=""
             draggable={false}
             className="absolute bottom-0 left-1/2 h-full w-auto max-w-none -translate-x-1/2 select-none"

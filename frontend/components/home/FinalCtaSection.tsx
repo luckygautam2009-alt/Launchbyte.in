@@ -2,7 +2,6 @@
 
 import React, { useRef } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { Sparkles, ArrowRight, ShieldCheck, Users, Trophy } from "lucide-react";
 import { Reveal, MagneticButton } from "./HomeMotion";
@@ -25,12 +24,10 @@ export default function FinalCtaSection() {
     >
       {/* Background Cinematic Nebula */}
       <div className="absolute inset-0 z-0">
-        <Image
-          src="/brand/rocket-nebula.webp"
+        <img
+          src="/brand/rocket-nebula.jpg"
           alt="Cinematic rocket nebula background"
-          fill
-          sizes="100vw"
-          className="object-cover select-none opacity-40 mix-blend-screen"
+          className="w-full h-full object-cover select-none opacity-40 mix-blend-screen"
         />
         {/* Dark radial and gradient scrims for pristine text contrast >= 4.5:1 */}
         <div className="absolute inset-0 bg-[#050510]/80" />
@@ -42,12 +39,10 @@ export default function FinalCtaSection() {
       <div className="hidden lg:block absolute right-[6%] bottom-0 z-10 pointer-events-none">
         {shouldReduceMotion ? (
           <div className="w-64 sm:w-72 h-auto opacity-80 drop-shadow-[0_0_40px_rgba(139,92,246,0.4)]">
-            <Image
-              src="/brand/launchbyte-mission-rocket.webp"
+            <img
+              src="/brand/launchbyte-mission-rocket.png"
               alt=""
               aria-hidden="true"
-              width={682}
-              height={1024}
               className="w-full h-auto select-none"
             />
           </div>
@@ -56,12 +51,10 @@ export default function FinalCtaSection() {
             style={{ y: rocketY }}
             className="w-64 sm:w-72 h-auto opacity-80 drop-shadow-[0_0_40px_rgba(139,92,246,0.4)]"
           >
-            <Image
-              src="/brand/launchbyte-mission-rocket.webp"
+            <img
+              src="/brand/launchbyte-mission-rocket.png"
               alt=""
               aria-hidden="true"
-              width={682}
-              height={1024}
               className="w-full h-auto select-none"
             />
           </motion.div>
