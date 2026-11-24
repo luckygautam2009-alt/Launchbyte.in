@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
@@ -43,18 +43,37 @@ export default function Navbar() {
   const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const visibleNav = NAV_ITEMS.filter((item) => !item.hidden);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-violet-900/20 bg-[#050510]/80 backdrop-blur-md">
+    <header
+      className={`sticky top-0 z-40 w-full transition-all duration-300 ${
+        scrolled
+          ? "bg-[#050510]/85 backdrop-blur-xl border-b border-violet-500/20 shadow-xl shadow-black/50"
+          : "bg-[#050510]/50 backdrop-blur-md border-b border-violet-900/15"
+      }`}
+    >
+      {/* Top Hairline Gradient Accent */}
+      <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-violet-500/30 to-transparent pointer-events-none" />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#4F46E5] to-[#8B5CF6] flex items-center justify-center text-white shadow-md shadow-violet-500/25 group-hover:scale-105 transition-transform">
-            <Sparkles className="w-5 h-5" />
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#4F46E5] to-[#8B5CF6] flex items-center justify-center text-white shadow-md shadow-violet-500/25 group-hover:scale-105 group-hover:shadow-violet-500/40 transition-all">
+            <Sparkles className="w-5 h-5 text-cyan-200" />
           </div>
-          <span className="font-bold text-xl tracking-tight text-white">
+          <span className="font-bold text-xl tracking-tight text-white group-hover:text-slate-100 transition-colors">
             Launch<span className="text-[#A78BFA]">Byte</span>
           </span>
         </Link>
@@ -70,10 +89,10 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`px-3.5 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                className={`px-3.5 py-1.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                   isActive
-                    ? "bg-violet-950/60 text-white border border-violet-800/40 shadow-sm"
-                    : "text-slate-300 hover:text-white hover:bg-violet-950/30"
+                    ? "bg-violet-950/70 text-white border border-violet-500/40 shadow-sm shadow-violet-950/40"
+                    : "text-slate-300 hover:text-white hover:bg-violet-950/40 hover:border-violet-500/20 border border-transparent"
                 }`}
               >
                 {item.label}
@@ -86,7 +105,7 @@ export default function Navbar() {
         <button
           type="button"
           onClick={() => window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }))}
-          className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-slate-400 hover:text-slate-200 hover:border-slate-700 transition select-none cursor-pointer"
+          className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#09091B]/80 border border-slate-800/90 text-xs text-slate-400 hover:text-slate-200 hover:border-violet-500/40 hover:bg-violet-950/30 transition-all select-none cursor-pointer shadow-sm"
         >
           <Search className="w-3.5 h-3.5 text-slate-500" />
           <span>Search...</span>
@@ -100,7 +119,7 @@ export default function Navbar() {
               <Link
                 href="/messages"
                 aria-label="Messages"
-                className="relative p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-900 border border-transparent hover:border-slate-800 transition"
+                className="relative p-2 rounded-xl text-slate-400 hover:text-white hover:bg-violet-950/40 border border-transparent hover:border-violet-500/30 transition"
                 title="Messages"
               >
                 <MessageSquare className="w-5 h-5" />
@@ -110,9 +129,9 @@ export default function Navbar() {
                 <button
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
                   aria-label="User profile menu"
-                  className="flex items-center gap-2.5 p-1.5 pr-3 rounded-full border border-slate-700 bg-slate-900 hover:bg-slate-800 text-slate-200 transition-all text-sm"
+                  className="flex items-center gap-2.5 p-1.5 pr-3 rounded-full border border-violet-500/30 bg-[#09091B]/90 hover:bg-violet-950/50 text-slate-200 transition-all text-sm shadow-md"
                 >
-                  <div className="w-7 h-7 rounded-full bg-brand-600 flex items-center justify-center text-white font-semibold text-xs">
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#4F46E5] to-[#8B5CF6] flex items-center justify-center text-white font-semibold text-xs shadow-inner">
                     {user.full_name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
                   </div>
                   <span className="max-w-[120px] truncate text-slate-200 font-medium">
@@ -123,12 +142,12 @@ export default function Navbar() {
                 {profileDropdownOpen && (
                   <div
                     onMouseLeave={() => setProfileDropdownOpen(false)}
-                    className="absolute right-0 mt-2 w-56 rounded-2xl border border-slate-800 bg-slate-900/95 backdrop-blur-xl shadow-2xl py-2 z-50 text-sm text-slate-300 animate-in fade-in zoom-in-95 duration-100"
+                    className="absolute right-0 mt-2 w-56 rounded-2xl border border-violet-500/30 bg-[#09091B]/95 backdrop-blur-xl shadow-2xl py-2 z-50 text-sm text-slate-300 animate-in fade-in zoom-in-95 duration-100"
                   >
                     <div className="px-4 py-2 border-b border-slate-800">
                       <p className="text-xs text-slate-400">Signed in as</p>
                       <p className="font-semibold text-white truncate">{user.email}</p>
-                      <span className="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-semibold tracking-wider uppercase bg-brand-950 text-brand-400 border border-brand-800/50">
+                      <span className="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-semibold tracking-wider uppercase bg-violet-950 text-violet-300 border border-violet-800/50">
                         {user.role}
                       </span>
                     </div>
@@ -136,7 +155,7 @@ export default function Navbar() {
                     <Link
                       href="/profile/edit"
                       onClick={() => setProfileDropdownOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-800/80 hover:text-white transition"
+                      className="flex items-center gap-2.5 px-4 py-2.5 hover:bg-violet-950/50 hover:text-white transition"
                     >
                       <UserCircle className="w-4 h-4 text-violet-400" />
                       Edit Profile
@@ -145,7 +164,7 @@ export default function Navbar() {
                     <Link
                       href="/me/teams"
                       onClick={() => setProfileDropdownOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-800/80 hover:text-white transition"
+                      className="flex items-center gap-2.5 px-4 py-2.5 hover:bg-violet-950/50 hover:text-white transition"
                     >
                       <UsersRound className="w-4 h-4 text-teal-400" />
                       My Teams
@@ -154,7 +173,7 @@ export default function Navbar() {
                     <Link
                       href="/me/invites"
                       onClick={() => setProfileDropdownOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-800/80 hover:text-white transition"
+                      className="flex items-center gap-2.5 px-4 py-2.5 hover:bg-violet-950/50 hover:text-white transition"
                     >
                       <Mail className="w-4 h-4 text-amber-400" />
                       Invites
@@ -163,7 +182,7 @@ export default function Navbar() {
                     <Link
                       href="/people"
                       onClick={() => setProfileDropdownOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-800/80 hover:text-white transition"
+                      className="flex items-center gap-2.5 px-4 py-2.5 hover:bg-violet-950/50 hover:text-white transition"
                     >
                       <UserSearch className="w-4 h-4 text-pink-400" />
                       Find Teammates
@@ -172,16 +191,16 @@ export default function Navbar() {
                     <Link
                       href="/network"
                       onClick={() => setProfileDropdownOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-800/80 hover:text-white transition"
+                      className="flex items-center gap-2.5 px-4 py-2.5 hover:bg-violet-950/50 hover:text-white transition"
                     >
-                      <Users className="w-4 h-4 text-brand-400" />
+                      <Users className="w-4 h-4 text-violet-400" />
                       My Network
                     </Link>
 
                     <Link
                       href="/messages"
                       onClick={() => setProfileDropdownOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-800/80 hover:text-white transition"
+                      className="flex items-center gap-2.5 px-4 py-2.5 hover:bg-violet-950/50 hover:text-white transition"
                     >
                       <MessageSquare className="w-4 h-4 text-cyan-400" />
                       Messages & Chat
@@ -190,7 +209,7 @@ export default function Navbar() {
                     <Link
                       href="/projects"
                       onClick={() => setProfileDropdownOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-800/80 hover:text-white transition"
+                      className="flex items-center gap-2.5 px-4 py-2.5 hover:bg-violet-950/50 hover:text-white transition"
                     >
                       <FolderGit2 className="w-4 h-4 text-emerald-400" />
                       Projects
@@ -199,61 +218,61 @@ export default function Navbar() {
                     <Link
                       href="/saved"
                       onClick={() => setProfileDropdownOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-800/80 hover:text-white transition"
+                      className="flex items-center gap-2.5 px-4 py-2.5 hover:bg-violet-950/50 hover:text-white transition"
                     >
-                      <Bookmark className="w-4 h-4 text-brand-400" />
+                      <Bookmark className="w-4 h-4 text-violet-400" />
                       Saved Opportunities
                     </Link>
 
-                  {(user.role === "organizer" || user.role === "admin") && (
-                    <Link
-                      href="/dashboard/opportunities"
-                      onClick={() => setProfileDropdownOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-800/80 hover:text-white transition"
-                    >
-                      <PlusCircle className="w-4 h-4 text-emerald-400" />
-                      Organizer Postings
-                    </Link>
-                  )}
+                    {(user.role === "organizer" || user.role === "admin") && (
+                      <Link
+                        href="/dashboard/opportunities"
+                        onClick={() => setProfileDropdownOpen(false)}
+                        className="flex items-center gap-2.5 px-4 py-2.5 hover:bg-violet-950/50 hover:text-white transition"
+                      >
+                        <PlusCircle className="w-4 h-4 text-emerald-400" />
+                        Organizer Postings
+                      </Link>
+                    )}
 
-                  {(user.role === "moderator" || user.role === "admin") && (
-                    <Link
-                      href="/admin/moderation"
-                      onClick={() => setProfileDropdownOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2.5 hover:bg-slate-800/80 hover:text-white transition"
-                    >
-                      <ShieldCheck className="w-4 h-4 text-amber-400" />
-                      Admin Moderation
-                    </Link>
-                  )}
+                    {(user.role === "moderator" || user.role === "admin") && (
+                      <Link
+                        href="/admin/moderation"
+                        onClick={() => setProfileDropdownOpen(false)}
+                        className="flex items-center gap-2.5 px-4 py-2.5 hover:bg-violet-950/50 hover:text-white transition"
+                      >
+                        <ShieldCheck className="w-4 h-4 text-amber-400" />
+                        Admin Moderation
+                      </Link>
+                    )}
 
-                  <div className="border-t border-slate-800 mt-1 pt-1">
-                    <button
-                      onClick={() => {
-                        setProfileDropdownOpen(false);
-                        logout();
-                      }}
-                      className="w-full flex items-center gap-2.5 px-4 py-2.5 text-rose-400 hover:bg-rose-950/30 transition text-left"
-                    >
-                      <LogOut className="w-4 h-4" />
-                      Log out
-                    </button>
+                    <div className="border-t border-slate-800 mt-1 pt-1">
+                      <button
+                        onClick={() => {
+                          setProfileDropdownOpen(false);
+                          logout();
+                        }}
+                        className="w-full flex items-center gap-2.5 px-4 py-2.5 text-rose-400 hover:bg-rose-950/30 transition text-left"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        Log out
+                      </button>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
-          </div>
           ) : (
             <div className="flex items-center gap-2">
               <Link
                 href="/login"
-                className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white transition"
+                className="px-4 py-2 text-sm font-medium text-slate-300 hover:text-white transition hover:bg-violet-950/30 rounded-xl"
               >
                 Sign In
               </Link>
               <Link
                 href="/register"
-                className="px-4 py-2 text-sm font-medium rounded-xl bg-gradient-to-r from-[#4F46E5] to-[#8B5CF6] hover:from-[#4338CA] hover:to-[#7C3AED] text-white shadow-md shadow-violet-500/20 transition hover:shadow-violet-500/30"
+                className="px-4 py-2 text-sm font-medium rounded-xl bg-gradient-to-r from-[#4F46E5] to-[#8B5CF6] hover:from-[#4338CA] hover:to-[#7C3AED] text-white shadow-md shadow-violet-500/25 transition glow-hover"
               >
                 Get Started
               </Link>
@@ -266,7 +285,7 @@ export default function Navbar() {
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-            className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition border border-transparent hover:border-slate-700"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -275,17 +294,17 @@ export default function Navbar() {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-slate-800 bg-slate-950 px-4 pt-2 pb-6 space-y-3">
+        <div className="md:hidden border-b border-violet-900/30 bg-[#070719]/95 backdrop-blur-xl px-4 pt-2 pb-6 space-y-3">
           <div className="flex flex-col gap-1">
             {visibleNav.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`px-3 py-2 rounded-lg text-base font-medium ${
+                className={`px-3 py-2 rounded-xl text-base font-medium ${
                   pathname === item.href
-                    ? "bg-slate-800 text-white"
-                    : "text-slate-400 hover:text-white"
+                    ? "bg-violet-950/80 text-white border border-violet-500/40"
+                    : "text-slate-300 hover:text-white hover:bg-violet-950/30"
                 }`}
               >
                 {item.label}
@@ -360,14 +379,14 @@ export default function Navbar() {
                 <Link
                   href="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center py-2 text-sm font-medium border border-slate-700 rounded-xl text-slate-200"
+                  className="w-full text-center py-2 text-sm font-medium border border-violet-500/30 rounded-xl text-slate-200 bg-violet-950/30"
                 >
                   Log in
                 </Link>
                 <Link
                   href="/register"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center py-2 text-sm font-medium bg-brand-600 rounded-xl text-white"
+                  className="w-full text-center py-2 text-sm font-medium bg-gradient-to-r from-[#4F46E5] to-[#8B5CF6] rounded-xl text-white shadow-md shadow-violet-500/30"
                 >
                   Register
                 </Link>

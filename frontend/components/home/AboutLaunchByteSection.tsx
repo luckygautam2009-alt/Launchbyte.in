@@ -9,54 +9,12 @@ import {
   ShieldCheck,
   ArrowRight,
   Sparkles,
-  Trophy,
-  Award,
+  CheckCircle2,
+  Terminal,
 } from "lucide-react";
+import { Reveal, MagneticButton } from "./HomeMotion";
 
 export default function AboutLaunchByteSection() {
-  const pillars = [
-    {
-      icon: Compass,
-      title: "Opportunity Discovery",
-      description:
-        "Verified hackathons, developer fellowships, and high-impact internships curated with zero spam, guaranteed prize pools, and transparent judging rubrics.",
-      badge: "Curated & Verified",
-      color: "from-violet-500/20 to-indigo-500/10",
-      borderColor: "border-violet-500/30",
-      iconColor: "text-violet-400",
-    },
-    {
-      icon: Zap,
-      title: "Skill Acceleration",
-      description:
-        "Real-world building sprints and hands-on masterclasses that transform textbook concepts into deployable full-stack software and verified portfolio entries.",
-      badge: "Real-World Experience",
-      color: "from-blue-500/20 to-cyan-500/10",
-      borderColor: "border-blue-500/30",
-      iconColor: "text-blue-400",
-    },
-    {
-      icon: Users,
-      title: "Teammate Synergy",
-      description:
-        "Intelligent matchmaking pairing builders across complementary skillsets—frontend architects, systems engineers, and designers ready to sprint together.",
-      badge: "Squad Finder",
-      color: "from-cyan-500/20 to-teal-500/10",
-      borderColor: "border-cyan-500/30",
-      iconColor: "text-cyan-400",
-    },
-    {
-      icon: ShieldCheck,
-      title: "Verifiable Credibility",
-      description:
-        "Cryptographically signed proof of attendance, digital builder credentials, and transparent host records that make your achievements indisputable.",
-      badge: "Verified Reputation",
-      color: "from-emerald-500/20 to-violet-500/10",
-      borderColor: "border-emerald-500/30",
-      iconColor: "text-emerald-400",
-    },
-  ];
-
   const metrics = [
     { value: "10,000+", label: "Student Builders", highlight: "Active across 50+ campuses" },
     { value: "$150,000+", label: "Prizes & Grants Won", highlight: "Transparently disbursed" },
@@ -66,86 +24,187 @@ export default function AboutLaunchByteSection() {
 
   return (
     <section className="relative py-20 sm:py-28 bg-[#050510] overflow-hidden">
-      {/* Background Ambience & Delicate Grid */}
-      <div className="absolute inset-0 bg-space-grid opacity-30 pointer-events-none" />
+      {/* Background Ambience */}
+      <div className="absolute inset-0 bg-space-grid opacity-25 pointer-events-none" />
       <div className="absolute top-1/2 left-0 w-96 h-96 bg-violet-600/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-10 right-0 w-96 h-96 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         {/* Section Header */}
-        <div className="max-w-3xl mx-auto text-center space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-violet-950/60 border border-violet-500/30 text-xs font-mono uppercase tracking-widest text-[#A78BFA] backdrop-blur-md">
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-            <span>What Is LaunchByte?</span>
+        <Reveal>
+          <div className="max-w-3xl mx-auto text-center space-y-4">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-violet-950/60 border border-violet-500/30 text-xs font-mono uppercase tracking-widest text-[#A78BFA] backdrop-blur-md">
+              <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+              <span>What Is LaunchByte?</span>
+            </div>
+
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight leading-tight">
+              The Launchpad Built by Builders, <br className="hidden sm:inline" />
+              <span className="bg-gradient-to-r from-[#A78BFA] via-[#C084FC] to-[#22D3EE] bg-clip-text text-transparent">
+                for the Next Generation of Tech.
+              </span>
+            </h2>
+
+            <p className="text-base sm:text-lg text-[#CBD5E1] leading-relaxed font-normal">
+              Legacy student portals are slow, cluttered with sponsored spam, and disconnected from real developer needs. LaunchByte is an integrated platform engineered to help students discover opportunities, assemble squads, ship real products, and launch careers in tech.
+            </p>
           </div>
+        </Reveal>
 
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight leading-tight">
-            The Launchpad Built by Builders, <br className="hidden sm:inline" />
-            <span className="bg-gradient-to-r from-[#A78BFA] via-[#C084FC] to-[#22D3EE] bg-clip-text text-transparent">
-              for the Next Generation of Tech.
-            </span>
-          </h2>
+        {/* 3 Pillars Bento Grid: One Large Featured + Two Small */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+          {/* 1. Large Bento Pillar (7 columns on desktop) */}
+          <Reveal className="lg:col-span-7 flex" delay={0.1}>
+            <div className="relative p-[1px] rounded-3xl overflow-hidden group w-full flex">
+              {/* Animated Gradient Border on Hover */}
+              <div className="absolute inset-0 bg-gradient-to-r from-violet-600 via-cyan-400 to-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl animate-gradient-xy" />
 
-          <p className="text-base sm:text-lg text-[#B8BAD0] leading-relaxed font-normal">
-            Legacy student portals are slow, cluttered with sponsored spam, and disconnected from real developer needs. LaunchByte is an integrated platform engineered to help students discover opportunities, assemble squads, ship real products, and launch careers in tech.
-          </p>
-        </div>
-
-        {/* 4 Pillars Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-          {pillars.map((pillar, idx) => {
-            const Icon = pillar.icon;
-            return (
-              <div
-                key={idx}
-                className={`relative p-7 sm:p-8 rounded-3xl bg-[#09091B]/80 border ${pillar.borderColor} hover:border-violet-400/60 transition-all duration-300 shadow-xl shadow-black/40 group hover:-translate-y-1`}
-              >
-                {/* Subtle Inner Glow */}
-                <div
-                  className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${pillar.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none`}
-                />
-
-                <div className="relative space-y-4">
+              <div className="relative rounded-[23px] w-full bg-[#09091B]/90 glass-card glow-hover p-7 sm:p-9 flex flex-col justify-between space-y-6">
+                <div className="space-y-5">
                   <div className="flex items-center justify-between">
-                    <div className="w-12 h-12 rounded-2xl bg-slate-900/90 border border-slate-700/60 flex items-center justify-center shadow-inner">
-                      <Icon className={`w-6 h-6 ${pillar.iconColor}`} />
+                    <div className="w-14 h-14 rounded-2xl bg-violet-950/80 border border-violet-500/40 flex items-center justify-center shadow-lg shadow-violet-900/30">
+                      <Compass className="w-7 h-7 text-cyan-400" />
                     </div>
-                    <span className="text-[11px] font-mono tracking-wider text-slate-400 bg-slate-900/80 px-2.5 py-1 rounded-full border border-slate-800">
-                      {pillar.badge}
+                    <span className="text-xs font-mono tracking-wider text-cyan-300 bg-cyan-950/50 px-3 py-1 rounded-full border border-cyan-500/30">
+                      Flagship Engine
                     </span>
                   </div>
 
-                  <h3 className="text-xl font-bold text-[#F8FAFC] group-hover:text-white transition-colors">
-                    {pillar.title}
-                  </h3>
+                  <div className="space-y-2">
+                    <span className="text-xs font-mono uppercase tracking-widest text-violet-400 font-semibold">
+                      Pillar 01 • Curated Discovery
+                    </span>
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-[#F8FAFC] tracking-tight">
+                      Curated Opportunity Engine
+                    </h3>
+                  </div>
 
-                  <p className="text-sm text-[#B8BAD0] leading-relaxed">
-                    {pillar.description}
+                  <p className="text-sm sm:text-base text-[#CBD5E1] leading-relaxed">
+                    Verified hackathons, developer fellowships, and high-impact internships curated with zero sponsored junk, guaranteed escrow prize pools, and transparent judging rubrics so you never waste weekend sprints.
                   </p>
+
+                  {/* Highlights list */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                    {[
+                      "Zero spam or phantom listings",
+                      "Guaranteed prize pool escrow",
+                      "Transparent evaluation rubrics",
+                      "Automated registration alerts",
+                    ].map((item, i) => (
+                      <div key={i} className="flex items-center gap-2 text-xs sm:text-sm text-slate-300">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between">
+                  <span className="text-xs font-mono text-slate-400">
+                    Trusted by 10,000+ student builders
+                  </span>
+                  <MagneticButton>
+                    <Link
+                      href="/events"
+                      className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-cyan-300 hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-cyan-400 rounded-lg p-1"
+                    >
+                      <span>Explore Catalog</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </MagneticButton>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          </Reveal>
+
+          {/* 2 & 3. Two Small Bento Pillars Stacked (5 columns on desktop) */}
+          <div className="lg:col-span-5 flex flex-col gap-6 justify-between">
+            {/* Pillar 2: Skill Acceleration */}
+            <Reveal delay={0.2} className="flex-1 flex">
+              <div className="relative p-[1px] rounded-3xl overflow-hidden group w-full flex">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-500 to-violet-600 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+                <div className="relative rounded-[23px] w-full bg-[#09091B]/90 glass-card glow-hover p-6 sm:p-7 flex flex-col justify-between space-y-4">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="w-11 h-11 rounded-xl bg-blue-950/80 border border-blue-500/30 flex items-center justify-center">
+                        <Zap className="w-5 h-5 text-blue-400" />
+                      </div>
+                      <span className="text-[11px] font-mono tracking-wider text-slate-400 bg-slate-900/80 px-2.5 py-0.5 rounded-full border border-slate-800">
+                        Pillar 02
+                      </span>
+                    </div>
+
+                    <h3 className="text-lg sm:text-xl font-bold text-[#F8FAFC]">
+                      Skill Acceleration Sprints
+                    </h3>
+
+                    <p className="text-xs sm:text-sm text-[#CBD5E1] leading-relaxed">
+                      Hands-on 24–48h building sprints that transform textbook concepts into deployable full-stack software and verified portfolio credentials.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-xs font-mono text-blue-300">
+                    <Terminal className="w-3.5 h-3.5" />
+                    <span>Real-world production architectures</span>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+
+            {/* Pillar 3: Teammate Synergy */}
+            <Reveal delay={0.3} className="flex-1 flex">
+              <div className="relative p-[1px] rounded-3xl overflow-hidden group w-full flex">
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-teal-400 to-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+                <div className="relative rounded-[23px] w-full bg-[#09091B]/90 glass-card glow-hover p-6 sm:p-7 flex flex-col justify-between space-y-4">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="w-11 h-11 rounded-xl bg-cyan-950/80 border border-cyan-500/30 flex items-center justify-center">
+                        <Users className="w-5 h-5 text-cyan-400" />
+                      </div>
+                      <span className="text-[11px] font-mono tracking-wider text-slate-400 bg-slate-900/80 px-2.5 py-0.5 rounded-full border border-slate-800">
+                        Pillar 03
+                      </span>
+                    </div>
+
+                    <h3 className="text-lg sm:text-xl font-bold text-[#F8FAFC]">
+                      Autonomous Squad Synergy
+                    </h3>
+
+                    <p className="text-xs sm:text-sm text-[#CBD5E1] leading-relaxed">
+                      Intelligent matchmaking pairing builders across complementary skillsets—frontend architects, systems engineers, and designers ready to sprint together.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-xs font-mono text-cyan-300">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+                    <span>Verified builder reputation system</span>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          </div>
         </div>
 
         {/* Impact Metrics Strip */}
-        <div className="rounded-3xl bg-gradient-to-r from-violet-950/40 via-slate-900/60 to-indigo-950/40 border border-violet-500/20 p-6 sm:p-10 backdrop-blur-md">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
-            {metrics.map((m, i) => (
-              <div key={i} className="space-y-1">
-                <div className="text-2xl sm:text-4xl font-extrabold bg-gradient-to-r from-[#F8FAFC] via-[#A78BFA] to-[#22D3EE] bg-clip-text text-transparent tracking-tight">
-                  {m.value}
+        <Reveal delay={0.4}>
+          <div className="rounded-3xl glass-card glow-hover p-6 sm:p-10 border border-violet-500/20 backdrop-blur-md">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+              {metrics.map((m, i) => (
+                <div key={i} className="space-y-1">
+                  <div className="text-2xl sm:text-4xl font-extrabold bg-gradient-to-r from-[#F8FAFC] via-[#A78BFA] to-[#22D3EE] bg-clip-text text-transparent tracking-tight">
+                    {m.value}
+                  </div>
+                  <div className="text-xs sm:text-sm font-semibold text-slate-200">
+                    {m.label}
+                  </div>
+                  <div className="text-[11px] text-slate-400">
+                    {m.highlight}
+                  </div>
                 </div>
-                <div className="text-xs sm:text-sm font-semibold text-slate-200">
-                  {m.label}
-                </div>
-                <div className="text-[11px] text-slate-400">
-                  {m.highlight}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

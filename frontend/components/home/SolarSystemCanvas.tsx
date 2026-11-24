@@ -400,7 +400,13 @@ interface ProjectedLabel {
   depth: number;
 }
 
-export default function SolarSystemCanvas() {
+export default function SolarSystemCanvas({
+  className,
+  showForegroundAstronaut = true,
+}: {
+  className?: string;
+  showForegroundAstronaut?: boolean;
+} = {}) {
   const mountRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const routerRef = useRef(router);
@@ -424,6 +430,7 @@ export default function SolarSystemCanvas() {
         alpha: false,
         powerPreference: "high-performance",
       });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     } catch {
       setWebglSupported(false);
       return;
@@ -718,7 +725,7 @@ export default function SolarSystemCanvas() {
     const resizeObserver = new ResizeObserver(() => {
       width = container.clientWidth || width;
       height = container.clientHeight || height;
-      webgl.setPixelRatio(Math.min(window.devicePixelRatio || 1, width < 800 ? 1.5 : 1.75));
+      webgl.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
       webgl.setSize(width, height);
       fitSystem();
     });
@@ -872,7 +879,7 @@ export default function SolarSystemCanvas() {
   }, []);
 
   return (
-    <div className="relative w-full h-[700px] sm:h-[800px] lg:h-[900px] overflow-hidden bg-[#050510]">
+    <div className={`relative w-full overflow-hidden bg-[#050510] ${className || "h-[700px] sm:h-[800px] lg:h-[900px]"}`}>
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -left-16 top-8 h-72 w-72 rounded-full bg-violet-700/20 blur-3xl" />
         <div className="absolute right-0 top-16 h-80 w-80 rounded-full bg-sky-500/10 blur-3xl" />
@@ -881,25 +888,13 @@ export default function SolarSystemCanvas() {
       <div ref={mountRef} className="absolute inset-0" />
 
       {!webglSupported && (
-        <div className="absolute inset-0 flex items-center justify-center p-6">
-          <div className="max-w-lg rounded-2xl border border-violet-500/30 bg-[#09091B] p-6 text-center">
-            <Compass className="mx-auto mb-3 h-7 w-7 text-violet-300" />
-            <p className="text-sm text-slate-300">
-              This browser cannot render the interactive universe. The destinations are still available below.
-            </p>
-            <div className="mt-4 flex flex-wrap justify-center gap-2">
-              {PLANETS.map((planet) => (
-                <button
-                  key={planet.id}
-                  type="button"
-                  onClick={() => router.push(planet.route)}
-                  className="rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs text-white"
-                >
-                  {planet.name}
-                </button>
-              ))}
-            </div>
-          </div>
+        <div className="absolute inset-0">
+          <img
+            src="/brand/universe-cosmic-backdrop.webp"
+            alt="Cosmic backdrop"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-[#050510]/50" />
         </div>
       )}
 
@@ -920,25 +915,27 @@ export default function SolarSystemCanvas() {
         </div>
       )}
 
-      <div
-        className="pointer-events-none absolute bottom-0 left-1/2 z-30 w-[min(520px,78vw)] -translate-x-1/2 overflow-hidden"
-        style={{
-          height: "clamp(156px, 24vw, 220px)",
-          maskImage:
-            "linear-gradient(to top, #000 68%, transparent), linear-gradient(to right, transparent, #000 10%, #000 90%, transparent)",
-          WebkitMaskImage:
-            "linear-gradient(to top, #000 68%, transparent), linear-gradient(to right, transparent, #000 10%, #000 90%, transparent)",
-          maskComposite: "intersect",
-          WebkitMaskComposite: "source-in",
-        }}
-      >
-        <img
-          src="/brand/universe-foreground-astronaut.png"
-          alt=""
-          draggable={false}
-          className="absolute bottom-0 left-1/2 h-full w-auto max-w-none -translate-x-1/2 select-none"
-        />
-      </div>
+      {showForegroundAstronaut && (
+        <div
+          className="pointer-events-none absolute bottom-0 left-1/2 z-30 w-[min(520px,78vw)] -translate-x-1/2 overflow-hidden"
+          style={{
+            height: "clamp(156px, 24vw, 220px)",
+            maskImage:
+              "linear-gradient(to top, #000 68%, transparent), linear-gradient(to right, transparent, #000 10%, #000 90%, transparent)",
+            WebkitMaskImage:
+              "linear-gradient(to top, #000 68%, transparent), linear-gradient(to right, transparent, #000 10%, #000 90%, transparent)",
+            maskComposite: "intersect",
+            WebkitMaskComposite: "source-in",
+          }}
+        >
+          <img
+            src="/brand/universe-foreground-astronaut.webp"
+            alt=""
+            draggable={false}
+            className="absolute bottom-0 left-1/2 h-full w-auto max-w-none -translate-x-1/2 select-none"
+          />
+        </div>
+      )}
     </div>
   );
 }

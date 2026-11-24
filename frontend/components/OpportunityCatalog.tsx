@@ -27,6 +27,7 @@ interface Props {
   fixedType?: OpportunityType;
   title: string;
   subtitle: string;
+  hideHeader?: boolean;
 }
 
 const ALL_TYPES: OpportunityType[] = [
@@ -54,6 +55,7 @@ export default function OpportunityCatalog({
   fixedType,
   title,
   subtitle,
+  hideHeader = false,
 }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -225,40 +227,42 @@ export default function OpportunityCatalog({
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       {/* Title & Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-slate-800">
-        <div>
-          <h1 className="text-3xl font-extrabold text-white tracking-tight sm:text-4xl">
-            {title}
-          </h1>
-          <p className="mt-1.5 text-sm text-slate-400 max-w-2xl">{subtitle}</p>
-        </div>
+      {!hideHeader && (
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-slate-800">
+          <div>
+            <h1 className="text-3xl font-extrabold text-white tracking-tight sm:text-4xl">
+              {title}
+            </h1>
+            <p className="mt-1.5 text-sm text-slate-400 max-w-2xl">{subtitle}</p>
+          </div>
 
-        {/* Search Bar */}
-        <form onSubmit={handleSearchSubmit} className="relative w-full md:w-80">
-          <input
-            type="text"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Search title, tech, company..."
-            aria-label="Search opportunities by title, tech, or company"
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500 transition"
-          />
-          <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" />
-          {q && (
-            <button
-              type="button"
-              onClick={() => {
-                setQ("");
-                applyFilters({ q: "" });
-              }}
-              aria-label="Clear search query"
-              className="absolute right-3 top-3 text-slate-400 hover:text-white"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          )}
-        </form>
-      </div>
+          {/* Search Bar */}
+          <form onSubmit={handleSearchSubmit} className="relative w-full md:w-80">
+            <input
+              type="text"
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Search title, tech, company..."
+              aria-label="Search opportunities by title, tech, or company"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500 transition"
+            />
+            <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" />
+            {q && (
+              <button
+                type="button"
+                onClick={() => {
+                  setQ("");
+                  applyFilters({ q: "" });
+                }}
+                aria-label="Clear search query"
+                className="absolute right-3 top-3 text-slate-400 hover:text-white"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </form>
+        </div>
+      )}
 
       {/* Main Layout: Filter Drawer / Sidebar + Cards Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { api } from "@/lib/api";
 import { EventListItem, EventMode } from "@/lib/types";
 import { Calendar, MapPin, Users, Wifi, Building2, Sparkles, Search, Clock } from "lucide-react";
+import PageHero from "@/components/common/PageHero";
 
 function EventCard({ event }: { event: EventListItem }) {
   const starts = new Date(event.starts_at);
@@ -20,7 +21,7 @@ function EventCard({ event }: { event: EventListItem }) {
     : null;
 
   return (
-    <Link href={`/events/${event.slug}`} className="group block bg-slate-900/60 border border-slate-800 rounded-2xl overflow-hidden hover:border-indigo-500/40 hover:shadow-lg hover:shadow-indigo-500/5 transition-all duration-200">
+    <Link href={`/events/${event.slug}`} className="group block glass-card glow-hover rounded-2xl overflow-hidden transition-all duration-200">
       {/* Banner */}
       <div className="relative h-44 bg-gradient-to-br from-slate-800 to-slate-900 overflow-hidden">
         {event.banner_url ? (
@@ -81,8 +82,8 @@ function EventCard({ event }: { event: EventListItem }) {
 
 function EventCardSkeleton() {
   return (
-    <div className="bg-slate-900/60 border border-slate-800 rounded-2xl overflow-hidden animate-pulse">
-      <div className="h-44 bg-slate-800" />
+    <div className="glass-card rounded-2xl overflow-hidden animate-pulse">
+      <div className="h-44 bg-slate-800/60" />
       <div className="p-4 space-y-2">
         <div className="h-3 bg-slate-800 rounded w-1/3" />
         <div className="h-4 bg-slate-800 rounded w-3/4" />
@@ -138,38 +139,40 @@ export default function EventsPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-950">
-      {/* Hero */}
-      <div className="relative overflow-hidden border-b border-slate-800 bg-gradient-to-b from-slate-900 to-slate-950">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900/20 via-transparent to-transparent pointer-events-none" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative">
-          <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-            Discover <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Events</span>
-          </h1>
-          <p className="text-slate-400 text-lg mb-8 max-w-xl">
-            Find hackathons, workshops, and competitions from verified organizations.
-          </p>
-          <form onSubmit={handleSearch} className="flex gap-2 max-w-lg">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-              <input
-                type="text"
-                placeholder="Search events..."
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 text-sm"
-              />
-            </div>
-            <button type="submit" className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-medium transition-colors">
-              Search
-            </button>
-          </form>
-        </div>
-      </div>
+    <main className="min-h-screen bg-[#050510]">
+      {/* PageHero with search form inside */}
+      <PageHero
+        eyebrow="EVENTS HUB"
+        title={
+          <>
+            Discover{" "}
+            <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+              Events
+            </span>
+          </>
+        }
+        subtitle="Find hackathons, workshops, and competitions from verified organizations."
+      >
+        <form onSubmit={handleSearch} className="flex gap-2 max-w-lg mx-auto">
+          <div className="flex-1 relative">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+            <input
+              type="text"
+              placeholder="Search events..."
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              className="w-full pl-10 pr-4 py-2.5 bg-slate-900/90 border border-slate-700/80 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 text-sm"
+            />
+          </div>
+          <button type="submit" className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-semibold transition-colors shadow-lg shadow-indigo-600/25">
+            Search
+          </button>
+        </form>
+      </PageHero>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-wrap gap-2 mb-8">
-          <div className="flex bg-slate-900 border border-slate-800 rounded-xl p-1 gap-1">
+          <div className="flex bg-slate-900/80 border border-slate-800 rounded-xl p-1 gap-1">
             <button
               onClick={() => { setUpcoming(true); setOffset(0); }}
               className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${upcoming ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white"}`}
@@ -187,7 +190,7 @@ export default function EventsPage() {
             <button
               key={m.value}
               onClick={() => { setMode(m.value as EventMode | ""); setOffset(0); }}
-              className={`px-3 py-1.5 rounded-xl text-sm font-medium border transition-colors ${mode === m.value ? "bg-indigo-600 text-white border-indigo-600" : "bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-600"}`}
+              className={`px-3 py-1.5 rounded-xl text-sm font-medium border transition-colors ${mode === m.value ? "bg-indigo-600 text-white border-indigo-600" : "bg-slate-900/60 text-slate-400 border-slate-800 hover:border-slate-600"}`}
             >
               {m.label}
             </button>
