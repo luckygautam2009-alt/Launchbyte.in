@@ -18,6 +18,7 @@ import PartnersLogoRow from "@/components/home/PartnersLogoRow";
 import TestimonialsCarousel from "@/components/home/TestimonialsCarousel";
 import FaqAccordionSection from "@/components/home/FaqAccordionSection";
 import PartnerContactSection from "@/components/home/PartnerContactSection";
+import CoreTeamSection from "@/components/home/CoreTeamSection";
 import FinalCtaSection from "@/components/home/FinalCtaSection";
 
 export default function HomePage() {
@@ -117,7 +118,10 @@ export default function HomePage() {
         {/* 14. Partner Contact / Partner With Us Inquiry Form */}
         <PartnerContactSection />
 
-        {/* 15. Final Call To Action (Cinematic Cosmic CTA & Rocket Liftoff Stage) */}
+        {/* 15. Core Team Showcase */}
+        <CoreTeamSection />
+
+        {/* 16. Final Call To Action (Cinematic Cosmic CTA & Rocket Liftoff Stage) */}
         <div id="stage-launch" className="relative scroll-mt-24">
           <div className="md:hidden flex items-center justify-center gap-1.5 pt-6 pb-2 text-[10px] font-mono uppercase tracking-widest text-cyan-400">
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />

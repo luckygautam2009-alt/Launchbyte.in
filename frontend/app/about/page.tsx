@@ -7,6 +7,7 @@ import { api } from "@/lib/api";
 import { TeamMember } from "@/lib/types";
 import { SITE_CONTENT } from "@/lib/siteContent";
 import PageHero from "@/components/common/PageHero";
+import CoreTeamSection from "@/components/home/CoreTeamSection";
 import {
   ShieldCheck,
   Zap,
@@ -250,81 +251,13 @@ export default function AboutPage() {
         </section>
 
         {/* 6. Our Team */}
-        <section className="space-y-8">
-          <div className="text-center max-w-2xl mx-auto space-y-3">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#F8FAFC] tracking-tight">Meet the Team</h2>
-            <p className="text-slate-400 text-sm">
-              The engineers, community organizers, and designers building the LaunchByte frontier.
-            </p>
-          </div>
-
-          {loading ? (
-            <div className="py-16 flex items-center justify-center text-slate-400">
-              <Loader2 className="w-8 h-8 animate-spin text-indigo-500 mr-2" />
-              <span>Loading team members...</span>
-            </div>
-          ) : team.length === 0 ? (
-            <div className="text-center py-12 text-slate-500">
-              Team roster updating shortly.
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {team.map((member) => (
-                <div
-                  key={member.id}
-                  className="glass-card glow-hover rounded-2xl p-6 flex flex-col items-center text-center transition"
-                >
-                  <div className="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-indigo-500/30 bg-slate-800 relative">
-                    {member.photo_url ? (
-                      <img
-                        src={member.photo_url}
-                        alt={member.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-2xl font-bold text-indigo-400 bg-indigo-500/10">
-                        {member.name.charAt(0)}
-                      </div>
-                    )}
-                  </div>
-
-                  <h3 className="text-lg font-bold text-white mb-0.5">{member.name}</h3>
-                  <p className="text-xs font-semibold text-indigo-400 mb-3">{member.designation}</p>
-                  {member.bio && (
-                    <p className="text-xs text-slate-400 leading-relaxed mb-4 line-clamp-3">
-                      {member.bio}
-                    </p>
-                  )}
-
-                  <div className="mt-auto flex items-center gap-3 pt-3 border-t border-slate-800/80 w-full justify-center">
-                    {member.linkedin_url && (
-                      <a
-                        href={member.linkedin_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-slate-800/60 text-slate-400 hover:text-white hover:bg-slate-800 transition"
-                        aria-label={`${member.name}'s LinkedIn`}
-                      >
-                        <Linkedin className="w-4 h-4" />
-                      </a>
-                    )}
-                    {member.github_url && (
-                      <a
-                        href={member.github_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-slate-800/60 text-slate-400 hover:text-white hover:bg-slate-800 transition"
-                        aria-label={`${member.name}'s GitHub`}
-                      >
-                        <Github className="w-4 h-4" />
-                      </a>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
+        <div className="-mx-4 sm:-mx-6 lg:-mx-8">
+          <CoreTeamSection
+            title="Meet the Core Team"
+            subtitle="The engineers, community organizers, and designers building the LaunchByte frontier."
+            showEyebrow={false}
+          />
+        </div>
 
         {/* 7. CTA Section */}
         <section className="text-center py-12 rounded-3xl glass-card border border-indigo-500/30 p-8 sm:p-12 relative overflow-hidden">
