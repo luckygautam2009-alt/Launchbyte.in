@@ -1,8 +1,8 @@
 /**
  * Centralized Site Content & Company Profile Configuration
  *
- * NOTE: All placeholder content is marked with TODO comments so you can
- * easily customize names, metrics, testimonials, and partner logos in one place.
+ * NOTE: Sample content is tagged with // SAMPLE - replace so you can easily
+ * replace with your official launch assets.
  */
 
 export interface ImpactMetric {
@@ -19,7 +19,7 @@ export interface PartnerLogo {
   id: string;
   name: string;
   category: string;
-  symbol: string; // text symbol or icon abbreviation
+  symbol: string;
   placeholderUrl?: string;
 }
 
@@ -53,13 +53,23 @@ export interface CompanyValue {
   iconName: string;
 }
 
+export interface CoreTeamMember {
+  name: string;
+  role: string;
+  bio: string;
+  photo?: string;
+  linkedin?: string;
+  github?: string;
+  twitter?: string;
+}
+
 export const SITE_CONTENT = {
-  // 1. Impact Metrics (TODO: Replace placeholder values when live counts are unavailable)
+  // 1. Impact Metrics (Live counts are dynamically loaded; fallback samples below)
   impactMetrics: [
     {
       id: "opportunities",
       label: "Verified Opportunities",
-      count: 480, // TODO: Update with actual live count
+      count: 48, // SAMPLE - replace
       suffix: "+",
       description: "Hackathons, fellowships & research grants",
       isPlaceholder: true,
@@ -67,25 +77,25 @@ export const SITE_CONTENT = {
     {
       id: "builders",
       label: "Student Builders",
-      count: 12500, // TODO: Update with actual registered builders count
+      count: 1200, // SAMPLE - replace
       suffix: "+",
-      description: "Active developers across 60+ universities",
+      description: "Active developers across campuses",
       isPlaceholder: true,
     },
     {
       id: "events",
-      label: "Events & Sprints Hosted",
-      count: 140, // TODO: Update with actual events hosted count
+      label: "Events & Sprints",
+      count: 24, // SAMPLE - replace
       suffix: "+",
-      description: "Completed with verified judging & payouts",
+      description: "Organized with verified judging & reviews",
       isPlaceholder: true,
     },
     {
       id: "organizations",
       label: "Partner Organizations",
-      count: 85, // TODO: Update with actual organization count
+      count: 16, // SAMPLE - replace
       suffix: "+",
-      description: "Venture labs, devtool sponsors & universities",
+      description: "Developer clubs & collegiate chapters",
       isPlaceholder: true,
     },
   ] as ImpactMetric[],
@@ -100,7 +110,7 @@ export const SITE_CONTENT = {
         "To dismantle the bureaucratic friction of student tech by curating verified, zero-scam hackathons, fostering multi-disciplinary squads, and giving every ambitious student engineer verifiable proof of execution.",
       points: [
         "Curate opportunities with zero sponsored spam or paywalls.",
-        "Guarantee transparent evaluation rubrics and verified prize escrows.",
+        "Guarantee transparent evaluation rubrics and verified schedules.",
         "Empower student squads to build production-grade software.",
       ],
     },
@@ -116,92 +126,63 @@ export const SITE_CONTENT = {
     },
   },
 
-  // 3. Partners / Sponsors Logo Row (TODO: Update with approved partner names/logos)
+  // 3. Partners / Sponsors (Reduced to 3 sample items per spec)
   partners: [
-    { id: "p1", name: "Nebula Protocol", category: "Cloud & AI", symbol: "NP" },
-    { id: "p2", name: "Solstice Labs", category: "Distributed Systems", symbol: "SL" },
-    { id: "p3", name: "Vanguard Devtools", category: "Developer Tools", symbol: "VD" },
-    { id: "p4", name: "Aetheria Venture", category: "Venture Capital", symbol: "AV" },
-    { id: "p5", name: "Hyperion Systems", category: "Infrastructure", symbol: "HS" },
-    { id: "p6", name: "Quantum Campus", category: "University Network", symbol: "QC" },
-    { id: "p7", name: "ZeroMatrix Fund", category: "Grants & Fellowships", symbol: "ZM" },
-    { id: "p8", name: "Synthetix AI", category: "Autonomous Agents", symbol: "SA" },
+    { id: "p1", name: "Sample Cloud Partner", category: "Cloud & AI", symbol: "CP" }, // SAMPLE - replace
+    { id: "p2", name: "Sample DevTools", category: "Developer Tools", symbol: "DT" }, // SAMPLE - replace
+    { id: "p3", name: "Sample Campus Labs", category: "University Network", symbol: "CL" }, // SAMPLE - replace
   ] as PartnerLogo[],
 
-  // 4. Testimonials (TODO: Replace with verified quotes from student winners and organizers)
+  // 4. Testimonials (Reduced to 2 sample items per spec)
   testimonials: [
     {
       id: "t1",
       quote:
-        "LaunchByte helped me find my co-founder and frontend lead in 48 hours for the Autonomous Agents hackathon. We shipped our MVP, took first prize, and secured our initial grant.",
-      name: "Marcus Brody",
-      role: "Founder, AgentFlow",
-      organization: "Autonomous Agents Hackathon Winner",
+        "LaunchByte helped me find my co-founder and frontend lead in 48 hours for our hackathon sprint. We shipped our MVP and secured our initial grant.", // SAMPLE - replace
+      name: "Marcus Brody", // SAMPLE - replace
+      role: "Student Founder", // SAMPLE - replace
+      organization: "Sample Hackathon Winner", // SAMPLE - replace
       avatarText: "MB",
       verifiedBadge: "Hackathon Winner",
     },
     {
       id: "t2",
       quote:
-        "Unlike standard student job boards that are 90% spam, every listing on LaunchByte has verified organizers and clear deadlines. I landed my compiler engineering fellowship through here.",
-      name: "Priya Sundaram",
-      role: "Systems Research Fellow",
-      organization: "OpenSource Fellowship 2026",
+        "Unlike cluttered student job boards, every opportunity here has verified organizers and clear deadlines. Landed my summer engineering fellowship.", // SAMPLE - replace
+      name: "Priya Sundaram", // SAMPLE - replace
+      role: "Systems Fellow", // SAMPLE - replace
+      organization: "Sample Fellowship Fellow", // SAMPLE - replace
       avatarText: "PS",
       verifiedBadge: "Verified Fellow",
     },
-    {
-      id: "t3",
-      quote:
-        "Hosting our university's regional hackathon on LaunchByte saved us weeks of admin overhead. The QR check-in and automated team matching were genuinely flawless.",
-      name: "Leo Rivera",
-      role: "Lead Organizer",
-      organization: "CalTech Builder Summit",
-      avatarText: "LR",
-      verifiedBadge: "Host Partner",
-    },
   ] as TestimonialItem[],
 
-  // 5. Frequently Asked Questions
+  // 5. Frequently Asked Questions (Reduced to 3 sample items per spec)
   faqs: [
     {
       id: "faq-1",
       question: "Is LaunchByte free for students?",
       answer:
-        "Yes, 100%. LaunchByte is and will always remain completely free for student developers. There are no hidden fees, paywalls to apply, or subscription tiers for participants.",
+        "Yes, 100%. LaunchByte is completely free for student developers. There are no fees to apply or join squads.", // SAMPLE - replace
       category: "students",
     },
     {
       id: "faq-2",
       question: "How are hackathons and opportunities verified?",
       answer:
-        "Every event and fellowship submitted passes through algorithmic screening and manual review to verify legitimate sponsors, transparent judging rubrics, realistic schedules, and guaranteed escrowed prize payouts.",
+        "Every event and fellowship submitted passes through algorithmic screening and manual review to verify legitimate organizers and transparent timelines.", // SAMPLE - replace
       category: "general",
     },
     {
       id: "faq-3",
       question: "How does teammate matching work?",
       answer:
-        "You can explore open squads or post your own team looking for complementary roles (e.g. backend engineer, UI/UX designer, smart contract auditor). You can review applicant profiles and invite members with one click.",
+        "You can explore open squads or post your own team looking for complementary roles (e.g. backend, frontend, design). You can invite members with one click.", // SAMPLE - replace
       category: "students",
-    },
-    {
-      id: "faq-4",
-      question: "Can universities or devtool companies partner with LaunchByte?",
-      answer:
-        "Yes. We collaborate with student developer clubs, engineering departments, and devtool companies to sponsor tracks, distribute grants, and host high-visibility builder sprints.",
-      category: "partners",
-    },
-    {
-      id: "faq-5",
-      question: "What is the QR Pass and how does event check-in work?",
-      answer:
-        "When you register for an in-person or hybrid hackathon, LaunchByte generates an offline-ready cryptographic QR pass saved to your dashboard. Organizers scan it at check-in for instant verification.",
-      category: "organizers",
     },
   ] as FaqItem[],
 
-  // 6. Our Story Timeline for /about (TODO: Adjust milestones to reflect company trajectory)
+  // 6. Our Story Timeline for /about
   storyTimeline: [
     {
       year: "2024",
@@ -214,14 +195,14 @@ export const SITE_CONTENT = {
       year: "2025",
       title: "The Trust Protocol",
       description:
-        "Expanded into an automated verification platform, launching digital QR passes, escrow-verified prize pools, and multi-campus squad matching.",
+        "Expanded into an automated verification platform, launching digital QR passes, verified listings, and multi-campus squad matching.",
       tag: "Expansion",
     },
     {
       year: "2026",
       title: "The Cosmic Frontier",
       description:
-        "Now connecting over 10,000 student builders across 60+ universities with tier-one fellowships, venture grants, and global hackathon ecosystems.",
+        "Now connecting thousands of student builders with fellowships, venture grants, and global hackathon ecosystems.",
       tag: "Scale",
     },
   ] as TimelineEvent[],
@@ -253,4 +234,39 @@ export const SITE_CONTENT = {
       iconName: "Sparkles",
     },
   ] as CompanyValue[],
+
+  // 8. Core Team (Fallback data when backend /about/team is empty)
+  coreTeam: [
+    {
+      name: "Alex Vance", // SAMPLE - replace
+      role: "Founder & Product Lead",
+      bio: "Systems architect and collegiate hackathon organizer passionate about democratizing student tech.",
+      photo: "/team/alex.jpg",
+      github: "https://github.com",
+      linkedin: "https://linkedin.com",
+    },
+    {
+      name: "Sophia Zhang", // SAMPLE - replace
+      role: "Lead Platform Engineer",
+      bio: "Distributed systems engineer building high-concurrency event pipelines and cryptographic check-in passes.",
+      photo: "/team/sophia.jpg",
+      github: "https://github.com",
+      linkedin: "https://linkedin.com",
+    },
+    {
+      name: "Devon Reed", // SAMPLE - replace
+      role: "Design & Creative Director",
+      bio: "Crafting atmospheric interfaces, motion design systems, and developer-first user experiences.",
+      photo: "/team/devon.jpg",
+      github: "https://github.com",
+      twitter: "https://x.com",
+    },
+    {
+      name: "Mira Patel", // SAMPLE - replace
+      role: "Ecosystem & Partnerships",
+      bio: "Connecting university clubs, collegiate hackathons, and developer grants across global campuses.",
+      photo: "/team/mira.jpg",
+      linkedin: "https://linkedin.com",
+    },
+  ] as CoreTeamMember[],
 };

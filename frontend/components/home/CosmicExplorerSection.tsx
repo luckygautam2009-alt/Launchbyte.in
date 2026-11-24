@@ -5,6 +5,9 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Sparkles, ArrowRight, Compass, Trophy, Users } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
+import SectionEyebrow from "@/components/ui/SectionEyebrow";
+import RevealHeading from "@/components/ui/RevealHeading";
+import TiltCard from "@/components/ui/TiltCard";
 
 // Lazy-load Three.js WebGL canvas (zero SSR hydration errors, paused when off-screen)
 const SolarSystemCanvas = dynamic(() => import("./SolarSystemCanvas"), {
@@ -94,19 +97,15 @@ export default function CosmicExplorerSection() {
         <div className="absolute -inset-x-8 -inset-y-6 bg-[radial-gradient(ellipse_at_center,rgba(5,5,16,0.85)_0%,rgba(5,5,16,0.55)_55%,transparent_75%)] -z-10 pointer-events-none rounded-3xl" />
 
         {/* Editorial Pill Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-violet-950/60 border border-violet-500/30 text-[11px] sm:text-xs font-mono uppercase tracking-widest text-[#A78BFA] backdrop-blur-md shadow-lg shadow-violet-950/40">
-          <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-          <span>The LaunchByte Frontier</span>
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+        <div className="flex justify-center">
+          <SectionEyebrow stage="STAGE 01 // DISCOVER" />
         </div>
 
         {/* Section Heading */}
-        <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#F8FAFC] tracking-tight leading-[1.15]">
-          A Vast Universe of <br className="hidden sm:inline" />
-          <span className="bg-gradient-to-r from-[#A78BFA] via-[#C084FC] to-[#22D3EE] bg-clip-text text-transparent">
-            Builder Possibilities.
-          </span>
-        </h2>
+        <RevealHeading
+          text="A Vast Universe of Builder Possibilities."
+          className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#F8FAFC] tracking-tight leading-[1.15]"
+        />
 
         {/* Subtitle Description */}
         <p className="max-w-2xl mx-auto text-sm sm:text-base lg:text-lg text-[#B8BAD0] leading-relaxed font-normal">
@@ -138,33 +137,34 @@ export default function CosmicExplorerSection() {
           {miniCards.map((card, i) => {
             const Icon = card.icon;
             return (
-              <Link
-                key={i}
-                href={card.href}
-                className="glass-card glow-hover group p-4 sm:p-5 rounded-2xl flex flex-col justify-between"
-              >
-                <div className="space-y-2.5">
-                  <div className="flex items-center justify-between">
-                    <div
-                      className={`w-9 h-9 rounded-xl flex items-center justify-center border ${card.accentBg}`}
-                    >
-                      <Icon className={`w-4 h-4 ${card.accent}`} />
+              <TiltCard key={i} className="p-4 sm:p-5">
+                <Link
+                  href={card.href}
+                  className="group flex flex-col justify-between h-full"
+                >
+                  <div className="space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <div
+                        className={`w-9 h-9 rounded-xl flex items-center justify-center border ${card.accentBg}`}
+                      >
+                        <Icon className={`w-4 h-4 ${card.accent}`} />
+                      </div>
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 bg-slate-900/60 px-2 py-0.5 rounded-md border border-white/5">
+                        {card.badge}
+                      </span>
                     </div>
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 bg-slate-900/60 px-2 py-0.5 rounded-md border border-white/5">
-                      {card.badge}
-                    </span>
+                    <div>
+                      <h3 className="text-sm font-bold text-white group-hover:text-violet-200 transition-colors flex items-center gap-1">
+                        <span>{card.title}</span>
+                        <ArrowRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-violet-400" />
+                      </h3>
+                      <p className="text-xs text-[#B8BAD0] leading-relaxed mt-1">
+                        {card.tagline}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-sm font-bold text-white group-hover:text-violet-200 transition-colors flex items-center gap-1">
-                      <span>{card.title}</span>
-                      <ArrowRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-violet-400" />
-                    </h3>
-                    <p className="text-xs text-[#B8BAD0] leading-relaxed mt-1">
-                      {card.tagline}
-                    </p>
-                  </div>
-                </div>
-              </Link>
+                </Link>
+              </TiltCard>
             );
           })}
         </div>

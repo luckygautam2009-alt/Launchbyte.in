@@ -11,118 +11,47 @@ import {
   MotionValue,
 } from "framer-motion";
 
-export interface JourneyStage {
+export interface JourneyStageDot {
   id: string;
   tag: string;
-  title: string;
+  label: string;
   progress: number;
-  range: [number, number, number, number];
-  xPercent: number;
-  yPercent: number;
-  side: "left" | "right";
 }
 
-export const JOURNEY_STAGES: JourneyStage[] = [
+export const JOURNEY_5_STAGES: JourneyStageDot[] = [
   {
     id: "stage-discover",
-    tag: "DISCOVER",
-    title: "Step into a universe of opportunities.",
-    progress: 0.04,
-    range: [0.005, 0.03, 0.12, 0.15],
-    xPercent: 5,
-    yPercent: 3,
-    side: "left",
+    tag: "01",
+    label: "Discover",
+    progress: 0.05,
   },
   {
     id: "stage-explore",
-    tag: "EXPLORE",
-    title: "Find hackathons, fellowships and more.",
-    progress: 0.22,
-    range: [0.16, 0.19, 0.28, 0.32],
-    xPercent: 91,
-    yPercent: 21,
-    side: "right",
-  },
-  {
-    id: "stage-apply",
-    tag: "APPLY",
-    title: "Pick what fits and go for it.",
-    progress: 0.38,
-    range: [0.33, 0.36, 0.44, 0.48],
-    xPercent: 6,
-    yPercent: 37,
-    side: "left",
+    tag: "02",
+    label: "Explore",
+    progress: 0.25,
   },
   {
     id: "stage-connect",
-    tag: "CONNECT",
-    title: "Find your squad.",
-    progress: 0.54,
-    range: [0.49, 0.52, 0.60, 0.64],
-    xPercent: 90,
-    yPercent: 53,
-    side: "right",
+    tag: "03",
+    label: "Connect",
+    progress: 0.52,
   },
   {
     id: "stage-build",
-    tag: "BUILD",
-    title: "Ship something real.",
-    progress: 0.70,
-    range: [0.65, 0.68, 0.76, 0.80],
-    xPercent: 6,
-    yPercent: 69,
-    side: "left",
+    tag: "04",
+    label: "Build",
+    progress: 0.72,
   },
   {
     id: "stage-launch",
-    tag: "LAUNCH",
-    title: "Launch your trajectory into orbit.",
+    tag: "05",
+    label: "Launch",
     progress: 0.94,
-    range: [0.88, 0.92, 0.98, 1.0],
-    xPercent: 86,
-    yPercent: 94,
-    side: "right",
   },
 ];
 
-function StageCaption({
-  stage,
-  progress,
-}: {
-  stage: JourneyStage;
-  progress: MotionValue<number>;
-}) {
-  const opacity = useTransform(progress, stage.range, [0, 1, 1, 0]);
-  const scale = useTransform(progress, stage.range, [0.88, 1, 1, 0.88]);
-  const yOffset = useTransform(progress, stage.range, [12, 0, 0, -12]);
-
-  const isLeft = stage.side === "left";
-
-  return (
-    <motion.div
-      style={{ opacity, scale, y: yOffset }}
-      className={`absolute top-1/2 -translate-y-1/2 pointer-events-none w-56 sm:w-64 z-30 ${
-        isLeft ? "left-full ml-3 sm:ml-4 text-left" : "right-full mr-3 sm:mr-4 text-right"
-      }`}
-    >
-      <div className="glass-card rounded-xl p-3 border border-violet-500/35 backdrop-blur-md shadow-2xl shadow-black/60 bg-[#09091b]/90">
-        <div
-          className={`flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wider text-cyan-400 mb-1 ${
-            isLeft ? "justify-start" : "justify-end"
-          }`}
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-          <span>STAGE // {stage.tag}</span>
-        </div>
-        <p className="text-xs font-semibold text-white leading-snug">
-          {stage.title}
-        </p>
-      </div>
-    </motion.div>
-  );
-}
-
-function ProgressRail({
+function LeftProgressRail({
   scrollYProgress,
 }: {
   scrollYProgress: MotionValue<number>;
@@ -133,6 +62,7 @@ function ProgressRail({
     return scrollYProgress.on("change", (v) => setCurrentProgress(v));
   }, [scrollYProgress]);
 
+  // Rail strictly appears only after the frozen sections and fades before the footer
   const railOpacity = useTransform(scrollYProgress, [0, 0.02, 0.98, 1], [0, 1, 1, 0]);
 
   const handleScrollTo = (id: string) => {
@@ -145,41 +75,50 @@ function ProgressRail({
   return (
     <motion.nav
       style={{ opacity: railOpacity }}
-      aria-label="Storyline Navigation Rail"
-      className="hidden md:flex fixed right-4 top-1/2 -translate-y-1/2 z-40 flex-col items-center gap-3.5 py-4 px-2 rounded-full glass-card border border-violet-500/25 bg-[#050510]/80 backdrop-blur-md shadow-xl shadow-black/50"
+      aria-label="Journey Progress Rail"
+      className="hidden xl:flex fixed left-4 2xl:left-6 top-1/2 -translate-y-1/2 z-40 flex-col items-center gap-4 py-4 px-2.5 rounded-full glass-card border border-violet-500/30 bg-[#050510]/85 backdrop-blur-md shadow-2xl shadow-black/60"
     >
-      <span className="text-[9px] font-mono text-slate-400 font-bold -rotate-90 my-2 select-none tracking-widest">
-        ORBIT
+      <span className="text-[9px] font-mono text-cyan-400 font-bold -rotate-90 my-2 select-none tracking-widest">
+        STAGES
       </span>
 
-      <div className="flex flex-col items-center gap-3 relative">
-        {JOURNEY_STAGES.map((s) => {
-          const isActive = currentProgress >= s.progress - 0.06;
+      {/* Progress track line */}
+      <div className="relative flex flex-col items-center gap-4 py-1">
+        <div className="absolute top-1 bottom-1 w-0.5 bg-violet-950/80 -z-10 rounded-full" />
+        <motion.div
+          style={{ height: `${Math.min(Math.max(currentProgress * 100, 0), 100)}%` }}
+          className="absolute top-1 w-0.5 bg-gradient-to-b from-cyan-400 via-violet-400 to-indigo-400 -z-10 rounded-full transition-all duration-150"
+        />
+
+        {JOURNEY_5_STAGES.map((s) => {
+          const isReached = currentProgress >= s.progress - 0.06;
           const isCurrent =
-            currentProgress >= s.range[0] && currentProgress <= s.range[3];
+            Math.abs(currentProgress - s.progress) < 0.12 ||
+            (s.tag === "01" && currentProgress < 0.15) ||
+            (s.tag === "05" && currentProgress > 0.88);
 
           return (
             <button
               key={s.id}
               onClick={() => handleScrollTo(s.id)}
-              className="group relative flex items-center justify-center p-1 focus:outline-none"
-              title={`${s.tag}: ${s.title}`}
-              aria-label={`Scroll to stage ${s.tag}`}
+              className="group relative flex items-center justify-center p-1.5 focus:outline-none"
+              title={`${s.tag} // ${s.label}`}
+              aria-label={`Jump to stage ${s.label}`}
             >
               {/* Dot */}
               <div
                 className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
                   isCurrent
-                    ? "bg-cyan-400 ring-4 ring-cyan-400/30 scale-125"
-                    : isActive
-                    ? "bg-violet-400 ring-2 ring-violet-400/20"
+                    ? "bg-cyan-400 ring-4 ring-cyan-400/35 scale-125 shadow-[0_0_10px_rgba(34,211,238,0.7)]"
+                    : isReached
+                    ? "bg-violet-400 ring-2 ring-violet-400/25"
                     : "bg-slate-700 hover:bg-slate-500"
                 }`}
               />
 
-              {/* Tooltip on Hover */}
-              <span className="absolute right-full mr-3 px-2.5 py-1 rounded-md bg-slate-900/95 border border-violet-500/30 text-[10px] font-mono text-cyan-300 uppercase tracking-wider whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity shadow-lg">
-                {s.tag}
+              {/* Tooltip on right */}
+              <span className="absolute left-full ml-3 px-2.5 py-1 rounded-md bg-slate-900/95 border border-violet-500/30 text-[10px] font-mono text-cyan-300 uppercase tracking-wider whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity shadow-lg">
+                {s.tag} // {s.label}
               </span>
             </button>
           );
@@ -215,29 +154,29 @@ export default function AstronautJourney({
     stiffness: 350,
   });
 
-  // Astronaut X position (alternating between left margin ~5% and right margin ~91%)
+  // Astronaut X position (confined strictly to side gutters: ~2% left margin and ~96% right margin)
+  // This guarantees it never hovers over the 1280px centered content cards
   const posX = useTransform(
     smoothProgress,
-    [0, 0.04, 0.22, 0.38, 0.54, 0.70, 0.94, 1.0],
-    ["5%", "5%", "91%", "6%", "90%", "6%", "86%", "86%"]
+    [0, 0.05, 0.25, 0.52, 0.72, 0.94, 1.0],
+    ["3%", "3%", "96%", "3.5%", "96%", "95%", "95%"]
   );
 
-  // Astronaut Y position (travels down the full wrapper height 0% to ~96%)
+  // Astronaut Y position down the page height
   const posY = useTransform(
     smoothProgress,
-    [0, 0.04, 0.22, 0.38, 0.54, 0.70, 0.94, 1.0],
-    ["1%", "3%", "21%", "37%", "53%", "69%", "94%", "96%"]
+    [0, 0.05, 0.25, 0.52, 0.72, 0.94, 1.0],
+    ["1.5%", "3%", "23%", "50%", "71%", "94%", "96%"]
   );
 
-  // Gentle orientation tilt following motion direction and scroll velocity
+  // Orientation tilt
   const dirTilt = useTransform(
     smoothProgress,
-    [0, 0.12, 0.22, 0.30, 0.38, 0.46, 0.54, 0.62, 0.70, 0.82, 0.94, 1.0],
-    [0, 9, 3, -9, -3, 9, 3, -9, -3, 10, 0, 0]
+    [0, 0.15, 0.25, 0.40, 0.52, 0.62, 0.72, 0.85, 0.94, 1.0],
+    [0, 8, 2, -8, -2, 8, 2, -8, 0, 0]
   );
-  const velTilt = useTransform(smoothVelocity, [-0.4, 0, 0.4], [-10, 0, 10]);
+  const velTilt = useTransform(smoothVelocity, [-0.4, 0, 0.4], [-8, 0, 8]);
 
-  // Combined rotation
   const rotCombined = useTransform(
     [dirTilt, velTilt],
     ([d, v]: any[]) => (d || 0) + (v || 0)
@@ -245,27 +184,27 @@ export default function AstronautJourney({
 
   return (
     <div ref={containerRef} className="relative w-full">
-      {/* Progress Rail (Fixed right edge, visible strictly while inside this wrapper) */}
-      <ProgressRail scrollYProgress={scrollYProgress} />
+      {/* Left-edge Progress Rail (Desktop >= 1280px only) */}
+      <LeftProgressRail scrollYProgress={scrollYProgress} />
 
-      {/* SVG S-Curve Glowing Trail (Desktop only) */}
+      {/* SVG S-Curve Glowing Trail (Constrained to margins, Desktop >= 1280px only) */}
       {!shouldReduceMotion && (
         <svg
-          className="absolute inset-0 w-full h-full pointer-events-none hidden md:block z-10"
+          className="absolute inset-0 w-full h-full pointer-events-none hidden xl:block z-10"
           preserveAspectRatio="none"
           viewBox="0 0 100 100"
           aria-hidden="true"
         >
           <defs>
             <linearGradient id="journeyTrailGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#818CF8" stopOpacity="0.85" />
-              <stop offset="25%" stopColor="#C084FC" stopOpacity="0.9" />
+              <stop offset="0%" stopColor="#818CF8" stopOpacity="0.8" />
+              <stop offset="25%" stopColor="#C084FC" stopOpacity="0.85" />
               <stop offset="50%" stopColor="#22D3EE" stopOpacity="0.85" />
               <stop offset="75%" stopColor="#A78BFA" stopOpacity="0.9" />
               <stop offset="100%" stopColor="#38BDF8" stopOpacity="0.95" />
             </linearGradient>
             <filter id="trailGlow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="0.5" result="blur" />
+              <feGaussianBlur stdDeviation="0.45" result="blur" />
               <feMerge>
                 <feMergeNode in="blur" />
                 <feMergeNode in="SourceGraphic" />
@@ -275,26 +214,29 @@ export default function AstronautJourney({
 
           {/* Faint Guide Trail */}
           <path
-            d="M 5,3 C 5,12 91,12 91,21 C 91,30 6,29 6,37 C 6,45 90,45 90,53 C 90,61 6,61 6,69 C 6,80 86,82 86,94"
+            d="M 3,3 C 3,13 96,13 96,23 C 96,37 3.5,37 3.5,50 C 3.5,61 96,61 96,71 C 96,82 95,84 95,94"
             fill="none"
-            stroke="rgba(167, 139, 250, 0.12)"
-            strokeWidth="0.3"
+            stroke="rgba(167, 139, 250, 0.1)"
+            strokeWidth="0.25"
             strokeDasharray="0.8 1.4"
           />
 
           {/* Active Animated Trail */}
           <motion.path
-            d="M 5,3 C 5,12 91,12 91,21 C 91,30 6,29 6,37 C 6,45 90,45 90,53 C 90,61 6,61 6,69 C 6,80 86,82 86,94"
+            d="M 3,3 C 3,13 96,13 96,23 C 96,37 3.5,37 3.5,50 C 3.5,61 96,61 96,71 C 96,82 95,84 95,94"
             fill="none"
             stroke="url(#journeyTrailGrad)"
-            strokeWidth="0.45"
+            strokeWidth="0.38"
             filter="url(#trailGlow)"
             style={{ pathLength: smoothProgress }}
           />
         </svg>
       )}
 
-      {/* Floating Astronaut and Captions (Desktop only) */}
+      {/* 
+        Side-gutter Floating Astronaut (Desktop >= 1280px only, hidden below 1280px)
+        No floating captions: nothing floats over content anymore.
+      */}
       {!shouldReduceMotion && (
         <motion.div
           style={{
@@ -303,13 +245,13 @@ export default function AstronautJourney({
             rotate: rotCombined,
             willChange: "transform",
           }}
-          className="absolute -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none hidden md:block"
+          className="absolute -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none hidden xl:block"
         >
           {/* Subtle Zero-G Idle Float */}
           <motion.div
             animate={{
-              y: [-6, 6, -6],
-              rotate: [-2, 2, -2],
+              y: [-5, 5, -5],
+              rotate: [-1.5, 1.5, -1.5],
             }}
             transition={{
               duration: 4.8,
@@ -322,22 +264,13 @@ export default function AstronautJourney({
               src="/brand/journey-astronaut.png"
               alt=""
               aria-hidden="true"
-              className="w-24 sm:w-28 h-auto select-none pointer-events-none drop-shadow-[0_0_24px_rgba(167,139,250,0.55)]"
+              className="w-20 sm:w-24 h-auto select-none pointer-events-none drop-shadow-[0_0_20px_rgba(167,139,250,0.5)]"
             />
           </motion.div>
-
-          {/* Stage Captions (Only one visible at a time) */}
-          {JOURNEY_STAGES.map((stage) => (
-            <StageCaption
-              key={stage.id}
-              stage={stage}
-              progress={smoothProgress}
-            />
-          ))}
         </motion.div>
       )}
 
-      {/* Content wrapper: all sections 3 through 9+ render here */}
+      {/* Content wrapper: all sections 3 through 9+ render cleanly here */}
       <div className="relative z-10">{children}</div>
     </div>
   );

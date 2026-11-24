@@ -9,6 +9,14 @@ export default function TestimonialsCarousel() {
   const testimonials: TestimonialItem[] = SITE_CONTENT.testimonials;
   const [activeIndex, setActiveIndex] = useState(0);
 
+  if (!testimonials || testimonials.length === 0) {
+    return (
+      <section className="relative py-16 bg-[#050510] text-center border-t border-slate-800/40">
+        <p className="text-xs font-mono text-slate-500">No builder testimonials available.</p>
+      </section>
+    );
+  }
+
   const prev = () => {
     setActiveIndex((curr) => (curr === 0 ? testimonials.length - 1 : curr - 1));
   };

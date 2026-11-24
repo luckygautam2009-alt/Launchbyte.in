@@ -5,6 +5,8 @@ import Link from "next/link";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { Sparkles, ArrowRight, ShieldCheck, Users, Trophy } from "lucide-react";
 import { Reveal, MagneticButton } from "./HomeMotion";
+import SectionEyebrow from "@/components/ui/SectionEyebrow";
+import RevealHeading from "@/components/ui/RevealHeading";
 
 export default function FinalCtaSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -65,22 +67,20 @@ export default function FinalCtaSection() {
       <div className="relative z-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-10">
         {/* Editorial Pill */}
         <Reveal>
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-950/70 border border-violet-500/40 text-xs font-mono uppercase tracking-widest text-[#A78BFA] backdrop-blur-md shadow-lg shadow-violet-950/50">
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Launch Your Trajectory</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-          </div>
+          <SectionEyebrow
+            stage="STAGE 05 // LAUNCH"
+            badge="Launch Your Trajectory"
+            accentColor="cyan"
+          />
         </Reveal>
 
         {/* Main Heading & Subtitle */}
         <Reveal delay={0.1}>
           <div className="space-y-4">
-            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#F8FAFC] tracking-tight leading-[1.15]">
-              Ready to Build Your <br />
-              <span className="bg-gradient-to-r from-[#A78BFA] via-[#C084FC] to-[#22D3EE] bg-clip-text text-transparent">
-                Next Breakthrough?
-              </span>
-            </h2>
+            <RevealHeading
+              text="Ready to Build Your Next Breakthrough?"
+              className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#F8FAFC] tracking-tight leading-[1.15]"
+            />
 
             <p className="max-w-2xl mx-auto text-base sm:text-lg text-[#CBD5E1] leading-relaxed font-normal">
               Join thousands of student developers teaming up, claiming verified prize pools, and landing high-impact software careers on LaunchByte.

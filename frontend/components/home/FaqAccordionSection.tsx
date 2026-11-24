@@ -9,6 +9,14 @@ export default function FaqAccordionSection() {
   const faqs: FaqItem[] = SITE_CONTENT.faqs;
   const [openId, setOpenId] = useState<string | null>("faq-1");
 
+  if (!faqs || faqs.length === 0) {
+    return (
+      <section className="relative py-16 bg-[#050510] text-center border-t border-slate-800/40">
+        <p className="text-xs font-mono text-slate-500">No FAQs available.</p>
+      </section>
+    );
+  }
+
   const toggle = (id: string) => {
     setOpenId((curr) => (curr === id ? null : id));
   };

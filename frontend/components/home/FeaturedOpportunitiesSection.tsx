@@ -23,6 +23,8 @@ import { Badge } from "@/components/ui/Badge";
 import { Countdown } from "@/components/ui/Countdown";
 import { OpportunityCardSkeleton } from "@/components/ui/Skeleton";
 import { Reveal, MagneticButton } from "./HomeMotion";
+import RevealHeading from "@/components/ui/RevealHeading";
+import TiltCard from "@/components/ui/TiltCard";
 
 export default function FeaturedOpportunitiesSection() {
   const [activeTab, setActiveTab] = useState<"all" | "hackathon" | "internship" | "event">("all");
@@ -77,9 +79,10 @@ export default function FeaturedOpportunitiesSection() {
                 <Trophy className="w-3.5 h-3.5 text-cyan-400" />
                 <span>Verified High-Impact Programs</span>
               </div>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight">
-                Featured Opportunities
-              </h2>
+              <RevealHeading
+                text="Featured Opportunities"
+                className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight"
+              />
               <p className="text-sm sm:text-base text-[#CBD5E1] leading-relaxed">
                 Handpicked, verified competitions, internships, and fellowships with verified organizers and guaranteed rewards.
               </p>
@@ -130,7 +133,8 @@ export default function FeaturedOpportunitiesSection() {
                   delay={0.08 * (idx % 3)}
                   className="snap-center shrink-0 w-[86vw] sm:w-auto flex"
                 >
-                  <div className="group relative w-full rounded-3xl glass-card glow-hover p-6 flex flex-col justify-between transition-all duration-300">
+                  <TiltCard maxTilt={5} className="w-full flex">
+                    <div className="group relative w-full rounded-3xl glass-card glow-hover p-6 flex flex-col justify-between transition-all duration-300">
                     <div className="space-y-4">
                       {/* Top: Org Header + Trust Badge */}
                       <div className="flex items-start justify-between gap-3">
@@ -241,7 +245,8 @@ export default function FeaturedOpportunitiesSection() {
                       </MagneticButton>
                     </div>
                   </div>
-                </Reveal>
+                </TiltCard>
+              </Reveal>
               );
             })}
           </div>

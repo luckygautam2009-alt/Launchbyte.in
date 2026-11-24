@@ -12,6 +12,9 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { Reveal, MagneticButton } from "./HomeMotion";
+import SectionEyebrow from "@/components/ui/SectionEyebrow";
+import RevealHeading from "@/components/ui/RevealHeading";
+import TiltCard from "@/components/ui/TiltCard";
 
 export default function HowItWorksSection() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -88,17 +91,16 @@ export default function HowItWorksSection() {
         {/* Section Header */}
         <Reveal>
           <div className="max-w-3xl mx-auto text-center space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-violet-950/60 border border-violet-500/30 text-xs font-mono uppercase tracking-widest text-[#A78BFA] backdrop-blur-md">
-              <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-              <span>The 3-Step Journey</span>
-            </div>
+            <SectionEyebrow
+              stage="STAGE 04 // BUILD"
+              badge="The 3-Step Journey"
+              accentColor="cyan"
+            />
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight leading-tight">
-              How It Works: <br className="hidden sm:inline" />
-              <span className="bg-gradient-to-r from-[#8B5CF6] via-[#3B82F6] to-[#22D3EE] bg-clip-text text-transparent">
-                From Curiosity to Shipped Software.
-              </span>
-            </h2>
+            <RevealHeading
+              text="How It Works: From Curiosity to Shipped Software."
+              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight leading-tight"
+            />
 
             <p className="text-base sm:text-lg text-[#CBD5E1] leading-relaxed font-normal">
               A frictionless, streamlined progression designed to take any student from browsing to winning hackathons and claiming career breakthroughs.
@@ -162,84 +164,86 @@ export default function HowItWorksSection() {
               const Icon = step.icon;
               return (
                 <Reveal key={idx} delay={0.12 * idx} className="flex">
-                  <div className="group relative w-full p-8 rounded-3xl glass-card glow-hover flex flex-col justify-between space-y-6 transition-all duration-300">
-                    <div className="space-y-6">
-                      {/* Step Header with Glowing Node Indicator */}
-                      <div className="flex items-center justify-between">
-                        <div
-                          className="w-14 h-14 rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 shadow-lg relative"
-                          style={{
-                            backgroundColor: `${step.accent}18`,
-                            border: `1px solid ${step.accent}50`,
-                            boxShadow: `0 0 25px -4px ${step.accent}50`,
-                          }}
-                        >
-                          <Icon className="w-7 h-7" style={{ color: step.accent }} />
-
-                          {/* Outer Pulsing Glow Node Ring */}
+                  <TiltCard maxTilt={5} className="w-full flex">
+                    <div className="group relative w-full p-8 rounded-3xl glass-card glow-hover flex flex-col justify-between space-y-6 transition-all duration-300">
+                      <div className="space-y-6">
+                        {/* Step Header with Glowing Node Indicator */}
+                        <div className="flex items-center justify-between">
                           <div
-                            className="absolute -inset-1 rounded-2xl opacity-40 group-hover:opacity-100 transition-opacity blur-[2px] pointer-events-none"
-                            style={{ border: `1px solid ${step.accent}` }}
-                          />
+                            className="w-14 h-14 rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 shadow-lg relative"
+                            style={{
+                              backgroundColor: `${step.accent}18`,
+                              border: `1px solid ${step.accent}50`,
+                              boxShadow: `0 0 25px -4px ${step.accent}50`,
+                            }}
+                          >
+                            <Icon className="w-7 h-7" style={{ color: step.accent }} />
+
+                            {/* Outer Pulsing Glow Node Ring */}
+                            <div
+                              className="absolute -inset-1 rounded-2xl opacity-40 group-hover:opacity-100 transition-opacity blur-[2px] pointer-events-none"
+                              style={{ border: `1px solid ${step.accent}` }}
+                            />
+                          </div>
+
+                          <div className="text-right">
+                            <span
+                              className="text-2xl sm:text-3xl font-extrabold font-mono tracking-tighter"
+                              style={{ color: step.accent }}
+                            >
+                              {step.step}
+                            </span>
+                            <span className="block text-[10px] font-mono uppercase tracking-widest text-slate-400">
+                              {step.name}
+                            </span>
+                          </div>
                         </div>
 
-                        <div className="text-right">
-                          <span
-                            className="text-2xl sm:text-3xl font-extrabold font-mono tracking-tighter"
+                        {/* Title & Phase */}
+                        <div className="space-y-2">
+                          <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400">
+                            Phase: {step.phase}
+                          </span>
+                          <h3 className="text-xl font-bold text-[#F8FAFC] leading-snug group-hover:text-white transition-colors">
+                            {step.title}
+                          </h3>
+                          <p className="text-xs sm:text-sm text-[#CBD5E1] leading-relaxed">
+                            {step.description}
+                          </p>
+                        </div>
+
+                        {/* Bullets */}
+                        <ul className="space-y-2.5 pt-3 border-t border-slate-800/80">
+                          {step.bullets.map((b, bIdx) => (
+                            <li key={bIdx} className="flex items-start gap-2 text-xs text-slate-300">
+                              <CheckCircle2
+                                className="w-4 h-4 shrink-0 mt-0.5"
+                                style={{ color: step.accent }}
+                              />
+                              <span>{b}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Bottom Action CTA */}
+                      <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between">
+                        <span className="text-[11px] font-mono text-slate-400">
+                          Zero friction
+                        </span>
+                        <MagneticButton>
+                          <Link
+                            href={step.linkHref}
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-violet-400 rounded-lg p-1"
                             style={{ color: step.accent }}
                           >
-                            {step.step}
-                          </span>
-                          <span className="block text-[10px] font-mono uppercase tracking-widest text-slate-400">
-                            {step.name}
-                          </span>
-                        </div>
+                            <span>{step.linkText}</span>
+                            <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+                          </Link>
+                        </MagneticButton>
                       </div>
-
-                      {/* Title & Phase */}
-                      <div className="space-y-2">
-                        <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400">
-                          Phase: {step.phase}
-                        </span>
-                        <h3 className="text-xl font-bold text-[#F8FAFC] leading-snug group-hover:text-white transition-colors">
-                          {step.title}
-                        </h3>
-                        <p className="text-xs sm:text-sm text-[#CBD5E1] leading-relaxed">
-                          {step.description}
-                        </p>
-                      </div>
-
-                      {/* Bullets */}
-                      <ul className="space-y-2.5 pt-3 border-t border-slate-800/80">
-                        {step.bullets.map((b, bIdx) => (
-                          <li key={bIdx} className="flex items-start gap-2 text-xs text-slate-300">
-                            <CheckCircle2
-                              className="w-4 h-4 shrink-0 mt-0.5"
-                              style={{ color: step.accent }}
-                            />
-                            <span>{b}</span>
-                          </li>
-                        ))}
-                      </ul>
                     </div>
-
-                    {/* Bottom Action CTA */}
-                    <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between">
-                      <span className="text-[11px] font-mono text-slate-400">
-                        Zero friction
-                      </span>
-                      <MagneticButton>
-                        <Link
-                          href={step.linkHref}
-                          className="inline-flex items-center gap-1.5 text-xs font-semibold hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-violet-400 rounded-lg p-1"
-                          style={{ color: step.accent }}
-                        >
-                          <span>{step.linkText}</span>
-                          <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
-                        </Link>
-                      </MagneticButton>
-                    </div>
-                  </div>
+                  </TiltCard>
                 </Reveal>
               );
             })}
