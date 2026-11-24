@@ -313,5 +313,18 @@ export const SITE_CONTENT = {
         "Technical Coordination",
       ],
     },
+    {
+      name: "Saumya Bhardwaj",
+      role: "Social Media & Digital Outreach Lead",
+      bio: "Leading LaunchByte's social media presence, managing Instagram and other digital platforms, coordinating content strategy, and driving community engagement, brand visibility, and event coverage.",
+      photo: "/team/saumya-bhardwaj.jpg",
+      focus: [
+        "Social Media Management",
+        "Content Strategy & Branding",
+        "Event Promotion",
+        "Digital Outreach",
+        "Audience Engagement",
+      ],
+    },
   ] as CoreTeamMember[],
 };

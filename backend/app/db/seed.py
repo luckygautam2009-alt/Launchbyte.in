@@ -370,6 +370,15 @@ def seed(
             "github_url": None,
             "display_order": 4,
         },
+        {
+            "name": "Saumya Bhardwaj",
+            "designation": "Social Media & Digital Outreach Lead",
+            "bio": "Leading LaunchByte's social media presence, managing Instagram and other digital platforms, coordinating content strategy, and driving community engagement, brand visibility, and event coverage.",
+            "photo_url": "/team/saumya-bhardwaj.jpg",
+            "linkedin_url": None,
+            "github_url": None,
+            "display_order": 5,
+        },
     ]
     for tm in team_members:
         lookup = {"name": tm["name"]}
