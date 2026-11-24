@@ -34,6 +34,7 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { label: "Explore", href: "/opportunities" },
   { label: "Hackathons", href: "/hackathons" },
+  { label: "Host an Event", href: "/host" },
   { label: "Organizations", href: "/network" },
   { label: "About", href: "/about" },
 ];
