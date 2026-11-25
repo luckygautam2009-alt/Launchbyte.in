@@ -1,17 +1,19 @@
 """
 Safe data cleanup & real featured hackathon seeding script.
 
-1. Non-destructively archives/soft-deletes all fake/demo opportunities and events
-   so they never appear on the public website while preserving historical integrity.
-2. Seeds the 4 verified real upcoming hackathons:
-   - Rack It Up 2026
-   - DeFy'27
-   - Incursion 2027
-   - HACKSPRINT 3.0 2027
+1. Non-destructively archives/soft-deletes all previous out-of-NCR and placeholder hackathons
+   (including Chennai/Tamil Nadu and Pune listings: DeFy'27, HACKSPRINT 3.0, Rack It Up, Incursion)
+   so they no longer appear on active public feeds, searches, or featured lists.
+2. Seeds the 4 researched, verified Delhi NCR hackathons:
+   - HackSmart 2.0 (Battery Smart × Geek Room, Gurugram, Haryana)
+   - AI Vibeathon 1.0 (Echo Engineers, Delhi, India)
+   - TCU Hack Day (Technical Community Universe, Delhi NCR)
+   - SustainX — The Sustainability Hackathon, Track 2 (Great Lakes Institute of Management, Gurgaon, Haryana)
 """
 import os
 import sys
 from datetime import datetime, timezone
+from decimal import Decimal
 
 # Ensure backend root is on sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -28,121 +30,163 @@ from app.models.enums import (
     VerificationStatus,
 )
 from app.models.events import Event, EventStatus
-from app.models.opportunities import Opportunity
+from app.models.opportunities import Opportunity, Tag
 from app.models.organizations import Organization
+from app.services.opportunities.service import slugify
 
-FAKE_SLUGS_OR_DOMAINS = (
-    "acme-robotics.com",
-    "stateuniversity.edu",
-    "bytelabs.org",
-    "brightfutures.org",
-    "bit.ly/quick-hire-now",
-)
+
+def get_or_create_tag(db, tag_cache: dict[str, Tag], name: str) -> Tag | None:
+    name = name.strip()
+    slug = slugify(name)[:64].strip("-")
+    if not slug:
+        return None
+    if slug in tag_cache:
+        return tag_cache[slug]
+    existing = db.scalar(select(Tag).where(Tag.slug == slug))
+    if existing:
+        tag_cache[slug] = existing
+        return existing
+    new_tag = Tag(name=name[:64], slug=slug)
+    db.add(new_tag)
+    db.flush()
+    tag_cache[slug] = new_tag
+    return new_tag
 
 REAL_HACKATHONS = [
     {
-        "slug": "rack-it-up-2026",
-        "title": "Rack It Up 2026",
-        "organizer_name": "Rack'Em / Karma Enterprises",
-        "summary": "Online engineering & innovation hackathon organized by Rack'Em / Karma Enterprises for teams of 1–4 builders.",
+        "slug": "hacksmart-2-0",
+        "title": "HackSmart 2.0",
+        "organizer_name": "Battery Smart × Geek Room",
+        "summary": "An industry-focused hackathon centered around electric mobility, battery swapping, automation, operational efficiency and practical technology solutions.",
         "description": (
-            "Rack It Up 2026 is an online hackathon hosted by Rack'Em / Karma Enterprises.\n\n"
-            "• Format: Online\n"
-            "• Dates: 11–13 December 2026\n"
+            "HackSmart 2.0 is an industry-focused hackathon organized by Battery Smart × Geek Room.\n\n"
+            "Centered around electric mobility, battery swapping, automation, operational efficiency and practical technology solutions.\n\n"
+            "• Location: Gurugram, Haryana, India\n"
+            "• Mode: Offline\n"
+            "• Category: Electric Mobility / Software / Innovation\n"
             "• Team Size: 1–4 members\n"
-            "• Registration Fee: Free"
+            "• Registration Deadline: 15 December 2026\n"
+            "• Hackathon Dates: 6–7 February 2027"
         ),
         "type": OpportunityType.HACKATHON,
-        "location_type": LocationType.REMOTE,
-        "location_text": "Online",
-        "starts_at": datetime(2026, 12, 11, 9, 0, tzinfo=timezone.utc),
-        "ends_at": datetime(2026, 12, 13, 18, 0, tzinfo=timezone.utc),
-        "deadline_at": datetime(2026, 12, 10, 23, 59, tzinfo=timezone.utc),
+        "location_type": LocationType.ONSITE,
+        "location_text": "Gurugram, Haryana, India",
+        "starts_at": datetime(2027, 2, 6, 9, 0, tzinfo=timezone.utc),
+        "ends_at": datetime(2027, 2, 7, 18, 0, tzinfo=timezone.utc),
+        "deadline_at": datetime(2026, 12, 15, 23, 59, tzinfo=timezone.utc),
         "team_size": "1–4 members",
         "compensation_type": CompensationType.UNPAID,
         "compensation_note": "Free Registration",
-        "official_website": "https://rackitup.karmaenterprises.tech/",
-        "application_url": "https://unstop.com/competitions/1777639/register",
-        "source_url": "https://rackitup.karmaenterprises.tech/",
+        "official_website": "https://unstop.com/hackathons/hacksmart-20-geek-room-1799091",
+        "application_url": "https://unstop.com/hackathons/hacksmart-20-geek-room-1799091",
+        "source_url": "https://unstop.com/hackathons/hacksmart-20-geek-room-1799091",
+        "tags": ["Electric Mobility", "Software", "Innovation", "Delhi NCR"],
     },
     {
-        "slug": "defy-27-vit-chennai",
-        "title": "DeFy'27",
-        "organizer_name": "Vellore Institute of Technology (VIT), Chennai",
-        "summary": "Flagship hackathon by VIT Chennai featuring online idea submission followed by an offline final round at VIT Chennai.",
+        "slug": "ai-vibeathon-1-0",
+        "title": "AI Vibeathon 1.0",
+        "organizer_name": "Echo Engineers",
+        "summary": "An open innovation AI hackathon where students and developers can build AI-powered solutions across different domains with an online preliminary round and an offline finale in Delhi.",
         "description": (
-            "DeFy'27 is organized by Vellore Institute of Technology (VIT), Chennai.\n\n"
-            "• Format: Online idea submission + offline final round\n"
-            "• Final Round Dates: 9–10 January 2027\n"
-            "• Venue: VIT Chennai\n"
-            "• Team Size: 4–6 members"
+            "AI Vibeathon 1.0 is an open innovation AI hackathon hosted by Echo Engineers where students and developers can build AI-powered solutions across different domains.\n\n"
+            "Participants first compete in an online preliminary round, with shortlisted teams invited to an offline finale in Delhi.\n\n"
+            "• Location: Delhi, India\n"
+            "• Mode: Online Preliminary + Offline Finale\n"
+            "• Category: Artificial Intelligence / Open Innovation\n"
+            "• Team Size: 1–4 members\n"
+            "• Online Round: 17 December 2026\n"
+            "• Offline Finale: 19 December 2026\n"
+            "• Registration Deadline: 17 December 2026"
         ),
         "type": OpportunityType.HACKATHON,
         "location_type": LocationType.HYBRID,
-        "location_text": "VIT Chennai (Online Prelims + Offline Final)",
-        "starts_at": datetime(2027, 1, 9, 9, 0, tzinfo=timezone.utc),
-        "ends_at": datetime(2027, 1, 10, 18, 0, tzinfo=timezone.utc),
-        "deadline_at": datetime(2027, 1, 5, 23, 59, tzinfo=timezone.utc),
-        "team_size": "4–6 members",
-        "compensation_type": CompensationType.UNSPECIFIED,
-        "compensation_note": "See official rules",
-        "official_website": "https://defy.daocommunity.in/",
-        "application_url": "https://unstop.com/competitions/1806122/register",
-        "source_url": "https://defy.daocommunity.in/",
-    },
-    {
-        "slug": "incursion-2027-dypit",
-        "title": "Incursion 2027",
-        "organizer_name": "Dr. D. Y. Patil Institute of Technology, Pimpri, Pune",
-        "summary": "24-hour offline finale following online selection rounds, hosted by Dr. D. Y. Patil Institute of Technology, Pimpri, Pune.",
-        "description": (
-            "Incursion 2027 is hosted by Dr. D. Y. Patil Institute of Technology, Pimpri, Pune.\n\n"
-            "• Format: Online selection rounds + offline 24-hour finale\n"
-            "• Finale Dates: 30–31 January 2027\n"
-            "• Venue: Pimpri, Pune\n"
-            "• Team Size: 2–4 members\n"
-            "• Registration: Initial registration is free. A finalist confirmation fee applies only to shortlisted teams per official rules."
-        ),
-        "type": OpportunityType.HACKATHON,
-        "location_type": LocationType.HYBRID,
-        "location_text": "Pimpri, Pune (Online Rounds + 24h Offline Finale)",
-        "starts_at": datetime(2027, 1, 30, 9, 0, tzinfo=timezone.utc),
-        "ends_at": datetime(2027, 1, 31, 18, 0, tzinfo=timezone.utc),
-        "deadline_at": datetime(2027, 1, 25, 23, 59, tzinfo=timezone.utc),
-        "team_size": "2–4 members",
-        "compensation_type": CompensationType.UNPAID,
-        "compensation_note": "Free initial registration",
-        "official_website": "https://incursion.tech",
-        "application_url": "https://unstop.com/competitions/1806016/register",
-        "source_url": "https://incursion.tech",
-    },
-    {
-        "slug": "hacksprint-3-0-2027",
-        "title": "HACKSPRINT 3.0 2027",
-        "organizer_name": "Karpagam Academy of Higher Education (KAHE) & HackIndia",
-        "summary": "National hackathon by KAHE in association with HackIndia featuring an online preliminary round and offline final in Coimbatore.",
-        "description": (
-            "HACKSPRINT 3.0 2027 is organized by Karpagam Academy of Higher Education (KAHE) in association with HackIndia.\n\n"
-            "• Format: Online preliminary round + offline final\n"
-            "• Dates: 5–6 February 2027\n"
-            "• Venue: KAHE, Coimbatore\n"
-            "• Team Size: 2–5 members\n"
-            "• Registration Fee: Free"
-        ),
-        "type": OpportunityType.HACKATHON,
-        "location_type": LocationType.HYBRID,
-        "location_text": "KAHE, Coimbatore (Online Prelim + Offline Final)",
-        "starts_at": datetime(2027, 2, 5, 9, 0, tzinfo=timezone.utc),
-        "ends_at": datetime(2027, 2, 6, 18, 0, tzinfo=timezone.utc),
-        "deadline_at": datetime(2027, 2, 1, 23, 59, tzinfo=timezone.utc),
-        "team_size": "2–5 members",
+        "location_text": "Delhi, India",
+        "starts_at": datetime(2026, 12, 17, 9, 0, tzinfo=timezone.utc),
+        "ends_at": datetime(2026, 12, 19, 18, 0, tzinfo=timezone.utc),
+        "deadline_at": datetime(2026, 12, 17, 23, 59, tzinfo=timezone.utc),
+        "team_size": "1–4 members",
         "compensation_type": CompensationType.UNPAID,
         "compensation_note": "Free Registration",
-        "official_website": "https://hackindia.org/2027/hacksprint-30-2027",
-        "application_url": "https://hacksprint-3.devfolio.co/",
-        "source_url": "https://hackindia.org/2027/hacksprint-30-2027",
+        "official_website": "https://unstop.com/hackathons/ai-vibeathon-2026-promptwars-echo-engineers-echo-engineers-1799092",
+        "application_url": "https://unstop.com/hackathons/ai-vibeathon-2026-promptwars-echo-engineers-echo-engineers-1799092",
+        "source_url": "https://unstop.com/hackathons/ai-vibeathon-2026-promptwars-echo-engineers-echo-engineers-1799092",
+        "tags": ["Artificial Intelligence", "Open Innovation", "AI", "Delhi NCR"],
+    },
+    {
+        "slug": "tcu-hack-day",
+        "title": "TCU Hack Day",
+        "organizer_name": "Technical Community Universe",
+        "summary": "An intensive build sprint where student developers, designers and founders collaborate to turn ideas into working products. Includes online qualification and an offline final hackathon.",
+        "description": (
+            "TCU Hack Day is an intensive build sprint organized by Technical Community Universe where student developers, designers and founders collaborate to turn ideas into working products.\n\n"
+            "Includes online qualification and an offline final hackathon in Delhi NCR.\n\n"
+            "• Location: Delhi NCR, India\n"
+            "• Mode: Online qualifying round + Offline finale\n"
+            "• Category: Hackathon / Product Building / Innovation\n"
+            "• Team Size: 2–4 members\n"
+            "• Online Round: 10 January 2027\n"
+            "• Offline Grand Finale: 23 January 2027\n"
+            "• Registration Deadline: 31 December 2026"
+        ),
+        "type": OpportunityType.HACKATHON,
+        "location_type": LocationType.HYBRID,
+        "location_text": "Delhi NCR, India",
+        "starts_at": datetime(2027, 1, 10, 9, 0, tzinfo=timezone.utc),
+        "ends_at": datetime(2027, 1, 23, 18, 0, tzinfo=timezone.utc),
+        "deadline_at": datetime(2026, 12, 31, 23, 59, tzinfo=timezone.utc),
+        "team_size": "2–4 members",
+        "compensation_type": CompensationType.UNPAID,
+        "compensation_note": "Free Registration",
+        "official_website": "https://unstop.com/hackathons/tcu-hack-day-technical-community-universe-1763620",
+        "application_url": "https://unstop.com/hackathons/tcu-hack-day-technical-community-universe-1763620",
+        "source_url": "https://unstop.com/hackathons/tcu-hack-day-technical-community-universe-1763620",
+        "tags": ["Product Building", "Innovation", "Hackathon", "Delhi NCR"],
+    },
+    {
+        "slug": "sustainx-the-sustainability-hackathon-track-2",
+        "title": "SustainX — The Sustainability Hackathon, Track 2",
+        "organizer_name": "Great Lakes Institute of Management, Gurgaon",
+        "summary": "Build an AI-powered Smog Response System for Delhi NCR to forecast air pollution, identify contributing sources, and recommend practical actions to civic authorities.",
+        "description": (
+            "SustainX — The Sustainability Hackathon, Track 2 is organized by Great Lakes Institute of Management, Gurgaon.\n\n"
+            "Challenge: Build an AI-powered Smog Response System for Delhi NCR. Participants must design a solution capable of forecasting local air pollution, identifying contributing sources, and recommending practical actions to civic authorities.\n\n"
+            "• Location: Gurgaon, Haryana, India\n"
+            "• Mode: Hackathon submission + on-campus final presentation\n"
+            "• Category: AI / Sustainability / Climate Tech / Social Impact\n"
+            "• Team Size: 2–4 members\n"
+            "• Submission Deadline: 30 November 2026, 11:59 PM IST\n"
+            "• Final Presentation: 8 December 2026\n\n"
+            "Prizes:\n"
+            "• Winner: ₹25,000\n"
+            "• 1st Runner-up: ₹15,000\n"
+            "• 2nd Runner-up: ₹10,000"
+        ),
+        "type": OpportunityType.HACKATHON,
+        "location_type": LocationType.HYBRID,
+        "location_text": "Gurgaon, Haryana, India",
+        "starts_at": datetime(2026, 11, 20, 9, 0, tzinfo=timezone.utc),
+        "ends_at": datetime(2026, 12, 8, 18, 0, tzinfo=timezone.utc),
+        "deadline_at": datetime(2026, 11, 30, 18, 29, tzinfo=timezone.utc),
+        "team_size": "2–4 members",
+        "compensation_type": CompensationType.PRIZE,
+        "compensation_min": Decimal("10000"),
+        "compensation_max": Decimal("25000"),
+        "compensation_currency": "INR",
+        "compensation_note": "Winner ₹25k | 1st Runner-up ₹15k | 2nd Runner-up ₹10k",
+        "benefits": "Total Prize Pool: ₹50,000\nWinner: ₹25,000\n1st Runner-up: ₹15,000\n2nd Runner-up: ₹10,000",
+        "official_website": "https://unstop.com/competitions/sustainx-the-sustainability-hackathon-track-2-great-lakes-institute-of-management-glim-gurgaon-1820702/amp",
+        "application_url": "https://unstop.com/competitions/sustainx-the-sustainability-hackathon-track-2-great-lakes-institute-of-management-glim-gurgaon-1820702/amp",
+        "source_url": "https://unstop.com/competitions/sustainx-the-sustainability-hackathon-track-2-great-lakes-institute-of-management-glim-gurgaon-1820702/amp",
+        "tags": ["AI", "Sustainability", "Climate Tech", "Social Impact", "Delhi NCR"],
     },
 ]
+
+OLD_OUT_OF_NCR_HACKATHON_SLUGS = (
+    "defy-27-vit-chennai",
+    "hacksprint-3-0-2027",
+    "rack-it-up-2026",
+    "incursion-2027-dypit",
+)
 
 
 def run():
@@ -151,28 +195,20 @@ def run():
     real_slugs = {h["slug"] for h in REAL_HACKATHONS}
 
     try:
-        # 1. Safely archive & soft-delete all fake/placeholder opportunities
+        # 1. Safely archive & soft-delete all old out-of-NCR hackathons and placeholder hackathons
         all_opps = db.scalars(select(Opportunity)).all()
         archived_count = 0
         for opp in all_opps:
             if opp.slug in real_slugs:
                 continue
-            # Archive any demo/placeholder opportunities
-            if opp.deleted_at is None or opp.status == OpportunityStatus.PUBLISHED:
+            if opp.slug in OLD_OUT_OF_NCR_HACKATHON_SLUGS or opp.type == OpportunityType.HACKATHON:
+                # Archive the hackathon so it never shows in active listings
                 opp.status = OpportunityStatus.ARCHIVED
                 opp.is_featured = False
                 opp.deleted_at = now
                 archived_count += 1
 
-        # 2. Safely archive fake seeded event (HackQuantum 2026)
-        fake_events = db.scalars(select(Event)).all()
-        archived_events = 0
-        for ev in fake_events:
-            if "hackquantum" in ev.title.lower() or ev.status == EventStatus.PUBLISHED:
-                ev.status = EventStatus.CANCELLED
-                archived_events += 1
-
-        # 3. Ensure default curated organization exists
+        # 2. Ensure default curated organization exists
         org = db.scalar(select(Organization).where(Organization.slug == "launchbyte-curated"))
         if org is None:
             org = Organization(
@@ -184,10 +220,13 @@ def run():
             db.add(org)
             db.flush()
 
-        # 4. Upsert the 4 real verified featured hackathons
+        # 3. Upsert the 4 real verified Delhi NCR featured hackathons
         seeded = 0
+        tag_cache: dict[str, Tag] = {}
         for item in REAL_HACKATHONS:
             existing = db.scalar(select(Opportunity).where(Opportunity.slug == item["slug"]))
+            opp_tags = [t for t in (get_or_create_tag(db, tag_cache, tag_name) for tag_name in item.get("tags", [])) if t is not None]
+            
             if existing is None:
                 opp = Opportunity(
                     organization_id=org.id,
@@ -204,7 +243,11 @@ def run():
                     deadline_at=item["deadline_at"],
                     team_size=item["team_size"],
                     compensation_type=item["compensation_type"],
-                    compensation_note=item["compensation_note"],
+                    compensation_min=item.get("compensation_min"),
+                    compensation_max=item.get("compensation_max"),
+                    compensation_currency=item.get("compensation_currency"),
+                    compensation_note=item.get("compensation_note"),
+                    benefits=item.get("benefits"),
                     official_website=item["official_website"],
                     application_url=item["application_url"],
                     source_url=item["source_url"],
@@ -215,20 +258,41 @@ def run():
                     is_featured=True,
                     published_at=now,
                 )
+                opp.tags = opp_tags
                 db.add(opp)
                 seeded += 1
             else:
+                existing.title = item["title"]
+                existing.summary = item["summary"]
+                existing.description = item["description"]
+                existing.type = item["type"]
                 existing.status = OpportunityStatus.PUBLISHED
                 existing.deleted_at = None
                 existing.is_featured = True
+                existing.location_type = item["location_type"]
+                existing.location_text = item["location_text"]
+                existing.starts_at = item["starts_at"]
+                existing.ends_at = item["ends_at"]
+                existing.deadline_at = item["deadline_at"]
+                existing.team_size = item["team_size"]
+                existing.compensation_type = item["compensation_type"]
+                existing.compensation_min = item.get("compensation_min")
+                existing.compensation_max = item.get("compensation_max")
+                existing.compensation_currency = item.get("compensation_currency")
+                existing.compensation_note = item.get("compensation_note")
+                existing.benefits = item.get("benefits")
                 existing.organizer_name_override = item["organizer_name"]
                 existing.application_url = item["application_url"]
                 existing.official_website = item["official_website"]
+                existing.source_url = item["source_url"]
+                existing.verification_status = VerificationStatus.VERIFIED
+                existing.trust_score = 95
+                existing.tags = opp_tags
 
         db.commit()
         print(
-            f"Cleanup complete: archived {archived_count} fake opportunities, "
-            f"{archived_events} fake events; seeded {seeded} real featured hackathons."
+            f"Cleanup complete: archived {archived_count} old/non-NCR hackathons; "
+            f"seeded/updated {seeded} verified Delhi NCR hackathons."
         )
     finally:
         db.close()
