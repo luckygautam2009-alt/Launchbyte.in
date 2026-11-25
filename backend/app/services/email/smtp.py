@@ -1,3 +1,4 @@
+import html
 import logging
 import smtplib
 import uuid
@@ -9,13 +10,18 @@ from app.services.email.base import EmailBackend
 logger = logging.getLogger(__name__)
 
 
+def _safe_header_value(value: str) -> str:
+    """Strip CR/LF characters to prevent SMTP header injection."""
+    return value.replace("\r", " ").replace("\n", " ").strip()
+
+
 class SMTPEmailBackend(EmailBackend):
     def _send(self, to_email: str, subject: str, body_text: str, body_html: str) -> None:
         settings = get_settings()
         msg = EmailMessage()
-        msg["Subject"] = subject
+        msg["Subject"] = _safe_header_value(subject)
         msg["From"] = settings.SMTP_FROM
-        msg["To"] = to_email
+        msg["To"] = _safe_header_value(to_email)
         msg.set_content(body_text)
         msg.add_alternative(body_html, subtype="html")
 
@@ -47,5 +53,6 @@ class SMTPEmailBackend(EmailBackend):
         self._send(email, subject, body_text, body_html)
 
     def send_notification_email(self, email: str, subject: str, message: str) -> None:
-        body_html = f"<p>{message}</p>"
+        safe_html_body = html.escape(message).replace("\n", "<br/>")
+        body_html = f"<p>{safe_html_body}</p>"
         self._send(email, subject, message, body_html)

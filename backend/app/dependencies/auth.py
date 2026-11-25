@@ -37,9 +37,9 @@ def get_current_user(db: DBSession, token: Annotated[str, Depends(oauth2_scheme)
     if not user.is_active:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Inactive user")
 
-    # Invalidate token if token_version has been bumped (e.g. password changed/reset)
+    # Require and validate token_version so password resets invalidate all prior tokens
     token_version = payload.get("token_version")
-    if token_version is not None and token_version != user.token_version:
+    if not isinstance(token_version, int) or token_version != user.token_version:
         raise credentials_exception
 
     return user
@@ -89,7 +89,7 @@ def get_optional_user(db: DBSession, token: Annotated[str | None, Depends(oauth2
         if not user or not user.is_active:
             return None
         token_version = payload.get("token_version")
-        if token_version is not None and token_version != user.token_version:
+        if not isinstance(token_version, int) or token_version != user.token_version:
             return None
         return user
     except Exception:

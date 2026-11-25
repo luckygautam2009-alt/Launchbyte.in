@@ -16,6 +16,17 @@ import {
   CheckCircle2, AlertCircle, Loader2, ArrowLeft, QrCode
 } from "lucide-react";
 
+function sanitizeEventHtml(raw: string): string {
+  if (!raw) return "";
+  // Defense-in-depth client sanitization before rendering sanitized event HTML
+  let clean = raw
+    .replace(/<\s*(script|style|iframe|object|embed|svg|math|form|meta|link|base)[^>]*>[\s\S]*?<\s*\/\s*\1\s*>/gi, "")
+    .replace(/<\s*(script|style|iframe|object|embed|svg|math|form|meta|link|base)\b[^>]*\/?\s*>/gi, "")
+    .replace(/\s+on[a-z]+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/gi, "")
+    .replace(/(href|src)\s*=\s*(["'])\s*(?:javascript|vbscript|data):[^"']*\2/gi, '$1="#"');
+  return clean;
+}
+
 function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
@@ -355,7 +366,7 @@ export default function EventDetailPage() {
               <h2 className="text-xl font-semibold text-white mb-4">About</h2>
               <div
                 className="prose prose-invert prose-sm max-w-none text-slate-300 leading-relaxed"
-                dangerouslySetInnerHTML={{ __html: event.description }}
+                dangerouslySetInnerHTML={{ __html: sanitizeEventHtml(event.description) }}
               />
             </section>
           )}

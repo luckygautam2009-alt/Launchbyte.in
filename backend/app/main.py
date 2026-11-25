@@ -54,10 +54,15 @@ async def lifespan(app: FastAPI):
     logger.info("%s shutting down", settings.APP_NAME)
 
 
+is_prod_like = settings.ENV.lower() not in {"local", "test"}
+
 app = FastAPI(
     title=settings.APP_NAME,
     debug=settings.DEBUG,
     lifespan=lifespan,
+    docs_url=None if is_prod_like else "/docs",
+    redoc_url=None if is_prod_like else "/redoc",
+    openapi_url=None if is_prod_like else "/openapi.json",
 )
 
 # --- Middlewares ---
@@ -66,8 +71,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type", "X-Request-ID", "Accept"],
 )
 
 
@@ -79,8 +84,12 @@ async def security_and_request_id_middleware(request: Request, call_next):
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-    response.headers["Content-Security-Policy"] = "default-src 'self'"
-    if settings.ENV not in {"local", "test"}:
+    response.headers["Permissions-Policy"] = "camera=(self), microphone=(), geolocation=()"
+    if request.url.path.startswith("/uploads"):
+        response.headers["Content-Security-Policy"] = "sandbox; default-src 'none'"
+    else:
+        response.headers["Content-Security-Policy"] = "default-src 'self'; frame-ancestors 'none'"
+    if settings.ENV.lower() not in {"local", "test"}:
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
     return response
 

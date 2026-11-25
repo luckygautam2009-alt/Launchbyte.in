@@ -12,6 +12,18 @@ from fastapi import HTTPException, Request, status
 from app.core.config import get_settings
 
 
+_MAX_BUCKETS = 10_000
+
+
+def get_client_ip(request: Request) -> str:
+    settings = get_settings()
+    if settings.TRUST_PROXY_HEADERS:
+        forwarded = request.headers.get("X-Forwarded-For", "").split(",")[0].strip()
+        if forwarded:
+            return forwarded
+    return request.client.host if request.client else "127.0.0.1"
+
+
 class InMemoryRateLimiter:
     def __init__(self):
         # key -> list of float timestamps
@@ -21,6 +33,14 @@ class InMemoryRateLimiter:
         """Reset all rate limit counters (useful in tests)."""
         self._records.clear()
 
+    def _prune_stale(self, now: float, window_seconds: int) -> None:
+        if len(self._records) <= _MAX_BUCKETS:
+            return
+        cutoff = now - max(window_seconds, 60)
+        stale_keys = [k for k, ts in self._records.items() if not ts or ts[-1] <= cutoff]
+        for k in stale_keys:
+            self._records.pop(k, None)
+
     def check(self, key: str, max_requests: int, window_seconds: int = 60) -> tuple[bool, int]:
         """
         Check if a request is allowed.
@@ -28,10 +48,14 @@ class InMemoryRateLimiter:
         """
         now = time.time()
         window_start = now - window_seconds
+        self._prune_stale(now, window_seconds)
 
         # Prune old records
         records = [t for t in self._records[key] if t > window_start]
-        self._records[key] = records
+        if records:
+            self._records[key] = records
+        else:
+            self._records.pop(key, None)
 
         if len(records) >= max_requests:
             oldest = records[0]
@@ -85,7 +109,7 @@ def rate_limit(
         if key_func is not None:
             ident = key_func(request)
         else:
-            ident = request.client.host if request.client else "127.0.0.1"
+            ident = get_client_ip(request)
 
         key = f"{request.url.path}:{ident}"
         allowed, retry_after = limiter.check(key, max_requests=limit, window_seconds=window_seconds)

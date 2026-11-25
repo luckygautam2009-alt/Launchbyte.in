@@ -5,7 +5,16 @@ import uuid
 from datetime import datetime
 from typing import Literal
 
-from pydantic import BaseModel, EmailStr, Field, HttpUrl, model_validator
+from pydantic import BaseModel, EmailStr, Field, HttpUrl, field_validator, model_validator
+
+
+def _validate_safe_media_url(v: str | None) -> str | None:
+    if not v:
+        return None
+    cleaned = v.strip()
+    if not cleaned.startswith(("http://", "https://", "/uploads/")):
+        raise ValueError("URL must start with http://, https://, or /uploads/")
+    return cleaned
 
 
 # ---------- Contributor Access Requests ----------
@@ -66,6 +75,11 @@ class PublicEventSubmissionCreate(BaseModel):
     additional_details: str | None = Field(default=None, max_length=4000)
     # Anti-spam honeypot (must stay empty)
     website_honeypot: str | None = Field(default="", max_length=100)
+
+    @field_validator("thumbnail_url")
+    @classmethod
+    def validate_thumbnail_url(cls, v: str | None) -> str | None:
+        return _validate_safe_media_url(v)
 
     @model_validator(mode="after")
     def validate_dates_and_venue(self) -> "PublicEventSubmissionCreate":

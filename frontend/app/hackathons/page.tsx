@@ -1,6 +1,20 @@
 import React, { Suspense } from "react";
+import type { Metadata } from "next";
 import OpportunityCatalog from "@/components/OpportunityCatalog";
 import PageHero from "@/components/common/PageHero";
+
+export const metadata: Metadata = {
+  title: "Hackathons",
+  description:
+    "Compete, build production-grade prototypes, and discover verified online and in-person hackathons on LaunchByte.",
+  alternates: { canonical: "/hackathons" },
+  openGraph: {
+    title: "Hackathons | LaunchByte",
+    description:
+      "Compete, build production-grade prototypes, and discover verified online and in-person hackathons on LaunchByte.",
+    url: "/hackathons",
+  },
+};
 
 export default function HackathonsPage() {
   return (

@@ -25,6 +25,11 @@ def register_user(db: DBSession, user_in: UserCreate) -> UserRead:
             status_code=status.HTTP_409_CONFLICT,
             detail="Email already registered",
         ) from exc
+    except users_service.HandleAlreadyTakenError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Handle already taken",
+        ) from exc
 
 
 @router.get("/me", response_model=UserRead)

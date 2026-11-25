@@ -1,0 +1,11 @@
+import type { Metadata } from "next";
+import { NOINDEX_METADATA } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  ...NOINDEX_METADATA,
+  title: "Profile Settings",
+};
+
+export default function ProfileLayout({ children }: { children: React.ReactNode }) {
+  return children;
+}

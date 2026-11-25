@@ -158,6 +158,6 @@ def test_public_contact_and_metrics(client):
     r_metrics = client.get("/api/v1/metrics/public")
     assert r_metrics.status_code == 200
     body = r_metrics.json()
-    assert body["core_team_members"] == 4
+    assert body["core_team_members"] == 5
     assert isinstance(body["active_opportunities"], int)
     assert isinstance(body["featured_hackathons"], int)

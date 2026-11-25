@@ -25,7 +25,7 @@ from app.schemas.opportunities import OrganizationBrief
 def _sanitize_html(text: str | None) -> str | None:
     if not text:
         return text
-    # Clean text with nh3 allowing safe markdown elements
+    # Clean text with nh3 allowing safe markdown elements and enforcing noopener noreferrer on links
     return nh3.clean(
         text,
         tags={
@@ -33,11 +33,12 @@ def _sanitize_html(text: str | None) -> str | None:
             "ul", "ol", "li", "a", "code", "pre", "blockquote", "hr", "br", "span", "table", "thead", "tbody", "tr", "th", "td"
         },
         attributes={
-            "a": {"href", "title", "target"},
+            "a": {"href", "title"},
             "span": {"class"},
             "code": {"class"},
         },
         url_schemes={"http", "https", "mailto"},
+        link_rel="noopener noreferrer",
     )
 
 
@@ -166,6 +167,15 @@ class EventQuickCreate(BaseModel):
             raise ValueError("Description is too short or contains invalid content")
         return cleaned
 
+    @field_validator("sections", mode="before")
+    @classmethod
+    def _val_sections(cls, v: Any) -> Any:
+        if v is None:
+            return {}
+        if isinstance(v, dict):
+            return EventSections.model_validate(v).model_dump()
+        return v
+
     @field_validator("custom_questions")
     @classmethod
     def _val_questions(cls, v: list[CustomQuestion]) -> list[CustomQuestion]:
@@ -245,6 +255,15 @@ class EventUpdate(BaseModel):
         if not cleaned or len(cleaned.strip()) < 10:
             raise ValueError("Description is too short or invalid")
         return cleaned
+
+    @field_validator("sections", mode="before")
+    @classmethod
+    def _val_sections(cls, v: Any) -> Any:
+        if v is None:
+            return {}
+        if isinstance(v, dict):
+            return EventSections.model_validate(v).model_dump()
+        return v
 
     @field_validator("custom_questions")
     @classmethod

@@ -56,12 +56,13 @@ class ApiClient {
   setToken(token: string | null) {
     this.token = token;
     if (typeof window !== "undefined") {
+      const secureFlag = window.location.protocol === "https:" ? "; Secure" : "";
       if (token) {
         localStorage.setItem("lb_token", token);
-        document.cookie = `lb_token=${token}; path=/; max-age=86400; SameSite=Lax`;
+        document.cookie = `lb_token=${token}; path=/; max-age=3600; SameSite=Lax${secureFlag}`;
       } else {
         localStorage.removeItem("lb_token");
-        document.cookie = `lb_token=; path=/; max-age=0`;
+        document.cookie = `lb_token=; path=/; max-age=0; SameSite=Lax${secureFlag}`;
       }
     }
   }

@@ -28,7 +28,7 @@ def test_security_headers_and_request_id(client):
 
 def test_non_local_env_rejects_debug_true():
     with pytest.raises(ValidationError, match="DEBUG must be false"):
-        Settings(_env_file=None, ENV="production", SECRET_KEY="a" * 40, DEBUG=True)
+        Settings(_env_file=None, ENV="production", SECRET_KEY="a" * 40, QR_SIGNING_KEY="b" * 40, DEBUG=True)
 
 
 def test_rate_limiting_on_auth_login(client, db_session):

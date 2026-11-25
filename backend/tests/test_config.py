@@ -36,4 +36,4 @@ def test_env_example_placeholder_is_rejected_in_production():
 
 
 def test_non_local_env_accepts_strong_secret():
-    assert make(ENV="production", SECRET_KEY="x" * 40).ENV == "production"
+    assert make(ENV="production", SECRET_KEY="x" * 40, QR_SIGNING_KEY="y" * 40).ENV == "production"

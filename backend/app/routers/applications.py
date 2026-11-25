@@ -14,7 +14,9 @@ Staff/admin routes (require StaffUser):
 """
 import uuid
 
-from fastapi import APIRouter, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+
+from app.core.rate_limit import rate_limit
 
 from app.dependencies.auth import CurrentUser, StaffUser
 from app.dependencies.db import DBSession
@@ -38,6 +40,7 @@ router = APIRouter(tags=["applications"])
     "/applications",
     response_model=ApplicationRead,
     status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(rate_limit(max_requests=20, window_seconds=60))],
 )
 def submit_application(
     db: DBSession,

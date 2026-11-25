@@ -16,6 +16,7 @@ from sqlalchemy.orm import Session
 
 from app.core.security import hash_password, verify_password
 from app.models.auth_tokens import EmailVerificationToken, PasswordResetToken
+from app.models.enums import UserRole
 from app.models.users import User
 from app.schemas.users import UserCreate
 from app.services.email import get_email_backend
@@ -88,6 +89,7 @@ def create_user(db: Session, user_in: UserCreate) -> User:
         handle=handle,
         hashed_password=hash_password(user_in.password),
         full_name=user_in.full_name,
+        role=UserRole.USER,
     )
     db.add(user)
     try:
@@ -173,8 +175,8 @@ def confirm_email_verification(db: Session, token: str) -> User:
 
     record.used_at = now
     user = db.get(User, record.user_id)
-    if user is None:
-        raise InvalidOrExpiredTokenError("User no longer exists.")
+    if user is None or not user.is_active:
+        raise InvalidOrExpiredTokenError("Invalid or expired verification token.")
 
     user.is_email_verified = True
     db.commit()
@@ -227,8 +229,8 @@ def confirm_password_reset(db: Session, token: str, new_password: str) -> User:
 
     record.used_at = now
     user = db.get(User, record.user_id)
-    if user is None:
-        raise InvalidOrExpiredTokenError("User no longer exists.")
+    if user is None or not user.is_active:
+        raise InvalidOrExpiredTokenError("Invalid or expired reset token.")
 
     user.hashed_password = hash_password(new_password)
     user.token_version += 1  # Invalidate all existing JWT tokens

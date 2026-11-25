@@ -1,10 +1,11 @@
 import io
 import uuid
 
-from fastapi import APIRouter, File, HTTPException, UploadFile, status
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from PIL import Image, UnidentifiedImageError
 from pydantic import BaseModel
 
+from app.core.rate_limit import rate_limit
 from app.dependencies.auth import OrganizerUser
 from app.dependencies.db import DBSession
 from app.models.media import MediaAsset
@@ -14,6 +15,25 @@ router = APIRouter(prefix="/uploads", tags=["uploads"])
 
 MAX_FILE_SIZE = 5 * 1024 * 1024  # 5 MB
 MAX_DIMENSION = 4096
+Image.MAX_IMAGE_PIXELS = 25_000_000  # Mitigate decompression image bombs
+
+
+async def read_bounded_upload(file: UploadFile, max_bytes: int = MAX_FILE_SIZE) -> bytes:
+    """Read upload in bounded chunks to prevent large payload memory exhaustion."""
+    chunks: list[bytes] = []
+    total = 0
+    while True:
+        chunk = await file.read(256 * 1024)
+        if not chunk:
+            break
+        total += len(chunk)
+        if total > max_bytes:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=f"File exceeds maximum size of {max_bytes // (1024 * 1024)} MB.",
+            )
+        chunks.append(chunk)
+    return b"".join(chunks)
 
 
 class ImageUploadResponse(BaseModel):
@@ -42,18 +62,18 @@ def _detect_mime_and_ext(header: bytes) -> tuple[str, str] | None:
     return None
 
 
-@router.post("/images", response_model=ImageUploadResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/images",
+    response_model=ImageUploadResponse,
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(rate_limit(max_requests=20, window_seconds=60))],
+)
 async def upload_image(
     db: DBSession,
     user: OrganizerUser,
     file: UploadFile = File(...),
 ) -> ImageUploadResponse:
-    content = await file.read()
-    if len(content) > MAX_FILE_SIZE:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail=f"File exceeds maximum size of 5 MB (received {len(content)} bytes).",
-        )
+    content = await read_bounded_upload(file, MAX_FILE_SIZE)
 
     mime_ext = _detect_mime_and_ext(content[:64])
     if mime_ext is None:

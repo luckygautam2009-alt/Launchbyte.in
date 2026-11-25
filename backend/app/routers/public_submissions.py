@@ -12,6 +12,7 @@ from PIL import Image, UnidentifiedImageError
 from pydantic import BaseModel
 from sqlalchemy import func, or_, select
 
+from app.core.rate_limit import get_client_ip, limiter
 from app.dependencies.auth import StaffUser
 from app.dependencies.db import DBSession
 from app.models.audit import AuditLog
@@ -20,7 +21,7 @@ from app.models.media import MediaAsset
 from app.models.networking import Project, ProjectStatus, ProjectVisibility
 from app.models.opportunities import Opportunity
 from app.models.submissions import ContactInquiry, PublicEventSubmission
-from app.routers.uploads import MAX_DIMENSION, MAX_FILE_SIZE, _detect_mime_and_ext
+from app.routers.uploads import MAX_DIMENSION, MAX_FILE_SIZE, _detect_mime_and_ext, read_bounded_upload
 from app.schemas.submissions import (
     ContactInquiryCreate,
     ContactInquiryResponse,
@@ -35,22 +36,15 @@ from app.services.storage import get_storage_backend
 
 router = APIRouter(tags=["public submissions & metrics"])
 
-# Simple per-IP rate limiting for public unauthenticated submission endpoints
-_RATE_BUCKETS: dict[str, list[float]] = defaultdict(list)
-
 
 def _check_public_rate_limit(request: Request, key: str, max_requests: int = 6, window_sec: int = 60) -> None:
-    ip = request.client.host if request.client else "unknown"
-    bucket_key = f"{key}:{ip}"
-    now = time.monotonic()
-    recent = [t for t in _RATE_BUCKETS[bucket_key] if now - t < window_sec]
-    if len(recent) >= max_requests:
-        raise HTTPException(
-            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-            detail="Too many submissions. Please wait a minute and try again.",
-        )
-    recent.append(now)
-    _RATE_BUCKETS[bucket_key] = recent
+    ip = get_client_ip(request)
+    limiter.check_rate_limit(
+        request,
+        key=f"public:{key}:{ip}",
+        max_requests=max_requests,
+        window_seconds=window_sec,
+    )
 
 
 class PublicImageUploadResponse(BaseModel):
@@ -71,12 +65,7 @@ async def upload_public_event_banner(
 ) -> PublicImageUploadResponse:
     """Public rate-limited image upload for Host an Event thumbnails/banners (PNG/JPEG/WebP only)."""
     _check_public_rate_limit(request, "public_upload", max_requests=10, window_sec=60)
-    content = await file.read()
-    if len(content) > MAX_FILE_SIZE:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail=f"File exceeds maximum size of 5 MB (received {len(content)} bytes).",
-        )
+    content = await read_bounded_upload(file, MAX_FILE_SIZE)
 
     mime_ext = _detect_mime_and_ext(content[:64])
     if mime_ext is None:
@@ -297,7 +286,7 @@ def get_public_metrics(db: DBSession) -> PublicMetricsRead:
     return PublicMetricsRead(
         active_opportunities=active_opps,
         featured_hackathons=featured_hacks,
-        core_team_members=4,
+        core_team_members=5,
         approved_projects=approved_projects,
     )
 

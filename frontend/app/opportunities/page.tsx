@@ -1,6 +1,20 @@
 import React, { Suspense } from "react";
+import type { Metadata } from "next";
 import OpportunityCatalog from "@/components/OpportunityCatalog";
 import PageHero from "@/components/common/PageHero";
+
+export const metadata: Metadata = {
+  title: "Explore Opportunities",
+  description:
+    "Discover verified hackathons, internships, fellowships, and workshops curated for student engineers and builders.",
+  alternates: { canonical: "/opportunities" },
+  openGraph: {
+    title: "Explore Opportunities | LaunchByte",
+    description:
+      "Discover verified hackathons, internships, fellowships, and workshops curated for student engineers and builders.",
+    url: "/opportunities",
+  },
+};
 
 export default function OpportunitiesPage() {
   return (

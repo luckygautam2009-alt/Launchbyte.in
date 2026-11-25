@@ -3,6 +3,8 @@ from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
+from app.core.rate_limit import rate_limit
+
 from app.dependencies.auth import CurrentUser
 from app.dependencies.db import DBSession
 from app.schemas.networking import (
@@ -30,7 +32,12 @@ from app.services.networking.connections import (
 router = APIRouter(tags=["connections"])
 
 
-@router.post("/connections/requests", response_model=ConnectionRead, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/connections/requests",
+    response_model=ConnectionRead,
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(rate_limit(max_requests=20, window_seconds=60))],
+)
 def request_connection(
     payload: ConnectionRequestCreate,
     db: DBSession,

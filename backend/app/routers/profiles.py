@@ -2,13 +2,15 @@ import io
 import uuid
 from typing import Optional
 
-from fastapi import APIRouter, File, HTTPException, Query, UploadFile, status
+from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile, status
 from PIL import Image, UnidentifiedImageError
 from pydantic import BaseModel
 
+from app.core.rate_limit import rate_limit
 from app.dependencies.auth import CurrentUser, OptionalUser
 from app.dependencies.db import DBSession
 from app.models.profiles import UserProfile
+from app.routers.uploads import read_bounded_upload
 from app.schemas.profiles import MyProfileRead, ProfileUpdate, PublicProfileRead
 from app.schemas.teams import TeammateCandidateRead
 from app.services.storage import get_storage_backend
@@ -72,18 +74,18 @@ def modify_my_profile(
         )
 
 
-@router.post("/me/profile/avatar", response_model=AvatarUploadResponse, status_code=status.HTTP_200_OK)
+@router.post(
+    "/me/profile/avatar",
+    response_model=AvatarUploadResponse,
+    status_code=status.HTTP_200_OK,
+    dependencies=[Depends(rate_limit(max_requests=15, window_seconds=60))],
+)
 async def upload_avatar(
     db: DBSession,
     current_user: CurrentUser,
     file: UploadFile = File(...),
 ):
-    content = await file.read()
-    if len(content) > MAX_AVATAR_SIZE:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail={"error": {"code": "FILE_TOO_LARGE", "message": f"Avatar exceeds max size of 5 MB ({len(content)} bytes)."}},
-        )
+    content = await read_bounded_upload(file, MAX_AVATAR_SIZE)
 
     mime_ext = _detect_image_mime_and_ext(content[:64])
     if mime_ext is None:

@@ -43,6 +43,8 @@ class Settings(BaseSettings):
         description="Signs JWT access tokens. Must be overridden (32+ chars) outside local dev.",
     )
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
+    JWT_ISSUER: str = "launchbyte.io"
+    JWT_AUDIENCE: str = "launchbyte-api"
     QR_SIGNING_KEY: str = Field(
         default="dev-qr-signing-key-minimum-32-chars-long",
         description="Signs QR pass tokens. Separate from SECRET_KEY.",
@@ -52,6 +54,7 @@ class Settings(BaseSettings):
     RATE_LIMIT_ENABLED: bool = True
     RATE_LIMIT_PER_MINUTE: int = 60
     RATE_LIMIT_AUTH_PER_MINUTE: int = 10
+    TRUST_PROXY_HEADERS: bool = False
 
     # --- Email Service ---
     EMAIL_BACKEND: str = "console"  # console | smtp
@@ -95,6 +98,14 @@ class Settings(BaseSettings):
                     "SECRET_KEY must be set to a random string of at least 32 characters "
                     f"when ENV={self.ENV!r}. Generate one with: python -c "
                     '"import secrets; print(secrets.token_urlsafe(48))"'
+                )
+            if self.QR_SIGNING_KEY == "dev-qr-signing-key-minimum-32-chars-long" or len(self.QR_SIGNING_KEY) < 32:
+                raise ValueError(
+                    f"QR_SIGNING_KEY must be overridden (32+ chars) when ENV={self.ENV!r}"
+                )
+            if "*" in self.CORS_ORIGINS:
+                raise ValueError(
+                    f"CORS_ORIGINS cannot contain wildcard '*' when ENV={self.ENV!r}"
                 )
             if self.DEBUG:
                 raise ValueError(

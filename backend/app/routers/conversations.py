@@ -14,6 +14,8 @@ from fastapi import (
     status,
 )
 
+from app.core.config import get_settings
+from app.core.rate_limit import rate_limit
 from app.core.websocket import ticket_store, ws_manager
 from app.dependencies.auth import CurrentUser
 from app.dependencies.db import DBSession
@@ -100,7 +102,12 @@ def get_messages(
         )
 
 
-@router.post("/conversations/{conversation_id}/messages", response_model=MessageRead, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/conversations/{conversation_id}/messages",
+    response_model=MessageRead,
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(rate_limit(max_requests=40, window_seconds=60))],
+)
 def post_message(
     conversation_id: uuid.UUID,
     payload: MessageCreate,
@@ -200,7 +207,11 @@ def report(
 # ==========================================
 
 
-@router.post("/ws/ticket", response_model=WSTicketResponse)
+@router.post(
+    "/ws/ticket",
+    response_model=WSTicketResponse,
+    dependencies=[Depends(rate_limit(max_requests=20, window_seconds=60))],
+)
 def get_ws_ticket(
     current_user: CurrentUser,
 ):
@@ -214,6 +225,14 @@ async def websocket_endpoint(
     db: DBSession,
     ticket: str | None = Query(default=None),
 ):
+    # Enforce WebSocket Origin check when Origin header is present (CSWSH protection)
+    origin = websocket.headers.get("origin")
+    if origin:
+        allowed_origins = get_settings().CORS_ORIGINS
+        if "*" not in allowed_origins and origin not in allowed_origins:
+            await websocket.close(code=4003, reason="Origin not allowed")
+            return
+
     if not ticket:
         await websocket.close(code=4001, reason="Authentication ticket required")
         return
@@ -278,8 +297,8 @@ async def websocket_endpoint(
                         send_message(db, user, conv_id, body, client_msg_id=client_msg_id)
                     except MessagingError as me:
                         await websocket.send_text(json.dumps({"event": "error", "message": me.message}))
-                    except Exception as ex:
-                        await websocket.send_text(json.dumps({"event": "error", "message": str(ex)}))
+                    except Exception:
+                        await websocket.send_text(json.dumps({"event": "error", "message": "Unable to send message"}))
 
                 # 3. typing indicator action
                 elif action == "typing":

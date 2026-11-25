@@ -6,7 +6,7 @@ from datetime import datetime
 from decimal import Decimal
 
 from fastapi import APIRouter, HTTPException, Request, status
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, Field, HttpUrl, field_validator
 from sqlalchemy import select
 from sqlalchemy.orm import selectinload
 
@@ -26,6 +26,16 @@ from app.services.email.dispatcher import send_admin_notification
 from app.services.opportunities.service import _unique_slug
 
 router = APIRouter(prefix="/contributor/opportunities", tags=["contributor: opportunities"])
+
+
+def _safe_media_or_web_url(v: str | None, allow_mailto: bool = False) -> str | None:
+    if not v:
+        return None
+    cleaned = v.strip()
+    prefixes = ("http://", "https://", "/uploads/", "mailto:") if allow_mailto else ("http://", "https://", "/uploads/")
+    if not cleaned.startswith(prefixes):
+        raise ValueError("Invalid URL scheme.")
+    return cleaned
 
 
 class ContributorOpportunityCreate(BaseModel):
@@ -62,6 +72,16 @@ class ContributorOpportunityCreate(BaseModel):
 
     submit_for_review: bool = False
 
+    @field_validator("thumbnail_url")
+    @classmethod
+    def _val_thumb(cls, v: str | None) -> str | None:
+        return _safe_media_or_web_url(v, allow_mailto=False)
+
+    @field_validator("organizer_contact_url")
+    @classmethod
+    def _val_contact(cls, v: str | None) -> str | None:
+        return _safe_media_or_web_url(v, allow_mailto=True)
+
 
 class ContributorOpportunityUpdate(BaseModel):
     title: str | None = Field(default=None, min_length=3, max_length=255)
@@ -88,6 +108,16 @@ class ContributorOpportunityUpdate(BaseModel):
     application_url: HttpUrl | None = None
     source_url: HttpUrl | None = None
     organizer_contact_url: str | None = Field(default=None, max_length=1000)
+
+    @field_validator("thumbnail_url")
+    @classmethod
+    def _val_thumb_upd(cls, v: str | None) -> str | None:
+        return _safe_media_or_web_url(v, allow_mailto=False)
+
+    @field_validator("organizer_contact_url")
+    @classmethod
+    def _val_contact_upd(cls, v: str | None) -> str | None:
+        return _safe_media_or_web_url(v, allow_mailto=True)
 
 
 def _get_or_create_default_org(db: DBSession) -> Organization:
