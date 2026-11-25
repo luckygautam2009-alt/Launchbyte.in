@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { Mail, Send, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import Link from "next/link";
+import { Mail, Send, CheckCircle2, AlertCircle, Loader2, ArrowRight } from "lucide-react";
 import { Reveal, MagneticButton } from "./HomeMotion";
 import { LAUNCHBYTE_SOCIALS } from "@/lib/siteContent";
 
@@ -66,7 +67,7 @@ export default function PartnerContactSection() {
               Partner with LaunchByte
             </h2>
             <p className="text-sm sm:text-base text-[#CBD5E1] max-w-2xl mx-auto">
-              Collaborate on student hackathons, developer workshops, or community initiatives. Inquiries are delivered directly to{" "}
+              Organizations, developer communities, event organizers, and collaborators can reach out or submit events directly. Inquiries are routed to{" "}
               <a
                 href={`mailto:${LAUNCHBYTE_SOCIALS.email}`}
                 className="text-cyan-300 hover:underline font-mono text-xs sm:text-sm"
@@ -75,6 +76,15 @@ export default function PartnerContactSection() {
               </a>
               .
             </p>
+            <div className="pt-1">
+              <Link
+                href="/host"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-mono font-semibold text-cyan-300 hover:text-white transition-colors"
+              >
+                <span>Hosting a hackathon or tech event? Submit via Host an Event</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
           </div>
         </Reveal>
 

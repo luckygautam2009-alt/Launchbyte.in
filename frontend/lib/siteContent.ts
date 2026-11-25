@@ -15,6 +15,8 @@ export interface DeveloperCommunity {
   id: string;
   name: string;
   url: string;
+  description: string;
+  logoUrl?: string;
   shortLabel?: string;
 }
 
@@ -104,31 +106,39 @@ export const SITE_CONTENT = {
     },
   },
 
-  // 3. Developer Communities (Real verified communities with official URLs)
+  // 3. Developer Communities (Verified official names, descriptions & URLs — no fabricated logos)
   developerCommunities: [
     {
       id: "codehive",
       name: "CodeHive",
       url: "https://www.codehivee.tech/",
-      shortLabel: "Developer Community",
+      description:
+        "A student developer community focused on technology, collaboration, building and hackathon experiences.",
+      shortLabel: "Student Developer Community",
     },
     {
       id: "codersera",
       name: "CodersEra",
       url: "https://www.codersera.in/",
-      shortLabel: "Developer Community",
+      description:
+        "A community connecting developers through coding, technology activities and collaborative learning.",
+      shortLabel: "Developer Collective",
     },
     {
       id: "gdg-noida",
       name: "GDG Noida",
       url: "https://gdgnoida.com/",
+      description:
+        "A Google Developer Group community focused on developer technologies, learning and community events.",
       shortLabel: "Google Developer Group",
     },
     {
       id: "gdg-dtc",
       name: "Google Developer Groups on Campus — Delhi Technical Campus, Greater Noida",
       url: "https://gdg.community.dev/gdg-on-campus-delhi-technical-campus-greater-noida-india/",
-      shortLabel: "GDG on Campus • Greater Noida",
+      description:
+        "A campus developer community focused on learning, building projects and exploring developer technologies.",
+      shortLabel: "GDG on Campus",
     },
   ] as DeveloperCommunity[],
 

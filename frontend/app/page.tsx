@@ -14,74 +14,77 @@ import HowItWorksSection from "@/components/home/HowItWorksSection";
 import MissionVisionSection from "@/components/home/MissionVisionSection";
 import PartnersLogoRow from "@/components/home/PartnersLogoRow";
 import TestimonialsCarousel from "@/components/home/TestimonialsCarousel";
+import CoreTeamSection from "@/components/home/CoreTeamSection";
 import PartnerContactSection from "@/components/home/PartnerContactSection";
 import FinalCtaSection from "@/components/home/FinalCtaSection";
-import CoreTeamSection from "@/components/home/CoreTeamSection";
 import FaqAccordionSection from "@/components/home/FaqAccordionSection";
 
 export default function HomePage() {
   return (
     <div className="space-y-0 bg-transparent">
-      {/* 1. Cinematic Opening Hero Section (Preserved) */}
+      {/* 1. Cinematic Opening Hero Section */}
       <HeroSection />
 
-      {/* 2. Orbital Brand Showcase Section with 3D Metallic Emblem (Preserved) */}
+      {/* 2. Orbital Brand Showcase Section with 3D Metallic Emblem */}
       <OrbitalBrandSection />
 
       <AstronautJourney>
-        {/* 3. Discover / Single Ringed Planet Showcase */}
+        {/* 3. Discover / Single Ringed Planet Experience */}
         <div id="stage-discover" className="relative scroll-mt-20">
           <CosmicExplorerSection />
         </div>
 
-        {/* 4. What is LaunchByte? Section */}
+        {/* 4. Discover LaunchByte & Opportunities Domains */}
         <AboutLaunchByteSection />
 
-        {/* 5. What You Can Explore Section */}
         <div id="stage-explore" className="relative scroll-mt-20">
           <ExploreCategoriesSection />
         </div>
 
-        {/* Marquee Strip */}
         <MarqueeStrip />
 
-        {/* 6. Featured Opportunities Section */}
+        {/* 5. Featured Hackathons, Community Network, How It Works, Mission */}
         <div id="stage-apply" className="relative scroll-mt-20">
           <FeaturedOpportunitiesSection />
         </div>
 
-        {/* 7. Community & Builder Network Section */}
         <div id="stage-connect" className="relative scroll-mt-20">
           <CommunityNetworkSection />
         </div>
 
-        {/* 8. How It Works */}
         <div id="stage-build" className="relative scroll-mt-20">
           <HowItWorksSection />
         </div>
 
-        {/* 9. Mission and Vision */}
         <MissionVisionSection />
 
-        {/* 10. Connected Communities */}
-        <PartnersLogoRow />
+        {/* 6. Connected Communities — Interactive Developer Ecosystem Hub */}
+        <div id="connected-communities" className="relative scroll-mt-20">
+          <PartnersLogoRow />
+        </div>
 
-        {/* 11. Testimonials (Only renders when verified quotes exist) */}
+        {/* 7. Loved by Hackathon Builders & Fellows (One Large Carousel when quotes exist) */}
         <TestimonialsCarousel />
 
-        {/* 12. Partner & Contact Inquiry Form */}
-        <PartnerContactSection />
+        {/* 8. Meet the Core Team */}
+        <div id="core-team" className="relative scroll-mt-20">
+          <CoreTeamSection />
+        </div>
 
-        {/* 13. Final Call To Action */}
+        {/* 9. Partner with LaunchByte (Immediately after Meet the Core Team) */}
+        <div id="partner-with-launchbyte" className="relative scroll-mt-20">
+          <PartnerContactSection />
+        </div>
+
+        {/* 10. Ready to Build Your Next Breakthrough? (Closing CTA before FAQ) */}
         <div id="stage-launch" className="relative scroll-mt-20">
           <FinalCtaSection />
         </div>
 
-        {/* 14. Meet the Core Team (5 Members) */}
-        <CoreTeamSection />
-
-        {/* 15. Frequently Asked Questions (Final content section directly above Footer) */}
-        <FaqAccordionSection />
+        {/* 11. Frequently Asked Questions (Final content section directly before Footer) */}
+        <div id="faq" className="relative scroll-mt-20">
+          <FaqAccordionSection />
+        </div>
       </AstronautJourney>
     </div>
   );

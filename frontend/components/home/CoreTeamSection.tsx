@@ -170,7 +170,7 @@ function TeamMemberBlock({
     <div
       ref={blockRef}
       id={`crew-member-${index + 1}`}
-      className="min-h-[85vh] lg:min-h-screen flex items-center justify-center py-20 lg:py-28 relative scroll-mt-20"
+      className="min-h-[640px] lg:min-h-[76vh] flex items-center justify-center py-14 lg:py-20 relative scroll-mt-20"
     >
       <div
         className={`w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col ${
