@@ -97,9 +97,9 @@ export default function TestimonialsCarousel() {
           onKeyDown={handleKeyDown}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
-          className="relative rounded-3xl glass-card border border-violet-500/25 p-8 sm:p-12 lg:p-16 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+          className="relative rounded-2xl sm:rounded-3xl glass-card border border-violet-500/25 p-6 sm:p-12 lg:p-16 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
         >
-          <div className="flex flex-col justify-between min-h-[260px] sm:min-h-[300px] space-y-10">
+          <div className="flex flex-col justify-between min-h-[220px] sm:min-h-[300px] space-y-8 sm:space-y-10">
             <div className="flex items-center justify-between">
               <Quote className="w-8 h-8 text-violet-400/70" aria-hidden="true" />
               {total > 1 && (

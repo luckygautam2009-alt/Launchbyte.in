@@ -82,17 +82,17 @@ function TeamPortraitFrame({
 
   return (
     <div
-      className="group relative w-full max-w-[340px] sm:max-w-[400px] lg:max-w-[440px]"
+      className="group relative w-full max-w-[260px] sm:max-w-[340px] md:max-w-[390px] lg:max-w-[440px]"
       style={{ perspective: 1200 }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
       {/* Soft Ambient Purple/Cyan Glow Backdrop */}
-      <div className="absolute -inset-4 sm:-inset-6 rounded-3xl bg-gradient-to-tr from-violet-600/30 via-indigo-600/20 to-cyan-400/25 blur-3xl opacity-50 group-hover:opacity-90 transition-opacity duration-700 pointer-events-none" />
+      <div className="absolute -inset-3 sm:-inset-6 rounded-3xl bg-gradient-to-tr from-violet-600/30 via-indigo-600/20 to-cyan-400/25 blur-2xl sm:blur-3xl opacity-50 group-hover:opacity-90 transition-opacity duration-700 pointer-events-none" />
 
-      {/* Floating 3D Portrait Frame with hairline gradient edge */}
+      {/* Floating 3D Portrait Frame with hairline gradient edge (flat on mobile touch devices) */}
       <div
-        className="relative aspect-[4/5] w-full rounded-2xl sm:rounded-3xl p-[1.5px] bg-gradient-to-tr from-cyan-400/50 via-violet-500/60 to-indigo-500/50 shadow-[0_25px_60px_-15px_rgba(139,92,246,0.35),0_0_40px_-10px_rgba(34,211,238,0.2)] transition-transform duration-300 ease-out will-change-transform"
+        className="relative aspect-[4/5] w-full rounded-2xl sm:rounded-3xl p-[1.5px] bg-gradient-to-tr from-cyan-400/50 via-violet-500/60 to-indigo-500/50 shadow-[0_25px_60px_-15px_rgba(139,92,246,0.35),0_0_40px_-10px_rgba(34,211,238,0.2)] transition-transform duration-300 ease-out will-change-transform max-md:!transform-none"
         style={{
           transform: currentTransform,
           transformStyle: "preserve-3d",
@@ -103,7 +103,7 @@ function TeamPortraitFrame({
           {member.photo && !imgError ? (
             <motion.div
               style={{ y: imageY }}
-              className="relative w-full h-[116%] -top-[8%]"
+              className="relative w-full h-[116%] -top-[8%] max-md:!transform-none"
             >
               <img
                 src={member.photo}
@@ -170,12 +170,12 @@ function TeamMemberBlock({
     <div
       ref={blockRef}
       id={`crew-member-${index + 1}`}
-      className="min-h-[640px] lg:min-h-[76vh] flex items-center justify-center py-14 lg:py-20 relative scroll-mt-20"
+      className="lg:min-h-[76vh] flex items-center justify-center py-10 sm:py-14 lg:py-20 relative scroll-mt-20"
     >
       <div
         className={`w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col ${
           isImageLeft ? "lg:flex-row" : "lg:flex-row-reverse"
-        } items-center justify-between gap-12 lg:gap-16 xl:gap-20`}
+        } items-center justify-between gap-8 sm:gap-12 lg:gap-16 xl:gap-20`}
       >
         {/* ================= 1. Portrait Column (40%–48%) ================= */}
         <motion.div
@@ -297,7 +297,7 @@ function TeamMemberBlock({
 
           {/* Social Links (Rendered ONLY when valid URLs exist) */}
           {(member.linkedin || member.github || member.portfolio || member.instagram || member.twitter) && (
-            <div className="pt-3 flex items-center gap-3">
+            <div className="pt-3 flex flex-wrap items-center gap-3">
               {member.linkedin && member.linkedin.startsWith("http") && (
                 <a
                   href={member.linkedin}
@@ -305,7 +305,7 @@ function TeamMemberBlock({
                   rel="noopener noreferrer"
                   aria-label={`${member.name}'s LinkedIn profile`}
                   title="LinkedIn"
-                  className="p-2.5 rounded-xl bg-violet-950/40 border border-violet-500/25 text-slate-400 hover:text-cyan-300 hover:border-cyan-400/50 hover:bg-violet-900/40 transition-all duration-200"
+                  className="w-11 h-11 flex items-center justify-center rounded-xl bg-violet-950/40 border border-violet-500/25 text-slate-400 hover:text-cyan-300 hover:border-cyan-400/50 hover:bg-violet-900/40 transition-all duration-200"
                 >
                   <Linkedin className="w-4 h-4" />
                 </a>
@@ -317,7 +317,7 @@ function TeamMemberBlock({
                   rel="noopener noreferrer"
                   aria-label={`${member.name}'s GitHub profile`}
                   title="GitHub"
-                  className="p-2.5 rounded-xl bg-violet-950/40 border border-violet-500/25 text-slate-400 hover:text-cyan-300 hover:border-cyan-400/50 hover:bg-violet-900/40 transition-all duration-200"
+                  className="w-11 h-11 flex items-center justify-center rounded-xl bg-violet-950/40 border border-violet-500/25 text-slate-400 hover:text-cyan-300 hover:border-cyan-400/50 hover:bg-violet-900/40 transition-all duration-200"
                 >
                   <Github className="w-4 h-4" />
                 </a>
@@ -329,7 +329,7 @@ function TeamMemberBlock({
                   rel="noopener noreferrer"
                   aria-label={`${member.name}'s Portfolio website`}
                   title="Portfolio"
-                  className="p-2.5 rounded-xl bg-violet-950/40 border border-violet-500/25 text-slate-400 hover:text-cyan-300 hover:border-cyan-400/50 hover:bg-violet-900/40 transition-all duration-200"
+                  className="w-11 h-11 flex items-center justify-center rounded-xl bg-violet-950/40 border border-violet-500/25 text-slate-400 hover:text-cyan-300 hover:border-cyan-400/50 hover:bg-violet-900/40 transition-all duration-200"
                 >
                   <Globe className="w-4 h-4" />
                 </a>
@@ -341,7 +341,7 @@ function TeamMemberBlock({
                   rel="noopener noreferrer"
                   aria-label={`${member.name}'s Instagram profile`}
                   title="Instagram"
-                  className="p-2.5 rounded-xl bg-violet-950/40 border border-violet-500/25 text-slate-400 hover:text-cyan-300 hover:border-cyan-400/50 hover:bg-violet-900/40 transition-all duration-200"
+                  className="w-11 h-11 flex items-center justify-center rounded-xl bg-violet-950/40 border border-violet-500/25 text-slate-400 hover:text-cyan-300 hover:border-cyan-400/50 hover:bg-violet-900/40 transition-all duration-200"
                 >
                   <Instagram className="w-4 h-4" />
                 </a>

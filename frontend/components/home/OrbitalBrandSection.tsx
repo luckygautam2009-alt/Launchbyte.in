@@ -37,8 +37,8 @@ export default function OrbitalBrandSection() {
       <div className="absolute inset-0 bg-gradient-to-b from-[#050510] via-[#09091B]/90 to-[#050510] pointer-events-none" />
 
       {/* Subtle Central Violet Nebula Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] sm:w-[800px] h-[600px] sm:h-[800px] rounded-full bg-violet-600/[0.07] blur-[150px] pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[450px] h-[300px] sm:h-[450px] rounded-full bg-cyan-500/[0.04] blur-[100px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] sm:w-[800px] h-[320px] sm:h-[800px] rounded-full bg-violet-600/[0.07] blur-[80px] sm:blur-[150px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] sm:w-[450px] h-[200px] sm:h-[450px] rounded-full bg-cyan-500/[0.04] blur-[60px] sm:blur-[100px] pointer-events-none" />
 
       {/* Sparse Subtle Twinkling Stars */}
       <div className="absolute top-[16%] left-[12%] text-violet-200 animate-star-twinkle">
@@ -107,13 +107,13 @@ export default function OrbitalBrandSection() {
           {/* CENTRAL FLOATING LOGO                                     */}
           {/* ========================================================= */}
           <div className="relative w-full lg:w-[36%] xl:w-[40%] flex justify-center items-center order-2 py-4 sm:py-6 lg:py-0">
-            {/* Concentric faint orbital lines */}
-            <div className="absolute w-[320px] h-[320px] sm:w-[420px] sm:h-[420px] lg:w-[460px] lg:h-[460px] rounded-full border border-violet-500/[0.09] pointer-events-none animate-slow-orbit" />
-            <div className="absolute w-[400px] h-[400px] sm:w-[500px] sm:h-[500px] lg:w-[540px] lg:h-[540px] rounded-full border border-violet-400/[0.04] pointer-events-none rotate-45" />
+            {/* Concentric faint orbital lines (compact on mobile) */}
+            <div className="absolute w-[240px] h-[240px] sm:w-[420px] sm:h-[420px] lg:w-[460px] lg:h-[460px] rounded-full border border-violet-500/[0.09] pointer-events-none animate-slow-orbit" />
+            <div className="hidden sm:block absolute w-[500px] h-[500px] lg:w-[540px] lg:h-[540px] rounded-full border border-violet-400/[0.04] pointer-events-none rotate-45" />
 
             {/* Ambient violet + subtle cyan radial glow behind logo */}
-            <div className="absolute w-56 h-56 sm:w-72 sm:h-72 rounded-full bg-violet-500/20 blur-[70px] pointer-events-none" />
-            <div className="absolute w-40 h-40 sm:w-52 sm:h-52 rounded-full bg-cyan-400/10 blur-[50px] pointer-events-none" />
+            <div className="absolute w-44 h-44 sm:w-72 sm:h-72 rounded-full bg-violet-500/20 blur-[55px] sm:blur-[70px] pointer-events-none" />
+            <div className="absolute w-32 h-32 sm:w-52 sm:h-52 rounded-full bg-cyan-400/10 blur-[40px] sm:blur-[50px] pointer-events-none" />
 
             {/* Continuous Gentle Floating Animation */}
             <motion.div
@@ -130,7 +130,7 @@ export default function OrbitalBrandSection() {
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
-                className="relative w-[280px] sm:w-[350px] md:w-[390px] lg:w-[420px] xl:w-[460px] max-w-[85vw]"
+                className="relative w-[220px] sm:w-[340px] md:w-[390px] lg:w-[420px] xl:w-[460px] max-w-[75vw]"
               >
                 <Image
                   src="/brand/launchbyte-orbital-neon-emblem.png"

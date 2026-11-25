@@ -33,7 +33,7 @@ export function MobileBottomNav() {
   return (
     <nav
       aria-label="Mobile Bottom Navigation"
-      className="md:hidden fixed bottom-0 left-0 right-0 z-40 h-16 bg-slate-950/90 backdrop-blur-lg border-t border-slate-800/80 px-2 flex items-center justify-around select-none safe-area-pb"
+      className="md:hidden fixed bottom-0 left-0 right-0 z-40 min-h-16 bg-slate-950/92 backdrop-blur-lg border-t border-slate-800/80 px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] pb-[env(safe-area-inset-bottom)] flex items-center justify-around select-none"
     >
       {items.map((item) => {
         const Icon = item.icon;

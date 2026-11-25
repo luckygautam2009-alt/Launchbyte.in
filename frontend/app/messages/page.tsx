@@ -349,18 +349,22 @@ export default function MessagesPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <div className="bg-slate-900/60 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row h-[780px]">
-        {/* LEFT COLUMN: CONVERSATION LIST */}
-        <div className="w-full md:w-80 lg:w-96 border-b md:border-b-0 md:border-r border-slate-800 flex flex-col bg-slate-950/40">
-          <div className="p-4 border-b border-slate-800 flex items-center justify-between">
+    <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6">
+      <div className="bg-slate-900/60 border border-slate-800 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row h-[calc(100dvh-10.5rem-env(safe-area-inset-bottom))] min-h-[460px] md:h-[min(780px,calc(100dvh-7.5rem))]">
+        {/* LEFT COLUMN: CONVERSATION LIST (Full-width on mobile when no chat selected) */}
+        <div
+          className={`w-full md:w-80 lg:w-96 md:border-r border-slate-800 flex-col bg-slate-950/40 min-h-0 flex-1 md:flex-none ${
+            selectedConv ? "hidden md:flex" : "flex"
+          }`}
+        >
+          <div className="p-4 border-b border-slate-800 flex items-center justify-between gap-2">
             <h2 className="font-bold text-white text-lg flex items-center gap-2">
               <MessageSquare className="w-5 h-5 text-brand-400" />
               Messages
             </h2>
             <Link
               href="/network"
-              className="text-xs text-brand-400 hover:text-brand-300 font-medium transition"
+              className="min-h-[36px] inline-flex items-center px-2 text-xs text-brand-400 hover:text-brand-300 font-medium transition"
             >
               Find Peers &rarr;
             </Link>
@@ -437,32 +441,46 @@ export default function MessagesPage() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: ACTIVE CHAT PANEL */}
-        <div className="flex-1 flex flex-col bg-slate-900/30">
+        {/* RIGHT COLUMN: ACTIVE CHAT PANEL (Full-width on mobile when chat selected) */}
+        <div
+          className={`flex-1 flex-col bg-slate-900/30 min-w-0 min-h-0 ${
+            selectedConv ? "flex" : "hidden md:flex"
+          }`}
+        >
           {selectedConv ? (
             <>
               {/* Chat Header */}
-              <div className="p-4 border-b border-slate-800 bg-slate-950/30 flex items-center justify-between">
-                <div>
-                  <h3 className="font-bold text-white text-base flex items-center gap-2">
-                    {getConvTitle(selectedConv)}
-                    {selectedConv.type === "team" && (
-                      <span className="px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider bg-purple-950/60 text-purple-300 border border-purple-800/60">
-                        Team
-                      </span>
-                    )}
-                  </h3>
-                  <p className="text-xs text-slate-400 flex items-center gap-1.5 mt-0.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-                    {selectedConv.participants.length} participant
-                    {selectedConv.participants.length === 1 ? "" : "s"}
-                  </p>
+              <div className="p-3 sm:p-4 border-b border-slate-800 bg-slate-950/30 flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedConv(null)}
+                    aria-label="Back to conversations"
+                    className="md:hidden min-w-[44px] min-h-[44px] -ml-1 flex items-center justify-center rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition shrink-0"
+                  >
+                    &larr;
+                  </button>
+                  <div className="min-w-0">
+                    <h3 className="font-bold text-white text-sm sm:text-base flex items-center gap-2 truncate">
+                      <span className="truncate">{getConvTitle(selectedConv)}</span>
+                      {selectedConv.type === "team" && (
+                        <span className="px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider bg-purple-950/60 text-purple-300 border border-purple-800/60 shrink-0">
+                          Team
+                        </span>
+                      )}
+                    </h3>
+                    <p className="text-xs text-slate-400 flex items-center gap-1.5 mt-0.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                      {selectedConv.participants.length} participant
+                      {selectedConv.participants.length === 1 ? "" : "s"}
+                    </p>
+                  </div>
                 </div>
 
                 {selectedConv.type === "team" && selectedConv.team_slug && (
                   <Link
                     href={`/projects`}
-                    className="text-xs text-slate-400 hover:text-white px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800 transition"
+                    className="min-h-[36px] inline-flex items-center text-xs text-slate-300 hover:text-white px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800 transition shrink-0"
                   >
                     View Project
                   </Link>
@@ -503,23 +521,25 @@ export default function MessagesPage() {
                           </span>
                         )}
 
-                        <div className="relative max-w-[80%] flex items-center gap-2">
-                          {/* Message actions trigger on hover */}
+                        <div className="relative max-w-[88%] sm:max-w-[80%] flex items-center gap-1.5 sm:gap-2">
+                          {/* Message actions: accessible on touch and subtle hover on desktop */}
                           {isMe && !m.is_deleted && (
-                            <div className="opacity-0 group-hover:opacity-100 transition flex items-center gap-1">
+                            <div className="opacity-85 sm:opacity-0 sm:group-hover:opacity-100 focus-within:opacity-100 transition flex items-center gap-0.5 shrink-0">
                               <button
                                 onClick={() => {
                                   setEditingMessageId(m.id);
                                   setEditBody(m.body);
                                 }}
-                                className="p-1 rounded text-slate-500 hover:text-slate-300"
+                                aria-label="Edit message"
+                                className="min-w-[34px] min-h-[34px] flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
                                 title="Edit message"
                               >
                                 <Edit2 className="w-3.5 h-3.5" />
                               </button>
                               <button
                                 onClick={() => handleDeleteMessage(m.id)}
-                                className="p-1 rounded text-slate-500 hover:text-rose-400"
+                                aria-label="Delete message"
+                                className="min-w-[34px] min-h-[34px] flex items-center justify-center rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-800/60"
                                 title="Delete message"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
@@ -528,10 +548,11 @@ export default function MessagesPage() {
                           )}
 
                           {!isMe && !m.is_deleted && (
-                            <div className="opacity-0 group-hover:opacity-100 transition">
+                            <div className="opacity-85 sm:opacity-0 sm:group-hover:opacity-100 focus-within:opacity-100 transition shrink-0">
                               <button
                                 onClick={() => setReportModalMsg(m)}
-                                className="p-1 rounded text-slate-500 hover:text-amber-400"
+                                aria-label="Report message"
+                                className="min-w-[34px] min-h-[34px] flex items-center justify-center rounded-lg text-slate-400 hover:text-amber-400 hover:bg-slate-800/60"
                                 title="Report message"
                               >
                                 <Flag className="w-3.5 h-3.5" />
@@ -606,18 +627,19 @@ export default function MessagesPage() {
               )}
 
               {/* Chat Input */}
-              <form onSubmit={handleSendMessage} className="p-3 border-t border-slate-800 bg-slate-950/40 flex items-center gap-2">
+              <form onSubmit={handleSendMessage} className="p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] border-t border-slate-800 bg-slate-950/40 flex items-center gap-2">
                 <input
                   type="text"
                   placeholder="Type a message..."
                   value={inputBody}
                   onChange={(e) => handleTypingChange(e.target.value)}
-                  className="flex-1 px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-brand-500"
+                  className="min-w-0 flex-1 min-h-[44px] px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-slate-100 placeholder-slate-500 text-base md:text-sm focus:outline-none focus:border-brand-500"
                 />
                 <button
                   type="submit"
                   disabled={!inputBody.trim() || sending}
-                  className="p-2.5 rounded-2xl bg-brand-600 hover:bg-brand-500 disabled:opacity-50 text-white font-medium transition shadow-md shadow-brand-600/20"
+                  aria-label="Send message"
+                  className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-2xl bg-brand-600 hover:bg-brand-500 disabled:opacity-50 text-white font-medium transition shadow-md shadow-brand-600/20 shrink-0"
                 >
                   <Send className="w-5 h-5" />
                 </button>

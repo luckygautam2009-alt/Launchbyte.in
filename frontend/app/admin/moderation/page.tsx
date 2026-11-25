@@ -174,13 +174,13 @@ export default function AdminModerationPage() {
         </div>
 
         {tab === "opportunities" && (
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {["pending_review", "published", "draft", "rejected", "archived"].map((s) => (
               <button
                 key={s}
                 type="button"
                 onClick={() => setStatusFilter(s)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono cursor-pointer ${
+                className={`min-h-[38px] px-3 py-1.5 rounded-lg text-xs font-mono cursor-pointer ${
                   statusFilter === s
                     ? "bg-violet-600/30 border border-violet-400 text-white"
                     : "bg-slate-900 border border-slate-800 text-slate-400"
@@ -208,8 +208,8 @@ export default function AdminModerationPage() {
                   key={opp.id}
                   className="p-5 rounded-2xl glass-card border border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                 >
-                  <div className="space-y-1">
-                    <h3 className="font-bold text-white">{opp.title}</h3>
+                  <div className="space-y-1 min-w-0 flex-1">
+                    <h3 className="font-bold text-white break-words">{opp.title}</h3>
                     <p className="text-xs text-slate-400">
                       {opp.organizer_name_override || opp.organization?.name} • {opp.type} • {opp.status}
                     </p>
@@ -218,19 +218,19 @@ export default function AdminModerationPage() {
                         href={opp.application_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs font-mono text-cyan-300 inline-flex items-center gap-1 hover:underline"
+                        className="text-xs font-mono text-cyan-300 inline-flex items-center gap-1 hover:underline break-all"
                       >
                         <span>{opp.application_url}</span>
-                        <ExternalLink className="w-3 h-3" />
+                        <ExternalLink className="w-3 h-3 shrink-0" />
                       </a>
                     )}
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     {opp.status !== "published" && (
                       <button
                         type="button"
                         onClick={() => handleOppApprove(opp)}
-                        className="inline-flex items-center gap-1 px-3.5 py-2 rounded-xl bg-emerald-600/20 border border-emerald-500/40 text-emerald-300 text-xs font-semibold cursor-pointer"
+                        className="min-h-[42px] inline-flex items-center gap-1 px-3.5 py-2 rounded-xl bg-emerald-600/20 border border-emerald-500/40 text-emerald-300 text-xs font-semibold cursor-pointer"
                       >
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         <span>Approve & Publish</span>
@@ -240,7 +240,7 @@ export default function AdminModerationPage() {
                       <button
                         type="button"
                         onClick={() => handleOppReject(opp)}
-                        className="inline-flex items-center gap-1 px-3.5 py-2 rounded-xl bg-red-600/20 border border-red-500/40 text-red-300 text-xs font-semibold cursor-pointer"
+                        className="min-h-[42px] inline-flex items-center gap-1 px-3.5 py-2 rounded-xl bg-red-600/20 border border-red-500/40 text-red-300 text-xs font-semibold cursor-pointer"
                       >
                         <XCircle className="w-3.5 h-3.5" />
                         <span>Reject</span>

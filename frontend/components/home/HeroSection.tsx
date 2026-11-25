@@ -93,12 +93,58 @@ export default function HeroSection() {
       </div>
 
       {/* ========================================================= */}
+      {/* EDITORIAL CONTENT: LEFT SIDE ALIGNED (Stacked cleanly on mobile) */}
+      {/* ========================================================= */}
+      <div className="relative z-30 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-16 lg:pt-28 pb-4 sm:pb-8 lg:pb-24 flex-1 flex flex-col justify-center">
+        <div className="max-w-xl text-left space-y-5 sm:space-y-6">
+          {/* Small category / label */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs sm:text-sm font-semibold tracking-[0.25em] text-[#A78BFA] uppercase">
+              LEARN • BUILD • GROW
+            </span>
+          </div>
+
+          {/* Main headline */}
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.12]">
+            Explore{" "}
+            <span className="bg-gradient-to-r from-white via-[#E2E8F0] to-[#A78BFA] bg-clip-text text-transparent">
+              Beyond Limits.
+            </span>
+          </h2>
+
+          {/* Supporting description */}
+          <p className="text-sm sm:text-lg text-[#B8BAD0] leading-relaxed max-w-lg font-normal">
+            A community for students, developers and innovators to discover hackathons,
+            opportunities and build something extraordinary.
+          </p>
+
+          {/* Actions / CTA Buttons */}
+          <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-3 sm:gap-4 pt-2">
+            <Link
+              href="/opportunities"
+              className="w-full sm:w-auto min-h-[46px] justify-center px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#4F46E5] to-[#8B5CF6] hover:from-[#4338CA] hover:to-[#7C3AED] text-white font-semibold text-sm sm:text-base shadow-lg shadow-violet-500/25 transition-all hover:scale-[1.02] active:scale-[0.98] inline-flex items-center gap-2 group"
+            >
+              <span>Explore Opportunities</span>
+              <ArrowRight className="w-4 h-4 text-violet-200 group-hover:translate-x-1 transition-transform" />
+            </Link>
+
+            <Link
+              href="/register"
+              className="w-full sm:w-auto min-h-[46px] justify-center px-6 py-3.5 rounded-xl border border-violet-500/30 hover:border-violet-400/60 bg-violet-950/20 hover:bg-violet-900/30 text-[#F8FAFC] font-semibold text-sm sm:text-base transition-all hover:scale-[1.02] active:scale-[0.98] inline-flex items-center gap-2"
+            >
+              <span>Join LaunchByte</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* ========================================================= */}
       {/* CENTER VISUAL: ASTRONAUT HOLDING GLOWING PLANET           */}
       {/* ========================================================= */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[340px] sm:w-[480px] md:w-[580px] lg:w-[680px] xl:w-[740px] max-w-[95vw] pointer-events-none select-none z-20 flex flex-col items-center">
+      <div className="relative mx-auto -mt-2 lg:mt-0 lg:absolute lg:bottom-0 lg:left-1/2 lg:-translate-x-1/2 w-[270px] sm:w-[400px] md:w-[480px] lg:w-[680px] xl:w-[740px] max-w-[90vw] pointer-events-none select-none z-20 flex flex-col items-center">
         {/* Glow halo behind the glowing planet */}
-        <div className="absolute top-[48%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 sm:w-64 sm:h-64 rounded-full bg-violet-500/25 blur-[60px] pointer-events-none" />
-        <div className="absolute top-[48%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full bg-cyan-400/15 blur-[40px] pointer-events-none" />
+        <div className="absolute top-[48%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 sm:w-64 sm:h-64 rounded-full bg-violet-500/25 blur-[50px] sm:blur-[60px] pointer-events-none" />
+        <div className="absolute top-[48%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-cyan-400/15 blur-[32px] sm:blur-[40px] pointer-events-none" />
 
         {/* Astronaut image with gentle floating animation */}
         <motion.div
@@ -121,53 +167,7 @@ export default function HeroSection() {
         </motion.div>
 
         {/* Seamless bottom fade mask to blend with the background */}
-        <div className="absolute bottom-0 inset-x-0 h-24 sm:h-32 bg-gradient-to-t from-[#050510] via-[#050510]/80 to-transparent pointer-events-none z-30" />
-      </div>
-
-      {/* ========================================================= */}
-      {/* EDITORIAL CONTENT: LEFT SIDE ALIGNED                      */}
-      {/* ========================================================= */}
-      <div className="relative z-30 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-12 sm:pt-20 lg:pt-28 pb-32 sm:pb-36 lg:pb-24 flex-1 flex flex-col justify-center">
-        <div className="max-w-xl text-left space-y-6">
-          {/* Small category / label */}
-          <div className="flex items-center gap-2">
-            <span className="text-xs sm:text-sm font-semibold tracking-[0.25em] text-[#A78BFA] uppercase">
-              LEARN • BUILD • GROW
-            </span>
-          </div>
-
-          {/* Main headline */}
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.12]">
-            Explore{" "}
-            <span className="bg-gradient-to-r from-white via-[#E2E8F0] to-[#A78BFA] bg-clip-text text-transparent">
-              Beyond Limits.
-            </span>
-          </h2>
-
-          {/* Supporting description */}
-          <p className="text-base sm:text-lg text-[#B8BAD0] leading-relaxed max-w-lg font-normal">
-            A community for students, developers and innovators to discover hackathons,
-            opportunities and build something extraordinary.
-          </p>
-
-          {/* Actions / CTA Buttons */}
-          <div className="flex flex-wrap items-center gap-4 pt-2">
-            <Link
-              href="/opportunities"
-              className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-[#4F46E5] to-[#8B5CF6] hover:from-[#4338CA] hover:to-[#7C3AED] text-white font-semibold text-sm sm:text-base shadow-lg shadow-violet-500/25 transition-all hover:scale-[1.02] active:scale-[0.98] inline-flex items-center gap-2 group"
-            >
-              <span>Explore Opportunities</span>
-              <ArrowRight className="w-4 h-4 text-violet-200 group-hover:translate-x-1 transition-transform" />
-            </Link>
-
-            <Link
-              href="/register"
-              className="px-6 py-3.5 rounded-xl border border-violet-500/30 hover:border-violet-400/60 bg-violet-950/20 hover:bg-violet-900/30 text-[#F8FAFC] font-semibold text-sm sm:text-base transition-all hover:scale-[1.02] active:scale-[0.98] inline-flex items-center gap-2"
-            >
-              <span>Join LaunchByte</span>
-            </Link>
-          </div>
-        </div>
+        <div className="absolute bottom-0 inset-x-0 h-20 sm:h-32 bg-gradient-to-t from-[#050510] via-[#050510]/80 to-transparent pointer-events-none z-30" />
       </div>
 
       {/* Bottom subtle border separating hero from the rest of the page */}

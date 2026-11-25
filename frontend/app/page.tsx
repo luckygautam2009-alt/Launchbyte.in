@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import LaunchByteIntro from "@/components/intro/LaunchByteIntro";
 import HeroSection from "@/components/home/HeroSection";
 import OrbitalBrandSection from "@/components/home/OrbitalBrandSection";
 import AstronautJourney from "@/components/home/AstronautJourney";
@@ -22,6 +23,8 @@ import FaqAccordionSection from "@/components/home/FaqAccordionSection";
 export default function HomePage() {
   return (
     <div className="space-y-0 bg-transparent">
+      <LaunchByteIntro />
+
       {/* 1. Cinematic Opening Hero Section */}
       <HeroSection />
 

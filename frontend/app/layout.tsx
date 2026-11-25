@@ -43,6 +43,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
@@ -52,7 +53,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className="bg-[#050510] text-slate-100 flex flex-col min-h-screen antialiased selection:bg-brand-500 selection:text-white pb-16 md:pb-0 relative">
+      <body className="bg-[#050510] text-slate-100 flex flex-col min-h-screen min-h-[100dvh] antialiased selection:bg-brand-500 selection:text-white pb-[calc(4rem+env(safe-area-inset-bottom))] md:pb-0 relative">
         <AuthProvider>
           <ToastProvider>
             {/* Global animated particles from top to bottom across the entire page */}

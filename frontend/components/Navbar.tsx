@@ -69,7 +69,7 @@ export default function Navbar() {
       {/* Top Hairline Gradient Accent */}
       <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-violet-500/30 to-transparent pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-[env(safe-area-inset-top)] h-[calc(4rem+env(safe-area-inset-top))] flex items-center justify-between">
         {/* Official Logo */}
         <Link
           href="/"
@@ -290,12 +290,21 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile Hamburger Button */}
-        <div className="flex md:hidden items-center gap-2">
+        {/* Mobile Search + Hamburger Button */}
+        <div className="flex md:hidden items-center gap-1.5">
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }))}
+            aria-label="Search LaunchByte"
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition border border-transparent hover:border-slate-700"
+          >
+            <Search className="w-5 h-5" />
+          </button>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition border border-transparent hover:border-slate-700"
+            aria-expanded={mobileMenuOpen}
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition border border-transparent hover:border-slate-700"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -304,14 +313,14 @@ export default function Navbar() {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-violet-900/30 bg-[#070719]/95 backdrop-blur-xl px-4 pt-2 pb-6 space-y-3">
+        <div className="md:hidden max-h-[calc(100dvh-4rem-env(safe-area-inset-top))] overflow-y-auto border-b border-violet-900/30 bg-[#070719]/95 backdrop-blur-xl px-4 pt-2 pb-[calc(1.5rem+env(safe-area-inset-bottom))] space-y-3">
           <div className="flex flex-col gap-1">
             {visibleNav.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`px-3 py-2 rounded-xl text-base font-medium ${
+                className={`min-h-[44px] flex items-center px-3 py-2.5 rounded-xl text-base font-medium ${
                   pathname === item.href
                     ? "bg-violet-950/80 text-white border border-violet-500/40"
                     : "text-slate-300 hover:text-white hover:bg-violet-950/30"
@@ -389,14 +398,14 @@ export default function Navbar() {
                 <Link
                   href="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center py-2 text-sm font-medium border border-violet-500/30 rounded-xl text-slate-200 bg-violet-950/30"
+                  className="w-full min-h-[44px] flex items-center justify-center text-center py-2.5 text-sm font-medium border border-violet-500/30 rounded-xl text-slate-200 bg-violet-950/30"
                 >
                   Log in
                 </Link>
                 <Link
                   href="/register"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center py-2 text-sm font-medium bg-gradient-to-r from-[#4F46E5] to-[#8B5CF6] rounded-xl text-white shadow-md shadow-violet-500/30"
+                  className="w-full min-h-[44px] flex items-center justify-center text-center py-2.5 text-sm font-medium bg-gradient-to-r from-[#4F46E5] to-[#8B5CF6] rounded-xl text-white shadow-md shadow-violet-500/30"
                 >
                   Register
                 </Link>

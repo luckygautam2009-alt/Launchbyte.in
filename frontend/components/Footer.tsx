@@ -69,14 +69,14 @@ export default function Footer() {
           {/* Compact Social Media & Contact Group */}
           <div>
             <h4 className="font-semibold text-white mb-3 text-sm tracking-wide">Connect</h4>
-            <div className="flex items-center gap-2.5 text-slate-400">
+            <div className="flex flex-wrap items-center gap-2.5 text-slate-400">
               <a
                 href={LAUNCHBYTE_SOCIALS.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="LaunchByte on LinkedIn"
                 title="LinkedIn"
-                className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 flex items-center justify-center hover:text-white hover:border-violet-400/50 transition-colors"
+                className="w-11 h-11 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center hover:text-white hover:border-violet-400/50 transition-colors"
               >
                 <Linkedin className="w-4 h-4" />
               </a>
@@ -86,7 +86,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 aria-label="LaunchByte on Instagram"
                 title="Instagram"
-                className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 flex items-center justify-center hover:text-white hover:border-violet-400/50 transition-colors"
+                className="w-11 h-11 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center hover:text-white hover:border-violet-400/50 transition-colors"
               >
                 <Instagram className="w-4 h-4" />
               </a>
@@ -96,7 +96,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 aria-label="LaunchByte WhatsApp Community"
                 title="WhatsApp Community"
-                className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 flex items-center justify-center hover:text-emerald-300 hover:border-emerald-400/50 transition-colors"
+                className="w-11 h-11 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center hover:text-emerald-300 hover:border-emerald-400/50 transition-colors"
               >
                 <MessageCircle className="w-4 h-4" />
               </a>
@@ -104,13 +104,13 @@ export default function Footer() {
                 href={`mailto:${LAUNCHBYTE_SOCIALS.email}`}
                 aria-label="Email LaunchByte"
                 title={LAUNCHBYTE_SOCIALS.email}
-                className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 flex items-center justify-center hover:text-cyan-300 hover:border-cyan-400/50 transition-colors"
+                className="w-11 h-11 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-center hover:text-cyan-300 hover:border-cyan-400/50 transition-colors"
               >
                 <Mail className="w-4 h-4" />
               </a>
             </div>
-            <p className="text-xs text-slate-400 mt-3">
-              <a href={`mailto:${LAUNCHBYTE_SOCIALS.email}`} className="hover:text-cyan-300 transition">
+            <p className="text-xs sm:text-sm text-slate-400 mt-3 break-words">
+              <a href={`mailto:${LAUNCHBYTE_SOCIALS.email}`} className="inline-flex min-h-[36px] items-center hover:text-cyan-300 transition">
                 {LAUNCHBYTE_SOCIALS.email}
               </a>
             </p>

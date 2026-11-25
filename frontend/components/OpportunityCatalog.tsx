@@ -267,10 +267,10 @@ export default function OpportunityCatalog({
       {/* Main Layout: Filter Drawer / Sidebar + Cards Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Mobile Filter Toggle */}
-        <div className="lg:hidden flex items-center justify-between pb-2">
+        <div className="lg:hidden flex flex-wrap items-center justify-between gap-2 pb-2">
           <button
             onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-sm font-medium text-slate-200"
+            className="min-h-[44px] flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-sm font-medium text-slate-200"
           >
             <SlidersHorizontal className="w-4 h-4" />
             Filters {selectedTypes.length + selectedTags.length > 0 && `(${selectedTypes.length + selectedTags.length})`}
@@ -284,7 +284,7 @@ export default function OpportunityCatalog({
               applyFilters({ sort: e.target.value });
             }}
             aria-label="Sort opportunities"
-            className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+            className="min-h-[44px] flex-1 sm:flex-none bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
           >
             <option value="deadline">Soonest Deadline</option>
             <option value="newest">Recently Published</option>
@@ -344,7 +344,7 @@ export default function OpportunityCatalog({
                       key={t}
                       type="button"
                       onClick={() => handleTypeToggle(t)}
-                      className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition ${
+                      className={`min-h-[36px] px-3 py-1.5 rounded-lg text-xs font-medium border transition ${
                         active
                           ? "bg-brand-950 text-brand-300 border-brand-700 font-semibold"
                           : "bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-700"
@@ -375,7 +375,7 @@ export default function OpportunityCatalog({
                       setLocationType(next);
                       applyFilters({ location_type: next });
                     }}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition capitalize ${
+                    className={`min-h-[36px] px-3 py-1.5 rounded-lg text-xs font-medium border transition capitalize ${
                       active
                         ? "bg-brand-950 text-brand-300 border-brand-700 font-semibold"
                         : "bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-700"
@@ -405,7 +405,7 @@ export default function OpportunityCatalog({
                       setCompensationType(next);
                       applyFilters({ compensation_type: next });
                     }}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition capitalize ${
+                    className={`min-h-[36px] px-3 py-1.5 rounded-lg text-xs font-medium border transition capitalize ${
                       active
                         ? "bg-brand-950 text-brand-300 border-brand-700 font-semibold"
                         : "bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-700"
@@ -435,7 +435,7 @@ export default function OpportunityCatalog({
                       setVerificationStatus(next);
                       applyFilters({ verification_status: next });
                     }}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-medium border transition capitalize ${
+                    className={`min-h-[36px] px-3 py-1.5 rounded-lg text-xs font-medium border transition capitalize ${
                       active
                         ? "bg-brand-950 text-brand-300 border-brand-700 font-semibold"
                         : "bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-700"

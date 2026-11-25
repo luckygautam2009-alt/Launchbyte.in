@@ -225,8 +225,8 @@ export default function CosmicExplorerSection() {
             />
           </div>
 
-          {/* 2. Dynamic Interactive Category Labels Traveling along the Orbital Ring */}
-          <div className="absolute inset-0 w-full h-full pointer-events-none">
+          {/* 2. Dynamic Interactive Category Labels Traveling along the Orbital Ring (Tablet/Desktop md+) */}
+          <div className="hidden md:block absolute inset-0 w-full h-full pointer-events-none">
             {CATEGORIES.map((cat, index) => {
               // Calculate parametric orbital angle evenly distributed along 360°
               const baseAngle = (index / CATEGORIES.length) * Math.PI * 2;
@@ -352,6 +352,26 @@ export default function CosmicExplorerSection() {
             })}
           </div>
         </div>
+      </div>
+
+      {/* 3. Mobile Tap-Friendly Orbital Category Pills (< 768px) */}
+      <div className="md:hidden relative z-30 w-full max-w-lg mx-auto px-4 mt-4 grid grid-cols-2 gap-2.5">
+        {CATEGORIES.map((cat) => (
+          <Link
+            key={cat.id}
+            href={cat.href}
+            aria-label={`Explore ${cat.label} on LaunchByte`}
+            className="min-h-[44px] flex items-center gap-2 px-3 py-2.5 rounded-xl bg-[#09091B]/80 border border-white/10 active:border-cyan-400/60 hover:border-cyan-400/50 transition-colors"
+          >
+            <span
+              className="w-2 h-2 rounded-full shrink-0"
+              style={{ backgroundColor: cat.color, boxShadow: `0 0 8px ${cat.color}` }}
+            />
+            <span className="font-mono text-[11px] font-semibold tracking-wider text-slate-100 truncate">
+              {cat.label}
+            </span>
+          </Link>
+        ))}
       </div>
 
       {/* Bottom Gradient Blend into Next Section */}

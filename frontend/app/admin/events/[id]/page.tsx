@@ -266,17 +266,17 @@ export default function AdminEventDetailPage() {
         <section className="bg-slate-900/60 border border-slate-800 rounded-2xl overflow-hidden">
           <div className="p-5 border-b border-slate-800 flex items-center justify-between gap-4 flex-wrap">
             <h2 className="text-lg font-semibold text-white">Attendees</h2>
-            <div className="flex items-center gap-2 flex-wrap">
-              <div className="relative">
+            <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
+              <div className="relative flex-1 sm:flex-none">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500" />
                 <input
                   type="text" placeholder="Search..." value={searchQ}
                   onChange={(e) => { setSearchQ(e.target.value); setRegOffset(0); }}
-                  className="pl-9 pr-3 py-1.5 bg-slate-800 border border-slate-700 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 w-40"
+                  className="pl-9 pr-3 py-2 bg-slate-800 border border-slate-700 rounded-xl text-base md:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 w-full sm:w-48 min-h-[44px]"
                 />
               </div>
               <button onClick={handleCSV}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 border border-slate-700 text-slate-300 hover:border-slate-500 rounded-xl text-xs font-medium transition-colors">
+                className="min-h-[44px] flex items-center gap-1.5 px-3.5 py-2 bg-slate-800 border border-slate-700 text-slate-300 hover:border-slate-500 rounded-xl text-xs font-medium transition-colors">
                 <Download className="w-3.5 h-3.5" /> CSV
               </button>
             </div>
@@ -285,7 +285,7 @@ export default function AdminEventDetailPage() {
           <div className="px-5 py-2 border-b border-slate-800 flex gap-2 overflow-x-auto scrollbar-none">
             {(["", "registered", "waitlisted", "pending_approval", "checked_in", "cancelled"] as const).map((s) => (
               <button key={s} onClick={() => { setStatusFilter(s); setRegOffset(0); }}
-                className={`whitespace-nowrap px-3 py-1 rounded-lg text-xs font-medium transition-colors ${statusFilter === s ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white"}`}>
+                className={`min-h-[36px] whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${statusFilter === s ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white"}`}>
                 {s === "" ? "All" : s.replace(/_/g, " ")}
               </button>
             ))}
@@ -296,8 +296,56 @@ export default function AdminEventDetailPage() {
           ) : registrations.length === 0 ? (
             <div className="p-8 text-center text-slate-500 text-sm">No attendees yet.</div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+            <>
+              {/* Mobile Compact Attendee Card List (< 768px) */}
+              <div className="md:hidden divide-y divide-slate-800/70">
+                {registrations.map((reg) => (
+                  <div key={reg.id} className="p-4 space-y-2.5">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0">
+                        <p className="text-white font-medium text-sm truncate">{reg.user?.full_name || "—"}</p>
+                        <p className="text-xs text-slate-400 truncate">{reg.user?.email}</p>
+                      </div>
+                      <span className={`shrink-0 inline-flex items-center text-[11px] font-medium px-2 py-0.5 rounded-full border ${STATUS_BADGE[reg.status] || ""}`}>
+                        {reg.status.replace(/_/g, " ")}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs text-slate-400">
+                      <span className="font-mono">{reg.registration_code}</span>
+                      <span>{new Date(reg.registered_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
+                    </div>
+                    {(reg.status === "pending_approval" || reg.status === "checked_in") && (
+                      <div className="flex items-center gap-2 pt-1">
+                        {reg.status === "pending_approval" && (
+                          <>
+                            <button onClick={() => handleRegAction(reg.id, "approve")}
+                              disabled={actionLoading === reg.id + "approve"}
+                              className="flex-1 min-h-[40px] flex items-center justify-center gap-1.5 text-xs font-medium text-green-400 bg-green-500/10 border border-green-500/25 rounded-xl">
+                              <CheckCircle2 className="w-3.5 h-3.5" /> Approve
+                            </button>
+                            <button onClick={() => handleRegAction(reg.id, "reject")}
+                              disabled={actionLoading === reg.id + "reject"}
+                              className="flex-1 min-h-[40px] flex items-center justify-center gap-1.5 text-xs font-medium text-red-400 bg-red-500/10 border border-red-500/25 rounded-xl">
+                              <XCircle className="w-3.5 h-3.5" /> Reject
+                            </button>
+                          </>
+                        )}
+                        {reg.status === "checked_in" && (
+                          <button onClick={() => handleRegAction(reg.id, "undo-check-in")}
+                            disabled={actionLoading === reg.id + "undo-check-in"}
+                            className="min-h-[40px] px-3 flex items-center justify-center gap-1.5 text-xs font-medium text-amber-400 bg-amber-500/10 border border-amber-500/25 rounded-xl">
+                            <RefreshCw className="w-3.5 h-3.5" /> Undo Check-in
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop Table (md+) */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-slate-800 text-xs text-slate-500 uppercase tracking-wide">
                     <th className="text-left px-5 py-3">Attendee</th>
@@ -360,7 +408,8 @@ export default function AdminEventDetailPage() {
                   ))}
                 </tbody>
               </table>
-            </div>
+              </div>
+            </>
           )}
 
           {regTotal > REG_LIMIT && (
