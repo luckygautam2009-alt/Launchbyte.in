@@ -67,6 +67,7 @@ export interface CoreTeamMember {
   linkedin?: string;
   github?: string;
   portfolio?: string;
+  instagram?: string;
   twitter?: string;
   highlights?: TeamHighlight[];
   skills?: string[];
@@ -276,7 +277,7 @@ export const SITE_CONTENT = {
     },
   ] as CompanyValue[],
 
-  // 8. Core Team (Exactly 4 members — Saumya removed)
+  // 8. Core Team (5 Members in Canonical Order)
   coreTeam: [
     {
       name: "Yash Gautam",
@@ -311,6 +312,19 @@ export const SITE_CONTENT = {
       ],
     },
     {
+      name: "Shobhit Srivastava",
+      role: "Co-Founder",
+      bio: "Co-founding partner driving operational alignment, product strategy, and organizational execution across LaunchByte initiatives.",
+      photo: "/team/shobhit.jpg",
+      linkedin: "https://www.linkedin.com/in/shobhit-srivastava-7842083b9/",
+      focus: [
+        "Product Strategy",
+        "Operations",
+        "Team Execution",
+        "Ecosystem Growth",
+      ],
+    },
+    {
       name: "Vidhyansh Rajput",
       role: "Head of Community & Event Management",
       bio: "Responsible for community building, event coordination, participant engagement, and event operations across LaunchByte.",
@@ -325,19 +339,6 @@ export const SITE_CONTENT = {
       ],
     },
     {
-      name: "Shobhit Srivastava",
-      role: "Co-Founder",
-      bio: "Co-founding partner driving operational alignment, product strategy, and organizational execution across LaunchByte initiatives.",
-      photo: "/team/shobhit.jpg",
-      linkedin: "https://www.linkedin.com/in/shobhit-srivastava-7842083b9/",
-      focus: [
-        "Product Strategy",
-        "Operations",
-        "Team Execution",
-        "Ecosystem Growth",
-      ],
-    },
-    {
       name: "Sreyansh Dixit",
       role: "Technical Head",
       bio: "Leading technical direction, engineering execution, platform development, and technical coordination.",
@@ -348,6 +349,21 @@ export const SITE_CONTENT = {
         "Engineering Execution",
         "Platform Development",
         "Technical Coordination",
+      ],
+    },
+    {
+      name: "Saumya Bhardwaj",
+      role: "Social Media & Coverage",
+      bio: "Managing LaunchByte's social media presence, Instagram content strategy, community event coverage, and digital outreach.",
+      photo: "/team/saumya-bhardwaj.jpg",
+      // Configurable URLs (leave empty until provided — hidden automatically if empty)
+      linkedin: "",
+      instagram: "",
+      focus: [
+        "Social Media Management",
+        "Event Coverage",
+        "Content Strategy",
+        "Digital Outreach",
       ],
     },
   ] as CoreTeamMember[],

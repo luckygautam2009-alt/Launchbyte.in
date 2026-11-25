@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Mail, Send, CheckCircle2, Building, AlertCircle, Loader2 } from "lucide-react";
+import { Mail, Send, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 import { Reveal, MagneticButton } from "./HomeMotion";
 import { LAUNCHBYTE_SOCIALS } from "@/lib/siteContent";
 
@@ -56,17 +56,12 @@ export default function PartnerContactSection() {
   };
 
   return (
-    <section className="relative py-20 sm:py-28 bg-[#050510] overflow-hidden">
-      <div className="absolute inset-0 bg-space-grid opacity-20 pointer-events-none" />
+    <section className="relative py-16 sm:py-24 bg-transparent overflow-hidden">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gradient-to-r from-violet-600/10 via-cyan-500/10 to-indigo-600/10 rounded-full blur-[130px] pointer-events-none" />
 
-      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <Reveal>
           <div className="text-center space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-violet-950/60 border border-violet-500/30 text-xs font-mono uppercase tracking-widest text-[#A78BFA] backdrop-blur-md">
-              <Building className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Partner & Contact</span>
-            </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight">
               Partner with LaunchByte
             </h2>

@@ -13,7 +13,6 @@ import {
   ArrowRight,
   PlusCircle,
 } from "lucide-react";
-import SectionEyebrow from "@/components/ui/SectionEyebrow";
 import RevealHeading from "@/components/ui/RevealHeading";
 import TiltCard from "@/components/ui/TiltCard";
 import { Reveal, MagneticButton } from "./HomeMotion";
@@ -194,27 +193,25 @@ export default function ExploreCategoriesSection() {
       title: "Community Network",
       subtitle: "Builder Network",
       description:
-        "Network with over 10,000 student developers, share code reviews, exchange ideas, and find lifelong collaborators.",
+        "Connect with student developers, share code reviews, exchange ideas, and find collaborators.",
       href: "/network",
       icon: Users,
       accentColor: "#EC4899", // Rose
-      tag: "10K+ Peers",
+      tag: "Community",
       spanClass: "lg:col-span-6",
     },
   ];
 
   return (
-    <section className="relative py-20 sm:py-28 bg-[#050510] overflow-hidden">
+    <section className="relative py-16 sm:py-24 bg-transparent overflow-hidden">
       {/* Background Ambience */}
-      <div className="absolute inset-0 bg-space-grid opacity-20 pointer-events-none" />
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-violet-900/10 rounded-full blur-[120px] pointer-events-none" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Section Header */}
         <Reveal>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="space-y-3 max-w-2xl">
-              <SectionEyebrow stage="EXPLORE DOMAINS" />
               <RevealHeading
                 text="What You Can Explore"
                 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight"

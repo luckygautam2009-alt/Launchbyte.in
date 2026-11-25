@@ -1,138 +1,198 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useRef } from "react";
 
-interface Particle {
-  id: number;
+interface StarSpec {
   x: number;
   y: number;
-  size: number;
-  duration: number;
-  delay: number;
-  opacity: number;
+  r: number;
+  layer: 1 | 2 | 3;
+  baseAlpha: number;
+  phase: number;
+  speed: number;
+  driftY: number;
   color: string;
 }
 
-interface Mote {
-  id: number;
-  x: number;
-  y: number;
-  size: number;
-  duration: number;
-  delay: number;
-  color: string;
-}
-
+/**
+ * Single reusable global animated galaxy & star atmosphere.
+ * Renders 3 subtle depth layers (Distant Stars, Mid-Depth Stars, Near Particles)
+ * on one lightweight canvas with pointer-events: none behind page content.
+ * Automatically pauses when tab is hidden and renders statically under prefers-reduced-motion.
+ */
 export default function GlobalCosmicParticles() {
-  const [mounted, setMounted] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    setMounted(true);
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-  const particles: Particle[] = useMemo(() => {
-    if (!mounted) return [];
-    const count = isMobile ? 40 : 90;
-    const colors = ["#FFFFFF", "#DDD6FE", "#BAE6FD", "#C084FC", "#A78BFA"];
-    const items: Particle[] = [];
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let reduceMotion = motionQuery.matches;
+    let isMobile = window.innerWidth < 768;
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    let scrollY = window.scrollY;
+    let rafId = 0;
+    let stars: StarSpec[] = [];
 
-    for (let i = 0; i < count; i++) {
-      const s1 = ((i * 9301 + 49297) % 233280) / 233280;
-      const s2 = ((i * 49297 + 9301) % 233280) / 233280;
-      const s3 = ((i * 12345 + 67891) % 233280) / 233280;
-      const s4 = ((i * 54321 + 19876) % 233280) / 233280;
+    const buildStars = () => {
+      stars = [];
+      const layer1Count = isMobile ? 28 : 60; // Distant stars
+      const layer2Count = isMobile ? 8 : 22;  // Mid-depth stars
+      const layer3Count = isMobile ? 3 : 8;   // Near subtle light points
 
-      items.push({
-        id: i,
-        x: Math.round(s1 * 98 + 1), // 1% to 99%
-        y: Math.round(s2 * 98 + 1), // 1% to 99%
-        size: s3 > 0.88 ? 2.5 : s3 > 0.5 ? 1.8 : 1.1,
-        duration: 2.5 + s4 * 3.5, // 2.5s to 6.0s
-        delay: s1 * 4, // 0 to 4s
-        opacity: 0.35 + s3 * 0.45,
-        color: colors[Math.floor(s4 * colors.length)],
-      });
+      const distantColors = ["#FFFFFF", "#E2E8F0", "#DDD6FE"];
+      const midColors = ["#DDD6FE", "#BAE6FD", "#A78BFA", "#FFFFFF"];
+      const nearColors = ["#8B5CF6", "#6366F1", "#22D3EE"];
+
+      const addLayer = (
+        count: number,
+        layer: 1 | 2 | 3,
+        rMin: number,
+        rMax: number,
+        aMin: number,
+        aMax: number,
+        palette: string[],
+        drift: number
+      ) => {
+        for (let i = 0; i < count; i++) {
+          const s1 = ((i * 9301 + 49297 + layer * 7919) % 233280) / 233280;
+          const s2 = ((i * 49297 + 9301 + layer * 3571) % 233280) / 233280;
+          const s3 = ((i * 12345 + 67891 + layer * 1049) % 233280) / 233280;
+          stars.push({
+            x: s1,
+            y: s2,
+            r: rMin + s3 * (rMax - rMin),
+            layer,
+            baseAlpha: aMin + s3 * (aMax - aMin),
+            phase: s1 * Math.PI * 2,
+            speed: 0.35 + s2 * 0.65,
+            driftY: drift * (0.6 + s3 * 0.8),
+            color: palette[i % palette.length],
+          });
+        }
+      };
+
+      addLayer(layer1Count, 1, 0.55, 1.05, 0.16, 0.42, distantColors, 0);
+      addLayer(layer2Count, 2, 1.05, 1.65, 0.25, 0.55, midColors, 0.002);
+      addLayer(layer3Count, 3, 1.6, 2.3, 0.18, 0.38, nearColors, 0.005);
+    };
+
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      isMobile = width < 768;
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      buildStars();
+      if (reduceMotion) drawFrame(0);
+    };
+
+    const drawFrame = (timeSec: number) => {
+      ctx.clearRect(0, 0, width, height);
+
+      for (let i = 0; i < stars.length; i++) {
+        const s = stars[i];
+        const px = s.x * width;
+        const parallax = !reduceMotion && !isMobile ? (s.layer === 2 ? 0.035 : s.layer === 3 ? 0.065 : 0) : 0;
+        const driftOffset = !reduceMotion ? timeSec * s.driftY * height : 0;
+        const rawY = s.y * height - scrollY * parallax - driftOffset;
+        const py = ((rawY % height) + height) % height;
+
+        const twinkle = reduceMotion
+          ? 1
+          : 0.65 + 0.35 * Math.sin(timeSec * s.speed + s.phase);
+        const alpha = s.baseAlpha * twinkle;
+
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = s.color;
+
+        if (s.layer === 3) {
+          ctx.shadowBlur = 10;
+          ctx.shadowColor = s.color;
+        } else {
+          ctx.shadowBlur = 0;
+        }
+
+        ctx.beginPath();
+        ctx.arc(px, py, s.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.shadowBlur = 0;
+      ctx.globalAlpha = 1;
+    };
+
+    let startMs = performance.now();
+    const tick = (now: number) => {
+      if (document.hidden || reduceMotion) return;
+      const elapsedSec = (now - startMs) / 1000;
+      drawFrame(elapsedSec);
+      rafId = requestAnimationFrame(tick);
+    };
+
+    const onScroll = () => {
+      scrollY = window.scrollY;
+      if (reduceMotion) drawFrame(0);
+    };
+
+    const onVisibility = () => {
+      cancelAnimationFrame(rafId);
+      if (!document.hidden && !reduceMotion) {
+        startMs = performance.now();
+        rafId = requestAnimationFrame(tick);
+      }
+    };
+
+    const onMotionChange = (e: MediaQueryListEvent) => {
+      reduceMotion = e.matches;
+      cancelAnimationFrame(rafId);
+      drawFrame(0);
+      if (!reduceMotion && !document.hidden) {
+        startMs = performance.now();
+        rafId = requestAnimationFrame(tick);
+      }
+    };
+
+    resize();
+    if (reduceMotion) {
+      drawFrame(0);
+    } else if (!document.hidden) {
+      rafId = requestAnimationFrame(tick);
     }
-    return items;
-  }, [mounted, isMobile]);
 
-  const motes: Mote[] = useMemo(() => {
-    if (!mounted || isMobile) return [];
-    return [
-      { id: 1, x: 12, y: 80, size: 3.5, duration: 14, delay: 0, color: "#8B5CF6" },
-      { id: 2, x: 28, y: 88, size: 2.5, duration: 18, delay: 2, color: "#22D3EE" },
-      { id: 3, x: 48, y: 75, size: 3.0, duration: 16, delay: 5, color: "#C084FC" },
-      { id: 4, x: 68, y: 85, size: 3.2, duration: 15, delay: 1, color: "#818CF8" },
-      { id: 5, x: 84, y: 78, size: 2.8, duration: 17, delay: 4, color: "#A78BFA" },
-      { id: 6, x: 92, y: 92, size: 3.0, duration: 19, delay: 3, color: "#38BDF8" },
-    ];
-  }, [mounted, isMobile]);
+    window.addEventListener("resize", resize, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    document.addEventListener("visibilitychange", onVisibility);
+    motionQuery.addEventListener("change", onMotionChange);
 
-  if (!mounted) return null;
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("scroll", onScroll);
+      document.removeEventListener("visibilitychange", onVisibility);
+      motionQuery.removeEventListener("change", onMotionChange);
+    };
+  }, []);
 
   return (
     <div
       aria-hidden="true"
-      className="fixed inset-0 pointer-events-none select-none z-0 overflow-hidden"
+      className="fixed inset-0 pointer-events-none select-none z-[1] overflow-hidden"
     >
-      {/* Ambient background stars */}
-      {particles.map((p) => (
-        <div
-          key={p.id}
-          className="absolute rounded-full"
-          style={{
-            left: `${p.x}%`,
-            top: `${p.y}%`,
-            width: `${p.size}px`,
-            height: `${p.size}px`,
-            backgroundColor: p.color,
-            boxShadow: `0 0 ${p.size * 2}px ${p.color}`,
-            animation: `star-twinkle ${p.duration}s ease-in-out ${p.delay}s infinite`,
-            opacity: p.opacity,
-          }}
-        />
-      ))}
+      {/* Subtle Static Violet/Indigo Nebula Ambient Wash */}
+      <div className="absolute -top-40 -left-40 w-[680px] h-[680px] rounded-full bg-violet-950/20 blur-[160px]" />
+      <div className="absolute top-1/3 -right-40 w-[620px] h-[620px] rounded-full bg-indigo-950/20 blur-[160px]" />
+      <div className="absolute -bottom-40 left-1/4 w-[650px] h-[500px] rounded-full bg-cyan-950/12 blur-[170px]" />
 
-      {/* Floating upward cosmic dust motes */}
-      {motes.map((m) => (
-        <div
-          key={m.id}
-          className="absolute rounded-full blur-[0.5px]"
-          style={{
-            left: `${m.x}%`,
-            top: `${m.y}%`,
-            width: `${m.size}px`,
-            height: `${m.size}px`,
-            backgroundColor: m.color,
-            boxShadow: `0 0 12px ${m.color}`,
-            animation: `float-up ${m.duration}s ease-in-out ${m.delay}s infinite`,
-          }}
-        />
-      ))}
-
-      <style jsx>{`
-        @keyframes float-up {
-          0% {
-            transform: translateY(0) scale(0.8);
-            opacity: 0;
-          }
-          20% {
-            opacity: 0.6;
-          }
-          80% {
-            opacity: 0.6;
-          }
-          100% {
-            transform: translateY(-160px) scale(1.1);
-            opacity: 0;
-          }
-        }
-      `}</style>
+      {/* 3-Layer Starfield Canvas */}
+      <canvas ref={canvasRef} className="w-full h-full block" />
     </div>
   );
 }

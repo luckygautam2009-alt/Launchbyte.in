@@ -2,7 +2,7 @@
 
 import React from "react";
 import { SITE_CONTENT, DeveloperCommunity } from "@/lib/siteContent";
-import { ExternalLink } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { Reveal } from "./HomeMotion";
 
 export default function PartnersLogoRow() {
@@ -13,54 +13,51 @@ export default function PartnersLogoRow() {
   }
 
   return (
-    <section className="relative py-16 sm:py-20 bg-[#050510] overflow-hidden">
-      <div className="absolute inset-0 bg-space-grid opacity-15 pointer-events-none" />
-
-      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <section className="relative py-16 sm:py-24 bg-transparent overflow-hidden">
+      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 text-center">
         <Reveal>
-          <div className="text-center space-y-2">
-            <span className="text-xs font-mono uppercase tracking-widest text-violet-400 font-semibold block">
-              Ecosystem
-            </span>
-            <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#F8FAFC]">
-              Developer Communities
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto">
-              Communities building together across campus chapters and technical collectives.
+          <div className="space-y-3">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#F8FAFC] tracking-tight">
+              Connected Communities
+            </h2>
+            <p className="text-sm sm:text-base text-slate-400 max-w-xl mx-auto">
+              Discover communities contributing to India&apos;s growing developer ecosystem.
             </p>
           </div>
         </Reveal>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-          {communities.map((c, idx) => (
-            <Reveal key={c.id} delay={0.05 * idx}>
-              <a
-                href={c.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Visit ${c.name} official website`}
-                className="group h-full p-5 rounded-2xl glass-card glow-hover border border-white/[0.08] hover:border-cyan-400/40 flex flex-col justify-between gap-3 transition-all duration-300"
-              >
-                <div className="space-y-1.5">
-                  <div className="flex items-start justify-between gap-2">
-                    <span className="text-sm font-bold text-slate-100 group-hover:text-white leading-snug">
-                      {c.name}
-                    </span>
-                    <ExternalLink className="w-3.5 h-3.5 text-slate-500 group-hover:text-cyan-300 shrink-0 mt-0.5 transition-colors" />
-                  </div>
-                  {c.shortLabel && (
-                    <span className="text-[11px] font-mono text-slate-400 block">
-                      {c.shortLabel}
-                    </span>
-                  )}
-                </div>
-                <span className="text-[11px] font-mono text-cyan-400/80 group-hover:text-cyan-300 transition-colors">
-                  Visit Website →
-                </span>
-              </a>
-            </Reveal>
-          ))}
-        </div>
+        {/* Restrained Editorial Horizontal Layout — Elegant Text Links (No Boxed Cards or Fake Logos) */}
+        <Reveal delay={0.08}>
+          <nav
+            aria-label="Connected Developer Communities"
+            className="flex flex-wrap items-center justify-center gap-x-6 sm:gap-x-10 gap-y-4 pt-2 border-y border-white/[0.06] py-8"
+          >
+            {communities.map((c, idx) => (
+              <React.Fragment key={c.id}>
+                {idx > 0 && (
+                  <span
+                    aria-hidden="true"
+                    className="hidden sm:inline text-slate-700 font-light select-none"
+                  >
+                    /
+                  </span>
+                )}
+                <a
+                  href={c.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Visit ${c.name} official website`}
+                  className="group inline-flex items-center gap-1.5 text-sm sm:text-base font-medium text-slate-300 hover:text-cyan-300 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 rounded-md px-1 py-0.5"
+                >
+                  <span className="border-b border-transparent group-hover:border-cyan-400/50 transition-colors">
+                    {c.name}
+                  </span>
+                  <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-cyan-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
+                </a>
+              </React.Fragment>
+            ))}
+          </nav>
+        </Reveal>
       </div>
     </section>
   );

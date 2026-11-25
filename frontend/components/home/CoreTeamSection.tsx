@@ -10,9 +10,8 @@ import {
 import { api } from "@/lib/api";
 import { TeamMember } from "@/lib/types";
 import { SITE_CONTENT, CoreTeamMember } from "@/lib/siteContent";
-import SectionEyebrow from "@/components/ui/SectionEyebrow";
 import RevealHeading from "@/components/ui/RevealHeading";
-import { Linkedin, Github, Twitter, Globe } from "lucide-react";
+import { Linkedin, Github, Twitter, Globe, Instagram } from "lucide-react";
 
 interface TeamPortraitFrameProps {
   member: CoreTeamMember;
@@ -206,16 +205,9 @@ function TeamMemberBlock({
           transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
           className="w-full lg:w-[50%] space-y-6 text-left"
         >
-          {/* Top Eyebrow Tag */}
-          <div className="flex items-center gap-3">
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_8px_#22d3ee]" />
-            <span className="font-mono text-xs uppercase tracking-widest text-cyan-400/90 font-semibold">
-              {memberTag}
-            </span>
-            <span className="text-slate-600 font-mono text-xs">•</span>
-            <span className="font-mono text-[11px] uppercase tracking-wider text-slate-400 font-medium">
-              FOUNDING TEAM
-            </span>
+          {/* Subtle Numeric Index */}
+          <div className="font-mono text-xs uppercase tracking-widest text-cyan-400/90 font-semibold">
+            {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
           </div>
 
           {/* Name & Role */}
@@ -304,7 +296,7 @@ function TeamMemberBlock({
           )}
 
           {/* Social Links (Rendered ONLY when valid URLs exist) */}
-          {(member.linkedin || member.github || member.portfolio || member.twitter) && (
+          {(member.linkedin || member.github || member.portfolio || member.instagram || member.twitter) && (
             <div className="pt-3 flex items-center gap-3">
               {member.linkedin && member.linkedin.startsWith("http") && (
                 <a
@@ -340,6 +332,18 @@ function TeamMemberBlock({
                   className="p-2.5 rounded-xl bg-violet-950/40 border border-violet-500/25 text-slate-400 hover:text-cyan-300 hover:border-cyan-400/50 hover:bg-violet-900/40 transition-all duration-200"
                 >
                   <Globe className="w-4 h-4" />
+                </a>
+              )}
+              {member.instagram && member.instagram.startsWith("http") && (
+                <a
+                  href={member.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${member.name}'s Instagram profile`}
+                  title="Instagram"
+                  className="p-2.5 rounded-xl bg-violet-950/40 border border-violet-500/25 text-slate-400 hover:text-cyan-300 hover:border-cyan-400/50 hover:bg-violet-900/40 transition-all duration-200"
+                >
+                  <Instagram className="w-4 h-4" />
                 </a>
               )}
               {member.twitter && member.twitter.startsWith("http") && (
@@ -423,20 +427,14 @@ export default function CoreTeamSection({
   return (
     <section
       data-hide-journey="true"
-      className="relative py-24 sm:py-32 bg-[#050510] overflow-hidden"
+      className="relative py-20 sm:py-28 bg-transparent overflow-hidden"
     >
       {/* Background Cosmic Ambience */}
-      <div className="absolute inset-0 bg-space-grid opacity-15 pointer-events-none" />
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[900px] h-[550px] bg-gradient-to-r from-violet-900/15 via-indigo-900/10 to-cyan-900/15 rounded-full blur-[170px] pointer-events-none" />
       <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-to-r from-cyan-900/10 via-violet-900/10 to-indigo-900/10 rounded-full blur-[170px] pointer-events-none" />
 
       {/* Section Top Header */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-20 text-center space-y-4">
-        {showEyebrow && (
-          <div className="flex justify-center">
-            <SectionEyebrow stage="LEADERSHIP // FOUNDING TEAM" accentColor="cyan" />
-          </div>
-        )}
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 sm:pb-14 text-center space-y-4">
         <RevealHeading
           text={title}
           className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight"

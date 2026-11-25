@@ -15,7 +15,6 @@ import {
   Compass,
   CheckCircle2,
 } from "lucide-react";
-import SectionEyebrow from "@/components/ui/SectionEyebrow";
 import RevealHeading from "@/components/ui/RevealHeading";
 import { Reveal, MagneticButton } from "./HomeMotion";
 import { LAUNCHBYTE_SOCIALS } from "@/lib/siteContent";
@@ -62,23 +61,14 @@ export default function CommunityNetworkSection() {
   ];
 
   return (
-    <section className="relative py-24 sm:py-32 bg-[#050510] overflow-hidden select-none">
+    <section className="relative py-16 sm:py-24 bg-transparent overflow-hidden select-none">
       {/* Background Cosmic Atmosphere */}
-      <div className="absolute inset-0 bg-space-grid opacity-15 pointer-events-none" />
       <div className="absolute top-1/4 left-1/4 w-[600px] h-[450px] bg-gradient-to-tr from-violet-900/20 via-indigo-900/15 to-transparent rounded-full blur-[160px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[400px] bg-gradient-to-bl from-cyan-950/20 via-violet-950/20 to-transparent rounded-full blur-[150px] pointer-events-none" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 lg:space-y-20">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14 lg:space-y-16">
         {/* ================= SECTION HEADER ================= */}
         <div className="max-w-3xl mx-auto text-center space-y-4">
-          <div className="hidden md:flex justify-center">
-            <SectionEyebrow
-              stage="BUILDER COMMUNITY"
-              badge="Connect & Ship"
-              accentColor="violet"
-            />
-          </div>
-
           <RevealHeading
             text="Build Something Bigger Than Yourself."
             className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-[#F8FAFC] tracking-tight leading-[1.12]"
@@ -90,7 +80,7 @@ export default function CommunityNetworkSection() {
           </p>
 
           {/* Micro Brand Ethos Strip */}
-          <div className="inline-flex items-center gap-3 pt-2 text-xs font-mono font-semibold tracking-widest uppercase text-cyan-400">
+          <div className="inline-flex items-center gap-3 pt-1 text-xs font-mono font-semibold tracking-widest uppercase text-cyan-400">
             <span>BUILD</span>
             <span className="text-violet-500">•</span>
             <span>COLLABORATE</span>

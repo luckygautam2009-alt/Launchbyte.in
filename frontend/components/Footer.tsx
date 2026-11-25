@@ -1,37 +1,40 @@
 import React from "react";
 import Link from "next/link";
-import { Sparkles, Linkedin, Instagram, MessageCircle, Mail } from "lucide-react";
+import Image from "next/image";
+import { Linkedin, Instagram, MessageCircle, Mail } from "lucide-react";
 import { LAUNCHBYTE_SOCIALS } from "@/lib/siteContent";
 
 export default function Footer() {
   return (
-    <footer className="relative border-t border-violet-900/30 bg-[#050510] text-slate-400 text-sm py-14 overflow-hidden">
-      {/* Top Hairline Glowing Gradient Accent */}
-      <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-violet-500/50 to-transparent pointer-events-none" />
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-32 bg-violet-600/5 rounded-full blur-3xl pointer-events-none" />
+    <footer className="relative z-10 border-t border-violet-900/30 bg-[#050510]/85 backdrop-blur-md text-slate-400 text-sm py-14 overflow-hidden">
+      <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-violet-500/40 to-transparent pointer-events-none" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 pb-8 border-b border-violet-900/20">
+          {/* Official Logo & Short Description */}
           <div className="md:col-span-2 space-y-4">
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-[#4F46E5] to-[#8B5CF6] flex items-center justify-center text-white shadow-md shadow-violet-500/25 group-hover:scale-105 transition-transform">
-                <Sparkles className="w-4 h-4 text-cyan-200" />
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500 rounded-lg py-1"
+              aria-label="LaunchByte Home"
+            >
+              <div className="relative h-10 w-auto aspect-[1024/939] flex items-center justify-center">
+                <Image
+                  src="/brand/launchbyte-navbar-logo.png"
+                  alt="LaunchByte Logo"
+                  width={1024}
+                  height={939}
+                  className="h-full w-auto object-contain select-none filter drop-shadow-[0_0_12px_rgba(139,92,246,0.3)]"
+                />
               </div>
-              <span className="font-bold text-lg text-white">
-                Launch<span className="text-[#A78BFA]">Byte</span>
-              </span>
             </Link>
             <p className="text-slate-400 max-w-sm text-xs sm:text-sm leading-relaxed">
-              The high-trust discovery and hosting platform for hackathons, fellowships,
-              internships, and workshops. Built to beat traditional platforms on speed,
-              authenticity, and transparency.
+              A student-driven technology platform for discovering verified hackathons,
+              fellowships, internships, and building alongside real developers.
             </p>
-            <div className="flex items-center gap-2 text-xs font-mono text-slate-500">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#10B981]" />
-              <span>All Systems Operational // Sector 01.LB</span>
-            </div>
           </div>
 
+          {/* Important Navigation Links */}
           <div>
             <h4 className="font-semibold text-white mb-3 text-sm tracking-wide">Explore</h4>
             <ul className="space-y-2 text-xs sm:text-sm">
@@ -42,7 +45,12 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/hackathons" className="text-slate-400 hover:text-white transition">
-                  Hackathons & Sprints
+                  Hackathons
+                </Link>
+              </li>
+              <li>
+                <Link href="/host" className="text-slate-400 hover:text-white transition">
+                  Host an Event
                 </Link>
               </li>
               <li>
@@ -51,28 +59,24 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/network" className="text-slate-400 hover:text-white transition">
-                  Builder Network
-                </Link>
-              </li>
-              <li>
                 <Link href="/about" className="text-slate-400 hover:text-white transition">
-                  About & Team
+                  About &amp; Core Team
                 </Link>
               </li>
             </ul>
           </div>
 
+          {/* Compact Social Media & Contact Group */}
           <div>
-            <h4 className="font-semibold text-white mb-3 text-sm tracking-wide">Community & Socials</h4>
-            <div className="flex flex-wrap gap-2.5 text-slate-400">
+            <h4 className="font-semibold text-white mb-3 text-sm tracking-wide">Connect</h4>
+            <div className="flex items-center gap-2.5 text-slate-400">
               <a
                 href={LAUNCHBYTE_SOCIALS.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="LaunchByte LinkedIn"
+                aria-label="LaunchByte on LinkedIn"
                 title="LinkedIn"
-                className="w-9 h-9 rounded-xl bg-[#09091B] border border-slate-800 flex items-center justify-center hover:text-white hover:border-violet-500/40 hover:bg-violet-950/40 transition glow-hover"
+                className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 flex items-center justify-center hover:text-white hover:border-violet-400/50 transition-colors"
               >
                 <Linkedin className="w-4 h-4" />
               </a>
@@ -80,9 +84,9 @@ export default function Footer() {
                 href={LAUNCHBYTE_SOCIALS.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="LaunchByte Instagram"
+                aria-label="LaunchByte on Instagram"
                 title="Instagram"
-                className="w-9 h-9 rounded-xl bg-[#09091B] border border-slate-800 flex items-center justify-center hover:text-white hover:border-violet-500/40 hover:bg-violet-950/40 transition glow-hover"
+                className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 flex items-center justify-center hover:text-white hover:border-violet-400/50 transition-colors"
               >
                 <Instagram className="w-4 h-4" />
               </a>
@@ -92,7 +96,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 aria-label="LaunchByte WhatsApp Community"
                 title="WhatsApp Community"
-                className="w-9 h-9 rounded-xl bg-[#09091B] border border-slate-800 flex items-center justify-center hover:text-emerald-300 hover:border-emerald-500/40 hover:bg-emerald-950/30 transition glow-hover"
+                className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 flex items-center justify-center hover:text-emerald-300 hover:border-emerald-400/50 transition-colors"
               >
                 <MessageCircle className="w-4 h-4" />
               </a>
@@ -100,40 +104,30 @@ export default function Footer() {
                 href={`mailto:${LAUNCHBYTE_SOCIALS.email}`}
                 aria-label="Email LaunchByte"
                 title={LAUNCHBYTE_SOCIALS.email}
-                className="w-9 h-9 rounded-xl bg-[#09091B] border border-slate-800 flex items-center justify-center hover:text-cyan-300 hover:border-cyan-500/40 hover:bg-cyan-950/30 transition glow-hover"
+                className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/10 flex items-center justify-center hover:text-cyan-300 hover:border-cyan-400/50 transition-colors"
               >
                 <Mail className="w-4 h-4" />
               </a>
             </div>
-            <p className="text-[11px] text-slate-400 mt-3 leading-relaxed">
-              Official inbox:{" "}
-              <a href={`mailto:${LAUNCHBYTE_SOCIALS.email}`} className="text-cyan-300 hover:underline">
+            <p className="text-xs text-slate-400 mt-3">
+              <a href={`mailto:${LAUNCHBYTE_SOCIALS.email}`} className="hover:text-cyan-300 transition">
                 {LAUNCHBYTE_SOCIALS.email}
               </a>
             </p>
-            <a
-              href={LAUNCHBYTE_SOCIALS.whatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-3 inline-flex items-center gap-1.5 text-xs font-mono text-emerald-300 hover:text-emerald-200 transition"
-            >
-              <MessageCircle className="w-3.5 h-3.5" />
-              <span>Join WhatsApp Community →</span>
-            </a>
           </div>
         </div>
 
-        <div className="pt-2 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <p>© {new Date().getFullYear()} LaunchByte Technologies Inc. All rights reserved.</p>
+        <div className="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+          <p>&copy; {new Date().getFullYear()} LaunchByte. All rights reserved.</p>
           <div className="flex gap-6">
-            <Link href="/about" className="hover:text-slate-400 transition">
-              Privacy Policy
+            <Link href="/about" className="hover:text-slate-300 transition">
+              About
             </Link>
-            <Link href="/about" className="hover:text-slate-400 transition">
-              Terms of Service
+            <Link href="/host" className="hover:text-slate-300 transition">
+              Host an Event
             </Link>
-            <Link href="/about" className="hover:text-slate-400 transition">
-              Trust & Safety
+            <Link href="/contributor/request-access" className="hover:text-slate-300 transition">
+              Contributor Access
             </Link>
           </div>
         </div>

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { SITE_CONTENT, FaqItem } from "@/lib/siteContent";
-import { ChevronDown, HelpCircle, Sparkles } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { Reveal } from "./HomeMotion";
 
 export default function FaqAccordionSection() {
@@ -22,18 +22,12 @@ export default function FaqAccordionSection() {
   };
 
   return (
-    <section className="relative py-20 sm:py-28 bg-[#050510] overflow-hidden">
-      {/* Background Ambience */}
-      <div className="absolute inset-0 bg-space-grid opacity-15 pointer-events-none" />
+    <section className="relative py-16 sm:py-24 bg-transparent overflow-hidden">
       <div className="absolute top-1/2 left-1/3 w-[500px] h-[300px] bg-cyan-600/10 rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <Reveal>
-          <div className="text-center space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-violet-950/60 border border-violet-500/30 text-xs font-mono uppercase tracking-widest text-[#A78BFA] backdrop-blur-md">
-              <HelpCircle className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Common Questions</span>
-            </div>
+          <div className="text-center space-y-3">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight">
               Frequently Asked Questions
             </h2>

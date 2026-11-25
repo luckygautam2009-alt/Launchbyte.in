@@ -11,7 +11,6 @@ import MarqueeStrip from "@/components/home/MarqueeStrip";
 import FeaturedOpportunitiesSection from "@/components/home/FeaturedOpportunitiesSection";
 import CommunityNetworkSection from "@/components/home/CommunityNetworkSection";
 import HowItWorksSection from "@/components/home/HowItWorksSection";
-import CompanyImpactStrip from "@/components/home/CompanyImpactStrip";
 import MissionVisionSection from "@/components/home/MissionVisionSection";
 import PartnersLogoRow from "@/components/home/PartnersLogoRow";
 import TestimonialsCarousel from "@/components/home/TestimonialsCarousel";
@@ -22,7 +21,7 @@ import FaqAccordionSection from "@/components/home/FaqAccordionSection";
 
 export default function HomePage() {
   return (
-    <div className="space-y-0 bg-[#050510]">
+    <div className="space-y-0 bg-transparent">
       {/* 1. Cinematic Opening Hero Section (Preserved) */}
       <HeroSection />
 
@@ -61,30 +60,27 @@ export default function HomePage() {
           <HowItWorksSection />
         </div>
 
-        {/* 9. Company Impact Numbers Strip */}
-        <CompanyImpactStrip />
-
-        {/* 10. Mission and Vision Bento Block */}
+        {/* 9. Mission and Vision */}
         <MissionVisionSection />
 
-        {/* 11. Partners / Sponsors */}
+        {/* 10. Connected Communities */}
         <PartnersLogoRow />
 
-        {/* 12. Testimonials Carousel */}
+        {/* 11. Testimonials (Only renders when verified quotes exist) */}
         <TestimonialsCarousel />
 
-        {/* 13. Partner Contact / Partner With Us Inquiry Form */}
+        {/* 12. Partner & Contact Inquiry Form */}
         <PartnerContactSection />
 
-        {/* 14. Final Call To Action */}
+        {/* 13. Final Call To Action */}
         <div id="stage-launch" className="relative scroll-mt-20">
           <FinalCtaSection />
         </div>
 
-        {/* 15. Meet the Core Team */}
+        {/* 14. Meet the Core Team (5 Members) */}
         <CoreTeamSection />
 
-        {/* 16. Frequently Asked Questions (Final content section directly above Footer) */}
+        {/* 15. Frequently Asked Questions (Final content section directly above Footer) */}
         <FaqAccordionSection />
       </AstronautJourney>
     </div>

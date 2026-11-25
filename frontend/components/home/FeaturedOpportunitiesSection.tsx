@@ -60,20 +60,15 @@ export default function FeaturedOpportunitiesSection() {
   }, [activeTab]);
 
   return (
-    <section className="relative py-20 sm:py-28 bg-[#050510] overflow-hidden">
-      <div className="absolute inset-0 bg-space-grid opacity-20 pointer-events-none" />
+    <section className="relative py-16 sm:py-24 bg-transparent overflow-hidden">
       <div className="absolute top-1/2 right-10 w-80 h-80 bg-violet-600/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-10 left-10 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         {/* Section Header with Filter Tabs */}
         <Reveal>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="space-y-3 max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-950/60 border border-violet-500/30 text-xs font-mono uppercase tracking-widest text-[#A78BFA]">
-                <Trophy className="w-3.5 h-3.5 text-cyan-400" />
-                <span>Curated Upcoming Hackathons</span>
-              </div>
               <RevealHeading
                 text="Featured Opportunities"
                 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight"

@@ -12,7 +12,6 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { Reveal, MagneticButton } from "./HomeMotion";
-import SectionEyebrow from "@/components/ui/SectionEyebrow";
 import RevealHeading from "@/components/ui/RevealHeading";
 import TiltCard from "@/components/ui/TiltCard";
 
@@ -82,21 +81,13 @@ export default function HowItWorksSection() {
   ];
 
   return (
-    <section ref={containerRef} className="relative py-20 sm:py-28 bg-[#050510] overflow-hidden">
-      {/* Background Ambience */}
-      <div className="absolute inset-0 bg-space-grid opacity-20 pointer-events-none" />
+    <section ref={containerRef} className="relative py-16 sm:py-24 bg-transparent overflow-hidden">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-gradient-to-r from-violet-900/10 via-blue-900/10 to-cyan-900/10 rounded-full blur-[140px] pointer-events-none" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         {/* Section Header */}
         <Reveal>
           <div className="max-w-3xl mx-auto text-center space-y-4">
-            <SectionEyebrow
-              stage="HOW IT WORKS"
-              badge="The 3-Step Journey"
-              accentColor="cyan"
-            />
-
             <RevealHeading
               text="How It Works: From Curiosity to Shipped Software."
               className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight leading-tight"
