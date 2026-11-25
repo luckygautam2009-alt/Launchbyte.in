@@ -1,177 +1,371 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import { Sparkles, ArrowRight, Compass, Trophy, Users } from "lucide-react";
 import { useReducedMotion } from "framer-motion";
 import SectionEyebrow from "@/components/ui/SectionEyebrow";
-import RevealHeading from "@/components/ui/RevealHeading";
-import TiltCard from "@/components/ui/TiltCard";
 
-// Lazy-load Three.js WebGL canvas (zero SSR hydration errors, paused when off-screen)
-const SolarSystemCanvas = dynamic(() => import("./SolarSystemCanvas"), {
-  ssr: false,
-  loading: () => (
-    <div className="absolute inset-0 w-full h-full overflow-hidden bg-[#050510]">
-      <img
-        src="/brand/universe-cosmic-backdrop.jpg"
-        alt="Cosmic universe backdrop"
-        className="w-full h-full object-cover select-none opacity-60"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-[#050510] via-transparent to-[#050510]" />
-    </div>
-  ),
-});
+interface OrbitCategory {
+  id: string;
+  label: string;
+  href: string;
+  color: string;
+  glowColor: string;
+  sublabel: string;
+}
+
+const CATEGORIES: OrbitCategory[] = [
+  {
+    id: "hackathons",
+    label: "HACKATHONS",
+    href: "/events",
+    color: "#22D3EE",
+    glowColor: "rgba(34, 211, 238, 0.7)",
+    sublabel: "24–48h builder sprints",
+  },
+  {
+    id: "internships",
+    label: "INTERNSHIPS",
+    href: "/opportunities",
+    color: "#818CF8",
+    glowColor: "rgba(129, 140, 248, 0.7)",
+    sublabel: "Industry engineering roles",
+  },
+  {
+    id: "opportunities",
+    label: "OPPORTUNITIES",
+    href: "/opportunities",
+    color: "#C084FC",
+    glowColor: "rgba(192, 132, 252, 0.7)",
+    sublabel: "Verified grants & programs",
+  },
+  {
+    id: "fellowships",
+    label: "FELLOWSHIPS",
+    href: "/opportunities",
+    color: "#A78BFA",
+    glowColor: "rgba(167, 139, 250, 0.7)",
+    sublabel: "Funded research cohorts",
+  },
+  {
+    id: "workshops",
+    label: "WORKSHOPS",
+    href: "/events",
+    color: "#60A5FA",
+    glowColor: "rgba(96, 165, 250, 0.7)",
+    sublabel: "Deep-dive technical sessions",
+  },
+  {
+    id: "community",
+    label: "COMMUNITY",
+    href: "/network",
+    color: "#34D399",
+    glowColor: "rgba(52, 211, 153, 0.7)",
+    sublabel: "Collegiate squads & networks",
+  },
+  {
+    id: "events",
+    label: "EVENTS",
+    href: "/events",
+    color: "#F472B6",
+    glowColor: "rgba(244, 114, 182, 0.7)",
+    sublabel: "Summits, meetups & demos",
+  },
+  {
+    id: "projects",
+    label: "PROJECTS",
+    href: "/projects",
+    color: "#38BDF8",
+    glowColor: "rgba(56, 189, 248, 0.7)",
+    sublabel: "Showcases & student launches",
+  },
+];
 
 export default function CosmicExplorerSection() {
   const shouldReduceMotion = useReducedMotion();
-  const [mounted, setMounted] = useState(false);
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+  const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
+  const [orbitalAngle, setOrbitalAngle] = useState(0);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const animFrameRef = useRef<number | null>(null);
+  const lastTimeRef = useRef<number | null>(null);
+
+  // Smooth orbital motion along the ring
   useEffect(() => {
-    setMounted(true);
+    if (shouldReduceMotion) return;
+
+    const animate = (time: number) => {
+      if (lastTimeRef.current !== null) {
+        const delta = (time - lastTimeRef.current) / 1000;
+        // Slow continuous orbital rotation (~75s full orbit, slows to ~300s when hovered)
+        const speed = hoveredCategory ? 0.022 : 0.085;
+        setOrbitalAngle((prev) => (prev + speed * delta) % (Math.PI * 2));
+      }
+      lastTimeRef.current = time;
+      animFrameRef.current = requestAnimationFrame(animate);
+    };
+
+    animFrameRef.current = requestAnimationFrame(animate);
+    return () => {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+    };
+  }, [hoveredCategory, shouldReduceMotion]);
+
+  // Subtle cursor parallax
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (shouldReduceMotion || !containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1; // -1 to 1
+      const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1; // -1 to 1
+      setMouseOffset({ x: nx, y: ny });
+    },
+    [shouldReduceMotion]
+  );
+
+  const handleMouseLeave = useCallback(() => {
+    setMouseOffset({ x: 0, y: 0 });
   }, []);
 
-  const miniCards = [
-    {
-      title: "Hackathons",
-      tagline: "Compete in high-stakes 24–48h sprints & win prizes.",
-      href: "/events",
-      icon: Trophy,
-      accent: "text-violet-400",
-      accentBg: "bg-violet-500/15 border-violet-500/30",
-      badge: "Sprints",
-    },
-    {
-      title: "Fellowships",
-      tagline: "Grants, research fellowships & funded tech programs.",
-      href: "/opportunities",
-      icon: Compass,
-      accent: "text-cyan-400",
-      accentBg: "bg-cyan-500/15 border-cyan-500/30",
-      badge: "Grants",
-    },
-    {
-      title: "Teams",
-      tagline: "Find complementary builders & assemble your crew.",
-      href: "/teams",
-      icon: Users,
-      accent: "text-indigo-400",
-      accentBg: "bg-indigo-500/15 border-indigo-500/30",
-      badge: "Squads",
-    },
-  ];
+  // Ellipse parameters corresponding to the clean ringed planet artwork (1024x576 aspect)
+  const cx = 49.3; // Center X %
+  const cy = 56.4; // Center Y %
+  const a = 43.5; // Semi-major axis (radius X %)
+  const b = 14.8; // Semi-minor axis (radius Y %)
+  const tilt = -10.2 * (Math.PI / 180); // -10.2 degrees tilt in radians
+
+  // Planet occlusion sphere parameters
+  const planetRx = 16.2;
+  const planetRy = 28.5;
 
   return (
-    <section className="relative w-full min-h-[780px] sm:min-h-[860px] lg:min-h-[940px] flex flex-col justify-between overflow-hidden bg-[#050510]">
+    <section
+      ref={containerRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="relative w-full min-h-[720px] sm:min-h-[820px] lg:min-h-[920px] flex flex-col justify-between overflow-hidden bg-[#050510] select-none"
+    >
       {/* Top Transition Blend with Section 2 (OrbitalBrandSection) */}
-      <div className="absolute top-0 inset-x-0 h-32 sm:h-44 bg-gradient-to-b from-[#050510] via-[#050510]/80 to-transparent z-20 pointer-events-none" />
+      <div className="absolute top-0 inset-x-0 h-28 sm:h-36 bg-gradient-to-b from-[#050510] via-[#050510]/80 to-transparent z-20 pointer-events-none" />
 
-      {/* Background: Three.js SolarSystemCanvas or Static Reduced-Motion Fallback */}
-      <div className="absolute inset-0 z-0">
-        {mounted && shouldReduceMotion ? (
-          <div className="absolute inset-0 w-full h-full overflow-hidden bg-[#050510]">
-            <img
-              src="/brand/universe-cosmic-backdrop.jpg"
-              alt="Cosmic universe backdrop"
-              className="w-full h-full object-cover select-none"
-            />
-            <div className="absolute inset-0 bg-[#050510]/40" />
-          </div>
-        ) : (
-          <SolarSystemCanvas
-            className="absolute inset-0 w-full h-full"
-            showForegroundAstronaut={false}
-          />
-        )}
-
-        {/* Ambient Cosmic Violet & Electric Blue Glow Highlights */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#050510] via-transparent to-[#050510]/60 pointer-events-none" />
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-violet-600/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+      {/* Atmospheric Nebula & Glow Ambient Layer */}
+      <div
+        className="pointer-events-none absolute inset-0 z-0 transition-transform duration-700 ease-out"
+        style={{
+          transform: shouldReduceMotion
+            ? "none"
+            : `translate3d(${-mouseOffset.x * 8}px, ${-mouseOffset.y * 6}px, 0)`,
+        }}
+      >
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] sm:w-[900px] h-[500px] rounded-full bg-gradient-to-tr from-violet-900/20 via-indigo-900/25 to-cyan-900/15 blur-[160px] opacity-75" />
+        <div className="absolute bottom-1/4 left-1/4 w-[500px] h-[350px] rounded-full bg-violet-600/10 blur-[130px] opacity-60" />
+        <div className="absolute top-1/4 right-1/4 w-[450px] h-[350px] rounded-full bg-cyan-500/10 blur-[120px] opacity-50" />
       </div>
 
-      {/* Safe Upper Content Zone with Radial Dark Scrim for Crisp Text Readability */}
-      <div className="relative z-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-28 text-center space-y-6">
-        {/* Radial Dark Scrim */}
-        <div className="absolute -inset-x-8 -inset-y-6 bg-[radial-gradient(ellipse_at_center,rgba(5,5,16,0.85)_0%,rgba(5,5,16,0.55)_55%,transparent_75%)] -z-10 pointer-events-none rounded-3xl" />
-
-        {/* Editorial Pill Badge */}
-        <div className="flex justify-center">
-          <SectionEyebrow stage="STAGE 01 // DISCOVER" />
+      {/* ================= SECTION TOP HEADING ================= */}
+      <div className="relative z-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 text-center space-y-3">
+        {/* Subtle Eyebrow Badge (desktop only; mobile indicator provided by parent stage wrapper) */}
+        <div className="hidden md:flex justify-center">
+          <SectionEyebrow stage="STAGE 01 // DISCOVER" accentColor="cyan" />
         </div>
 
-        {/* Section Heading */}
-        <RevealHeading
-          text="A Vast Universe of Builder Possibilities."
-          className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#F8FAFC] tracking-tight leading-[1.15]"
-        />
+        {/* Section Heading with Gradient Accent */}
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight leading-[1.18]">
+          What Will You{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-indigo-300 to-cyan-300">
+            Discover
+          </span>{" "}
+          on LaunchByte?
+        </h2>
 
         {/* Subtitle Description */}
-        <p className="max-w-2xl mx-auto text-sm sm:text-base lg:text-lg text-[#B8BAD0] leading-relaxed font-normal">
-          Where ambitious students step beyond standard classroom boundaries, discover high-impact hackathons, form squads, and ship technology that shapes the future.
+        <p className="text-sm sm:text-base text-[#B8BAD0] leading-relaxed font-normal max-w-xl mx-auto">
+          A universe of opportunities waiting to be explored.
         </p>
 
-        {/* Action CTAs */}
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-          <Link
-            href="/events"
-            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#4F46E5] to-[#8B5CF6] hover:from-[#4338CA] hover:to-[#7C3AED] text-white text-xs sm:text-sm font-semibold shadow-lg shadow-violet-500/25 transition-all flex items-center gap-2 group"
-          >
-            <span>Explore Hackathons</span>
-            <ArrowRight className="w-4 h-4 text-violet-200 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
-          <Link
-            href="/opportunities"
-            className="px-5 py-2.5 rounded-xl bg-[#09091B]/80 hover:bg-violet-950/50 border border-violet-500/30 hover:border-violet-500/60 text-[#F8FAFC] text-xs sm:text-sm font-semibold backdrop-blur-md transition-all flex items-center gap-2"
-          >
-            <Compass className="w-4 h-4 text-cyan-400" />
-            <span>Discover Fellowships</span>
-          </Link>
+        {/* Hairline Glowing Divider */}
+        <div className="flex items-center justify-center gap-3 pt-2">
+          <div className="h-[1px] w-20 sm:w-32 bg-gradient-to-r from-transparent via-violet-500/40 to-cyan-400/60" />
+          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
+          <div className="h-[1px] w-20 sm:w-32 bg-gradient-to-r from-cyan-400/60 via-violet-500/40 to-transparent" />
         </div>
       </div>
 
-      {/* Over-the-scene Glass Mini-Cards Row */}
-      <div className="relative z-20 max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 pt-8">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {miniCards.map((card, i) => {
-            const Icon = card.icon;
-            return (
-              <TiltCard key={i} className="p-4 sm:p-5">
-                <Link
-                  href={card.href}
-                  className="group flex flex-col justify-between h-full"
+      {/* ================= MAIN CINEMATIC PLANETARY ORBIT SYSTEM ================= */}
+      <div className="relative z-10 w-full flex-1 flex items-center justify-center my-auto py-8 sm:py-12 px-2 sm:px-4">
+        {/* 16:9 Aspect Ratio Master Space Stage */}
+        <div
+          className="relative w-full max-w-[1120px] aspect-[16/9] transition-transform duration-500 ease-out"
+          style={{
+            transform: shouldReduceMotion
+              ? "none"
+              : `translate3d(${mouseOffset.x * 12}px, ${mouseOffset.y * 8}px, 0)`,
+          }}
+        >
+          {/* 1. Base Realistic Ringed Planet CGI Artwork */}
+          <div className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden pointer-events-none">
+            <picture>
+              <source
+                srcSet="/brand/ringed-planet-clean.webp"
+                type="image/webp"
+              />
+              <img
+                src="/brand/ringed-planet-clean.jpg"
+                alt="LaunchByte Cinematic Ringed Planet"
+                className="w-full h-full object-cover select-none filter contrast-[1.03] brightness-[0.98]"
+              />
+            </picture>
+
+            {/* Subtle Atmospheric Light Sheen Layer */}
+            <div
+              className="absolute inset-0 bg-gradient-to-tr from-violet-600/15 via-transparent to-cyan-400/10 pointer-events-none opacity-60 transition-opacity duration-500"
+              style={{
+                opacity: hoveredCategory ? 0.85 : 0.6,
+              }}
+            />
+          </div>
+
+          {/* 2. Dynamic Interactive Category Labels Traveling along the Orbital Ring */}
+          <div className="absolute inset-0 w-full h-full pointer-events-none">
+            {CATEGORIES.map((cat, index) => {
+              // Calculate parametric orbital angle evenly distributed along 360°
+              const baseAngle = (index / CATEGORIES.length) * Math.PI * 2;
+              const t = (baseAngle + orbitalAngle) % (Math.PI * 2);
+
+              const cosT = Math.cos(t);
+              const sinT = Math.sin(t);
+
+              const xPrime = a * cosT;
+              const yPrime = b * sinT;
+
+              // Apply -10.2° tilt rotation matrix
+              const px =
+                cx + (xPrime * Math.cos(tilt) - yPrime * Math.sin(tilt));
+              const py =
+                cy + (xPrime * Math.sin(tilt) + yPrime * Math.cos(tilt));
+
+              // Determine 3D Depth & Occlusion
+              // sinT < 0 is the upper/rear arc of the ring (behind the planet)
+              const isBehind = sinT < -0.05;
+
+              // Distance from planet center normalized to planet ellipsoid radii
+              const dxNorm = (px - cx) / planetRx;
+              const dyNorm = (py - cy) / planetRy;
+              const distFromPlanetCenter = Math.sqrt(
+                dxNorm * dxNorm + dyNorm * dyNorm
+              );
+
+              // Occlusion behind dark planet sphere body
+              const isOccludedByPlanet = isBehind && distFromPlanetCenter < 0.98;
+
+              // Opacity, Scale & Z-Index based on orbital depth
+              let opacity = 1;
+              let scale = 1;
+              let zIndex = 30;
+
+              if (isOccludedByPlanet) {
+                // Smoothly hide as it traverses directly behind the solid planet body
+                opacity = 0;
+                scale = 0.75;
+                zIndex = 5;
+              } else if (isBehind) {
+                // Visible behind ring edge: slightly smaller perspective scale & soft depth opacity
+                opacity = 0.65;
+                scale = 0.88;
+                zIndex = 10;
+              } else {
+                // Foreground arc (in front of planet): bright, crisp, highest z-index
+                opacity = 1;
+                scale = 1.0;
+                zIndex = 35;
+              }
+
+              const isHovered = hoveredCategory === cat.id;
+
+              return (
+                <div
+                  key={cat.id}
+                  style={{
+                    left: `${px}%`,
+                    top: `${py}%`,
+                    opacity,
+                    transform: `translate(-50%, -50%) scale(${
+                      isHovered ? scale * 1.15 : scale
+                    })`,
+                    zIndex: isHovered ? 50 : zIndex,
+                    transition:
+                      "opacity 0.4s ease, transform 0.25s ease-out, filter 0.3s ease",
+                  }}
+                  className={`absolute pointer-events-auto transition-all ${
+                    isOccludedByPlanet ? "pointer-events-none" : ""
+                  }`}
+                  onMouseEnter={() => setHoveredCategory(cat.id)}
+                  onMouseLeave={() => setHoveredCategory(null)}
                 >
-                  <div className="space-y-2.5">
-                    <div className="flex items-center justify-between">
-                      <div
-                        className={`w-9 h-9 rounded-xl flex items-center justify-center border ${card.accentBg}`}
+                  <Link
+                    href={cat.href}
+                    className="group flex flex-col items-center justify-center p-1.5 focus:outline-none"
+                    aria-label={`Explore ${cat.label} on LaunchByte`}
+                  >
+                    {/* Satellite Orbital Beacon + Label Row */}
+                    <div className="flex items-center gap-1.5 sm:gap-2 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full backdrop-blur-md bg-black/50 border border-white/10 group-hover:border-cyan-400/60 group-hover:bg-violet-950/70 transition-all duration-300 shadow-lg shadow-black/40">
+                      {/* Pulsing Satellite Beacon Dot */}
+                      <span
+                        className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2 items-center justify-center"
+                        style={{ color: cat.color }}
                       >
-                        <Icon className={`w-4 h-4 ${card.accent}`} />
-                      </div>
-                      <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 bg-slate-900/60 px-2 py-0.5 rounded-md border border-white/5">
-                        {card.badge}
+                        <span
+                          className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
+                          style={{ backgroundColor: cat.color }}
+                        />
+                        <span
+                          className="relative inline-flex rounded-full h-1 w-1 sm:h-1.5 sm:w-1.5"
+                          style={{
+                            backgroundColor: cat.color,
+                            boxShadow: `0 0 8px ${cat.color}`,
+                          }}
+                        />
+                      </span>
+
+                      {/* Upright Letter-Spaced Category Typography (Never inverted or upside down) */}
+                      <span
+                        className="font-mono text-[9px] sm:text-xs lg:text-[13px] font-bold tracking-widest text-slate-100 group-hover:text-white transition-colors duration-200 select-none whitespace-nowrap"
+                        style={{
+                          textShadow: isHovered
+                            ? `0 0 14px ${cat.color}, 0 0 24px rgba(139, 92, 246, 0.8)`
+                            : "0 0 8px rgba(139, 92, 246, 0.5)",
+                        }}
+                      >
+                        {cat.label}
                       </span>
                     </div>
-                    <div>
-                      <h3 className="text-sm font-bold text-white group-hover:text-violet-200 transition-colors flex items-center gap-1">
-                        <span>{card.title}</span>
-                        <ArrowRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-violet-400" />
-                      </h3>
-                      <p className="text-xs text-[#B8BAD0] leading-relaxed mt-1">
-                        {card.tagline}
-                      </p>
-                    </div>
-                  </div>
-                </Link>
-              </TiltCard>
-            );
-          })}
+
+                    {/* Interactive Hover Tooltip Subtitle */}
+                    {isHovered && (
+                      <span className="mt-1 text-[10px] font-mono tracking-wider text-cyan-300/90 whitespace-nowrap backdrop-blur-md bg-black/80 px-2 py-0.5 rounded border border-cyan-500/30 shadow-md animate-in fade-in zoom-in-95 duration-200">
+                        {cat.sublabel} →
+                      </span>
+                    )}
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
         </div>
+      </div>
+
+      {/* ================= BOTTOM METRICS / DISCOVERY HINT STRIP ================= */}
+      <div className="relative z-20 max-w-4xl mx-auto w-full px-4 sm:px-6 lg:px-8 pb-10 sm:pb-16 text-center">
+        <p className="text-[11px] sm:text-xs font-mono uppercase tracking-widest text-slate-400/80 flex items-center justify-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
+          <span>CLICK ANY ORBITAL SECTOR TO STEP INTO LAUNCHBYTE</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+        </p>
       </div>
 
       {/* Bottom Gradient Blend into Section 4 (AboutLaunchByteSection) */}
-      <div className="absolute bottom-0 inset-x-0 h-32 sm:h-44 bg-gradient-to-t from-[#050510] via-[#050510]/80 to-transparent z-20 pointer-events-none" />
+      <div className="absolute bottom-0 inset-x-0 h-28 sm:h-36 bg-gradient-to-t from-[#050510] via-[#050510]/80 to-transparent z-20 pointer-events-none" />
     </section>
   );
 }
