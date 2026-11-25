@@ -59,6 +59,12 @@ class OpportunityListItem(BaseModel):
     trust_score: int | None
     is_featured: bool
     published_at: datetime | None
+    thumbnail_url: str | None = None
+    organizer_name_override: str | None = None
+    team_size: str | None = None
+    starts_at: datetime | None = None
+    ends_at: datetime | None = None
+    application_url: str | None = None
     organization: OrganizationBrief
     tags: list[TagRead]
 
@@ -67,9 +73,13 @@ class OpportunityDetail(OpportunityListItem):
     description: str | None
     eligibility: str | None
     requirements: list | None
-    application_url: str | None
-    starts_at: datetime | None
-    ends_at: datetime | None
+    official_website: str | None = None
+    source_url: str | None = None
+    organizer_contact_url: str | None = None
+    registration_opens_at: datetime | None = None
+    tracks: str | None = None
+    benefits: str | None = None
+    additional_instructions: str | None = None
     view_count: int
     status: OpportunityStatus | None = None
 
@@ -78,6 +88,9 @@ class OpportunityAdminRead(OpportunityDetail):
     status: OpportunityStatus
     organization_id: uuid.UUID
     posted_by_id: uuid.UUID | None
+    approved_by_id: uuid.UUID | None = None
+    approved_at: datetime | None = None
+    rejection_reason: str | None = None
     created_at: datetime
     updated_at: datetime
     deleted_at: datetime | None

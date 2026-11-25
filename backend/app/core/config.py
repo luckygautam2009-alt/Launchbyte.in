@@ -55,6 +55,7 @@ class Settings(BaseSettings):
 
     # --- Email Service ---
     EMAIL_BACKEND: str = "console"  # console | smtp
+    ADMIN_INBOX_EMAIL: str = "launchbyte.in26@gmail.com"
     SMTP_HOST: str = "localhost"
     SMTP_PORT: int = 587
     SMTP_USER: str = ""

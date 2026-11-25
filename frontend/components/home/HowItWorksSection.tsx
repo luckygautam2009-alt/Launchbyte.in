@@ -92,7 +92,7 @@ export default function HowItWorksSection() {
         <Reveal>
           <div className="max-w-3xl mx-auto text-center space-y-4">
             <SectionEyebrow
-              stage="STAGE 04 // BUILD"
+              stage="HOW IT WORKS"
               badge="The 3-Step Journey"
               accentColor="cyan"
             />

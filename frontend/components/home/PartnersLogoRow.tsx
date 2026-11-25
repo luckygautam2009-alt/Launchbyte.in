@@ -1,69 +1,65 @@
 "use client";
 
 import React from "react";
-import { SITE_CONTENT, PartnerLogo } from "@/lib/siteContent";
-import { Sparkles } from "lucide-react";
+import { SITE_CONTENT, DeveloperCommunity } from "@/lib/siteContent";
+import { ExternalLink } from "lucide-react";
 import { Reveal } from "./HomeMotion";
 
 export default function PartnersLogoRow() {
-  const partners: PartnerLogo[] = SITE_CONTENT.partners;
+  const communities: DeveloperCommunity[] = SITE_CONTENT.developerCommunities;
 
-  if (!partners || partners.length === 0) {
-    return (
-      <section className="relative py-12 bg-[#050510] border-y border-violet-950/40 text-center">
-        <p className="text-xs text-slate-500 font-mono">
-          Partner organizations & sponsor networks updating soon.
-        </p>
-      </section>
-    );
+  if (!communities || communities.length === 0) {
+    return null;
   }
 
-  // Duplicate for smooth seamless infinite marquee loop
-  const marqueeItems = [...partners, ...partners, ...partners, ...partners];
-
   return (
-    <section className="relative py-16 sm:py-20 bg-[#050510] border-y border-violet-950/40 overflow-hidden">
-      {/* Background Ambience */}
+    <section className="relative py-16 sm:py-20 bg-[#050510] overflow-hidden">
       <div className="absolute inset-0 bg-space-grid opacity-15 pointer-events-none" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <Reveal>
           <div className="text-center space-y-2">
             <span className="text-xs font-mono uppercase tracking-widest text-violet-400 font-semibold block">
-              Ecosystem Collaborators & Sponsors
+              Ecosystem
             </span>
-            <h3 className="text-xl sm:text-2xl font-bold text-[#F8FAFC]">
-              Trusted by Developer Communities & Campus Chapters
+            <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#F8FAFC]">
+              Developer Communities
             </h3>
+            <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto">
+              Communities building together across campus chapters and technical collectives.
+            </p>
           </div>
         </Reveal>
 
-        {/* Slow Infinite Marquee Strip: Pause on hover */}
-        <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
-          <div className="animate-marquee-slow flex items-center gap-6 py-2">
-            {marqueeItems.map((p, idx) => (
-              <div
-                key={`${p.id}-${idx}`}
-                className="group relative w-64 p-4 rounded-2xl glass-card glow-hover flex items-center gap-4 transition-all duration-300 filter grayscale hover:grayscale-0 cursor-default shrink-0"
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+          {communities.map((c, idx) => (
+            <Reveal key={c.id} delay={0.05 * idx}>
+              <a
+                href={c.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Visit ${c.name} official website`}
+                className="group h-full p-5 rounded-2xl glass-card glow-hover border border-white/[0.08] hover:border-cyan-400/40 flex flex-col justify-between gap-3 transition-all duration-300"
               >
-                {/* Brand Symbol */}
-                <div className="w-11 h-11 rounded-xl bg-violet-950/80 border border-violet-500/30 flex items-center justify-center text-white font-mono font-bold text-xs shadow-md group-hover:scale-105 group-hover:border-cyan-400 group-hover:shadow-[0_0_15px_rgba(34,211,238,0.35)] transition-all shrink-0">
-                  <span className="bg-gradient-to-tr from-violet-300 to-cyan-300 bg-clip-text text-transparent">
-                    {p.symbol}
-                  </span>
+                <div className="space-y-1.5">
+                  <div className="flex items-start justify-between gap-2">
+                    <span className="text-sm font-bold text-slate-100 group-hover:text-white leading-snug">
+                      {c.name}
+                    </span>
+                    <ExternalLink className="w-3.5 h-3.5 text-slate-500 group-hover:text-cyan-300 shrink-0 mt-0.5 transition-colors" />
+                  </div>
+                  {c.shortLabel && (
+                    <span className="text-[11px] font-mono text-slate-400 block">
+                      {c.shortLabel}
+                    </span>
+                  )}
                 </div>
-
-                <div className="min-w-0">
-                  <span className="text-sm font-semibold text-slate-200 group-hover:text-white transition-colors block truncate">
-                    {p.name}
-                  </span>
-                  <span className="text-[10px] font-mono text-slate-500 block truncate">
-                    {p.category}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
+                <span className="text-[11px] font-mono text-cyan-400/80 group-hover:text-cyan-300 transition-colors">
+                  Visit Website →
+                </span>
+              </a>
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>

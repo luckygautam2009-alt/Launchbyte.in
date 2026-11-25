@@ -18,10 +18,9 @@ import {
 import SectionEyebrow from "@/components/ui/SectionEyebrow";
 import RevealHeading from "@/components/ui/RevealHeading";
 import { Reveal, MagneticButton } from "./HomeMotion";
+import { LAUNCHBYTE_SOCIALS } from "@/lib/siteContent";
 
-// Community destination: configurable URL or fallback to internal verified /network route
-const COMMUNITY_DESTINATION =
-  process.env.NEXT_PUBLIC_COMMUNITY_URL || "/network";
+const COMMUNITY_DESTINATION = LAUNCHBYTE_SOCIALS.whatsapp;
 
 export default function CommunityNetworkSection() {
   const shouldReduceMotion = useReducedMotion();
@@ -74,8 +73,8 @@ export default function CommunityNetworkSection() {
         <div className="max-w-3xl mx-auto text-center space-y-4">
           <div className="hidden md:flex justify-center">
             <SectionEyebrow
-              stage="STAGE 04 // CONNECT"
-              badge="Builder Network"
+              stage="BUILDER COMMUNITY"
+              badge="Connect & Ship"
               accentColor="violet"
             />
           </div>
@@ -339,14 +338,16 @@ export default function CommunityNetworkSection() {
         {/* ================= COMMUNITY CTA STRIP ================= */}
         <div className="pt-6 sm:pt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 text-center">
           <MagneticButton>
-            <Link
+            <a
               href={COMMUNITY_DESTINATION}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-500 text-white font-semibold text-sm tracking-wide shadow-xl shadow-violet-950/50 hover:shadow-cyan-500/25 transition-all duration-300 hover:scale-[1.02] focus-visible:ring-2 focus-visible:ring-cyan-400"
             >
               <Users className="w-4 h-4" />
               <span>Join the LaunchByte Community</span>
               <ArrowRight className="w-4 h-4" />
-            </Link>
+            </a>
           </MagneticButton>
 
           <Link

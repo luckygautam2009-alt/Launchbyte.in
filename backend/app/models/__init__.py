@@ -40,6 +40,11 @@ from app.models.notifications import Notification
 from app.models.opportunities import Opportunity, SavedOpportunity, Tag, opportunity_tags
 from app.models.organizations import Organization, OrganizationMember
 from app.models.profiles import UserProfile
+from app.models.submissions import (
+    ContactInquiry,
+    ContributorAccessRequest,
+    PublicEventSubmission,
+)
 from app.models.team import SiteTeamMember
 from app.models.users import User
 from app.models.verification import OpportunityReport, VerificationCheck, VerificationRequest
@@ -50,6 +55,8 @@ __all__ = [
     "AuditLog",
     "CheckInLog",
     "CheckInResult",
+    "ContactInquiry",
+    "ContributorAccessRequest",
     "EmailVerificationToken",
     "Event",
     "EventMode",
@@ -64,6 +71,7 @@ __all__ = [
     "Organization",
     "OrganizationMember",
     "PasswordResetToken",
+    "PublicEventSubmission",
     "RegistrationStatus",
     "SavedOpportunity",
     "SiteTeamMember",

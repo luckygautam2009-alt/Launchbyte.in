@@ -72,8 +72,19 @@ export default function FaqAccordionSection() {
                   </button>
 
                   {isOpen && (
-                    <div className="px-5 pb-6 sm:px-6 sm:pb-6 text-xs sm:text-sm text-[#CBD5E1] leading-relaxed border-t border-slate-800/60 pt-4 animate-in fade-in duration-200">
-                      {faq.answer}
+                    <div className="px-5 pb-6 sm:px-6 sm:pb-6 text-xs sm:text-sm text-[#CBD5E1] leading-relaxed border-t border-slate-800/60 pt-4 space-y-3 animate-in fade-in duration-200">
+                      <p>{faq.answer}</p>
+                      {faq.ctaHref && faq.ctaLabel && (
+                        <div>
+                          <a
+                            href={faq.ctaHref}
+                            className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-cyan-300 hover:text-white transition-colors"
+                          >
+                            <span>{faq.ctaLabel}</span>
+                            <span aria-hidden="true">→</span>
+                          </a>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>

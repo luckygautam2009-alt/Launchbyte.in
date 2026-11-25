@@ -24,6 +24,8 @@ from app.routers import (
     applications,
     auth,
     connections,
+    contributor_access,
+    contributor_opportunities,
     conversations,
     events,
     health,
@@ -32,6 +34,7 @@ from app.routers import (
     opportunities,
     profiles,
     projects,
+    public_submissions,
     team,
     teams,
     uploads,
@@ -146,6 +149,9 @@ app.include_router(auth.router, prefix=settings.API_V1_PREFIX)
 app.include_router(users.router, prefix=settings.API_V1_PREFIX)
 app.include_router(opportunities.router, prefix=settings.API_V1_PREFIX)
 app.include_router(admin_opportunities.router, prefix=settings.API_V1_PREFIX)
+app.include_router(contributor_access.router, prefix=settings.API_V1_PREFIX)
+app.include_router(contributor_opportunities.router, prefix=settings.API_V1_PREFIX)
+app.include_router(public_submissions.router, prefix=settings.API_V1_PREFIX)
 app.include_router(events.router, prefix=settings.API_V1_PREFIX)
 app.include_router(admin_events.router, prefix=settings.API_V1_PREFIX)
 app.include_router(applications.router, prefix=settings.API_V1_PREFIX)

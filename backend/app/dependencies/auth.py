@@ -69,6 +69,10 @@ def require_verified_email(user: CurrentUser) -> User:
 AdminUser = Annotated[User, Depends(require_role(UserRole.ADMIN))]
 StaffUser = Annotated[User, Depends(require_role(UserRole.MODERATOR, UserRole.ADMIN))]
 OrganizerUser = Annotated[User, Depends(require_role(UserRole.ORGANIZER, UserRole.MODERATOR, UserRole.ADMIN))]
+ContributorUser = Annotated[
+    User,
+    Depends(require_role(UserRole.CONTRIBUTOR, UserRole.ORGANIZER, UserRole.MODERATOR, UserRole.ADMIN)),
+]
 VerifiedUser = Annotated[User, Depends(require_verified_email)]
 
 

@@ -12,7 +12,7 @@ import { TeamMember } from "@/lib/types";
 import { SITE_CONTENT, CoreTeamMember } from "@/lib/siteContent";
 import SectionEyebrow from "@/components/ui/SectionEyebrow";
 import RevealHeading from "@/components/ui/RevealHeading";
-import { Linkedin, Github, Twitter } from "lucide-react";
+import { Linkedin, Github, Twitter, Globe } from "lucide-react";
 
 interface TeamPortraitFrameProps {
   member: CoreTeamMember;
@@ -304,7 +304,7 @@ function TeamMemberBlock({
           )}
 
           {/* Social Links (Rendered ONLY when valid URLs exist) */}
-          {(member.linkedin || member.github || member.twitter) && (
+          {(member.linkedin || member.github || member.portfolio || member.twitter) && (
             <div className="pt-3 flex items-center gap-3">
               {member.linkedin && member.linkedin.startsWith("http") && (
                 <a
@@ -312,6 +312,7 @@ function TeamMemberBlock({
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`${member.name}'s LinkedIn profile`}
+                  title="LinkedIn"
                   className="p-2.5 rounded-xl bg-violet-950/40 border border-violet-500/25 text-slate-400 hover:text-cyan-300 hover:border-cyan-400/50 hover:bg-violet-900/40 transition-all duration-200"
                 >
                   <Linkedin className="w-4 h-4" />
@@ -323,9 +324,22 @@ function TeamMemberBlock({
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`${member.name}'s GitHub profile`}
+                  title="GitHub"
                   className="p-2.5 rounded-xl bg-violet-950/40 border border-violet-500/25 text-slate-400 hover:text-cyan-300 hover:border-cyan-400/50 hover:bg-violet-900/40 transition-all duration-200"
                 >
                   <Github className="w-4 h-4" />
+                </a>
+              )}
+              {member.portfolio && member.portfolio.startsWith("http") && (
+                <a
+                  href={member.portfolio}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${member.name}'s Portfolio website`}
+                  title="Portfolio"
+                  className="p-2.5 rounded-xl bg-violet-950/40 border border-violet-500/25 text-slate-400 hover:text-cyan-300 hover:border-cyan-400/50 hover:bg-violet-900/40 transition-all duration-200"
+                >
+                  <Globe className="w-4 h-4" />
                 </a>
               )}
               {member.twitter && member.twitter.startsWith("http") && (
@@ -334,6 +348,7 @@ function TeamMemberBlock({
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`${member.name}'s X profile`}
+                  title="X"
                   className="p-2.5 rounded-xl bg-violet-950/40 border border-violet-500/25 text-slate-400 hover:text-cyan-300 hover:border-cyan-400/50 hover:bg-violet-900/40 transition-all duration-200"
                 >
                   <Twitter className="w-4 h-4" />
@@ -414,28 +429,6 @@ export default function CoreTeamSection({
       <div className="absolute inset-0 bg-space-grid opacity-15 pointer-events-none" />
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[900px] h-[550px] bg-gradient-to-r from-violet-900/15 via-indigo-900/10 to-cyan-900/15 rounded-full blur-[170px] pointer-events-none" />
       <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-to-r from-cyan-900/10 via-violet-900/10 to-indigo-900/10 rounded-full blur-[170px] pointer-events-none" />
-
-      {/* Scoped Team Journey Progress Indicator (Sticky within section only) */}
-      <div className="absolute inset-y-0 right-6 xl:right-10 pointer-events-none hidden xl:block z-30">
-        <div className="sticky top-1/2 -translate-y-1/2 flex flex-col items-center gap-3 py-6">
-          <div className="text-[10px] font-mono tracking-widest text-cyan-400 font-bold backdrop-blur-md bg-black/70 px-2 py-1 rounded border border-white/10 shadow-lg shadow-black/50">
-            {String(activeIndex + 1).padStart(2, "0")} /{" "}
-            {String(displayList.length).padStart(2, "0")}
-          </div>
-          <div className="flex flex-col items-center gap-2">
-            {displayList.map((_, i) => (
-              <div
-                key={i}
-                className={`w-1 rounded-full transition-all duration-300 ${
-                  activeIndex === i
-                    ? "h-8 bg-gradient-to-b from-cyan-400 to-violet-400 shadow-[0_0_8px_#22d3ee]"
-                    : "h-2.5 bg-slate-700/50"
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
 
       {/* Section Top Header */}
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-20 text-center space-y-4">

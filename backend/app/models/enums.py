@@ -18,6 +18,7 @@ class _StrEnum(str, enum.Enum):
 
 class UserRole(_StrEnum):
     USER = "user"              # student / seeker — the default
+    CONTRIBUTOR = "contributor" # approved team member who can submit opportunities
     ORGANIZER = "organizer"    # can post opportunities for their organization
     MODERATOR = "moderator"    # reviews postings, verification, reports
     ADMIN = "admin"            # everything

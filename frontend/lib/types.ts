@@ -71,6 +71,12 @@ export interface OpportunityListItem {
   trust_score?: number | null;
   is_featured: boolean;
   published_at?: string | null;
+  thumbnail_url?: string | null;
+  organizer_name_override?: string | null;
+  team_size?: string | null;
+  starts_at?: string | null;
+  ends_at?: string | null;
+  application_url?: string | null;
   organization: OrganizationBrief;
   tags: TagRead[];
 }
@@ -79,9 +85,13 @@ export interface OpportunityDetail extends OpportunityListItem {
   description?: string | null;
   eligibility?: string | null;
   requirements?: string[] | null;
-  application_url?: string | null;
-  starts_at?: string | null;
-  ends_at?: string | null;
+  official_website?: string | null;
+  source_url?: string | null;
+  organizer_contact_url?: string | null;
+  registration_opens_at?: string | null;
+  tracks?: string | null;
+  benefits?: string | null;
+  additional_instructions?: string | null;
   view_count: number;
   status?: OpportunityStatus;
 }

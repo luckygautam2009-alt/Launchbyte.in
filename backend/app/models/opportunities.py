@@ -175,6 +175,23 @@ class Opportunity(UUIDPrimaryKeyMixin, TimestampMixin, SoftDeleteMixin, Base):
     )
     published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
+    # --- extended contributor listing & moderation fields ---
+    thumbnail_url: Mapped[str | None] = mapped_column(String(500))
+    official_website: Mapped[str | None] = mapped_column(String(1000))
+    source_url: Mapped[str | None] = mapped_column(String(1000))
+    organizer_contact_url: Mapped[str | None] = mapped_column(String(1000))
+    organizer_name_override: Mapped[str | None] = mapped_column(String(255))
+    registration_opens_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    team_size: Mapped[str | None] = mapped_column(String(100))
+    tracks: Mapped[str | None] = mapped_column(Text)
+    benefits: Mapped[str | None] = mapped_column(Text)
+    additional_instructions: Mapped[str | None] = mapped_column(Text)
+    approved_by_id: Mapped[uuid.UUID | None] = mapped_column(
+        SAUuid(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True
+    )
+    approved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    rejection_reason: Mapped[str | None] = mapped_column(Text)
+
     # --- relationships ---
     organization: Mapped["Organization"] = relationship(back_populates="opportunities")
     posted_by: Mapped["User | None"] = relationship(foreign_keys=[posted_by_id])

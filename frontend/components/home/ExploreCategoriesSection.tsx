@@ -214,7 +214,7 @@ export default function ExploreCategoriesSection() {
         <Reveal>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="space-y-3 max-w-2xl">
-              <SectionEyebrow stage="STAGE 02 // EXPLORE" />
+              <SectionEyebrow stage="EXPLORE DOMAINS" />
               <RevealHeading
                 text="What You Can Explore"
                 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight"

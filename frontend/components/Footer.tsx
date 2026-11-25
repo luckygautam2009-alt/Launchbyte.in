@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import { Sparkles, Github, Twitter, Linkedin, Heart } from "lucide-react";
+import { Sparkles, Linkedin, Instagram, MessageCircle, Mail } from "lucide-react";
+import { LAUNCHBYTE_SOCIALS } from "@/lib/siteContent";
 
 export default function Footer() {
   return (
@@ -64,38 +65,61 @@ export default function Footer() {
 
           <div>
             <h4 className="font-semibold text-white mb-3 text-sm tracking-wide">Community & Socials</h4>
-            <div className="flex gap-3 text-slate-400">
+            <div className="flex flex-wrap gap-2.5 text-slate-400">
               <a
-                href="https://github.com"
+                href={LAUNCHBYTE_SOCIALS.linkedin}
                 target="_blank"
-                rel="noreferrer"
-                aria-label="GitHub"
-                className="w-9 h-9 rounded-xl bg-[#09091B] border border-slate-800 flex items-center justify-center hover:text-white hover:border-violet-500/40 hover:bg-violet-950/40 transition glow-hover"
-              >
-                <Github className="w-4 h-4" />
-              </a>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Twitter / X"
-                className="w-9 h-9 rounded-xl bg-[#09091B] border border-slate-800 flex items-center justify-center hover:text-white hover:border-violet-500/40 hover:bg-violet-950/40 transition glow-hover"
-              >
-                <Twitter className="w-4 h-4" />
-              </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="LinkedIn"
+                rel="noopener noreferrer"
+                aria-label="LaunchByte LinkedIn"
+                title="LinkedIn"
                 className="w-9 h-9 rounded-xl bg-[#09091B] border border-slate-800 flex items-center justify-center hover:text-white hover:border-violet-500/40 hover:bg-violet-950/40 transition glow-hover"
               >
                 <Linkedin className="w-4 h-4" />
               </a>
+              <a
+                href={LAUNCHBYTE_SOCIALS.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LaunchByte Instagram"
+                title="Instagram"
+                className="w-9 h-9 rounded-xl bg-[#09091B] border border-slate-800 flex items-center justify-center hover:text-white hover:border-violet-500/40 hover:bg-violet-950/40 transition glow-hover"
+              >
+                <Instagram className="w-4 h-4" />
+              </a>
+              <a
+                href={LAUNCHBYTE_SOCIALS.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LaunchByte WhatsApp Community"
+                title="WhatsApp Community"
+                className="w-9 h-9 rounded-xl bg-[#09091B] border border-slate-800 flex items-center justify-center hover:text-emerald-300 hover:border-emerald-500/40 hover:bg-emerald-950/30 transition glow-hover"
+              >
+                <MessageCircle className="w-4 h-4" />
+              </a>
+              <a
+                href={`mailto:${LAUNCHBYTE_SOCIALS.email}`}
+                aria-label="Email LaunchByte"
+                title={LAUNCHBYTE_SOCIALS.email}
+                className="w-9 h-9 rounded-xl bg-[#09091B] border border-slate-800 flex items-center justify-center hover:text-cyan-300 hover:border-cyan-500/40 hover:bg-cyan-950/30 transition glow-hover"
+              >
+                <Mail className="w-4 h-4" />
+              </a>
             </div>
-            <p className="text-[11px] text-slate-500 mt-4 leading-relaxed">
-              Open source & community-driven. Built with passion for campus builders globally.
+            <p className="text-[11px] text-slate-400 mt-3 leading-relaxed">
+              Official inbox:{" "}
+              <a href={`mailto:${LAUNCHBYTE_SOCIALS.email}`} className="text-cyan-300 hover:underline">
+                {LAUNCHBYTE_SOCIALS.email}
+              </a>
             </p>
+            <a
+              href={LAUNCHBYTE_SOCIALS.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-flex items-center gap-1.5 text-xs font-mono text-emerald-300 hover:text-emerald-200 transition"
+            >
+              <MessageCircle className="w-3.5 h-3.5" />
+              <span>Join WhatsApp Community →</span>
+            </a>
           </div>
         </div>
 

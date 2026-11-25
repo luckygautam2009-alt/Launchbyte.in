@@ -1,36 +1,31 @@
 /**
  * Centralized Site Content & Company Profile Configuration
- *
- * NOTE: Sample content is tagged with // SAMPLE - replace so you can easily
- * replace with your official launch assets.
+ * Contains verified LaunchByte data: socials, team, developer communities,
+ * structured testimonial slots (no fabricated quotes), and FAQs.
  */
 
-export interface ImpactMetric {
-  id: string;
-  label: string;
-  count: number;
-  suffix?: string;
-  prefix?: string;
-  description: string;
-  isPlaceholder?: boolean;
-}
+export const LAUNCHBYTE_SOCIALS = {
+  linkedin: "https://www.linkedin.com/company/launchbytehq/posts/?viewAsMember=true",
+  instagram: "https://www.instagram.com/launch_bytee/?hl=en",
+  whatsapp: "https://chat.whatsapp.com/DfB8awNjkjj7UkB5h2eW1e",
+  email: "launchbyte.in26@gmail.com",
+};
 
-export interface PartnerLogo {
+export interface DeveloperCommunity {
   id: string;
   name: string;
-  category: string;
-  symbol: string;
-  placeholderUrl?: string;
+  url: string;
+  shortLabel?: string;
 }
 
-export interface TestimonialItem {
+export interface TestimonialSlot {
   id: string;
-  quote: string;
-  name: string;
-  role: string;
-  organization: string;
-  avatarText: string;
-  verifiedBadge?: string;
+  name: string | null;
+  quote: string | null;
+  role?: string | null;
+  photo?: string | null;
+  source?: string | null;
+  isPublished: boolean;
 }
 
 export interface FaqItem {
@@ -38,6 +33,8 @@ export interface FaqItem {
   question: string;
   answer: string;
   category: "students" | "organizers" | "partners" | "general";
+  ctaLabel?: string;
+  ctaHref?: string;
 }
 
 export interface TimelineEvent {
@@ -69,6 +66,7 @@ export interface CoreTeamMember {
   photo?: string;
   linkedin?: string;
   github?: string;
+  portfolio?: string;
   twitter?: string;
   highlights?: TeamHighlight[];
   skills?: string[];
@@ -76,41 +74,8 @@ export interface CoreTeamMember {
 }
 
 export const SITE_CONTENT = {
-  // 1. Impact Metrics (Live counts are dynamically loaded; fallback samples below)
-  impactMetrics: [
-    {
-      id: "opportunities",
-      label: "Verified Opportunities",
-      count: 48, // SAMPLE - replace
-      suffix: "+",
-      description: "Hackathons, fellowships & research grants",
-      isPlaceholder: true,
-    },
-    {
-      id: "builders",
-      label: "Student Builders",
-      count: 1200, // SAMPLE - replace
-      suffix: "+",
-      description: "Active developers across campuses",
-      isPlaceholder: true,
-    },
-    {
-      id: "events",
-      label: "Events & Sprints",
-      count: 24, // SAMPLE - replace
-      suffix: "+",
-      description: "Organized with verified judging & reviews",
-      isPlaceholder: true,
-    },
-    {
-      id: "organizations",
-      label: "Partner Organizations",
-      count: 16, // SAMPLE - replace
-      suffix: "+",
-      description: "Developer clubs & collegiate chapters",
-      isPlaceholder: true,
-    },
-  ] as ImpactMetric[],
+  // 1. Official LaunchByte Socials
+  socials: LAUNCHBYTE_SOCIALS,
 
   // 2. Mission & Vision
   missionVision: {
@@ -138,59 +103,123 @@ export const SITE_CONTENT = {
     },
   },
 
-  // 3. Partners / Sponsors (Reduced to 3 sample items per spec)
-  partners: [
-    { id: "p1", name: "Sample Cloud Partner", category: "Cloud & AI", symbol: "CP" }, // SAMPLE - replace
-    { id: "p2", name: "Sample DevTools", category: "Developer Tools", symbol: "DT" }, // SAMPLE - replace
-    { id: "p3", name: "Sample Campus Labs", category: "University Network", symbol: "CL" }, // SAMPLE - replace
-  ] as PartnerLogo[],
+  // 3. Developer Communities (Real verified communities with official URLs)
+  developerCommunities: [
+    {
+      id: "codehive",
+      name: "CodeHive",
+      url: "https://www.codehivee.tech/",
+      shortLabel: "Developer Community",
+    },
+    {
+      id: "codersera",
+      name: "CodersEra",
+      url: "https://www.codersera.in/",
+      shortLabel: "Developer Community",
+    },
+    {
+      id: "gdg-noida",
+      name: "GDG Noida",
+      url: "https://gdgnoida.com/",
+      shortLabel: "Google Developer Group",
+    },
+    {
+      id: "gdg-dtc",
+      name: "Google Developer Groups on Campus — Delhi Technical Campus, Greater Noida",
+      url: "https://gdg.community.dev/gdg-on-campus-delhi-technical-campus-greater-noida-india/",
+      shortLabel: "GDG on Campus • Greater Noida",
+    },
+  ] as DeveloperCommunity[],
 
-  // 4. Testimonials (Reduced to 2 sample items per spec)
+  // 4. Testimonials (Maximum 5 slots; quotes must NOT be fabricated — only published once verified)
   testimonials: [
     {
-      id: "t1",
-      quote:
-        "LaunchByte helped me find my co-founder and frontend lead in 48 hours for our hackathon sprint. We shipped our MVP and secured our initial grant.", // SAMPLE - replace
-      name: "Marcus Brody", // SAMPLE - replace
-      role: "Student Founder", // SAMPLE - replace
-      organization: "Sample Hackathon Winner", // SAMPLE - replace
-      avatarText: "MB",
-      verifiedBadge: "Hackathon Winner",
+      id: "slot-1",
+      name: "Vivek Dubey",
+      quote: null,
+      role: null,
+      photo: null,
+      source: null,
+      isPublished: false,
     },
     {
-      id: "t2",
-      quote:
-        "Unlike cluttered student job boards, every opportunity here has verified organizers and clear deadlines. Landed my summer engineering fellowship.", // SAMPLE - replace
-      name: "Priya Sundaram", // SAMPLE - replace
-      role: "Systems Fellow", // SAMPLE - replace
-      organization: "Sample Fellowship Fellow", // SAMPLE - replace
-      avatarText: "PS",
-      verifiedBadge: "Verified Fellow",
+      id: "slot-2",
+      name: "Shivang Mishra",
+      quote: null,
+      role: null,
+      photo: null,
+      source: null,
+      isPublished: false,
     },
-  ] as TestimonialItem[],
+    {
+      id: "slot-3",
+      name: "Prashant Pandey",
+      quote: null,
+      role: null,
+      photo: null,
+      source: null,
+      isPublished: false,
+    },
+    {
+      id: "slot-4",
+      name: "Himanshu Bisht",
+      quote: null,
+      role: null,
+      photo: null,
+      source: null,
+      isPublished: false,
+    },
+    {
+      id: "slot-5",
+      name: null,
+      quote: null,
+      role: null,
+      photo: null,
+      source: null,
+      isPublished: false,
+    },
+  ] as TestimonialSlot[],
 
-  // 5. Frequently Asked Questions (Reduced to 3 sample items per spec)
+  // 5. Frequently Asked Questions (5 questions total)
   faqs: [
     {
       id: "faq-1",
       question: "Is LaunchByte free for students?",
       answer:
-        "Yes, 100%. LaunchByte is completely free for student developers. There are no fees to apply or join squads.", // SAMPLE - replace
+        "Yes, 100%. LaunchByte is completely free for student developers. There are no fees to apply or join squads.",
       category: "students",
     },
     {
       id: "faq-2",
       question: "How are hackathons and opportunities verified?",
       answer:
-        "Every event and fellowship submitted passes through algorithmic screening and manual review to verify legitimate organizers and transparent timelines.", // SAMPLE - replace
+        "Every event and fellowship submitted passes through algorithmic screening and manual review to verify legitimate organizers and transparent timelines.",
       category: "general",
     },
     {
       id: "faq-3",
       question: "How does teammate matching work?",
       answer:
-        "You can explore open squads or post your own team looking for complementary roles (e.g. backend, frontend, design). You can invite members with one click.", // SAMPLE - replace
+        "You can explore open squads or post your own team looking for complementary roles (e.g. backend, frontend, design). You can invite members with one click.",
       category: "students",
+    },
+    {
+      id: "faq-4",
+      question: "How can I host my own event on LaunchByte?",
+      answer:
+        "Organizers can submit their event through the Host an Event form. Every submission is reviewed by the LaunchByte team before it is published.",
+      category: "organizers",
+      ctaLabel: "Go to Host an Event",
+      ctaHref: "/host",
+    },
+    {
+      id: "faq-5",
+      question: "How can I list an opportunity on LaunchByte?",
+      answer:
+        "Opportunity listings are managed by approved LaunchByte contributors. Core team members can request listing access, and approved contributors can submit opportunities for review and publishing.",
+      category: "general",
+      ctaLabel: "Request Listing Access",
+      ctaHref: "/contributor/request-access",
     },
   ] as FaqItem[],
 
@@ -214,7 +243,7 @@ export const SITE_CONTENT = {
       year: "2026",
       title: "The Cosmic Frontier",
       description:
-        "Now connecting thousands of student builders with fellowships, venture grants, and global hackathon ecosystems.",
+        "Connecting student builders with verified hackathons, fellowships, and developer communities.",
       tag: "Scale",
     },
   ] as TimelineEvent[],
@@ -247,14 +276,17 @@ export const SITE_CONTENT = {
     },
   ] as CompanyValue[],
 
-  // 8. Core Team (Leadership & Founding Team)
+  // 8. Core Team (Exactly 4 members — Saumya removed)
   coreTeam: [
     {
       name: "Yash Gautam",
-      role: "Founder & Chief Executive Officer",
+      role: "Founder & CEO",
       title: "Full-Stack Developer | Product Builder | AI/ML Enthusiast",
       bio: "I build technology-driven products at the intersection of full-stack development, AI/ML, and product engineering. My focus is turning ideas into functional products, solving real-world problems through technology, and building platforms that create meaningful opportunities for students and developers.",
       photo: "/team/yash-gautam.jpg",
+      linkedin: "https://www.linkedin.com/in/yash-gautam-1b9150383/",
+      github: "https://github.com/luckygautam2009-alt",
+      portfolio: "https://yash-gautam-portfolio-v4xf.vercel.app/",
       highlights: [
         {
           id: "01",
@@ -279,22 +311,12 @@ export const SITE_CONTENT = {
       ],
     },
     {
-      name: "Shobhit",
-      role: "Co-Founder, LaunchByte",
-      bio: "Co-founding partner driving operational alignment, product strategy, and organizational execution across LaunchByte initiatives.",
-      photo: "/team/shobhit.jpg",
-      focus: [
-        "Product Strategy",
-        "Operations",
-        "Team Execution",
-        "Ecosystem Growth",
-      ],
-    },
-    {
-      name: "Vidhyansh",
+      name: "Vidhyansh Rajput",
       role: "Head of Community & Event Management",
       bio: "Responsible for community building, event coordination, participant engagement, and event operations across LaunchByte.",
       photo: "/team/vidhyansh.jpg",
+      linkedin: "https://www.linkedin.com/in/vidhyansh-rajput-856441370/",
+      github: "https://github.com/vidhyanshrajput44-a11y",
       focus: [
         "Community Building",
         "Event Coordination",
@@ -303,10 +325,24 @@ export const SITE_CONTENT = {
       ],
     },
     {
+      name: "Shobhit Srivastava",
+      role: "Co-Founder",
+      bio: "Co-founding partner driving operational alignment, product strategy, and organizational execution across LaunchByte initiatives.",
+      photo: "/team/shobhit.jpg",
+      linkedin: "https://www.linkedin.com/in/shobhit-srivastava-7842083b9/",
+      focus: [
+        "Product Strategy",
+        "Operations",
+        "Team Execution",
+        "Ecosystem Growth",
+      ],
+    },
+    {
       name: "Sreyansh Dixit",
       role: "Technical Head",
       bio: "Leading technical direction, engineering execution, platform development, and technical coordination.",
       photo: "/team/sreyansh-dixit.jpg",
+      linkedin: "https://www.linkedin.com/in/sreyansh-dixit-4aba56372/",
       focus: [
         "Technical Direction",
         "Engineering Execution",

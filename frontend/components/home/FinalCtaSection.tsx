@@ -68,7 +68,7 @@ export default function FinalCtaSection() {
         {/* Editorial Pill */}
         <Reveal>
           <SectionEyebrow
-            stage="STAGE 05 // LAUNCH"
+            stage="GET STARTED"
             badge="Launch Your Trajectory"
             accentColor="cyan"
           />
