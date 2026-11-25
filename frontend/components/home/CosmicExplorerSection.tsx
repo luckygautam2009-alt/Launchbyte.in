@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { useReducedMotion } from "framer-motion";
-import SectionEyebrow from "@/components/ui/SectionEyebrow";
 
 interface OrbitCategory {
   id: string;
@@ -144,10 +143,10 @@ export default function CosmicExplorerSection() {
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="relative w-full min-h-[720px] sm:min-h-[820px] lg:min-h-[920px] flex flex-col justify-between overflow-hidden bg-[#050510] select-none"
+      className="relative w-full py-12 sm:py-16 lg:py-20 flex flex-col items-center justify-center overflow-hidden bg-[#050510] select-none"
     >
-      {/* Top Transition Blend with Section 2 (OrbitalBrandSection) */}
-      <div className="absolute top-0 inset-x-0 h-28 sm:h-36 bg-gradient-to-b from-[#050510] via-[#050510]/80 to-transparent z-20 pointer-events-none" />
+      {/* Top Transition Blend with Preceding Section */}
+      <div className="absolute top-0 inset-x-0 h-24 sm:h-32 bg-gradient-to-b from-[#050510] via-[#050510]/70 to-transparent z-20 pointer-events-none" />
 
       {/* Atmospheric Nebula & Glow Ambient Layer */}
       <div
@@ -158,20 +157,13 @@ export default function CosmicExplorerSection() {
             : `translate3d(${-mouseOffset.x * 8}px, ${-mouseOffset.y * 6}px, 0)`,
         }}
       >
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] sm:w-[900px] h-[500px] rounded-full bg-gradient-to-tr from-violet-900/20 via-indigo-900/25 to-cyan-900/15 blur-[160px] opacity-75" />
-        <div className="absolute bottom-1/4 left-1/4 w-[500px] h-[350px] rounded-full bg-violet-600/10 blur-[130px] opacity-60" />
-        <div className="absolute top-1/4 right-1/4 w-[450px] h-[350px] rounded-full bg-cyan-500/10 blur-[120px] opacity-50" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] sm:w-[1000px] h-[520px] rounded-full bg-gradient-to-tr from-violet-900/20 via-indigo-900/20 to-cyan-900/15 blur-[160px] opacity-75" />
       </div>
 
       {/* ================= SECTION TOP HEADING ================= */}
-      <div className="relative z-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 text-center space-y-3">
-        {/* Subtle Eyebrow Badge (desktop only; mobile indicator provided by parent stage wrapper) */}
-        <div className="hidden md:flex justify-center">
-          <SectionEyebrow stage="STAGE 01 // DISCOVER" accentColor="cyan" />
-        </div>
-
+      <div className="relative z-30 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3 mb-2 sm:-mb-4 lg:-mb-8">
         {/* Section Heading with Gradient Accent */}
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight leading-[1.18]">
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight leading-[1.16]">
           What Will You{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-indigo-300 to-cyan-300">
             Discover
@@ -183,28 +175,29 @@ export default function CosmicExplorerSection() {
         <p className="text-sm sm:text-base text-[#B8BAD0] leading-relaxed font-normal max-w-xl mx-auto">
           A universe of opportunities waiting to be explored.
         </p>
-
-        {/* Hairline Glowing Divider */}
-        <div className="flex items-center justify-center gap-3 pt-2">
-          <div className="h-[1px] w-20 sm:w-32 bg-gradient-to-r from-transparent via-violet-500/40 to-cyan-400/60" />
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
-          <div className="h-[1px] w-20 sm:w-32 bg-gradient-to-r from-cyan-400/60 via-violet-500/40 to-transparent" />
-        </div>
       </div>
 
-      {/* ================= MAIN CINEMATIC PLANETARY ORBIT SYSTEM ================= */}
-      <div className="relative z-10 w-full flex-1 flex items-center justify-center my-auto py-8 sm:py-12 px-2 sm:px-4">
-        {/* 16:9 Aspect Ratio Master Space Stage */}
+      {/* ================= FULL-BLEED CINEMATIC PLANETARY ORBIT SYSTEM ================= */}
+      <div className="relative z-10 w-full flex items-center justify-center">
+        {/* 16:9 Seamless Full-Width Space Stage (No card, no border, no rounded box) */}
         <div
-          className="relative w-full max-w-[1120px] aspect-[16/9] transition-transform duration-500 ease-out"
+          className="relative w-full max-w-[1440px] aspect-[16/9] transition-transform duration-500 ease-out"
           style={{
             transform: shouldReduceMotion
               ? "none"
-              : `translate3d(${mouseOffset.x * 12}px, ${mouseOffset.y * 8}px, 0)`,
+              : `translate3d(${mouseOffset.x * 10}px, ${mouseOffset.y * 6}px, 0)`,
           }}
         >
-          {/* 1. Base Realistic Ringed Planet CGI Artwork */}
-          <div className="absolute inset-0 w-full h-full rounded-2xl overflow-hidden pointer-events-none">
+          {/* 1. Base Realistic Ringed Planet CGI Artwork — Masked to dissolve invisibly into #050510 */}
+          <div
+            className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none"
+            style={{
+              maskImage:
+                "radial-gradient(ellipse 78% 76% at 50% 54%, black 42%, rgba(0,0,0,0.7) 68%, transparent 95%)",
+              WebkitMaskImage:
+                "radial-gradient(ellipse 78% 76% at 50% 54%, black 42%, rgba(0,0,0,0.7) 68%, transparent 95%)",
+            }}
+          >
             <picture>
               <source
                 srcSet="/brand/ringed-planet-clean.webp"
@@ -213,15 +206,21 @@ export default function CosmicExplorerSection() {
               <img
                 src="/brand/ringed-planet-clean.jpg"
                 alt="LaunchByte Cinematic Ringed Planet"
-                className="w-full h-full object-cover select-none filter contrast-[1.03] brightness-[0.98]"
+                className="w-full h-full object-cover select-none filter contrast-[1.04] brightness-[0.98]"
               />
             </picture>
 
+            {/* 4-Sided Edge Gradient Masks for Seamless Deep-Space Blending */}
+            <div className="absolute inset-x-0 top-0 h-[24%] bg-gradient-to-b from-[#050510] via-[#050510]/60 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 h-[22%] bg-gradient-to-t from-[#050510] via-[#050510]/60 to-transparent" />
+            <div className="absolute inset-y-0 left-0 w-[18%] bg-gradient-to-r from-[#050510] via-[#050510]/60 to-transparent" />
+            <div className="absolute inset-y-0 right-0 w-[18%] bg-gradient-to-l from-[#050510] via-[#050510]/60 to-transparent" />
+
             {/* Subtle Atmospheric Light Sheen Layer */}
             <div
-              className="absolute inset-0 bg-gradient-to-tr from-violet-600/15 via-transparent to-cyan-400/10 pointer-events-none opacity-60 transition-opacity duration-500"
+              className="absolute inset-0 bg-gradient-to-tr from-violet-600/12 via-transparent to-cyan-400/10 pointer-events-none transition-opacity duration-500"
               style={{
-                opacity: hoveredCategory ? 0.85 : 0.6,
+                opacity: hoveredCategory ? 0.85 : 0.55,
               }}
             />
           </div>
@@ -355,17 +354,8 @@ export default function CosmicExplorerSection() {
         </div>
       </div>
 
-      {/* ================= BOTTOM METRICS / DISCOVERY HINT STRIP ================= */}
-      <div className="relative z-20 max-w-4xl mx-auto w-full px-4 sm:px-6 lg:px-8 pb-10 sm:pb-16 text-center">
-        <p className="text-[11px] sm:text-xs font-mono uppercase tracking-widest text-slate-400/80 flex items-center justify-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
-          <span>CLICK ANY ORBITAL SECTOR TO STEP INTO LAUNCHBYTE</span>
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-        </p>
-      </div>
-
-      {/* Bottom Gradient Blend into Section 4 (AboutLaunchByteSection) */}
-      <div className="absolute bottom-0 inset-x-0 h-28 sm:h-36 bg-gradient-to-t from-[#050510] via-[#050510]/80 to-transparent z-20 pointer-events-none" />
+      {/* Bottom Gradient Blend into Next Section */}
+      <div className="absolute bottom-0 inset-x-0 h-20 sm:h-28 bg-gradient-to-t from-[#050510] via-[#050510]/70 to-transparent z-20 pointer-events-none" />
     </section>
   );
 }
