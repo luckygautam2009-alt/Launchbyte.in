@@ -260,7 +260,8 @@ export const SITE_CONTENT = {
           id: "01",
           title: "INQUEST",
           role: "Product Builder",
-          description: "Cross-platform dispute intelligence and complaint investigation system.",
+          description:
+            "Cross-platform dispute intelligence and complaint investigation platform.",
         },
         {
           id: "02",
@@ -279,7 +280,7 @@ export const SITE_CONTENT = {
     },
     {
       name: "Shobhit",
-      role: "Co-Founder",
+      role: "Co-Founder, LaunchByte",
       bio: "Co-founding partner driving operational alignment, product strategy, and organizational execution across LaunchByte initiatives.",
       photo: "/team/shobhit.jpg",
       focus: [
@@ -292,38 +293,25 @@ export const SITE_CONTENT = {
     {
       name: "Vidhyansh",
       role: "Head of Community & Event Management",
-      bio: "Responsible for community engagement, event coordination, participant experience, and community initiatives.",
+      bio: "Responsible for community building, event coordination, participant engagement, and event operations across LaunchByte.",
       photo: "/team/vidhyansh.jpg",
       focus: [
-        "Community Engagement",
+        "Community Building",
         "Event Coordination",
-        "Participant Experience",
-        "Community Initiatives",
+        "Participant Engagement",
+        "Event Operations",
       ],
     },
     {
       name: "Sreyansh Dixit",
       role: "Technical Head",
-      bio: "Focused on technical direction, engineering execution, platform development, and technical coordination.",
+      bio: "Leading technical direction, engineering execution, platform development, and technical coordination.",
       photo: "/team/sreyansh-dixit.jpg",
       focus: [
         "Technical Direction",
         "Engineering Execution",
         "Platform Development",
         "Technical Coordination",
-      ],
-    },
-    {
-      name: "Saumya Bhardwaj",
-      role: "Social Media & Digital Outreach Lead",
-      bio: "Leading LaunchByte's social media presence, managing Instagram and other digital platforms, coordinating content strategy, and driving community engagement, brand visibility, and event coverage.",
-      photo: "/team/saumya-bhardwaj.jpg",
-      focus: [
-        "Social Media Management",
-        "Content Strategy & Branding",
-        "Event Promotion",
-        "Digital Outreach",
-        "Audience Engagement",
       ],
     },
   ] as CoreTeamMember[],

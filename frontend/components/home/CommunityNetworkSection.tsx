@@ -1,295 +1,362 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   Users,
-  UserPlus,
-  ShieldCheck,
-  MessageSquare,
+  Terminal,
+  Rocket,
   Sparkles,
   ArrowRight,
   Code2,
   Cpu,
-  Globe,
-  Terminal,
-  Activity,
+  Layers,
+  Compass,
+  CheckCircle2,
 } from "lucide-react";
-import { AvatarGroup, AvatarItem } from "@/components/ui/AvatarGroup";
-import { Reveal, MagneticButton } from "./HomeMotion";
 import SectionEyebrow from "@/components/ui/SectionEyebrow";
 import RevealHeading from "@/components/ui/RevealHeading";
-import TiltCard from "@/components/ui/TiltCard";
+import { Reveal, MagneticButton } from "./HomeMotion";
 
-interface SquadItem {
-  id: string;
-  name: string;
-  target: string;
-  skills: string[];
-  seeking: string;
-  accent: string;
-  members: AvatarItem[];
-}
+// Community destination: configurable URL or fallback to internal verified /network route
+const COMMUNITY_DESTINATION =
+  process.env.NEXT_PUBLIC_COMMUNITY_URL || "/network";
 
 export default function CommunityNetworkSection() {
-  const squads: SquadItem[] = [
-    {
-      id: "squad-1",
-      name: "Neural Nexus AI",
-      target: "Autonomous Agents Global Hackathon",
-      skills: ["PyTorch", "Next.js", "FastAPI"],
-      seeking: "Senior Frontend & UI/UX Specialist",
-      accent: "#8B5CF6",
-      members: [
-        { id: "u1", name: "Alex Chen", role: "AI Engineer" },
-        { id: "u2", name: "Maya Patel", role: "Systems Architect" },
-        { id: "u3", name: "David Kim", role: "Backend Lead" },
-      ],
-    },
-    {
-      id: "squad-2",
-      name: "Solidity Zero Protocol",
-      target: "Decentralized Finance Sprint",
-      skills: ["Solidity", "Rust", "Foundry"],
-      seeking: "Smart Contract Auditor & Protocol Lead",
-      accent: "#3B82F6",
-      members: [
-        { id: "u4", name: "Elena Rostova", role: "Rust Dev" },
-        { id: "u5", name: "Samir Vance", role: "Security Auditor" },
-      ],
-    },
-    {
-      id: "squad-3",
-      name: "CloudNative Distributed",
-      target: "Kubernetes & Edge Computing Challenge",
-      skills: ["Go", "Kubernetes", "gRPC"],
-      seeking: "Systems Architect & Benchmarking Engineer",
-      accent: "#22D3EE",
-      members: [
-        { id: "u6", name: "Marcus Brody", role: "Go Engineer" },
-        { id: "u7", name: "Tanya Sen", role: "DevOps Lead" },
-        { id: "u8", name: "Leo Rivera", role: "Fullstack" },
-      ],
-    },
-  ];
+  const shouldReduceMotion = useReducedMotion();
+  const [activeNode, setActiveNode] = useState<string>("fullstack");
 
-  const features = [
+  const nodes = [
     {
-      icon: Users,
-      title: "Algorithmic Teammate Matching",
-      description:
-        "Filter thousands of active student developers by target hackathons, complementary skillsets, programming languages, and timezone.",
+      id: "fullstack",
+      label: "Full-Stack Devs",
+      sublabel: "React, Next.js, Node, Go",
+      accent: "#8B5CF6",
+      x: "25%",
+      y: "26%",
     },
     {
-      icon: Terminal,
-      title: "Instant Crew Dashboards",
-      description:
-        "Create private team spaces in seconds, generate shareable invite tokens, coordinate repository links, and submit projects without hassle.",
+      id: "aiml",
+      label: "AI / ML Engineers",
+      sublabel: "PyTorch, LLMs, Agents",
+      accent: "#22D3EE",
+      x: "75%",
+      y: "24%",
     },
     {
-      icon: ShieldCheck,
-      title: "Verified Builder Reputation",
-      description:
-        "Every hackathon attended, placement won, and project deployed creates an immutable, verifiable proof of execution on your builder profile.",
+      id: "systems",
+      label: "Systems & Cloud",
+      sublabel: "Rust, Distributed, K8s",
+      accent: "#6366F1",
+      x: "26%",
+      y: "74%",
+    },
+    {
+      id: "design",
+      label: "Product & UI/UX",
+      sublabel: "Figma, Design Systems",
+      accent: "#A78BFA",
+      x: "74%",
+      y: "76%",
     },
   ];
 
   return (
-    <section className="relative py-20 sm:py-28 bg-[#050510] overflow-hidden">
-      {/* Background Ambience */}
-      <div className="absolute inset-0 bg-space-grid opacity-20 pointer-events-none" />
-      <div className="absolute top-1/4 left-1/3 w-[600px] h-[350px] bg-violet-800/10 rounded-full blur-[100px] pointer-events-none" />
+    <section className="relative py-24 sm:py-32 bg-[#050510] overflow-hidden select-none">
+      {/* Background Cosmic Atmosphere */}
+      <div className="absolute inset-0 bg-space-grid opacity-15 pointer-events-none" />
+      <div className="absolute top-1/4 left-1/4 w-[600px] h-[450px] bg-gradient-to-tr from-violet-900/20 via-indigo-900/15 to-transparent rounded-full blur-[160px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[400px] bg-gradient-to-bl from-cyan-950/20 via-violet-950/20 to-transparent rounded-full blur-[150px] pointer-events-none" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
-        {/* Section Header */}
-        <Reveal>
-          <div className="max-w-3xl mx-auto text-center space-y-4">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 lg:space-y-20">
+        {/* ================= SECTION HEADER ================= */}
+        <div className="max-w-3xl mx-auto text-center space-y-4">
+          <div className="hidden md:flex justify-center">
             <SectionEyebrow
-              stage="STAGE 03 // CONNECT"
-              badge="The Builder Network"
+              stage="STAGE 04 // CONNECT"
+              badge="Builder Network"
               accentColor="violet"
             />
-
-            <RevealHeading
-              text="Never Hack Alone. Assemble Your Ultimate Crew."
-              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight leading-tight"
-            />
-
-            <p className="text-base sm:text-lg text-[#CBD5E1] leading-relaxed font-normal">
-              Whether you need a backend wizard, an AI researcher, or a product designer, LaunchByte connects you with student builders who share your work ethic, speed, and hunger to win.
-            </p>
           </div>
-        </Reveal>
 
-        {/* 3 Core Community Capabilities */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {features.map((feat, idx) => {
-            const Icon = feat.icon;
-            return (
-              <Reveal key={idx} delay={0.1 * idx}>
-                <TiltCard maxTilt={5} className="h-full">
-                  <div className="p-7 rounded-3xl glass-card glow-hover space-y-4 h-full flex flex-col justify-between">
-                    <div className="space-y-4">
-                      <div className="w-12 h-12 rounded-2xl bg-violet-950/70 border border-violet-500/30 flex items-center justify-center text-violet-400 shadow-md">
-                        <Icon className="w-6 h-6" />
-                      </div>
-                      <h3 className="text-lg font-bold text-[#F8FAFC]">{feat.title}</h3>
-                      <p className="text-xs sm:text-sm text-[#CBD5E1] leading-relaxed">
-                        {feat.description}
-                      </p>
-                    </div>
-                  </div>
-                </TiltCard>
-              </Reveal>
-            );
-          })}
+          <RevealHeading
+            text="Build Something Bigger Than Yourself."
+            className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-[#F8FAFC] tracking-tight leading-[1.12]"
+          />
+
+          <p className="text-base sm:text-lg text-[#CBD5E1] leading-relaxed font-normal max-w-2xl mx-auto">
+            Find your people, discover opportunities, collaborate on ideas and
+            turn what you learn into something real.
+          </p>
+
+          {/* Micro Brand Ethos Strip */}
+          <div className="inline-flex items-center gap-3 pt-2 text-xs font-mono font-semibold tracking-widest uppercase text-cyan-400">
+            <span>BUILD</span>
+            <span className="text-violet-500">•</span>
+            <span>COLLABORATE</span>
+            <span className="text-violet-500">•</span>
+            <span>LAUNCH</span>
+          </div>
         </div>
 
-        {/* Active Squads Showcase with Visual Connection Lines & Online Pulse Dots */}
-        <Reveal delay={0.2}>
-          <div className="rounded-3xl glass-card p-6 sm:p-10 space-y-8 relative overflow-hidden">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-6">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <span className="relative flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
-                  </span>
-                  <span className="text-xs font-mono uppercase tracking-wider text-cyan-400 font-semibold">
-                    Live Hackathon Squads Matching Now
+        {/* ================= ASYMMETRIC COMMUNITY COMPOSITION ================= */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
+          {/* ================= LEFT ANCHOR (7 Cols): Constellation & Find Your People ================= */}
+          <div className="lg:col-span-7 flex flex-col justify-between space-y-8 rounded-3xl p-6 sm:p-10 bg-gradient-to-b from-white/[0.04] to-white/[0.01] border border-violet-500/20 backdrop-blur-xl relative overflow-hidden shadow-2xl shadow-black/60 group">
+            {/* Ambient Background Aura */}
+            <div className="absolute -top-24 -left-24 w-72 h-72 bg-violet-600/15 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -bottom-24 -right-24 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+
+            <div className="relative z-10 space-y-6">
+              {/* Pillar A: FIND YOUR PEOPLE */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee] animate-pulse" />
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-cyan-300">
+                    PILLAR 01 // DISCOVER YOUR PEERS
                   </span>
                 </div>
-                <h3 className="text-xl sm:text-2xl font-bold text-white">
-                  Teams Actively Recruiting Collaborators
+                <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                  Find Your People
                 </h3>
+                <p className="text-sm sm:text-base text-slate-300/90 leading-relaxed max-w-xl">
+                  Connect with developers, designers, innovators and students who
+                  share your interests. Meet builders who complement your skills
+                  and challenge you to build higher.
+                </p>
               </div>
 
-              <MagneticButton>
-                <Link
-                  href="/teams"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-600/20 hover:bg-violet-600 text-violet-200 hover:text-white text-xs font-semibold border border-violet-500/30 transition-all focus-visible:ring-2 focus-visible:ring-violet-400"
+              {/* Dynamic Interactive Builder Constellation Diagram */}
+              <div className="relative w-full h-[240px] sm:h-[280px] rounded-2xl bg-[#070719]/90 border border-white/[0.08] p-4 overflow-hidden">
+                {/* SVG Connecting Vectors */}
+                <svg
+                  className="absolute inset-0 w-full h-full pointer-events-none opacity-40"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  <span>Explore All Teams</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </MagneticButton>
+                  <line
+                    x1="18%"
+                    y1="28%"
+                    x2="50%"
+                    y2="50%"
+                    stroke="#8B5CF6"
+                    strokeWidth="1.5"
+                    strokeDasharray="4 4"
+                  />
+                  <line
+                    x1="78%"
+                    y1="24%"
+                    x2="50%"
+                    y2="50%"
+                    stroke="#22D3EE"
+                    strokeWidth="1.5"
+                    strokeDasharray="4 4"
+                  />
+                  <line
+                    x1="24%"
+                    y1="74%"
+                    x2="50%"
+                    y2="50%"
+                    stroke="#6366F1"
+                    strokeWidth="1.5"
+                    strokeDasharray="4 4"
+                  />
+                  <line
+                    x1="72%"
+                    y1="76%"
+                    x2="50%"
+                    y2="50%"
+                    stroke="#A78BFA"
+                    strokeWidth="1.5"
+                    strokeDasharray="4 4"
+                  />
+                  {/* Outer cross-connections */}
+                  <line
+                    x1="18%"
+                    y1="28%"
+                    x2="78%"
+                    y2="24%"
+                    stroke="rgba(255,255,255,0.08)"
+                    strokeWidth="1"
+                  />
+                  <line
+                    x1="24%"
+                    y1="74%"
+                    x2="72%"
+                    y2="76%"
+                    stroke="rgba(255,255,255,0.08)"
+                    strokeWidth="1"
+                  />
+                </svg>
+
+                {/* Center Core Node: LaunchByte Hub */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center pointer-events-none">
+                  <div className="relative flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-tr from-violet-600 to-indigo-600 shadow-[0_0_24px_rgba(139,92,246,0.6)] border border-violet-300/40">
+                    <Sparkles className="w-5 h-5 text-white animate-spin-slow" />
+                  </div>
+                  <span className="mt-1.5 text-[9px] font-mono tracking-widest text-cyan-300 uppercase font-semibold">
+                    LAUNCHBYTE HUB
+                  </span>
+                </div>
+
+                {/* Orbiting Discipline Nodes */}
+                {nodes.map((node) => {
+                  const isActive = activeNode === node.id;
+                  return (
+                    <button
+                      key={node.id}
+                      type="button"
+                      onClick={() => setActiveNode(node.id)}
+                      onMouseEnter={() => setActiveNode(node.id)}
+                      style={{ left: node.x, top: node.y }}
+                      className={`absolute -translate-x-1/2 -translate-y-1/2 p-2 sm:p-2.5 rounded-xl border backdrop-blur-md transition-all duration-300 text-left cursor-pointer focus:outline-none ${
+                        isActive
+                          ? "bg-violet-950/90 border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.35)] scale-105 z-20"
+                          : "bg-black/60 border-white/10 hover:border-violet-400/50 hover:bg-black/80 z-10"
+                      }`}
+                    >
+                      <div className="flex items-center gap-1.5">
+                        <span
+                          className="w-1.5 h-1.5 rounded-full"
+                          style={{
+                            backgroundColor: node.accent,
+                            boxShadow: `0 0 6px ${node.accent}`,
+                          }}
+                        />
+                        <span className="text-[10px] sm:text-xs font-mono font-bold text-white whitespace-nowrap">
+                          {node.label}
+                        </span>
+                      </div>
+                      <span className="hidden sm:block text-[9px] font-mono text-slate-400 mt-0.5 whitespace-nowrap">
+                        {node.sublabel}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {squads.map((squad) => (
-                <TiltCard key={squad.id} maxTilt={5} className="h-full">
-                  <div
-                    className="relative p-6 rounded-2xl bg-slate-950/80 border border-slate-800/80 hover:border-violet-500/40 transition-all space-y-5 flex flex-col justify-between overflow-hidden group h-full"
-                  >
-                    {/* Subtle Background SVG Connection Lines between avatars/skills */}
-                    <svg
-                      className="absolute inset-0 w-full h-full pointer-events-none opacity-20 group-hover:opacity-40 transition-opacity"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <defs>
-                        <linearGradient id={`line-grad-${squad.id}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stopColor={squad.accent} stopOpacity="0.8" />
-                          <stop offset="100%" stopColor="#22D3EE" stopOpacity="0.2" />
-                        </linearGradient>
-                      </defs>
-                      <path
-                        d="M 30,50 Q 120,20 220,70 T 320,50"
-                        fill="none"
-                        stroke={`url(#line-grad-${squad.id})`}
-                        strokeWidth="1.5"
-                        strokeDasharray="4 4"
-                      />
-                      <circle cx="30" cy="50" r="3" fill={squad.accent} />
-                      <circle cx="220" cy="70" r="3" fill="#22D3EE" />
-                    </svg>
-
-                    <div className="relative z-10 space-y-4">
-                      {/* Header: Squad Size & Live Pulse Status */}
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-full bg-violet-950/80 border border-violet-500/30 text-violet-300">
-                          {squad.members.length} / 4 Members
-                        </span>
-                        <span className="text-[11px] text-emerald-400 font-mono font-semibold flex items-center gap-1.5 bg-emerald-950/40 px-2 py-0.5 rounded-md border border-emerald-500/20">
-                          <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-                          </span>
-                          <span>Recruiting</span>
-                        </span>
-                      </div>
-
-                      <div>
-                        <h4 className="text-base sm:text-lg font-bold text-white line-clamp-1 group-hover:text-violet-200 transition-colors">
-                          {squad.name}
-                        </h4>
-                        <p className="text-xs text-slate-400 font-mono line-clamp-1 mt-0.5">
-                          Target: {squad.target}
-                        </p>
-                      </div>
-
-                      {/* Member Avatars Visual with AvatarGroup & Connection Status */}
-                      <div className="pt-2 flex items-center justify-between bg-slate-900/60 p-3 rounded-xl border border-slate-800/80">
-                        <div>
-                          <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block mb-1">
-                            Squad Roster
-                          </span>
-                          <AvatarGroup users={squad.members} max={4} size="sm" />
-                        </div>
-                        <div className="text-right">
-                          <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block mb-1">
-                            Status
-                          </span>
-                          <span className="inline-flex items-center gap-1 text-[11px] font-mono text-cyan-300">
-                            <Activity className="w-3 h-3 text-cyan-400 animate-pulse" />
-                            <span>Active Now</span>
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Tech Stack Pills */}
-                      <div className="flex flex-wrap gap-1.5 pt-1">
-                        {squad.skills.map((skill, skIdx) => (
-                          <span
-                            key={skIdx}
-                            className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-slate-900 border border-slate-800 text-slate-300"
-                          >
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-
-                      {/* Seeking Role */}
-                      <div className="p-3 rounded-xl bg-violet-950/30 border border-violet-500/20 space-y-1">
-                        <span className="text-[10px] font-mono uppercase tracking-wider text-violet-300 font-semibold block">
-                          Seeking Complementary Role:
-                        </span>
-                        <p className="text-xs font-medium text-slate-200">
-                          {squad.seeking}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Action Link */}
-                    <div className="relative z-10 pt-3 border-t border-slate-800/80 flex items-center justify-between">
-                      <span className="text-[11px] font-mono text-slate-400">
-                        Open squad token
-                      </span>
-                      <MagneticButton>
-                        <Link
-                          href="/teams"
-                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-cyan-300 hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-cyan-400 rounded-lg p-1"
-                        >
-                          <span>Join Squad</span>
-                          <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
-                        </Link>
-                      </MagneticButton>
-                    </div>
-                  </div>
-                </TiltCard>
-              ))}
+            {/* Quick Action in Left Anchor */}
+            <div className="relative z-10 pt-2 flex flex-wrap items-center justify-between gap-4 border-t border-white/[0.08]">
+              <span className="text-xs font-mono text-slate-400">
+                Cross-disciplinary developer squads
+              </span>
+              <Link
+                href="/network"
+                className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-cyan-300 hover:text-white transition-colors"
+              >
+                <span>Browse Builder Network</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
           </div>
-        </Reveal>
+
+          {/* ================= RIGHT COLUMN (5 Cols): Pillars B, C, D Staggered Stack ================= */}
+          <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
+            {/* ================= PILLAR B: BUILD TOGETHER ================= */}
+            <div className="p-6 sm:p-7 rounded-3xl bg-gradient-to-br from-white/[0.03] to-transparent border border-white/[0.08] hover:border-violet-500/40 transition-all duration-300 space-y-3 relative overflow-hidden group">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-violet-950/80 border border-violet-500/30 flex items-center justify-center text-violet-300 shadow-md">
+                    <Terminal className="w-4 h-4 text-violet-400" />
+                  </div>
+                  <span className="text-xs font-mono uppercase tracking-wider text-violet-300 font-semibold">
+                    PILLAR 02 // COLLABORATION
+                  </span>
+                </div>
+                <Link
+                  href="/teams"
+                  className="text-[11px] font-mono text-slate-400 hover:text-cyan-300 transition-colors flex items-center gap-1"
+                >
+                  <span>Squads</span>
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
+
+              <h4 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                Build Together
+              </h4>
+              <p className="text-xs sm:text-sm text-slate-300/85 leading-relaxed">
+                Find collaborators, exchange ideas, build projects and work on
+                real-world challenges. Form squads for hackathons or assemble
+                teams to turn side ideas into production software.
+              </p>
+            </div>
+
+            {/* ================= PILLAR C: GROW THROUGH EXPERIENCE ================= */}
+            <div className="p-6 sm:p-7 rounded-3xl bg-gradient-to-br from-white/[0.03] to-transparent border border-white/[0.08] hover:border-cyan-500/40 transition-all duration-300 space-y-3 relative overflow-hidden group">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-cyan-950/80 border border-cyan-500/30 flex items-center justify-center text-cyan-300 shadow-md">
+                    <Rocket className="w-4 h-4 text-cyan-400" />
+                  </div>
+                  <span className="text-xs font-mono uppercase tracking-wider text-cyan-300 font-semibold">
+                    PILLAR 03 // TRAJECTORY
+                  </span>
+                </div>
+                <Link
+                  href="/events"
+                  className="text-[11px] font-mono text-slate-400 hover:text-cyan-300 transition-colors flex items-center gap-1"
+                >
+                  <span>Events</span>
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
+
+              <h4 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                Grow Through Experience
+              </h4>
+              <p className="text-xs sm:text-sm text-slate-300/85 leading-relaxed">
+                Explore hackathons, workshops, internships, programs and
+                opportunities to expand your skills. Move from theoretical
+                knowledge to hands-on shipping with real teammates.
+              </p>
+            </div>
+
+            {/* ================= PILLAR D: BE PART OF SOMETHING ================= */}
+            <div className="p-6 sm:p-7 rounded-3xl bg-gradient-to-br from-white/[0.03] to-transparent border border-white/[0.08] hover:border-indigo-500/40 transition-all duration-300 space-y-3 relative overflow-hidden group">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-indigo-950/80 border border-indigo-500/30 flex items-center justify-center text-indigo-300 shadow-md">
+                  <Users className="w-4 h-4 text-indigo-400" />
+                </div>
+                <span className="text-xs font-mono uppercase tracking-wider text-indigo-300 font-semibold">
+                  PILLAR 04 // BELONGING
+                </span>
+              </div>
+
+              <h4 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                Be Part of Something
+              </h4>
+              <p className="text-xs sm:text-sm text-slate-300/85 leading-relaxed">
+                Become part of a community that encourages building, learning,
+                sharing and creating. Where student developers support each
+                other, celebrate wins, and launch what matters.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ================= COMMUNITY CTA STRIP ================= */}
+        <div className="pt-6 sm:pt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 text-center">
+          <MagneticButton>
+            <Link
+              href={COMMUNITY_DESTINATION}
+              className="inline-flex items-center justify-center gap-2.5 px-8 py-4 rounded-2xl bg-gradient-to-r from-violet-600 via-indigo-600 to-cyan-500 text-white font-semibold text-sm tracking-wide shadow-xl shadow-violet-950/50 hover:shadow-cyan-500/25 transition-all duration-300 hover:scale-[1.02] focus-visible:ring-2 focus-visible:ring-cyan-400"
+            >
+              <Users className="w-4 h-4" />
+              <span>Join the LaunchByte Community</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </MagneticButton>
+
+          <Link
+            href="/teams"
+            className="inline-flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-violet-500/40 text-slate-300 hover:text-white font-medium text-sm transition-all duration-300"
+          >
+            <span>Explore Squad Finder</span>
+            <ArrowRight className="w-4 h-4 text-slate-400" />
+          </Link>
+        </div>
       </div>
     </section>
   );

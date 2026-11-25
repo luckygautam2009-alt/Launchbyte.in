@@ -35,11 +35,11 @@ function TeamPortraitFrame({
   const [isHovered, setIsHovered] = useState(false);
   const [imgError, setImgError] = useState(false);
 
-  // Subtle image parallax across scroll viewport
+  // Subtle image parallax across scroll viewport (kept minimal to avoid clipping)
   const imageY = useTransform(
     scrollYProgress,
     [0, 1],
-    shouldReduceMotion ? [0, 0] : [-22, 22]
+    shouldReduceMotion ? [0, 0] : [-12, 12]
   );
 
   const initials = member.name
@@ -378,26 +378,19 @@ export default function CoreTeamSection({
         );
 
         if (validPublicTeam.length > 0) {
-          const mapped: CoreTeamMember[] = validPublicTeam.map((m) => {
-            const fallback = SITE_CONTENT.coreTeam.find(
-              (c) => c.name.toLowerCase() === m.name.toLowerCase()
+          // Keep canonical core team order (01 to 04) and enrich with any verified database links
+          const enriched = SITE_CONTENT.coreTeam.map((official) => {
+            const match = validPublicTeam.find(
+              (p) => p.name.toLowerCase().trim() === official.name.toLowerCase().trim()
             );
+            if (!match) return official;
             return {
-              name: m.name,
-              role: fallback?.role || m.designation,
-              title: fallback?.title,
-              bio: fallback?.bio || m.bio || "",
-              tagline: fallback?.tagline,
-              photo: fallback?.photo || m.photo_url || "/team/yash-gautam.jpg",
-              linkedin: m.linkedin_url || fallback?.linkedin,
-              github: m.github_url || fallback?.github,
-              twitter: fallback?.twitter,
-              highlights: fallback?.highlights,
-              skills: fallback?.skills,
-              focus: fallback?.focus,
+              ...official,
+              linkedin: match.linkedin_url || official.linkedin,
+              github: match.github_url || official.github,
             };
           });
-          setMembers(mapped);
+          setMembers(enriched);
         } else {
           setMembers(SITE_CONTENT.coreTeam);
         }
