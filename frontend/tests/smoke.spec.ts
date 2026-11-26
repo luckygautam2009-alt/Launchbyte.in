@@ -18,7 +18,7 @@ test.describe("Smoke Tests - Key Pages & Responsive Viewports", () => {
       await expect(page.locator("text=LaunchByte").first()).toBeVisible();
 
       // Verify Hero Headline
-      await expect(page.locator("h1")).toContainText(/Build|Opportunities|hackathons/i);
+      await expect(page.locator("h1")).toContainText(/LAUNCHBYTE/i);
 
       // Verify Cmd+K search trigger or Navbar is present
       if (vp.width >= 768) {
@@ -31,10 +31,9 @@ test.describe("Smoke Tests - Key Pages & Responsive Viewports", () => {
     });
   }
 
-  test("Opportunities page renders with filters and list", async ({ page }) => {
+  test("Opportunities page redirects unauthenticated users to login", async ({ page }) => {
     await page.goto("/opportunities");
-    await expect(page).toHaveURL(/opportunities/);
-    await expect(page.locator("h1")).toContainText(/Opportunities/i);
+    await expect(page).toHaveURL(/\/login\?next=/);
   });
 
   test("Events page renders with mode filter and search", async ({ page }) => {

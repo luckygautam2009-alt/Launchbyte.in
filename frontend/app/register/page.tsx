@@ -30,7 +30,15 @@ function RegisterForm() {
 
   useEffect(() => {
     if (!loading && user) {
-      router.replace(safeNext);
+      if (!user.is_email_verified) {
+        const verifyTarget =
+          safeNext !== "/dashboard"
+            ? `/verify-email?next=${encodeURIComponent(safeNext)}`
+            : "/verify-email";
+        router.replace(verifyTarget);
+      } else {
+        router.replace(safeNext);
+      }
     }
   }, [loading, user, router, safeNext]);
 
