@@ -7,6 +7,7 @@ import httpx
 import pytest
 from PIL import Image
 
+from app.services.storage.local import LocalDiskBackend
 from app.services.storage.supabase import SupabaseStorageBackend
 
 
@@ -35,7 +36,7 @@ def test_supabase_storage_sb_secret_key_uses_apikey_only_no_bearer(monkeypatch):
     mock_client.__enter__.return_value = mock_client
     mock_client.__exit__.return_value = False
     mock_client.post.return_value = mock_resp
-    mock_client.get.return_value = mock_resp
+    mock_client.head.return_value = mock_resp
 
     with patch("app.services.storage.supabase.httpx.Client", return_value=mock_client):
         backend = SupabaseStorageBackend()
@@ -49,6 +50,10 @@ def test_supabase_storage_sb_secret_key_uses_apikey_only_no_bearer(monkeypatch):
     assert "Authorization" not in headers
     assert headers["x-upsert"] == "true"
     assert headers["Content-Type"] == "image/png"
+    mock_client.head.assert_called_once_with(
+        "https://example.supabase.co/storage/v1/object/public/avatars/avatar.png",
+        follow_redirects=True,
+    )
 
 
 def test_supabase_storage_legacy_jwt_key_sends_apikey_and_bearer(monkeypatch):
@@ -67,14 +72,14 @@ def test_supabase_storage_legacy_jwt_key_sends_apikey_and_bearer(monkeypatch):
     mock_resp.status_code = 201
     mock_resp.text = '{"Key":"media/avatar.png"}'
 
-    mock_get_resp = MagicMock()
-    mock_get_resp.status_code = 200
+    mock_head_resp = MagicMock()
+    mock_head_resp.status_code = 200
 
     mock_client = MagicMock()
     mock_client.__enter__.return_value = mock_client
     mock_client.__exit__.return_value = False
     mock_client.post.return_value = mock_resp
-    mock_client.get.return_value = mock_get_resp
+    mock_client.head.return_value = mock_head_resp
 
     with patch("app.services.storage.supabase.httpx.Client", return_value=mock_client):
         backend = SupabaseStorageBackend()
@@ -87,7 +92,7 @@ def test_supabase_storage_legacy_jwt_key_sends_apikey_and_bearer(monkeypatch):
     assert headers["x-upsert"] == "true"
 
 
-def test_supabase_storage_private_bucket_falls_back_to_signed_url(monkeypatch):
+def test_supabase_storage_head_check_failure_raises_runtime_error(monkeypatch):
     fake_settings = SimpleNamespace(
         SUPABASE_URL="https://example.supabase.co",
         SUPABASE_SERVICE_ROLE_KEY="sb_secret_test_key_123",
@@ -102,61 +107,51 @@ def test_supabase_storage_private_bucket_falls_back_to_signed_url(monkeypatch):
     mock_upload_resp.status_code = 200
     mock_upload_resp.text = '{"Key":"avatars/test.png"}'
 
-    # Public GET fails with 400 Bucket not found (private bucket)
-    mock_verify_resp = MagicMock()
-    mock_verify_resp.status_code = 400
-    mock_verify_resp.text = '{"error":"Bucket not found"}'
-
-    # Signed URL POST succeeds
-    mock_sign_resp = MagicMock()
-    mock_sign_resp.status_code = 200
-    mock_sign_resp.json.return_value = {
-        "signedURL": "/storage/v1/object/sign/avatars/test.png?token=valid-secret-token"
-    }
+    # Public HEAD fails with 400 / 403 when bucket is private or object unreachable
+    mock_head_resp = MagicMock()
+    mock_head_resp.status_code = 400
 
     mock_client = MagicMock()
     mock_client.__enter__.return_value = mock_client
     mock_client.__exit__.return_value = False
-    mock_client.post.side_effect = [mock_upload_resp, mock_sign_resp]
-    mock_client.get.return_value = mock_verify_resp
+    mock_client.post.return_value = mock_upload_resp
+    mock_client.head.return_value = mock_head_resp
 
     with patch("app.services.storage.supabase.httpx.Client", return_value=mock_client):
         backend = SupabaseStorageBackend()
-        url = backend.save(b"png-bytes", "test.png", "image/png")
-
-    assert url == "https://example.supabase.co/storage/v1/object/sign/avatars/test.png?token=valid-secret-token"
-
-
-def test_supabase_storage_inaccessible_object_raises_runtime_error(monkeypatch):
-    fake_settings = SimpleNamespace(
-        SUPABASE_URL="https://example.supabase.co",
-        SUPABASE_SERVICE_ROLE_KEY="sb_secret_test_key_123",
-        SUPABASE_STORAGE_BUCKET="avatars",
-    )
-    monkeypatch.setattr(
-        "app.services.storage.supabase.get_settings",
-        lambda: fake_settings,
-    )
-
-    mock_upload_resp = MagicMock()
-    mock_upload_resp.status_code = 200
-
-    mock_verify_resp = MagicMock()
-    mock_verify_resp.status_code = 403
-
-    mock_sign_resp = MagicMock()
-    mock_sign_resp.status_code = 500
-
-    mock_client = MagicMock()
-    mock_client.__enter__.return_value = mock_client
-    mock_client.__exit__.return_value = False
-    mock_client.post.side_effect = [mock_upload_resp, mock_sign_resp]
-    mock_client.get.return_value = mock_verify_resp
-
-    with patch("app.services.storage.supabase.httpx.Client", return_value=mock_client):
-        backend = SupabaseStorageBackend()
-        with pytest.raises(RuntimeError, match="public URL is inaccessible"):
+        with pytest.raises(RuntimeError, match="Supabase bucket 'avatars' is not public or URL unreachable \\(status 400\\)"):
             backend.save(b"png-bytes", "test.png", "image/png")
+
+    # Network error during HEAD also raises RuntimeError
+    mock_client.head.side_effect = httpx.ConnectError("DNS failure")
+    with patch("app.services.storage.supabase.httpx.Client", return_value=mock_client):
+        backend = SupabaseStorageBackend()
+        with pytest.raises(RuntimeError, match="Supabase bucket 'avatars' is not public or URL unreachable"):
+            backend.save(b"png-bytes", "test.png", "image/png")
+
+
+def test_local_storage_returns_absolute_url_when_backend_public_url_set(monkeypatch, tmp_path):
+    monkeypatch.setattr(
+        "app.services.storage.local.get_settings",
+        lambda: SimpleNamespace(
+            STORAGE_LOCAL_DIR=str(tmp_path),
+            BACKEND_PUBLIC_URL="http://localhost:8000/",
+        ),
+    )
+    backend = LocalDiskBackend()
+    url = backend.save(b"png-bytes", "avatar.png", "image/png")
+    assert url == "http://localhost:8000/uploads/avatar.png"
+    assert (tmp_path / "avatar.png").read_bytes() == b"png-bytes"
+
+    monkeypatch.setattr(
+        "app.services.storage.local.get_settings",
+        lambda: SimpleNamespace(
+            STORAGE_LOCAL_DIR=str(tmp_path),
+            BACKEND_PUBLIC_URL="",
+        ),
+    )
+    rel_backend = LocalDiskBackend()
+    assert rel_backend.save(b"png-bytes", "avatar2.png", "image/png") == "/uploads/avatar2.png"
 
 
 def test_supabase_storage_logs_real_error_and_raises_runtime_error(monkeypatch, caplog):

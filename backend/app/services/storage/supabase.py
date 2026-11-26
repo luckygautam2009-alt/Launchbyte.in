@@ -43,55 +43,23 @@ class SupabaseStorageBackend(StorageBackend):
             )
 
         public_url = f"{self.supabase_url}/storage/v1/object/public/{self.bucket}/{filename}"
-
-        # 1. Verify if the public URL is directly accessible
         try:
-            with httpx.Client(timeout=10.0) as verify_client:
-                v_resp = verify_client.get(public_url)
-                if v_resp.status_code == 200:
-                    return public_url
-                logger.warning(
-                    "Public storage URL %s returned status %s: %s",
-                    public_url,
-                    v_resp.status_code,
-                    v_resp.text[:200],
-                )
-        except Exception as v_err:
-            logger.warning("Could not verify public storage URL %s: %s", public_url, v_err)
+            with httpx.Client(timeout=10.0) as client:
+                head_resp = client.head(public_url, follow_redirects=True)
+        except httpx.HTTPError as exc:
+            logger.error("Supabase storage public URL HEAD failed for %s: %s", public_url, exc)
+            raise RuntimeError(
+                f"Supabase bucket '{self.bucket}' is not public or URL unreachable ({exc})"
+            ) from exc
 
-        # 2. If public access failed (e.g. private bucket), attempt long-lived signed URL
-        sign_url = f"{self.supabase_url}/storage/v1/object/sign/{self.bucket}/{filename}"
-        sign_headers = {
-            "apikey": self.service_key,
-            "Content-Type": "application/json",
-        }
-        if not self.service_key.startswith("sb_secret_"):
-            sign_headers["Authorization"] = f"Bearer {self.service_key}"
+        if head_resp.status_code != 200:
+            logger.error(
+                "Supabase public URL %s unreachable (status %s)",
+                public_url,
+                head_resp.status_code,
+            )
+            raise RuntimeError(
+                f"Supabase bucket '{self.bucket}' is not public or URL unreachable (status {head_resp.status_code})"
+            )
 
-        try:
-            with httpx.Client(timeout=10.0) as sign_client:
-                s_resp = sign_client.post(
-                    sign_url,
-                    json={"expiresIn": 315360000},  # 10 years
-                    headers=sign_headers,
-                )
-                if s_resp.status_code in (200, 201):
-                    s_data = s_resp.json()
-                    signed_path = s_data.get("signedURL")
-                    if signed_path:
-                        if not signed_path.startswith("http"):
-                            return f"{self.supabase_url}{signed_path}"
-                        return signed_path
-                logger.warning(
-                    "Supabase signed URL generation returned status %s: %s",
-                    s_resp.status_code,
-                    s_resp.text[:200],
-                )
-        except Exception as s_err:
-            logger.warning("Failed to generate Supabase signed URL: %s", s_err)
-
-        # 3. If both public URL and signed URL failed, fail cleanly with a helpful error
-        raise RuntimeError(
-            f"Uploaded object to bucket '{self.bucket}', but the public URL is inaccessible ({public_url}) "
-            f"and signed URL generation failed. Please verify that bucket '{self.bucket}' exists and has Public access enabled in Supabase Storage."
-        )
+        return public_url

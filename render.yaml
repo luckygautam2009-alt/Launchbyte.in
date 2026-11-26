@@ -22,3 +22,21 @@ services:
         generateValue: true
       - key: CORS_ORIGINS
         value: "https://launchbyte.vercel.app,https://launchbyte.io,https://www.launchbyte.io"
+      - key: FRONTEND_URL
+        value: https://launchbyte.io
+      - key: BACKEND_PUBLIC_URL
+        sync: false
+      - key: STORAGE_BACKEND
+        value: supabase
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SUPABASE_STORAGE_BUCKET
+        value: media
+      - key: EMAIL_BACKEND
+        value: brevo
+      - key: BREVO_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        sync: false

@@ -41,7 +41,16 @@ def test_production_settings_reject_console_email_and_missing_brevo_or_supabase(
     with pytest.raises(ValueError, match="EMAIL_FROM"):
         Settings(**base_kwargs, EMAIL_BACKEND="brevo", BREVO_API_KEY="xkeysib-123", EMAIL_FROM="")
 
-    # 3. Supabase storage requires URL, key, and bucket
+    # 3. Outside local/test, STORAGE_BACKEND must be 'supabase' and requires URL, key, and bucket
+    with pytest.raises(ValueError, match="STORAGE_BACKEND"):
+        Settings(
+            **base_kwargs,
+            EMAIL_BACKEND="brevo",
+            BREVO_API_KEY="xkeysib-123",
+            EMAIL_FROM="noreply@launchbyte.io",
+            STORAGE_BACKEND="local",
+        )
+
     with pytest.raises(ValueError, match="SUPABASE_URL"):
         Settings(
             **base_kwargs,

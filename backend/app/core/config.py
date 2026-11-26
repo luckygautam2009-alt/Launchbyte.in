@@ -26,6 +26,7 @@ class Settings(BaseSettings):
     DEBUG: bool = False
     API_V1_PREFIX: str = "/api/v1"
     FRONTEND_URL: str = "http://localhost:3000"
+    BACKEND_PUBLIC_URL: str = ""
 
     # --- Logging ---
     LOG_LEVEL: str = "INFO"
@@ -149,15 +150,19 @@ class Settings(BaseSettings):
                     )
 
             storage_backend = self.STORAGE_BACKEND.lower().strip()
-            if storage_backend == "supabase":
-                if not self.SUPABASE_URL.strip() or not self.SUPABASE_SERVICE_ROLE_KEY.strip():
-                    raise ValueError(
-                        "SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set when STORAGE_BACKEND='supabase'."
-                    )
-                if not self.SUPABASE_STORAGE_BUCKET.strip():
-                    raise ValueError(
-                        "SUPABASE_STORAGE_BUCKET must be set when STORAGE_BACKEND='supabase'."
-                    )
+            if storage_backend != "supabase":
+                raise ValueError(
+                    "STORAGE_BACKEND must be 'supabase' in non-local/test environments; "
+                    "local ephemeral disk storage is disallowed outside local/test."
+                )
+            if not self.SUPABASE_URL.strip() or not self.SUPABASE_SERVICE_ROLE_KEY.strip():
+                raise ValueError(
+                    "SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set when STORAGE_BACKEND='supabase'."
+                )
+            if not self.SUPABASE_STORAGE_BUCKET.strip():
+                raise ValueError(
+                    "SUPABASE_STORAGE_BUCKET must be set when STORAGE_BACKEND='supabase'."
+                )
         return self
 
 

@@ -42,6 +42,20 @@ def test_non_local_env_accepts_strong_secret():
             SECRET_KEY="x" * 40,
             QR_SIGNING_KEY="y" * 40,
             EMAIL_BACKEND="smtp",
+            STORAGE_BACKEND="supabase",
+            SUPABASE_URL="https://example.supabase.co",
+            SUPABASE_SERVICE_ROLE_KEY="sb_secret_test",
         ).ENV
         == "production"
     )
+
+
+def test_non_local_env_rejects_local_storage():
+    with pytest.raises(ValidationError, match="STORAGE_BACKEND must be 'supabase'"):
+        make(
+            ENV="production",
+            SECRET_KEY="x" * 40,
+            QR_SIGNING_KEY="y" * 40,
+            EMAIL_BACKEND="smtp",
+            STORAGE_BACKEND="local",
+        )
