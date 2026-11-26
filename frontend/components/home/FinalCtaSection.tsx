@@ -2,6 +2,7 @@
 
 import React, { useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { ArrowRight, LayoutDashboard, ShieldCheck, Users, Trophy } from "lucide-react";
 import { Reveal, MagneticButton } from "./HomeMotion";
@@ -27,10 +28,11 @@ export default function FinalCtaSection() {
     >
       {/* Background Cinematic Nebula */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <img
+        <Image
           src="/brand/rocket-nebula.webp"
           alt="Cinematic rocket nebula background"
-          className="w-full h-full object-cover select-none opacity-30 mix-blend-screen"
+          fill
+          className="object-cover select-none opacity-30 mix-blend-screen"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#050510] via-[#050510]/40 to-[#050510]" />
       </div>
@@ -39,9 +41,11 @@ export default function FinalCtaSection() {
       <div className="hidden lg:block absolute right-[6%] bottom-0 z-10 pointer-events-none">
         {shouldReduceMotion ? (
           <div className="w-64 sm:w-72 h-auto opacity-80 drop-shadow-[0_0_40px_rgba(139,92,246,0.4)]">
-            <img
+            <Image
               src="/brand/launchbyte-mission-rocket.webp"
               alt=""
+              width={288}
+              height={400}
               aria-hidden="true"
               className="w-full h-auto select-none"
             />
@@ -51,9 +55,11 @@ export default function FinalCtaSection() {
             style={{ y: rocketY }}
             className="w-64 sm:w-72 h-auto opacity-85 drop-shadow-[0_0_45px_rgba(139,92,246,0.45)] will-change-transform"
           >
-            <img
+            <Image
               src="/brand/launchbyte-mission-rocket.webp"
               alt=""
+              width={288}
+              height={400}
               aria-hidden="true"
               className="w-full h-auto select-none"
             />

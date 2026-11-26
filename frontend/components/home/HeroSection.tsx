@@ -175,7 +175,7 @@ export default function HeroSection() {
           className="relative w-full aspect-square flex items-end justify-center"
         >
           <Image
-            src="/brand/hero-astronaut-holding-planet.png"
+            src="/brand/hero-astronaut-holding-planet.webp"
             alt="Astronaut holding a glowing planet representing boundless opportunity"
             width={1024}
             height={1024}

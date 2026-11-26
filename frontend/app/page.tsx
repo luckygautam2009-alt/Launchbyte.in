@@ -1,24 +1,74 @@
 "use client";
 
 import React from "react";
+import dynamic from "next/dynamic";
 import LaunchByteIntro from "@/components/intro/LaunchByteIntro";
 import HeroSection from "@/components/home/HeroSection";
-import OrbitalBrandSection from "@/components/home/OrbitalBrandSection";
 import AstronautJourney from "@/components/home/AstronautJourney";
-import CosmicExplorerSection from "@/components/home/CosmicExplorerSection";
-import AboutLaunchByteSection from "@/components/home/AboutLaunchByteSection";
-import ExploreCategoriesSection from "@/components/home/ExploreCategoriesSection";
-import MarqueeStrip from "@/components/home/MarqueeStrip";
-import FeaturedOpportunitiesSection from "@/components/home/FeaturedOpportunitiesSection";
-import CommunityNetworkSection from "@/components/home/CommunityNetworkSection";
-import HowItWorksSection from "@/components/home/HowItWorksSection";
-import MissionVisionSection from "@/components/home/MissionVisionSection";
-import PartnersLogoRow from "@/components/home/PartnersLogoRow";
-import TestimonialsCarousel from "@/components/home/TestimonialsCarousel";
-import CoreTeamSection from "@/components/home/CoreTeamSection";
-import PartnerContactSection from "@/components/home/PartnerContactSection";
-import FinalCtaSection from "@/components/home/FinalCtaSection";
-import FaqAccordionSection from "@/components/home/FaqAccordionSection";
+
+const OrbitalBrandSection = dynamic(() => import("@/components/home/OrbitalBrandSection"), {
+  ssr: false,
+  loading: () => <div className="min-h-[300px]" />,
+});
+
+const CosmicExplorerSection = dynamic(() => import("@/components/home/CosmicExplorerSection"), {
+  loading: () => <div className="min-h-[300px]" />,
+});
+
+const AboutLaunchByteSection = dynamic(() => import("@/components/home/AboutLaunchByteSection"), {
+  loading: () => <div className="min-h-[200px]" />,
+});
+
+const ExploreCategoriesSection = dynamic(() => import("@/components/home/ExploreCategoriesSection"), {
+  loading: () => <div className="min-h-[200px]" />,
+});
+
+const MarqueeStrip = dynamic(() => import("@/components/home/MarqueeStrip"), {
+  loading: () => <div className="min-h-[80px]" />,
+});
+
+const FeaturedOpportunitiesSection = dynamic(
+  () => import("@/components/home/FeaturedOpportunitiesSection"),
+  {
+    loading: () => <div className="min-h-[300px]" />,
+  }
+);
+
+const CommunityNetworkSection = dynamic(() => import("@/components/home/CommunityNetworkSection"), {
+  loading: () => <div className="min-h-[200px]" />,
+});
+
+const HowItWorksSection = dynamic(() => import("@/components/home/HowItWorksSection"), {
+  loading: () => <div className="min-h-[200px]" />,
+});
+
+const MissionVisionSection = dynamic(() => import("@/components/home/MissionVisionSection"), {
+  loading: () => <div className="min-h-[200px]" />,
+});
+
+const PartnersLogoRow = dynamic(() => import("@/components/home/PartnersLogoRow"), {
+  loading: () => <div className="min-h-[150px]" />,
+});
+
+const TestimonialsCarousel = dynamic(() => import("@/components/home/TestimonialsCarousel"), {
+  loading: () => <div className="min-h-[200px]" />,
+});
+
+const CoreTeamSection = dynamic(() => import("@/components/home/CoreTeamSection"), {
+  loading: () => <div className="min-h-[300px]" />,
+});
+
+const PartnerContactSection = dynamic(() => import("@/components/home/PartnerContactSection"), {
+  loading: () => <div className="min-h-[200px]" />,
+});
+
+const FinalCtaSection = dynamic(() => import("@/components/home/FinalCtaSection"), {
+  loading: () => <div className="min-h-[200px]" />,
+});
+
+const FaqAccordionSection = dynamic(() => import("@/components/home/FaqAccordionSection"), {
+  loading: () => <div className="min-h-[200px]" />,
+});
 
 export default function HomePage() {
   return (

@@ -48,8 +48,18 @@ export { resolveMediaUrl };
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
+interface CacheEntry<T> {
+  data: T;
+  timestamp: number;
+}
+
+const CACHE_TTL_MS = 60 * 1000; // 60s fresh
+const SWR_WINDOW_MS = 300 * 1000; // 300s stale-while-revalidate
+
 class ApiClient {
   private token: string | null = null;
+  private getCache = new Map<string, CacheEntry<any>>();
+  private inFlight = new Map<string, Promise<any>>();
 
   constructor() {
     if (typeof window !== "undefined") {
@@ -57,8 +67,14 @@ class ApiClient {
     }
   }
 
+  clearCache() {
+    this.getCache.clear();
+    this.inFlight.clear();
+  }
+
   setToken(token: string | null) {
     this.token = token;
+    this.clearCache();
     if (typeof window !== "undefined") {
       const secureFlag = window.location.protocol === "https:" ? "; Secure" : "";
       if (token) {
@@ -78,7 +94,20 @@ class ApiClient {
     return this.token;
   }
 
-  private async request<T>(
+  private isPublicGet(endpoint: string, method?: string): boolean {
+    const m = (method || "GET").toUpperCase();
+    if (m !== "GET") return false;
+    return (
+      endpoint.startsWith("/opportunities") ||
+      endpoint.startsWith("/events") ||
+      endpoint.startsWith("/tags") ||
+      endpoint.startsWith("/projects") ||
+      endpoint.startsWith("/users/search") ||
+      endpoint.startsWith("/stats")
+    );
+  }
+
+  private async executeFetch<T>(
     endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
@@ -99,7 +128,6 @@ class ApiClient {
     });
 
     if (res.status === 401 && typeof window !== "undefined") {
-      // Clear token on 401
       this.setToken(null);
     }
 
@@ -127,6 +155,67 @@ class ApiClient {
     }
 
     return data as T;
+  }
+
+  private async request<T>(
+    endpoint: string,
+    options: RequestInit = {}
+  ): Promise<T> {
+    const method = (options.method || "GET").toUpperCase();
+
+    // Invalidate cache on any mutation
+    if (["POST", "PUT", "PATCH", "DELETE"].includes(method)) {
+      this.clearCache();
+      return this.executeFetch<T>(endpoint, options);
+    }
+
+    // Only cache eligible public GETs
+    if (!this.isPublicGet(endpoint, method)) {
+      return this.executeFetch<T>(endpoint, options);
+    }
+
+    const cacheKey = endpoint;
+    const now = Date.now();
+    const cached = this.getCache.get(cacheKey);
+
+    // Fresh within TTL 60s -> return immediately
+    if (cached && now - cached.timestamp < CACHE_TTL_MS) {
+      return cached.data as T;
+    }
+
+    // Stale within SWR window -> return cached immediately, trigger background revalidation
+    if (cached && now - cached.timestamp < SWR_WINDOW_MS) {
+      if (!this.inFlight.has(cacheKey)) {
+        const bgPromise = this.executeFetch<T>(endpoint, options)
+          .then((fresh) => {
+            this.getCache.set(cacheKey, { data: fresh, timestamp: Date.now() });
+            return fresh;
+          })
+          .catch(() => cached.data)
+          .finally(() => {
+            this.inFlight.delete(cacheKey);
+          });
+        this.inFlight.set(cacheKey, bgPromise);
+      }
+      return cached.data as T;
+    }
+
+    // In-flight deduplication
+    if (this.inFlight.has(cacheKey)) {
+      return this.inFlight.get(cacheKey)! as Promise<T>;
+    }
+
+    const fetchPromise = this.executeFetch<T>(endpoint, options)
+      .then((data) => {
+        this.getCache.set(cacheKey, { data, timestamp: Date.now() });
+        return data;
+      })
+      .finally(() => {
+        this.inFlight.delete(cacheKey);
+      });
+
+    this.inFlight.set(cacheKey, fetchPromise);
+    return fetchPromise;
   }
 
   // --- Auth ---

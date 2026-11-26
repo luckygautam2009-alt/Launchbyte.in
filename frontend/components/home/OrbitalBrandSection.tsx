@@ -133,11 +133,10 @@ export default function OrbitalBrandSection() {
                 className="relative w-[220px] sm:w-[340px] md:w-[390px] lg:w-[420px] xl:w-[460px] max-w-[75vw]"
               >
                 <Image
-                  src="/brand/launchbyte-orbital-neon-emblem.png"
+                  src="/brand/launchbyte-orbital-neon-emblem.webp"
                   alt="LaunchByte 3D Orbital Emblem"
                   width={1024}
                   height={939}
-                  priority
                   className="w-full h-auto object-contain drop-shadow-[0_12px_45px_rgba(139,92,246,0.32)] filter"
                 />
               </motion.div>

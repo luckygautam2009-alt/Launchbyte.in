@@ -40,9 +40,10 @@ export default function GlobalCosmicParticles() {
 
     const buildStars = () => {
       stars = [];
-      const layer1Count = isMobile ? 28 : 60; // Distant stars
-      const layer2Count = isMobile ? 8 : 22;  // Mid-depth stars
-      const layer3Count = isMobile ? 3 : 8;   // Near subtle light points
+      const lowHardware = typeof navigator !== "undefined" && (navigator.hardwareConcurrency || 4) <= 4;
+      const layer1Count = lowHardware ? 24 : (isMobile ? 28 : 60); // Distant stars
+      const layer2Count = lowHardware ? 6 : (isMobile ? 8 : 22);  // Mid-depth stars
+      const layer3Count = lowHardware ? 2 : (isMobile ? 3 : 8);   // Near subtle light points
 
       const distantColors = ["#FFFFFF", "#E2E8F0", "#DDD6FE"];
       const midColors = ["#DDD6FE", "#BAE6FD", "#A78BFA", "#FFFFFF"];
@@ -82,7 +83,7 @@ export default function GlobalCosmicParticles() {
     };
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       width = window.innerWidth;
       height = window.innerHeight;
       isMobile = width < 768;

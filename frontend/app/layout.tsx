@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { CommandPalette } from "@/components/ui/CommandPalette";
 import GlobalCosmicParticles from "@/components/GlobalCosmicParticles";
+import { WarmBackend } from "@/components/WarmBackend";
 import { LAUNCHBYTE_SOCIALS } from "@/lib/siteContent";
 
 const appUrl = (process.env.NEXT_PUBLIC_APP_URL || "https://launchbyte.io").replace(/\/$/, "");
@@ -120,6 +121,7 @@ export default function RootLayout({
           }}
         />
         <AuthProvider>
+          <WarmBackend />
           <ToastProvider>
             {/* Global animated particles from top to bottom across the entire page */}
             <GlobalCosmicParticles />

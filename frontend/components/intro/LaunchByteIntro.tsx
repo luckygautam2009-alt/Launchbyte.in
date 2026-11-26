@@ -162,7 +162,10 @@ export default function LaunchByteIntro() {
       return;
     }
 
-    if (prefersReducedMotion()) {
+    const isDataSaver = Boolean((navigator as any)?.connection?.saveData);
+    const isSmallScreen = typeof window !== "undefined" && window.innerWidth < 768;
+
+    if (prefersReducedMotion() || isDataSaver || isSmallScreen) {
       markIntroSeen();
       setStage("done");
       return;
@@ -320,7 +323,7 @@ export default function LaunchByteIntro() {
             muted
             autoPlay
             playsInline
-            preload="auto"
+            preload="metadata"
             aria-hidden="true"
             className="w-full h-full object-cover object-[51%_48%] md:object-center"
           />
