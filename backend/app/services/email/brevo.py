@@ -40,7 +40,6 @@ class BrevoEmailBackend(EmailBackend):
         if resp.status_code != 200:
             return
 
-        _CHECKED_SENDERS.add(cache_key)
         try:
             data = resp.json()
         except Exception:
@@ -55,10 +54,13 @@ class BrevoEmailBackend(EmailBackend):
             if isinstance(s, dict) and s.get("active") is True
         }
         if self.sender_email.lower() not in active_emails:
-            logger.warning(
-                "EMAIL_FROM=%s is not an active verified sender in Brevo (/v3/senders).",
-                self.sender_email,
+            msg = (
+                f"EMAIL_FROM={self.sender_email} is not an active verified sender in Brevo. "
+                "Validate the sender or authenticate your domain in Brevo."
             )
+            logger.error(msg)
+            raise RuntimeError(msg)
+        _CHECKED_SENDERS.add(cache_key)
 
     def _send(
         self,
