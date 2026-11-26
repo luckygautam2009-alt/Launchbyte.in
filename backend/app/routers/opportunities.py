@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 from typing import Annotated, Literal
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 
 from app.core.rate_limit import rate_limit
 from app.dependencies.auth import CurrentUser, OrganizerUser
@@ -40,6 +40,7 @@ def _ip(request: Request) -> str | None:
 @router.get("/opportunities", response_model=Page[OpportunityListItem])
 def list_opportunities(
     db: DBSession,
+    response: Response,
     limit: int = Query(20, ge=1, le=100),
     offset: int = Query(0, ge=0),
     page: int | None = Query(None, ge=1),
@@ -83,26 +84,30 @@ def list_opportunities(
         deadline_before=deadline_before,
         sort=sort,
     )
+    response.headers["Cache-Control"] = "public, max-age=60, stale-while-revalidate=300"
     return {"items": items, "total": total, "limit": effective_limit, "offset": effective_offset}
 
 
 @router.get("/opportunities/types", response_model=list[TypeWithCount])
-def get_opportunity_types(db: DBSession):
+def get_opportunity_types(db: DBSession, response: Response):
     """Returns opportunity types with counts of published listings."""
+    response.headers["Cache-Control"] = "public, max-age=60, stale-while-revalidate=300"
     return svc.get_types_with_counts(db)
 
 
 @router.get("/tags", response_model=list[TagWithCount])
-def get_tags(db: DBSession):
+def get_tags(db: DBSession, response: Response):
     """Returns tags with counts of published listings."""
+    response.headers["Cache-Control"] = "public, max-age=60, stale-while-revalidate=300"
     return svc.get_tags_with_counts(db)
 
 
 @router.get("/opportunities/{slug}", response_model=OpportunityDetail)
-def get_opportunity(db: DBSession, slug: str):
+def get_opportunity(db: DBSession, slug: str, response: Response):
     opp = svc.get_public_by_slug(db, slug)
     if opp is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Opportunity not found")
+    response.headers["Cache-Control"] = "public, max-age=60, stale-while-revalidate=300"
     return opp
 
 

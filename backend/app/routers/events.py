@@ -32,6 +32,7 @@ router = APIRouter(tags=["events"])
 @router.get("/events", response_model=Page[EventListItem])
 def list_events(
     db: DBSession,
+    response: Response,
     upcoming: bool = Query(True, description="Filter for upcoming vs past events"),
     mode: EventMode | None = Query(None),
     q: str | None = Query(None),
@@ -70,6 +71,7 @@ def list_events(
             )
         )
 
+    response.headers["Cache-Control"] = "public, max-age=60, stale-while-revalidate=300"
     return {"items": result_items, "total": total, "limit": limit, "offset": offset}
 
 
@@ -78,11 +80,17 @@ def get_event_by_slug(
     slug: str,
     db: DBSession,
     current_user: OptionalUser,
+    response: Response,
 ):
     try:
         event, meta = event_svc.get_public_event_by_slug(db, slug, caller=current_user)
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Event not found")
+
+    if current_user:
+        response.headers["Cache-Control"] = "private, no-cache"
+    else:
+        response.headers["Cache-Control"] = "public, max-age=60, stale-while-revalidate=300"
 
     # Reveal detailed venue / online_url ONLY if registered or manager
     is_registered = meta.get("registration_state") in ["registered", "checked_in"]

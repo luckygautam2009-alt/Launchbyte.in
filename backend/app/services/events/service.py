@@ -14,7 +14,7 @@ from datetime import datetime
 from typing import Any
 
 from sqlalchemy import delete, func, or_, select, update
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from app.core.config import get_settings
 from app.core.qr import create_pass_token, decode_and_verify_pass_token
@@ -398,7 +398,12 @@ def list_public_events(
     count_stmt = select(func.count()).select_from(stmt.subquery())
     total = db.scalar(count_stmt) or 0
 
-    items = db.scalars(stmt.order_by(order).limit(limit).offset(offset)).all()
+    items = db.scalars(
+        stmt.options(selectinload(Event.registrations), selectinload(Event.organization))
+        .order_by(order)
+        .limit(limit)
+        .offset(offset)
+    ).all()
     return items, total
 
 

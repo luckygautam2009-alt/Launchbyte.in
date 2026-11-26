@@ -4,6 +4,7 @@ App entry point. Run with:
     uvicorn app.main:app --reload
 """
 import logging
+import time
 import uuid
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -14,6 +15,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
+from starlette.middleware.gzip import GZipMiddleware
 
 from app.core.config import get_settings
 from app.core.logging import configure_logging
@@ -78,6 +80,8 @@ app = FastAPI(
 
 # --- Middlewares ---
 
+app.add_middleware(GZipMiddleware, minimum_size=1000)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,
@@ -90,8 +94,18 @@ app.add_middleware(
 
 @app.middleware("http")
 async def security_and_request_id_middleware(request: Request, call_next):
+    start_time = time.perf_counter()
     request_id = request.headers.get("X-Request-ID") or str(uuid.uuid4())
     response = await call_next(request)
+    process_time = time.perf_counter() - start_time
+    response.headers["X-Process-Time"] = f"{process_time:.4f}s"
+    if process_time > 0.5:
+        logger.warning(
+            "Slow request: %s %s took %.3fs",
+            request.method,
+            request.url.path,
+            process_time,
+        )
     response.headers["X-Request-ID"] = request_id
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
