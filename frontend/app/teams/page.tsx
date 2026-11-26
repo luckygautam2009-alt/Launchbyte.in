@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
@@ -19,40 +19,90 @@ export default function TeamsDiscoverPage() {
   const [teams, setTeams] = useState<TeamDetail[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
+
+  // Raw user inputs (instant for UI typing)
   const [search, setSearch] = useState("");
   const [skillFilter, setSkillFilter] = useState("");
   const [openSpotsOnly, setOpenSpotsOnly] = useState(false);
+
+  // Debounced search & skill states
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [debouncedSkillFilter, setDebouncedSkillFilter] = useState("");
+
   const [page, setPage] = useState(1);
   const perPage = 12;
 
-  useEffect(() => {
-    loadTeams();
-  }, [search, skillFilter, openSpotsOnly, page]);
+  // Track active request to prevent out-of-order race conditions
+  const activeRequestId = useRef(0);
 
-  async function loadTeams() {
+  // Debounce search input (300ms)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  // Debounce skill filter input (300ms)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSkillFilter(skillFilter);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [skillFilter]);
+
+  // When debounced search, debounced skill, or open spots change, reset page to 1
+  const prevFiltersRef = useRef({ debouncedSearch, debouncedSkillFilter, openSpotsOnly });
+  useEffect(() => {
+    const prev = prevFiltersRef.current;
+    if (
+      prev.debouncedSearch !== debouncedSearch ||
+      prev.debouncedSkillFilter !== debouncedSkillFilter ||
+      prev.openSpotsOnly !== openSpotsOnly
+    ) {
+      prevFiltersRef.current = { debouncedSearch, debouncedSkillFilter, openSpotsOnly };
+      setPage(1);
+    }
+  }, [debouncedSearch, debouncedSkillFilter, openSpotsOnly]);
+
+  const loadTeams = useCallback(async () => {
+    const requestId = ++activeRequestId.current;
     setLoading(true);
     try {
-      const skills = skillFilter
+      const skills = debouncedSkillFilter
         .split(",")
         .map((s) => s.trim())
         .filter(Boolean);
       const res = await api.listTeams({
-        q: search || undefined,
+        q: debouncedSearch.trim() || undefined,
         skills: skills.length ? skills : undefined,
         has_open_spots: openSpotsOnly || undefined,
         page,
         per_page: perPage,
       });
-      setTeams(res.items);
-      setTotal(res.total);
-    } catch {
-      console.error("Failed to load teams");
-    } finally {
-      setLoading(false);
-    }
-  }
 
-  const totalPages = Math.ceil(total / perPage);
+      // Prevent race conditions where slower early requests overwrite newer ones
+      if (requestId === activeRequestId.current) {
+        setTeams(res.items || []);
+        setTotal(res.total || 0);
+      }
+    } catch {
+      if (requestId === activeRequestId.current) {
+        setTeams([]);
+        setTotal(0);
+      }
+    } finally {
+      if (requestId === activeRequestId.current) {
+        setLoading(false);
+      }
+    }
+  }, [debouncedSearch, debouncedSkillFilter, openSpotsOnly, page]);
+
+  useEffect(() => {
+    loadTeams();
+  }, [loadTeams]);
+
+  const totalPages = Math.max(1, Math.ceil(total / perPage));
 
   return (
     <div className="min-h-screen bg-[#050510]">
@@ -84,12 +134,9 @@ export default function TeamsDiscoverPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
             <input
               type="text"
-              placeholder="Search teams..."
+              placeholder="Search teams by name, description, or skills..."
               value={search}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                setPage(1);
-              }}
+              onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 bg-slate-900/90 border border-slate-700/80 rounded-xl text-sm text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none transition"
             />
           </div>
@@ -97,20 +144,14 @@ export default function TeamsDiscoverPage() {
             type="text"
             placeholder="Filter by skills (comma-separated)"
             value={skillFilter}
-            onChange={(e) => {
-              setSkillFilter(e.target.value);
-              setPage(1);
-            }}
+            onChange={(e) => setSkillFilter(e.target.value)}
             className="sm:w-64 px-4 py-2.5 bg-slate-900/90 border border-slate-700/80 rounded-xl text-sm text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none transition"
           />
           <label className="flex items-center gap-2 px-4 py-2.5 bg-slate-900/90 border border-slate-700/80 rounded-xl text-sm text-slate-300 cursor-pointer hover:border-slate-600 transition">
             <input
               type="checkbox"
               checked={openSpotsOnly}
-              onChange={(e) => {
-                setOpenSpotsOnly(e.target.checked);
-                setPage(1);
-              }}
+              onChange={(e) => setOpenSpotsOnly(e.target.checked)}
               className="accent-brand-500"
             />
             Open spots only
@@ -148,7 +189,7 @@ export default function TeamsDiscoverPage() {
                     {team.name}
                   </h3>
                   <span className="shrink-0 ml-2 text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">
-                    {team.members.length}/{team.max_size}
+                    {(team.members || []).length}/{team.max_size}
                   </span>
                 </div>
 
@@ -164,9 +205,9 @@ export default function TeamsDiscoverPage() {
                   </p>
                 )}
 
-                {team.looking_for_skills.length > 0 && (
+                {(team.looking_for_skills || []).length > 0 && (
                   <div className="flex flex-wrap gap-1.5 mb-3">
-                    {team.looking_for_skills.slice(0, 4).map((skill) => (
+                    {(team.looking_for_skills || []).slice(0, 4).map((skill) => (
                       <span
                         key={skill}
                         className="text-xs px-2 py-0.5 rounded-full bg-brand-950 text-brand-300 border border-brand-800/40"
@@ -174,9 +215,9 @@ export default function TeamsDiscoverPage() {
                         {skill}
                       </span>
                     ))}
-                    {team.looking_for_skills.length > 4 && (
+                    {(team.looking_for_skills || []).length > 4 && (
                       <span className="text-xs text-slate-500">
-                        +{team.looking_for_skills.length - 4}
+                        +{(team.looking_for_skills || []).length - 4}
                       </span>
                     )}
                   </div>
@@ -184,7 +225,7 @@ export default function TeamsDiscoverPage() {
 
                 <div className="flex items-center justify-between mt-auto pt-2 border-t border-slate-800/50">
                   <div className="flex -space-x-2">
-                    {team.members.slice(0, 4).map((m) => (
+                    {(team.members || []).slice(0, 4).map((m) => (
                       <div
                         key={m.id}
                         className="w-7 h-7 rounded-full bg-slate-700 border-2 border-slate-900 flex items-center justify-center text-xs text-white font-medium"
@@ -212,9 +253,10 @@ export default function TeamsDiscoverPage() {
         {totalPages > 1 && (
           <div className="flex items-center justify-center gap-3 mt-8">
             <button
-              onClick={() => setPage(Math.max(1, page - 1))}
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
               className="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-400 hover:text-white disabled:opacity-40 transition"
+              aria-label="Previous page"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
@@ -222,9 +264,10 @@ export default function TeamsDiscoverPage() {
               Page {page} of {totalPages}
             </span>
             <button
-              onClick={() => setPage(Math.min(totalPages, page + 1))}
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
               className="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-400 hover:text-white disabled:opacity-40 transition"
+              aria-label="Next page"
             >
               <ChevronRight className="w-4 h-4" />
             </button>

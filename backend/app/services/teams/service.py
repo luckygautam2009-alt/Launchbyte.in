@@ -3,7 +3,7 @@ import uuid
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 
-from sqlalchemy import and_, func, or_, select
+from sqlalchemy import String, and_, cast, func, or_, select
 from sqlalchemy.orm import Session
 
 from app.core.websocket import ws_manager
@@ -360,14 +360,30 @@ def list_teams(
     if event_id:
         query = query.filter(Team.event_id == event_id)
 
-    if q:
+    if q and q.strip():
         q_clean = f"%{q.strip().lower()}%"
         query = query.filter(
             or_(
                 func.lower(Team.name).ilike(q_clean),
-                func.lower(Team.description).ilike(q_clean),
+                func.coalesce(func.lower(Team.description), "").ilike(q_clean),
+                cast(Team.looking_for_skills, String).ilike(q_clean),
             )
         )
+
+    parsed_skills: list[str] = []
+    if skills:
+        for item in skills:
+            for part in str(item).split(","):
+                part_clean = part.strip().lower()
+                if part_clean:
+                    parsed_skills.append(part_clean)
+
+    if parsed_skills:
+        skill_filters = [
+            cast(Team.looking_for_skills, String).ilike(f"%{s}%")
+            for s in parsed_skills
+        ]
+        query = query.filter(or_(*skill_filters))
 
     # Subquery for open spots filtering
     if has_open_spots:
@@ -391,10 +407,14 @@ def list_teams(
     details = _hydrate_teams(db, teams, current_user)
 
     # In-memory filter/scoring by skill overlap if requested
-    if skills:
-        target_skills = set(s.lower() for s in skills)
+    if parsed_skills:
+        target_skills = set(parsed_skills)
         details.sort(
-            key=lambda d: len(target_skills.intersection(set(s.lower() for s in d.looking_for_skills))),
+            key=lambda d: len(
+                target_skills.intersection(
+                    set(s.lower() for s in (d.looking_for_skills or []) if isinstance(s, str))
+                )
+            ),
             reverse=True,
         )
 
