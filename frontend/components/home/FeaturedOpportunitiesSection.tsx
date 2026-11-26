@@ -37,12 +37,14 @@ export default function FeaturedOpportunitiesSection() {
   const [activeTab, setActiveTab] = useState<"all" | "hackathon" | "internship" | "event">("all");
   const [opportunities, setOpportunities] = useState<OpportunityListItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadData() {
       setLoading(true);
+      setError(null);
       try {
-        const params: any = { limit: 4, sort: "deadline" };
+        const params: any = { limit: 4, sort: "deadline", include_expired: true };
         if (activeTab !== "all") {
           params.type = [activeTab];
         } else {
@@ -52,6 +54,7 @@ export default function FeaturedOpportunitiesSection() {
         setOpportunities((res.items || []).slice(0, 4));
       } catch (err) {
         console.error("Failed to fetch featured opportunities:", err);
+        setError("Unable to load featured opportunities at this time.");
       } finally {
         setLoading(false);
       }
@@ -106,6 +109,25 @@ export default function FeaturedOpportunitiesSection() {
             <OpportunityCardSkeleton />
             <OpportunityCardSkeleton />
           </div>
+        ) : error ? (
+          <Reveal>
+            <div className="rounded-3xl glass-card p-10 text-center max-w-lg mx-auto space-y-4">
+              <div className="w-12 h-12 rounded-2xl bg-rose-950/70 border border-rose-500/30 flex items-center justify-center mx-auto text-rose-400">
+                <Compass className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-[#F8FAFC]">Failed to load opportunities</h3>
+              <p className="text-xs sm:text-sm text-slate-300">
+                {error}
+              </p>
+              <button
+                type="button"
+                onClick={() => setActiveTab("all")}
+                className="px-5 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-semibold cursor-pointer transition"
+              >
+                Retry
+              </button>
+            </div>
+          </Reveal>
         ) : opportunities.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {opportunities.map((opp, idx) => {

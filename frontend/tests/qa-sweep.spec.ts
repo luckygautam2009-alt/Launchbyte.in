@@ -225,4 +225,45 @@ test.describe("QA Sweep: End-to-End Core Flows & Hardening", () => {
     expect(lastQueryUrl).toContain("q=Quantum");
     await expect(page.locator("text=Quantum Devs")).toBeVisible();
   });
+
+  // 7. Public Featured Opportunities Section Displays Verified Listings
+  test("Public homepage displays featured opportunities without authentication", async ({ page }) => {
+    await page.route("**/api/v1/opportunities*", async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          items: [
+            {
+              id: "66666666-6666-6666-6666-666666666666",
+              title: "HackSmart 2.0",
+              slug: "hacksmart-2-0",
+              summary: "Industry-focused hackathon centered around electric mobility",
+              type: "hackathon",
+              location_type: "onsite",
+              location_text: "Gurugram, Haryana, India",
+              starts_at: "2027-02-06T09:00:00Z",
+              ends_at: "2027-02-07T18:00:00Z",
+              deadline_at: "2026-12-15T23:59:00Z",
+              is_featured: true,
+              verification_status: "verified",
+              trust_score: 95,
+              application_url: "https://unstop.com/hackathons/hacksmart-20-geek-room-1799091",
+              organizer_name_override: "Battery Smart × Geek Room",
+            },
+          ],
+          total: 1,
+          limit: 4,
+          offset: 0,
+        }),
+      });
+    });
+
+    await page.goto("/");
+    await expect(page.locator("text=Featured Opportunities")).toBeVisible();
+    await expect(page.locator("text=HackSmart 2.0")).toBeVisible();
+    await expect(page.locator("text=Battery Smart × Geek Room")).toBeVisible();
+    await expect(page.locator('a[href*="/opportunities/hacksmart-2-0"]').first()).toBeVisible();
+    await expect(page.locator('a[href*="unstop.com/hackathons/hacksmart-20"]').first()).toBeVisible();
+  });
 });
