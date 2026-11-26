@@ -63,6 +63,11 @@ async def lifespan(app: FastAPI):
     )
     if email_backend == "console":
         logger.warning("No real emails are sent; OTPs are only printed in this log.")
+    if is_prod_like and settings.STORAGE_BACKEND.lower().strip() == "local":
+        logger.warning(
+            "STORAGE_BACKEND is 'local' in production. Uploads are stored on local ephemeral disk. "
+            "To use persistent cloud storage, set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY."
+        )
     yield
     logger.info("%s shutting down", settings.APP_NAME)
 

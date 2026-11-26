@@ -149,20 +149,20 @@ class Settings(BaseSettings):
                         "EMAIL_FROM must be set to a verified sender email when EMAIL_BACKEND='brevo'."
                     )
 
+            # Storage backend validation & auto-detection
+            if self.SUPABASE_URL.strip() and self.SUPABASE_SERVICE_ROLE_KEY.strip():
+                self.STORAGE_BACKEND = "supabase"
+
             storage_backend = self.STORAGE_BACKEND.lower().strip()
-            if storage_backend != "supabase":
-                raise ValueError(
-                    "STORAGE_BACKEND must be 'supabase' in non-local/test environments; "
-                    "local ephemeral disk storage is disallowed outside local/test."
-                )
-            if not self.SUPABASE_URL.strip() or not self.SUPABASE_SERVICE_ROLE_KEY.strip():
-                raise ValueError(
-                    "SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set when STORAGE_BACKEND='supabase'."
-                )
-            if not self.SUPABASE_STORAGE_BUCKET.strip():
-                raise ValueError(
-                    "SUPABASE_STORAGE_BUCKET must be set when STORAGE_BACKEND='supabase'."
-                )
+            if storage_backend == "supabase":
+                if not self.SUPABASE_URL.strip() or not self.SUPABASE_SERVICE_ROLE_KEY.strip():
+                    raise ValueError(
+                        "SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set when STORAGE_BACKEND='supabase'."
+                    )
+                if not self.SUPABASE_STORAGE_BUCKET.strip():
+                    raise ValueError(
+                        "SUPABASE_STORAGE_BUCKET must be set when STORAGE_BACKEND='supabase'."
+                    )
         return self
 
 
