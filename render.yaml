@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: launchbyte-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: ENV
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: APP_NAME
+        value: LaunchByte Backend
+      - key: SECRET_KEY
+        generateValue: true
+      - key: QR_SIGNING_KEY
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: "https://launchbyte.vercel.app,https://launchbyte.io,https://www.launchbyte.io"

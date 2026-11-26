@@ -20,5 +20,6 @@ def read_root() -> RootResponse:
 
 
 @router.get("/health", response_model=HealthResponse)
+@router.get("/api/v1/health", response_model=HealthResponse)
 def read_health() -> HealthResponse:
     return HealthResponse(status="ok")

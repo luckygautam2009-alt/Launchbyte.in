@@ -77,7 +77,26 @@ class Settings(BaseSettings):
     OPPORTUNITY_REPORT_FLAG_THRESHOLD: int = 3
 
     # --- CORS ---
-    CORS_ORIGINS: list[str] = ["http://localhost:3000"]
+    CORS_ORIGINS: list[str] = [
+        "http://localhost:3000",
+        "https://launchbyte.vercel.app",
+        "https://launchbyte.io",
+        "https://www.launchbyte.io",
+    ]
+
+    @field_validator("CORS_ORIGINS", mode="before")
+    @classmethod
+    def _parse_cors_origins(cls, v):
+        if isinstance(v, str):
+            v = v.strip()
+            if v.startswith("[") and v.endswith("]"):
+                import json
+                try:
+                    return json.loads(v)
+                except Exception:
+                    pass
+            return [origin.strip() for origin in v.split(",") if origin.strip()]
+        return v
 
     @field_validator("DEBUG", mode="before")
     @classmethod
