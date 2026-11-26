@@ -31,7 +31,7 @@ export default function OpportunityDetailPage() {
   const params = useParams();
   const slug = params?.slug as string;
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const toast = useToast();
 
   const [opp, setOpp] = useState<OpportunityDetail | null>(null);
@@ -47,7 +47,17 @@ export default function OpportunityDetailPage() {
   const [showTrustTooltip, setShowTrustTooltip] = useState(false);
 
   useEffect(() => {
-    if (!slug) return;
+    if (!authLoading && !user) {
+      const nextTarget =
+        typeof window !== "undefined"
+          ? `${window.location.pathname}${window.location.search}`
+          : `/opportunities/${slug}`;
+      router.replace(`/login?next=${encodeURIComponent(nextTarget)}`);
+    }
+  }, [authLoading, user, router, slug]);
+
+  useEffect(() => {
+    if (!slug || authLoading || !user) return;
     setLoading(true);
     setError(null);
 
@@ -69,7 +79,7 @@ export default function OpportunityDetailPage() {
       .finally(() => {
         setLoading(false);
       });
-  }, [slug]);
+  }, [slug, authLoading, user]);
 
   const toggleSave = async () => {
     if (!user) {
