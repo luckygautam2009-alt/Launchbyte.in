@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
 import OtpVerifyModal from "@/components/auth/OtpVerifyModal";
-import { Plus, ArrowLeft, Users, Eye, EyeOff, Lock } from "lucide-react";
+import { Plus, ArrowLeft, Users, Eye, Lock } from "lucide-react";
 import Link from "next/link";
 
 export default function CreateTeamPage() {
@@ -18,7 +18,7 @@ export default function CreateTeamPage() {
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
-  const [visibility, setVisibility] = useState<"public" | "unlisted" | "private">("public");
+  const [visibility, setVisibility] = useState<"public" | "private">("public");
   const [acceptingRequests, setAcceptingRequests] = useState(true);
   const [maxSize, setMaxSize] = useState(4);
   const [skillsInput, setSkillsInput] = useState("");
@@ -42,6 +42,7 @@ export default function CreateTeamPage() {
   }
 
   async function submitTeamCreation() {
+    if (loading) return;
     setLoading(true);
     setError("");
     try {
@@ -73,6 +74,7 @@ export default function CreateTeamPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (loading) return;
     setError("");
 
     if (name.trim().length < 3) {
@@ -167,7 +169,6 @@ export default function CreateTeamPage() {
             {(
               [
                 { value: "public", icon: Eye, label: "Public" },
-                { value: "unlisted", icon: EyeOff, label: "Unlisted" },
                 { value: "private", icon: Lock, label: "Private" },
               ] as const
             ).map((opt) => (

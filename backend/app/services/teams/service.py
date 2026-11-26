@@ -72,88 +72,114 @@ def _notify(db: Session, user_id: uuid.UUID, title: str, body: str, data: dict):
     db.add(notif)
 
 
-def _to_team_detail(db: Session, team: Team, current_user: Optional[User] = None) -> TeamDetail:
-    members = (
+def _hydrate_teams(
+    db: Session,
+    teams: list[Team],
+    current_user: Optional[User] = None,
+) -> list[TeamDetail]:
+    """Batch-hydrate a list of Team models into TeamDetail objects in O(1) queries (no N+1)."""
+    if not teams:
+        return []
+
+    team_ids = [t.id for t in teams]
+    event_ids = list({t.event_id for t in teams if t.event_id is not None})
+
+    # 1. Batch-load all members + users + profiles
+    member_rows = (
         db.query(TeamMember, User, UserProfile)
         .join(User, TeamMember.user_id == User.id)
         .outerjoin(UserProfile, User.id == UserProfile.user_id)
-        .filter(TeamMember.team_id == team.id)
+        .filter(TeamMember.team_id.in_(team_ids))
         .order_by(TeamMember.joined_at.asc())
         .all()
     )
-
-    brief_members = [
-        TeamMemberBrief(
-            id=tm.id,
-            user_id=tm.user_id,
-            handle=u.handle,
-            full_name=u.full_name,
-            avatar_url=prof.avatar_url if prof else None,
-            role=tm.role,
-            joined_at=tm.joined_at,
-        )
-        for tm, u, prof in members
-    ]
-
-    is_leader = False
-    is_member = False
-    has_pending = False
-
-    if current_user:
-        for m in brief_members:
-            if m.user_id == current_user.id:
-                is_member = True
-                if m.role == TeamMemberRole.LEADER:
-                    is_leader = True
-                break
-
-        if not is_member:
-            has_pending = (
-                db.query(TeamJoinRequest)
-                .filter(
-                    TeamJoinRequest.team_id == team.id,
-                    TeamJoinRequest.user_id == current_user.id,
-                    TeamJoinRequest.status == TeamJoinRequestStatus.PENDING,
-                )
-                .first()
-                is not None
+    members_by_team: dict[uuid.UUID, list[TeamMemberBrief]] = {tid: [] for tid in team_ids}
+    for tm, u, prof in member_rows:
+        members_by_team[tm.team_id].append(
+            TeamMemberBrief(
+                id=tm.id,
+                user_id=tm.user_id,
+                handle=u.handle,
+                full_name=u.full_name,
+                avatar_url=prof.avatar_url if prof else None,
+                role=tm.role,
+                joined_at=tm.joined_at,
             )
+        )
 
-    conv = (
-        db.query(Conversation)
-        .filter(Conversation.team_id == team.id)
-        .first()
+    # 2. Batch-load team conversations
+    conv_rows = (
+        db.query(Conversation.team_id, Conversation.id)
+        .filter(Conversation.team_id.in_(team_ids))
+        .all()
     )
+    conv_by_team: dict[uuid.UUID, uuid.UUID] = {tid: cid for tid, cid in conv_rows if tid is not None}
 
-    event_title = None
-    if team.event_id:
-        ev = db.get(Event, team.event_id)
-        if ev:
-            event_title = ev.title
+    # 3. Batch-load event titles
+    event_titles: dict[uuid.UUID, str] = {}
+    if event_ids:
+        ev_rows = db.query(Event.id, Event.title).filter(Event.id.in_(event_ids)).all()
+        event_titles = {eid: title for eid, title in ev_rows}
 
-    return TeamDetail(
-        id=team.id,
-        name=team.name,
-        slug=team.slug,
-        description=team.description,
-        avatar_url=team.avatar_url,
-        event_id=team.event_id,
-        event_title=event_title,
-        owner_id=team.owner_id,
-        visibility=team.visibility,
-        accepting_requests=team.accepting_requests,
-        max_size=team.max_size,
-        looking_for_skills=team.looking_for_skills or [],
-        status=team.status,
-        is_locked=team.is_locked,
-        created_at=team.created_at,
-        members=brief_members,
-        conversation_id=conv.id if conv else None,
-        is_leader=is_leader,
-        is_member=is_member,
-        has_pending_join_request=has_pending,
-        open_spots=max(0, team.max_size - len(brief_members)),
-    )
+    # 4. Batch-load pending join requests for current_user
+    pending_team_ids: set[uuid.UUID] = set()
+    if current_user:
+        pending_rows = (
+            db.query(TeamJoinRequest.team_id)
+            .filter(
+                TeamJoinRequest.team_id.in_(team_ids),
+                TeamJoinRequest.user_id == current_user.id,
+                TeamJoinRequest.status == TeamJoinRequestStatus.PENDING,
+            )
+            .all()
+        )
+        pending_team_ids = {tid for (tid,) in pending_rows}
+
+    details: list[TeamDetail] = []
+    for team in teams:
+        brief_members = members_by_team.get(team.id, [])
+        is_leader = False
+        is_member = False
+        if current_user:
+            for m in brief_members:
+                if m.user_id == current_user.id:
+                    is_member = True
+                    if m.role == TeamMemberRole.LEADER:
+                        is_leader = True
+                    break
+
+        has_pending = (team.id in pending_team_ids) if (current_user and not is_member) else False
+
+        details.append(
+            TeamDetail(
+                id=team.id,
+                name=team.name,
+                slug=team.slug,
+                description=team.description,
+                avatar_url=team.avatar_url,
+                event_id=team.event_id,
+                event_title=event_titles.get(team.event_id) if team.event_id else None,
+                owner_id=team.owner_id,
+                visibility=team.visibility,
+                accepting_requests=team.accepting_requests,
+                max_size=team.max_size,
+                looking_for_skills=team.looking_for_skills or [],
+                status=team.status,
+                is_locked=team.is_locked,
+                created_at=team.created_at,
+                members=brief_members,
+                conversation_id=conv_by_team.get(team.id),
+                is_leader=is_leader,
+                is_member=is_member,
+                has_pending_join_request=has_pending,
+                open_spots=max(0, team.max_size - len(brief_members)),
+            )
+        )
+    return details
+
+
+def _to_team_detail(db: Session, team: Team, current_user: Optional[User] = None) -> TeamDetail:
+    return _hydrate_teams(db, [team], current_user)[0]
 
 
 # ==========================================
@@ -181,10 +207,12 @@ def create_team(db: Session, current_user: User, data: TeamCreate) -> TeamDetail
     final_max_size = data.max_size
 
     # Event-scoped team validations
+    event_title: Optional[str] = None
     if data.event_id:
         event = db.get(Event, data.event_id)
         if not event or event.deleted_at is not None or event.status != EventStatus.PUBLISHED:
             raise TeamError("Event not found or not published", "EVENT_NOT_FOUND", 404)
+        event_title = event.title
 
         ends_at = _to_utc(event.ends_at)
         if ends_at and ends_at < datetime.now(timezone.utc):
@@ -264,8 +292,42 @@ def create_team(db: Session, current_user: User, data: TeamCreate) -> TeamDetail
 
     db.commit()
     db.refresh(team)
+    db.refresh(member)
 
-    return _to_team_detail(db, team, current_user)
+    leader_profile = db.get(UserProfile, current_user.id)
+    brief_leader = TeamMemberBrief(
+        id=member.id,
+        user_id=current_user.id,
+        handle=current_user.handle,
+        full_name=current_user.full_name,
+        avatar_url=leader_profile.avatar_url if leader_profile else None,
+        role=member.role,
+        joined_at=member.joined_at,
+    )
+
+    return TeamDetail(
+        id=team.id,
+        name=team.name,
+        slug=team.slug,
+        description=team.description,
+        avatar_url=team.avatar_url,
+        event_id=team.event_id,
+        event_title=event_title,
+        owner_id=team.owner_id,
+        visibility=team.visibility,
+        accepting_requests=team.accepting_requests,
+        max_size=team.max_size,
+        looking_for_skills=team.looking_for_skills or [],
+        status=team.status,
+        is_locked=team.is_locked,
+        created_at=team.created_at,
+        members=[brief_leader],
+        conversation_id=conv.id,
+        is_leader=True,
+        is_member=True,
+        has_pending_join_request=False,
+        open_spots=max(0, team.max_size - 1),
+    )
 
 
 def list_teams(
@@ -326,7 +388,7 @@ def list_teams(
         .all()
     )
 
-    details = [_to_team_detail(db, t, current_user) for t in teams]
+    details = _hydrate_teams(db, teams, current_user)
 
     # In-memory filter/scoring by skill overlap if requested
     if skills:
@@ -351,7 +413,7 @@ def list_my_teams(db: Session, current_user: User) -> list[TeamDetail]:
         .order_by(Team.created_at.desc())
         .all()
     )
-    return [_to_team_detail(db, t, current_user) for t in my_teams]
+    return _hydrate_teams(db, my_teams, current_user)
 
 
 def get_team_by_slug(db: Session, slug: str, current_user: Optional[User] = None) -> TeamDetail:
