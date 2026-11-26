@@ -123,7 +123,13 @@ async def upload_avatar(
 
     filename = f"avatar-{current_user.id.hex}-{uuid.uuid4().hex[:8]}.{ext}"
     storage = get_storage_backend()
-    url = storage.save(clean_bytes, filename, content_type)
+    try:
+        url = storage.save(clean_bytes, filename, content_type)
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail={"error": {"code": "STORAGE_UPLOAD_FAILED", "message": str(exc) or "Failed to upload avatar to storage."}},
+        ) from exc
 
     prof = db.get(UserProfile, current_user.id)
     if not prof:

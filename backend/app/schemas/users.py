@@ -25,6 +25,7 @@ class UserRead(UserBase):
     role: UserRole
     is_email_verified: bool
     handle: str | None = None
+    avatar_url: str | None = None
 
 
 class Token(BaseModel):

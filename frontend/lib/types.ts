@@ -119,6 +119,8 @@ export interface User {
   is_active: boolean;
   role: UserRole;
   is_email_verified: boolean;
+  handle?: string | null;
+  avatar_url?: string | null;
 }
 
 export interface TeamMember {

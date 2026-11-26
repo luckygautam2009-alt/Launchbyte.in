@@ -80,5 +80,9 @@ class User(Base):
         return self.role == UserRole.ADMIN
 
     @property
+    def avatar_url(self) -> str | None:
+        return self.profile.avatar_url if self.profile else None
+
+    @property
     def is_staff(self) -> bool:
         return self.role in (UserRole.MODERATOR, UserRole.ADMIN)

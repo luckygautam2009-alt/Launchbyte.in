@@ -25,7 +25,7 @@ import {
 
 export default function ProfileEditPage() {
   const router = useRouter();
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, refreshUser } = useAuth();
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -59,7 +59,7 @@ export default function ProfileEditPage() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push("/auth/login");
+      router.push("/login?next=/profile/edit");
       return;
     }
     if (user) {
@@ -110,16 +110,20 @@ export default function ProfileEditPage() {
       return;
     }
 
-    if (file.size > 2 * 1024 * 1024) {
-      setError("Image must be smaller than 2MB.");
+    if (file.size > 5 * 1024 * 1024) {
+      setError("Image must be smaller than 5MB.");
       return;
     }
 
     setUploadingAvatar(true);
     setError(null);
+    setSuccess(null);
     try {
       const res = await api.uploadAvatar(file);
-      setAvatarUrl(res.avatar_url);
+      const separator = res.avatar_url.includes("?") ? "&" : "?";
+      const bustedUrl = `${res.avatar_url}${separator}v=${Date.now()}`;
+      setAvatarUrl(bustedUrl);
+      await refreshUser();
       setSuccess("Avatar updated successfully!");
     } catch (err: any) {
       setError(err?.message || "Failed to upload avatar.");

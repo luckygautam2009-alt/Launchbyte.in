@@ -143,9 +143,17 @@ export default function Navbar() {
                   aria-label="User profile menu"
                   className="flex items-center gap-2.5 p-1.5 pr-3 rounded-full border border-violet-500/30 bg-[#09091B]/90 hover:bg-violet-950/50 text-slate-200 transition-all text-sm shadow-md"
                 >
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#4F46E5] to-[#8B5CF6] flex items-center justify-center text-white font-semibold text-xs shadow-inner">
-                    {user.full_name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
-                  </div>
+                  {user.avatar_url ? (
+                    <img
+                      src={user.avatar_url}
+                      alt={user.full_name || "User avatar"}
+                      className="w-7 h-7 rounded-full object-cover border border-violet-400/30"
+                    />
+                  ) : (
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-[#4F46E5] to-[#8B5CF6] flex items-center justify-center text-white font-semibold text-xs shadow-inner">
+                      {user.full_name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
+                    </div>
+                  )}
                   <span className="max-w-[120px] truncate text-slate-200 font-medium">
                     {user.full_name || user.email.split("@")[0]}
                   </span>

@@ -118,7 +118,13 @@ async def upload_image(
 
     random_filename = f"{uuid.uuid4().hex}.{ext}"
     storage = get_storage_backend()
-    file_url = storage.save(clean_bytes, random_filename, content_type)
+    try:
+        file_url = storage.save(clean_bytes, random_filename, content_type)
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail={"error": {"code": "STORAGE_UPLOAD_FAILED", "message": str(exc) or "Failed to upload image to storage."}},
+        ) from exc
 
     asset = MediaAsset(
         uploaded_by_id=user.id,
