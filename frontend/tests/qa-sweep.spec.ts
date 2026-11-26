@@ -266,4 +266,65 @@ test.describe("QA Sweep: End-to-End Core Flows & Hardening", () => {
     await expect(page.locator('a[href*="/opportunities/hacksmart-2-0"]').first()).toBeVisible();
     await expect(page.locator('a[href*="unstop.com/hackathons/hacksmart-20"]').first()).toBeVisible();
   });
+
+  // 8. Avatar image failure handles error gracefully and does not show false success
+  test("Profile edit avatar falls back cleanly on broken image and avoids false success", async ({
+    page,
+    context,
+  }) => {
+    await context.addCookies([
+      {
+        name: "lb_token",
+        value: "mock_avatar_test_token",
+        domain: "localhost",
+        path: "/",
+      },
+    ]);
+
+    await page.addInitScript(() => {
+      window.localStorage.setItem("lb_token", "mock_avatar_test_token");
+    });
+
+    await page.route("**/api/v1/users/me", async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          id: "77777777-7777-7777-7777-777777777777",
+          email: "avatartest@example.com",
+          handle: "avatartest",
+          full_name: "Avatar Tester",
+          role: "user",
+          is_email_verified: true,
+          avatar_url: "https://example.com/broken-nonexistent-image.png",
+        }),
+      });
+    });
+
+    await page.route("**/api/v1/me/profile", async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          user_id: "77777777-7777-7777-7777-777777777777",
+          email: "avatartest@example.com",
+          handle: "avatartest",
+          full_name: "Avatar Tester",
+          avatar_url: "https://example.com/broken-nonexistent-image.png",
+          headline: "Engineer",
+        }),
+      });
+    });
+
+    await page.goto("/profile/edit");
+
+    // Because the avatar URL is broken, it should trigger fallback to initial 'A'
+    await expect(page.locator("text=Identity & Handle")).toBeVisible();
+    // Navbar should fall back to initials 'A'
+    const navbarButton = page.locator('button[aria-label="User profile menu"]');
+    await expect(navbarButton).toBeVisible();
+    await expect(navbarButton).toContainText("Avatar Tester");
+    // Should NOT show broken image with success
+    await expect(page.locator("text=Avatar updated successfully!")).not.toBeVisible();
+  });
 });

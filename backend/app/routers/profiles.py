@@ -138,6 +138,8 @@ async def upload_avatar(
     else:
         prof.avatar_url = url
     db.commit()
+    db.refresh(prof)
+    db.refresh(current_user)
 
     return AvatarUploadResponse(avatar_url=url)
 

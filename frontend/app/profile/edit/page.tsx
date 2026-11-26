@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
-import { api } from "@/lib/api";
+import { api, resolveMediaUrl } from "@/lib/api";
 import { MyProfileRead, ProfileUpdate } from "@/lib/types";
 import {
   User,
@@ -30,6 +30,7 @@ export default function ProfileEditPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [avatarLoadError, setAvatarLoadError] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
@@ -70,6 +71,7 @@ export default function ProfileEditPage() {
   async function loadProfile() {
     setLoading(true);
     setError(null);
+    setAvatarLoadError(false);
     try {
       const data: MyProfileRead = await api.getMyProfile();
       setHandle(data.handle || "");
@@ -118,17 +120,42 @@ export default function ProfileEditPage() {
     setUploadingAvatar(true);
     setError(null);
     setSuccess(null);
+    setAvatarLoadError(false);
     try {
       const res = await api.uploadAvatar(file);
-      const separator = res.avatar_url.includes("?") ? "&" : "?";
-      const bustedUrl = `${res.avatar_url}${separator}v=${Date.now()}`;
+      const rawUrl = res.avatar_url;
+      const resolved = resolveMediaUrl(rawUrl);
+      const separator = resolved.includes("?") ? "&" : "?";
+      const bustedUrl = `${resolved}${separator}v=${Date.now()}`;
+
+      // Verify that the avatar image is genuinely accessible and loadable by the browser
+      await new Promise<void>((resolve, reject) => {
+        if (typeof window === "undefined") {
+          resolve();
+          return;
+        }
+        const testImg = new window.Image();
+        testImg.onload = () => resolve();
+        testImg.onerror = () => {
+          reject(
+            new Error(
+              "Avatar was uploaded, but the image URL is not accessible. Please check storage bucket permissions."
+            )
+          );
+        };
+        testImg.src = bustedUrl;
+      });
+
       setAvatarUrl(bustedUrl);
+      setAvatarLoadError(false);
       await refreshUser();
       setSuccess("Avatar updated successfully!");
     } catch (err: any) {
+      setAvatarLoadError(true);
       setError(err?.message || "Failed to upload avatar.");
     } finally {
       setUploadingAvatar(false);
+      e.target.value = "";
     }
   }
 
@@ -231,10 +258,18 @@ export default function ProfileEditPage() {
             <div className="flex flex-col sm:flex-row items-center gap-6">
               <div className="relative group">
                 <div className="w-24 h-24 rounded-full overflow-hidden bg-slate-800 border-2 border-slate-700 flex items-center justify-center text-slate-400 text-2xl font-bold">
-                  {avatarUrl ? (
-                    <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+                  {avatarUrl && !avatarLoadError ? (
+                    <img
+                      src={resolveMediaUrl(avatarUrl)}
+                      alt="Avatar"
+                      className="w-full h-full object-cover"
+                      onError={() => {
+                        setAvatarLoadError(true);
+                        setError("Unable to render avatar image. Falling back to initials.");
+                      }}
+                    />
                   ) : (
-                    user?.full_name?.charAt(0) || "U"
+                    user?.full_name?.charAt(0) || user?.email?.charAt(0)?.toUpperCase() || "U"
                   )}
                 </div>
                 <label className="absolute inset-0 bg-black/60 rounded-full flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition">

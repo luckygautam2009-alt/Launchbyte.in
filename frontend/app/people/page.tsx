@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
-import { api } from "@/lib/api";
+import { api, resolveMediaUrl } from "@/lib/api";
 import { TeammateCandidateRead } from "@/lib/types";
 import { Search, UserSearch, ExternalLink } from "lucide-react";
 import PageHero from "@/components/common/PageHero";
@@ -102,7 +102,17 @@ export default function PeopleDiscoverPage() {
                 <div className="flex items-start gap-3 mb-3">
                   <div className="w-11 h-11 rounded-full bg-slate-700 flex items-center justify-center text-white font-semibold shrink-0">
                     {c.avatar_url ? (
-                      <img src={c.avatar_url} alt="" className="w-11 h-11 rounded-full object-cover" />
+                      <img
+                        src={resolveMediaUrl(c.avatar_url)}
+                        alt=""
+                        className="w-11 h-11 rounded-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.style.display = "none";
+                          if (e.currentTarget.parentElement) {
+                            e.currentTarget.parentElement.textContent = c.full_name?.[0]?.toUpperCase() || "?";
+                          }
+                        }}
+                      />
                     ) : (
                       c.full_name?.[0]?.toUpperCase() || "?"
                     )}

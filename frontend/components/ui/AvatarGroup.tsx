@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { clsx } from "clsx";
+import { resolveMediaUrl } from "@/lib/api";
 
 export interface AvatarItem {
   id: string;
@@ -42,7 +43,17 @@ export function AvatarGroup({ users, max = 4, size = "md", className }: AvatarGr
           title={`${u.name}${u.role ? ` (${u.role})` : ""}`}
         >
           {u.avatarUrl ? (
-            <img src={u.avatarUrl} alt={u.name} className="w-full h-full object-cover" />
+            <img
+              src={resolveMediaUrl(u.avatarUrl)}
+              alt={u.name}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+                if (e.currentTarget.parentElement) {
+                  e.currentTarget.parentElement.textContent = u.name.charAt(0).toUpperCase();
+                }
+              }}
+            />
           ) : (
             <span>{u.name.charAt(0).toUpperCase()}</span>
           )}

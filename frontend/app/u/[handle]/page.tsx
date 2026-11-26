@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { api } from "@/lib/api";
+import { api, resolveMediaUrl } from "@/lib/api";
 import { PublicProfileRead } from "@/lib/types";
 import {
   User,
@@ -24,6 +24,7 @@ export default function PublicProfilePage() {
   const handle = params?.handle as string;
 
   const [profile, setProfile] = useState<PublicProfileRead | null>(null);
+  const [avatarError, setAvatarError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -36,6 +37,7 @@ export default function PublicProfilePage() {
   async function loadProfile(h: string) {
     setLoading(true);
     setError(null);
+    setAvatarError(false);
     try {
       const data = await api.getPublicProfile(h);
       setProfile(data);
@@ -87,8 +89,13 @@ export default function PublicProfilePage() {
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 relative z-10">
             <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-slate-800 border-2 border-slate-700 flex items-center justify-center text-slate-400 text-3xl font-bold shrink-0">
-              {profile.avatar_url ? (
-                <img src={profile.avatar_url} alt={profile.full_name} className="w-full h-full object-cover" />
+              {profile.avatar_url && !avatarError ? (
+                <img
+                  src={resolveMediaUrl(profile.avatar_url)}
+                  alt={profile.full_name}
+                  className="w-full h-full object-cover"
+                  onError={() => setAvatarError(true)}
+                />
               ) : (
                 profile.full_name?.charAt(0) || "U"
               )}
