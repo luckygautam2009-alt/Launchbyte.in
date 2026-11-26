@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
+import OtpVerifyModal from "@/components/auth/OtpVerifyModal";
 import { Plus, ArrowLeft, Users, Eye, EyeOff, Lock } from "lucide-react";
 import Link from "next/link";
 
@@ -12,6 +13,7 @@ export default function CreateTeamPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showOtpModal, setShowOtpModal] = useState(false);
 
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
@@ -39,16 +41,9 @@ export default function CreateTeamPage() {
     );
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError("");
-
-    if (name.trim().length < 3) {
-      setError("Team name must be at least 3 characters.");
-      return;
-    }
-
+  async function submitTeamCreation() {
     setLoading(true);
+    setError("");
     try {
       const skills = skillsInput
         .split(",")
@@ -66,10 +61,26 @@ export default function CreateTeamPage() {
       });
       router.push(`/teams/${team.slug}`);
     } catch (err: any) {
+      if (err?.code === "EMAIL_NOT_VERIFIED" || String(err?.message || "").toLowerCase().includes("email verification required")) {
+        setShowOtpModal(true);
+        return;
+      }
       setError(err?.message || "Failed to create team. Please try again.");
     } finally {
       setLoading(false);
     }
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+
+    if (name.trim().length < 3) {
+      setError("Team name must be at least 3 characters.");
+      return;
+    }
+
+    await submitTeamCreation();
   }
 
   return (
@@ -243,6 +254,13 @@ export default function CreateTeamPage() {
           {loading ? "Creating..." : "Create Team"}
         </button>
       </form>
+
+      <OtpVerifyModal
+        open={showOtpModal}
+        onClose={() => setShowOtpModal(false)}
+        onVerified={submitTeamCreation}
+        title="Verify your email to create a team"
+      />
     </div>
   );
 }

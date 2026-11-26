@@ -1,6 +1,6 @@
 import uuid
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, model_validator
 
 from app.models.enums import UserRole
 
@@ -40,7 +40,14 @@ class TokenPayload(BaseModel):
 
 
 class EmailVerificationConfirm(BaseModel):
-    token: str = Field(min_length=1)
+    code: str | None = Field(default=None, min_length=6, max_length=6, pattern=r"^\d{6}$")
+    token: str | None = Field(default=None, min_length=1)
+
+    @model_validator(mode="after")
+    def _require_code_or_token(self) -> "EmailVerificationConfirm":
+        if not self.code and not self.token:
+            raise ValueError("Either a 6-digit 'code' or 'token' is required.")
+        return self
 
 
 class PasswordResetRequest(BaseModel):

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
 import { TeamDetail, TeamInviteRead, TeamJoinRequestRead } from "@/lib/types";
+import OtpVerifyModal from "@/components/auth/OtpVerifyModal";
 import {
   Users,
   Crown,
@@ -53,6 +54,7 @@ export default function TeamDashboardPage() {
   const [actionLoading, setActionLoading] = useState(false);
   const [actionError, setActionError] = useState("");
   const [joinRequestLoading, setJoinRequestLoading] = useState(false);
+  const [showOtpModal, setShowOtpModal] = useState(false);
 
   const loadTeam = useCallback(async () => {
     try {
@@ -196,10 +198,15 @@ export default function TeamDashboardPage() {
   async function handleJoinRequest() {
     if (!team) return;
     setJoinRequestLoading(true);
+    setActionError("");
     try {
       await api.createJoinRequest(team.id, { message: "I'd love to join!" });
       await loadTeam();
     } catch (err: any) {
+      if (err?.code === "EMAIL_NOT_VERIFIED" || String(err?.message || "").toLowerCase().includes("email verification required")) {
+        setShowOtpModal(true);
+        return;
+      }
       setActionError(err?.message || "Failed to send join request");
     } finally {
       setJoinRequestLoading(false);
@@ -477,6 +484,13 @@ export default function TeamDashboardPage() {
           </div>
         </div>
       )}
+
+      <OtpVerifyModal
+        open={showOtpModal}
+        onClose={() => setShowOtpModal(false)}
+        onVerified={handleJoinRequest}
+        title="Verify your email to join this team"
+      />
     </div>
   );
 }

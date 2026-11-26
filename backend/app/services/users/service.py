@@ -49,6 +49,23 @@ def _hash_token(token: str) -> str:
     return hashlib.sha256(token.encode("utf-8")).hexdigest()
 
 
+def _generate_otp() -> str:
+    return f"{secrets.randbelow(1_000_000):06d}"
+
+
+def _hash_otp(user_id: uuid.UUID, code: str) -> str:
+    return hashlib.sha256(f"{user_id}:{code.strip()}".encode("utf-8")).hexdigest()
+
+
+def _as_utc(dt: datetime) -> datetime:
+    return dt.replace(tzinfo=timezone.utc) if dt.tzinfo is None else dt
+
+
+OTP_EXPIRE_MINUTES = 10
+OTP_MAX_ATTEMPTS = 5
+OTP_RESEND_COOLDOWN_SECONDS = 60
+
+
 def _generate_handle(db: Session, base: str) -> str:
     clean = re.sub(r"[^a-zA-Z0-9_]", "", base).lower()[:20]
     if len(clean) < 3:
@@ -99,21 +116,11 @@ def create_user(db: Session, user_in: UserCreate) -> User:
         raise EmailAlreadyRegisteredError(user_in.email) from exc
     db.refresh(user)
 
-    # Automatically generate and send email verification token
+    # Automatically generate and send 6-digit email verification OTP
     try:
-        raw_token = secrets.token_urlsafe(32)
-        token_hash = _hash_token(raw_token)
-        now = datetime.now(timezone.utc)
-        record = EmailVerificationToken(
-            user_id=user.id,
-            token_hash=token_hash,
-            expires_at=now + timedelta(hours=24),
-        )
-        db.add(record)
-        db.commit()
-        get_email_backend().send_verification_email(user.email, raw_token, user.id)
+        _issue_verification_otp(db, user, respect_cooldown=False)
     except Exception:
-        # Don't fail registration if email dispatch encounters an issue in dev
+        # Don't fail registration if email dispatch encounters an issue
         pass
 
     return user
@@ -131,35 +138,98 @@ def authenticate_user(db: Session, email: str, password: str) -> User | None:
     return user
 
 
-def request_email_verification(db: Session, user: User) -> None:
-    """Generate and send a new 24h single-use email verification token."""
+def _issue_verification_otp(db: Session, user: User, respect_cooldown: bool = True) -> str:
+    """Issue a new 6-digit OTP (stored hashed, 10m expiry, 60s cooldown) and send via email."""
     now = datetime.now(timezone.utc)
-    # Check for recent active token to prevent spam
-    recent = db.scalar(
+    if respect_cooldown:
+        latest = db.scalar(
+            select(EmailVerificationToken)
+            .where(EmailVerificationToken.user_id == user.id)
+            .order_by(EmailVerificationToken.created_at.desc())
+            .limit(1)
+        )
+        if latest is not None and _as_utc(latest.created_at) > now - timedelta(seconds=OTP_RESEND_COOLDOWN_SECONDS):
+            raise VerificationCooldownError(
+                f"Please wait at least {OTP_RESEND_COOLDOWN_SECONDS} seconds before requesting another code."
+            )
+
+    # Invalidate prior unused OTPs/tokens for this user
+    db.query(EmailVerificationToken).filter(
+        EmailVerificationToken.user_id == user.id,
+        EmailVerificationToken.used_at.is_(None),
+    ).update({"used_at": now})
+
+    code = _generate_otp()
+    record = EmailVerificationToken(
+        user_id=user.id,
+        token_hash=_hash_otp(user.id, code),
+        attempts=0,
+        expires_at=now + timedelta(minutes=OTP_EXPIRE_MINUTES),
+    )
+    db.add(record)
+    db.commit()
+    get_email_backend().send_verification_email(user.email, code, user.id)
+    return code
+
+
+def send_login_verification_otp_if_needed(db: Session, user: User) -> None:
+    """On login for unverified users, send a fresh OTP if outside the 60s cooldown."""
+    if user.is_email_verified:
+        return
+    try:
+        _issue_verification_otp(db, user, respect_cooldown=True)
+    except VerificationCooldownError:
+        pass
+    except Exception:
+        pass
+
+
+def request_email_verification(db: Session, user: User) -> None:
+    """Generate and send a new 10-minute single-use 6-digit email verification OTP."""
+    _issue_verification_otp(db, user, respect_cooldown=True)
+
+
+def confirm_email_verification_otp(db: Session, user: User, code: str) -> User:
+    """Verify email using the user's latest active 6-digit OTP (max 5 attempts)."""
+    now = datetime.now(timezone.utc)
+    record = db.scalar(
         select(EmailVerificationToken)
         .where(
             EmailVerificationToken.user_id == user.id,
             EmailVerificationToken.used_at.is_(None),
-            EmailVerificationToken.created_at > now - timedelta(seconds=60),
+            EmailVerificationToken.expires_at > now,
         )
+        .order_by(EmailVerificationToken.created_at.desc())
+        .limit(1)
     )
-    if recent is not None:
-        raise VerificationCooldownError("Please wait at least 60 seconds before requesting another email.")
+    if record is None:
+        raise InvalidOrExpiredTokenError("Verification code expired or not found. Please request a new code.")
 
-    raw_token = secrets.token_urlsafe(32)
-    token_hash = _hash_token(raw_token)
-    record = EmailVerificationToken(
-        user_id=user.id,
-        token_hash=token_hash,
-        expires_at=now + timedelta(hours=24),
-    )
-    db.add(record)
+    if record.attempts >= OTP_MAX_ATTEMPTS:
+        record.used_at = now
+        db.commit()
+        raise InvalidOrExpiredTokenError("Too many failed attempts. Please request a new code.")
+
+    expected_hash = _hash_otp(user.id, code)
+    if not secrets.compare_digest(record.token_hash, expected_hash):
+        record.attempts += 1
+        if record.attempts >= OTP_MAX_ATTEMPTS:
+            record.used_at = now
+            db.commit()
+            raise InvalidOrExpiredTokenError("Too many failed attempts. Please request a new code.")
+        db.commit()
+        remaining = OTP_MAX_ATTEMPTS - record.attempts
+        raise InvalidOrExpiredTokenError(f"Invalid verification code. {remaining} attempt(s) remaining.")
+
+    record.used_at = now
+    user.is_email_verified = True
     db.commit()
-    get_email_backend().send_verification_email(user.email, raw_token, user.id)
+    db.refresh(user)
+    return user
 
 
 def confirm_email_verification(db: Session, token: str) -> User:
-    """Verify email using single-use token."""
+    """Verify email using single-use legacy token."""
     now = datetime.now(timezone.utc)
     token_hash = _hash_token(token)
     record = db.scalar(

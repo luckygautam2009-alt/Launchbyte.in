@@ -52,22 +52,24 @@ def test_email_verification_flow(client, db_session):
     reg = client.post("/api/v1/users", json={"email": "verify_me@example.com", "password": "password123"})
     assert reg.status_code == 201
 
-    token = get_dev_token("verify_me@example.com", "verify")
-    assert token is not None
+    otp = get_dev_token("verify_me@example.com", "verify")
+    assert otp is not None and len(otp) == 6
 
-    # 2. Confirm verification
-    confirm = client.post("/api/v1/auth/verify-email/confirm", json={"token": token})
+    login = client.post("/api/v1/auth/login", data={"username": "verify_me@example.com", "password": "password123"})
+    access_token = login.json()["access_token"]
+    headers = {"Authorization": f"Bearer {access_token}"}
+
+    # 2. Confirm verification with 6-digit OTP
+    confirm = client.post("/api/v1/auth/verify-email/confirm", json={"code": otp}, headers=headers)
     assert confirm.status_code == 200
     assert "verified successfully" in confirm.json()["message"]
 
-    # 3. Re-using same token should fail
-    confirm_again = client.post("/api/v1/auth/verify-email/confirm", json={"token": token})
+    # 3. Re-using same OTP should fail
+    confirm_again = client.post("/api/v1/auth/verify-email/confirm", json={"code": otp}, headers=headers)
     assert confirm_again.status_code == 400
 
     # 4. User is verified
-    login = client.post("/api/v1/auth/login", data={"username": "verify_me@example.com", "password": "password123"})
-    access_token = login.json()["access_token"]
-    me = client.get("/api/v1/users/me", headers={"Authorization": f"Bearer {access_token}"})
+    me = client.get("/api/v1/users/me", headers=headers)
     assert me.json()["is_email_verified"] is True
 
 

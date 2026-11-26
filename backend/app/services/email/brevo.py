@@ -53,14 +53,23 @@ class BrevoEmailBackend(EmailBackend):
             raise RuntimeError(f"Brevo API error ({resp.status_code}): {resp.text[:300]}")
 
     def send_verification_email(self, email: str, token: str, user_id: uuid.UUID) -> None:
-        verify_url = f"{self.frontend_url}/verify-email?token={token}"
-        subject = "Verify your LaunchByte email address"
-        body = (
-            "Welcome to LaunchByte!\n\n"
-            f"Your verification code / token: {token}\n"
-            f"Or open this link: {verify_url}\n\n"
-            "If you did not create an account, you can ignore this email."
-        )
+        if len(token) == 6 and token.isdigit():
+            subject = "Your LaunchByte verification code"
+            body = (
+                "Welcome to LaunchByte!\n\n"
+                f"Your 6-digit email verification code is: {token}\n\n"
+                "This code expires in 10 minutes.\n"
+                "If you did not create an account, you can ignore this email."
+            )
+        else:
+            verify_url = f"{self.frontend_url}/verify-email?token={token}"
+            subject = "Verify your LaunchByte email address"
+            body = (
+                "Welcome to LaunchByte!\n\n"
+                f"Your verification token: {token}\n"
+                f"Or open this link: {verify_url}\n\n"
+                "If you did not create an account, you can ignore this email."
+            )
         self._send(email, subject, body)
 
     def send_password_reset_email(self, email: str, token: str, user_id: uuid.UUID) -> None:

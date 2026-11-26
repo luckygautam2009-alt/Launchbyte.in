@@ -19,7 +19,10 @@ class ConsoleEmailBackend(EmailBackend):
         _DEV_TOKENS[email]["verify"] = token
 
         if settings.ENV in {"local", "test"}:
-            logger.info("[EMAIL:VERIFY] To: %s | User: %s | Verification Link: %s", email, user_id, link)
+            if len(token) == 6 and token.isdigit():
+                logger.info("[EMAIL:VERIFY_OTP] To: %s | User: %s | OTP: %s", email, user_id, token)
+            else:
+                logger.info("[EMAIL:VERIFY] To: %s | User: %s | Verification Link: %s", email, user_id, link)
         else:
             logger.info("[EMAIL:VERIFY] To: %s | Verification email dispatched", email)
 

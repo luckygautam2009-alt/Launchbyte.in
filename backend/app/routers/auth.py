@@ -6,7 +6,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from app.core.config import get_settings
 from app.core.rate_limit import rate_limit
 from app.core.security import create_access_token
-from app.dependencies.auth import CurrentUser
+from app.dependencies.auth import CurrentUser, OptionalUser
 from app.dependencies.db import DBSession
 from app.schemas.users import (
     EmailVerificationConfirm,
@@ -43,6 +43,9 @@ def login(
             detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    if not user.is_email_verified:
+        users_service.send_login_verification_otp_if_needed(db, user)
+
     access_token = create_access_token(
         subject=str(user.id),
         role=user.role.value,
@@ -67,7 +70,7 @@ def request_email_verification(
     except users_service.VerificationCooldownError as exc:
         raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail=str(exc)) from exc
 
-    return MessageResponse(message="Verification email sent. Please check your inbox.")
+    return MessageResponse(message="6-digit verification code sent. Please check your inbox.")
 
 
 @router.post(
@@ -78,8 +81,18 @@ def request_email_verification(
 def confirm_email_verification(
     db: DBSession,
     body: EmailVerificationConfirm,
+    current_user: OptionalUser = None,
 ) -> MessageResponse:
     try:
+        if body.code:
+            if current_user is None:
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail="Authentication required to verify with 6-digit code.",
+                )
+            users_service.confirm_email_verification_otp(db, current_user, body.code)
+            return MessageResponse(message="Email verified successfully.")
+        assert body.token is not None
         users_service.confirm_email_verification(db, body.token)
         return MessageResponse(message="Email verified successfully.")
     except users_service.InvalidOrExpiredTokenError as exc:

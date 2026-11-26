@@ -162,10 +162,13 @@ class ApiClient {
     });
   }
 
-  async confirmEmailVerification(token: string): Promise<{ message: string }> {
+  async confirmEmailVerification(
+    payload: string | { code?: string; token?: string }
+  ): Promise<{ message: string }> {
+    const body = typeof payload === "string" ? { token: payload } : payload;
     return this.request<{ message: string }>("/auth/verify-email/confirm", {
       method: "POST",
-      body: JSON.stringify({ token }),
+      body: JSON.stringify(body),
     });
   }
 

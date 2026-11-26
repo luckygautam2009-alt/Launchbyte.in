@@ -38,10 +38,22 @@ class SMTPEmailBackend(EmailBackend):
 
     def send_verification_email(self, email: str, token: str, user_id: uuid.UUID) -> None:
         settings = get_settings()
-        link = f"{settings.FRONTEND_URL}/verify-email?token={token}"
-        subject = "Verify your LaunchByte email"
-        body_text = f"Welcome to LaunchByte! Please verify your email by opening:\n{link}\nThis link expires in 24 hours."
-        body_html = f"<p>Welcome to LaunchByte!</p><p>Please verify your email by clicking <a href='{link}'>here</a>.</p><p>Expires in 24 hours.</p>"
+        if len(token) == 6 and token.isdigit():
+            subject = "Your LaunchByte verification code"
+            body_text = (
+                f"Welcome to LaunchByte!\n\nYour 6-digit verification code is: {token}\n"
+                "This code expires in 10 minutes."
+            )
+            body_html = (
+                f"<p>Welcome to LaunchByte!</p>"
+                f"<p>Your 6-digit verification code is: <strong>{token}</strong></p>"
+                f"<p>This code expires in 10 minutes.</p>"
+            )
+        else:
+            link = f"{settings.FRONTEND_URL}/verify-email?token={token}"
+            subject = "Verify your LaunchByte email"
+            body_text = f"Welcome to LaunchByte! Please verify your email by opening:\n{link}\nThis link expires in 24 hours."
+            body_html = f"<p>Welcome to LaunchByte!</p><p>Please verify your email by clicking <a href='{link}'>here</a>.</p><p>Expires in 24 hours.</p>"
         self._send(email, subject, body_text, body_html)
 
     def send_password_reset_email(self, email: str, token: str, user_id: uuid.UUID) -> None:
