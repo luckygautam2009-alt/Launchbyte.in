@@ -1,8 +1,9 @@
+import re
 import uuid
 from datetime import datetime
 
 import nh3
-from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator
+from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator, model_validator
 
 from app.models.networking import (
     CollabRequestStatus,
@@ -14,6 +15,15 @@ from app.models.networking import (
     ReportStatus,
     TeamMemberRole,
 )
+
+GITHUB_REPO_REGEX = re.compile(r"^https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/?$")
+
+
+def _validate_github_repo_url(val: str) -> str:
+    cleaned = str(val).strip()
+    if not GITHUB_REPO_REGEX.match(cleaned):
+        raise ValueError("A valid public GitHub repository URL is required (e.g., https://github.com/org/repo)")
+    return cleaned.rstrip("/")
 
 
 def _sanitize_text(val: str | None) -> str | None:
@@ -228,7 +238,7 @@ class ProjectCreate(BaseModel):
     slug: str | None = Field(default=None, max_length=140)
     summary: str | None = Field(default=None, max_length=255)
     description: str | None = Field(default=None, max_length=10000)
-    repo_url: str | None = Field(default=None, max_length=500)
+    repo_url: str = Field(min_length=1, max_length=500)
     demo_url: str | None = Field(default=None, max_length=500)
     tech_stack: list[str] = Field(default_factory=list)
     looking_for: list[str] = Field(default_factory=list)
@@ -236,9 +246,14 @@ class ProjectCreate(BaseModel):
     visibility: ProjectVisibility = ProjectVisibility.PUBLIC
     team_id: uuid.UUID | None = None
 
-    @field_validator("repo_url", "demo_url")
+    @field_validator("repo_url")
     @classmethod
-    def validate_url(cls, v: str | None) -> str | None:
+    def validate_repo_url(cls, v: str) -> str:
+        return _validate_github_repo_url(v)
+
+    @field_validator("demo_url")
+    @classmethod
+    def validate_demo_url(cls, v: str | None) -> str | None:
         if v:
             v_str = str(v).strip()
             if not (v_str.startswith("http://") or v_str.startswith("https://")):
@@ -263,15 +278,28 @@ class ProjectUpdate(BaseModel):
     status: ProjectStatus | None = None
     visibility: ProjectVisibility | None = None
 
-    @field_validator("repo_url", "demo_url")
+    @field_validator("repo_url")
     @classmethod
-    def validate_url(cls, v: str | None) -> str | None:
+    def validate_repo_url(cls, v: str | None) -> str | None:
+        if v is None:
+            return None
+        return _validate_github_repo_url(v)
+
+    @field_validator("demo_url")
+    @classmethod
+    def validate_demo_url(cls, v: str | None) -> str | None:
         if v:
             v_str = str(v).strip()
             if not (v_str.startswith("http://") or v_str.startswith("https://")):
                 raise ValueError("URL must start with http:// or https://")
             return v_str
         return None
+
+    @model_validator(mode="after")
+    def prevent_clearing_repo_url(self) -> "ProjectUpdate":
+        if "repo_url" in self.model_fields_set and not self.repo_url:
+            raise ValueError("repo_url is required and cannot be cleared.")
+        return self
 
 
 class ProjectMemberRead(BaseModel):

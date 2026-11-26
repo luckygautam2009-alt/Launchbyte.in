@@ -448,7 +448,11 @@ def test_projects_crud_visibility_and_collaboration(client: TestClient, db_sessi
     # Private project visibility test
     resp_priv = client.post(
         "/api/v1/projects",
-        json={"title": "Super Secret Project", "visibility": "private"},
+        json={
+            "title": "Super Secret Project",
+            "visibility": "private",
+            "repo_url": "https://github.com/alice/super-secret",
+        },
         headers=auth_headers(alice),
     )
     priv_slug = resp_priv.json()["slug"]

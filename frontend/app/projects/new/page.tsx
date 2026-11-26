@@ -37,6 +37,20 @@ export default function NewProjectPage() {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [repoError, setRepoError] = useState<string | null>(null);
+
+  const GITHUB_REPO_REGEX = /^https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\/?$/;
+
+  function validateRepoUrl(val: string): string | null {
+    const trimmed = val.trim();
+    if (!trimmed) {
+      return "GitHub repository URL is required.";
+    }
+    if (!GITHUB_REPO_REGEX.test(trimmed)) {
+      return "Must be a valid GitHub repository URL: https://github.com/<owner>/<repo>";
+    }
+    return null;
+  }
 
   function handleAddTech() {
     const val = techInput.trim().toLowerCase();
@@ -56,10 +70,18 @@ export default function NewProjectPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!title.trim()) return;
+    if (!title.trim() || submitting) return;
+
+    const repoValidation = validateRepoUrl(repoUrl);
+    if (repoValidation) {
+      setRepoError(repoValidation);
+      setError(repoValidation);
+      return;
+    }
 
     setSubmitting(true);
     setError(null);
+    setRepoError(null);
 
     try {
       const project = await api.createProject({
@@ -67,7 +89,7 @@ export default function NewProjectPage() {
         slug: slug.trim() || undefined,
         summary: summary.trim() || undefined,
         description: description.trim() || undefined,
-        repo_url: repoUrl.trim() || undefined,
+        repo_url: repoUrl.trim(),
         demo_url: demoUrl.trim() || undefined,
         tech_stack: techStack,
         looking_for: lookingFor,
@@ -260,14 +282,31 @@ export default function NewProjectPage() {
           {/* Repo & Demo URLs */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">GitHub / Repo URL</label>
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                GitHub Repository URL *
+              </label>
               <input
                 type="url"
-                placeholder="https://github.com/org/repo"
+                required
+                placeholder="https://github.com/owner/repo"
                 value={repoUrl}
-                onChange={(e) => setRepoUrl(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-brand-500"
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setRepoUrl(val);
+                  if (repoError) setRepoError(validateRepoUrl(val));
+                }}
+                onBlur={() => setRepoError(validateRepoUrl(repoUrl))}
+                className={`w-full px-3.5 py-2.5 rounded-xl bg-slate-800 border text-white placeholder-slate-500 text-xs focus:outline-none ${
+                  repoError
+                    ? "border-rose-500 focus:border-rose-400"
+                    : "border-slate-700 focus:border-brand-500"
+                }`}
               />
+              {repoError ? (
+                <p className="mt-1 text-[11px] text-rose-400">{repoError}</p>
+              ) : (
+                <p className="mt-1 text-[11px] text-slate-500">Format: https://github.com/&lt;owner&gt;/&lt;repo&gt;</p>
+              )}
             </div>
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1.5">Live Demo URL</label>
