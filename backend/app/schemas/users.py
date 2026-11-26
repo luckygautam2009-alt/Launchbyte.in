@@ -26,11 +26,15 @@ class UserRead(UserBase):
     is_email_verified: bool
     handle: str | None = None
     avatar_url: str | None = None
+    verification_email_sent: bool | None = None
+    verification_email_error: str | None = None
 
 
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
+    verification_email_sent: bool | None = None
+    verification_email_error: str | None = None
 
 
 class TokenPayload(BaseModel):

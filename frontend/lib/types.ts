@@ -121,6 +121,8 @@ export interface User {
   is_email_verified: boolean;
   handle?: string | null;
   avatar_url?: string | null;
+  verification_email_sent?: boolean | null;
+  verification_email_error?: string | null;
 }
 
 export interface TeamMember {

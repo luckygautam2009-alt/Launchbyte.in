@@ -50,6 +50,9 @@ export default function PublicHostEventPage() {
     id: string;
     status: string;
     email_sent: boolean;
+    admin_email_sent?: boolean;
+    organizer_email_sent?: boolean;
+    email_error?: string | null;
     message: string;
   } | null>(null);
 
@@ -175,9 +178,30 @@ export default function PublicHostEventPage() {
             <div className="inline-block px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-cyan-300">
               Submission ID: {submissionAck.id} • Status: {submissionAck.status.toUpperCase()}
             </div>
-            <p className="text-xs text-slate-400">
-              Notification sent to <span className="text-cyan-300 font-mono">{LAUNCHBYTE_SOCIALS.email}</span>.
-            </p>
+            {submissionAck.email_sent ? (
+              <p className="text-xs text-emerald-300">
+                Notification delivered to <span className="text-cyan-300 font-mono">{LAUNCHBYTE_SOCIALS.email}</span>
+                {organizerEmail ? (
+                  <>
+                    {" "}and confirmation sent to <span className="text-cyan-300 font-mono">{organizerEmail}</span>
+                  </>
+                ) : null}
+                .
+              </p>
+            ) : (
+              <div className="max-w-lg mx-auto p-3.5 rounded-xl bg-amber-950/40 border border-amber-500/30 text-amber-200 text-xs space-y-1">
+                <p className="font-semibold">
+                  Submission saved, but email notification could not be fully delivered.
+                </p>
+                <p className="text-amber-300/90">
+                  {submissionAck.admin_email_sent
+                    ? `Admin alert was sent to ${LAUNCHBYTE_SOCIALS.email}, but the organizer confirmation email failed.`
+                    : submissionAck.organizer_email_sent
+                    ? `Organizer confirmation was sent, but the admin alert to ${LAUNCHBYTE_SOCIALS.email} failed.`
+                    : `Email delivery is currently unavailable. You can also reach us directly at ${LAUNCHBYTE_SOCIALS.email}.`}
+                </p>
+              </div>
+            )}
             <div className="pt-4 flex flex-wrap justify-center gap-4">
               <button
                 type="button"

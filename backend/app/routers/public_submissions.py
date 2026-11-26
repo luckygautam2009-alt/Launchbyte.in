@@ -188,11 +188,37 @@ def submit_public_host_event(
         ),
     )
 
+    all_sent = admin_res.sent and user_res.sent
+    errors = [err for err in (admin_res.error, user_res.error) if err]
+    if all_sent:
+        ack_message = (
+            "Event submission received and queued for LaunchByte team review. "
+            "Confirmation emails were delivered."
+        )
+    elif admin_res.sent and not user_res.sent:
+        ack_message = (
+            "Event submission received and queued for LaunchByte team review, "
+            "but the organizer confirmation email could not be delivered."
+        )
+    elif not admin_res.sent and user_res.sent:
+        ack_message = (
+            "Event submission saved for LaunchByte team review, "
+            "but the admin alert email could not be delivered."
+        )
+    else:
+        ack_message = (
+            "Event submission saved for LaunchByte team review, "
+            "but email notifications could not be delivered."
+        )
+
     return PublicEventSubmissionAck(
         id=submission.id,
         status=submission.status,
-        email_sent=admin_res.sent and user_res.sent,
-        message="Event submission received and queued for LaunchByte team review.",
+        email_sent=all_sent,
+        admin_email_sent=admin_res.sent,
+        organizer_email_sent=user_res.sent,
+        email_error="; ".join(errors) if errors else None,
+        message=ack_message,
     )
 
 

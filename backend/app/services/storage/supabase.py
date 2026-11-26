@@ -10,9 +10,9 @@ logger = logging.getLogger(__name__)
 class SupabaseStorageBackend(StorageBackend):
     def __init__(self):
         settings = get_settings()
-        self.supabase_url = settings.SUPABASE_URL.rstrip("/")
-        self.service_key = settings.SUPABASE_SERVICE_ROLE_KEY
-        self.bucket = settings.SUPABASE_STORAGE_BUCKET
+        self.supabase_url = settings.SUPABASE_URL.strip().rstrip("/")
+        self.service_key = settings.SUPABASE_SERVICE_ROLE_KEY.strip()
+        self.bucket = (settings.SUPABASE_STORAGE_BUCKET or "media").strip()
 
     def save(self, content: bytes, filename: str, content_type: str) -> str:
         if not self.supabase_url or not self.service_key:
@@ -21,10 +21,14 @@ class SupabaseStorageBackend(StorageBackend):
         url = f"{self.supabase_url}/storage/v1/object/{self.bucket}/{filename}"
         headers = {
             "apikey": self.service_key,
-            "Authorization": f"Bearer {self.service_key}",
             "Content-Type": content_type,
             "x-upsert": "true",
         }
+        # New Supabase secret keys (sb_secret_*) are opaque keys, not JWTs.
+        # Sending them in Authorization: Bearer triggers 403 Invalid Compact JWS.
+        # Legacy service_role JWT keys (eyJ...) still require Authorization: Bearer.
+        if not self.service_key.startswith("sb_secret_"):
+            headers["Authorization"] = f"Bearer {self.service_key}"
         try:
             with httpx.Client(timeout=30.0) as client:
                 resp = client.post(url, content=content, headers=headers)

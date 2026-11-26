@@ -5,6 +5,7 @@ Per convention: routers stay thin (parse input, call a service, return a
 schema) — this is where the actual work happens.
 """
 import hashlib
+import logging
 import re
 import secrets
 import uuid
@@ -21,6 +22,7 @@ from app.models.users import User
 from app.schemas.users import UserCreate
 from app.services.email import get_email_backend
 
+logger = logging.getLogger(__name__)
 _DUMMY_HASH = hash_password("timing-equalizer-not-a-real-password")
 
 
@@ -33,11 +35,15 @@ class HandleAlreadyTakenError(Exception):
 
 
 class InvalidOrExpiredTokenError(Exception):
-    """Raised when an email verification or password reset token is invalid or expired."""
+    """Raised when a verification or password-reset token is invalid or expired."""
 
 
 class VerificationCooldownError(Exception):
-    """Raised when requesting verification too quickly."""
+    """Raised when an OTP resend is requested before the 60s cooldown expires."""
+
+
+class EmailDeliveryError(Exception):
+    """Raised when the configured email backend fails to deliver an email."""
 
 
 def normalize_email(email: str) -> str:
@@ -119,9 +125,12 @@ def create_user(db: Session, user_in: UserCreate) -> User:
     # Automatically generate and send 6-digit email verification OTP
     try:
         _issue_verification_otp(db, user, respect_cooldown=False)
-    except Exception:
-        # Don't fail registration if email dispatch encounters an issue
-        pass
+        user.verification_email_sent = True  # type: ignore[attr-defined]
+        user.verification_email_error = None  # type: ignore[attr-defined]
+    except EmailDeliveryError as exc:
+        logger.error("Verification OTP dispatch failed on registration for %s: %s", user.email, exc)
+        user.verification_email_sent = False  # type: ignore[attr-defined]
+        user.verification_email_error = str(exc)  # type: ignore[attr-defined]
 
     return user
 
@@ -153,13 +162,22 @@ def _issue_verification_otp(db: Session, user: User, respect_cooldown: bool = Tr
                 f"Please wait at least {OTP_RESEND_COOLDOWN_SECONDS} seconds before requesting another code."
             )
 
+    code = _generate_otp()
+
+    # Dispatch email BEFORE invalidating prior tokens or committing the new token,
+    # so a transient send failure never consumes the 60s cooldown.
+    try:
+        get_email_backend().send_verification_email(user.email, code, user.id)
+    except Exception as exc:
+        logger.error("Failed to send verification OTP to %s: %s", user.email, exc)
+        raise EmailDeliveryError(f"Failed to send verification email: {exc}") from exc
+
     # Invalidate prior unused OTPs/tokens for this user
     db.query(EmailVerificationToken).filter(
         EmailVerificationToken.user_id == user.id,
         EmailVerificationToken.used_at.is_(None),
     ).update({"used_at": now})
 
-    code = _generate_otp()
     record = EmailVerificationToken(
         user_id=user.id,
         token_hash=_hash_otp(user.id, code),
@@ -168,20 +186,21 @@ def _issue_verification_otp(db: Session, user: User, respect_cooldown: bool = Tr
     )
     db.add(record)
     db.commit()
-    get_email_backend().send_verification_email(user.email, code, user.id)
     return code
 
 
-def send_login_verification_otp_if_needed(db: Session, user: User) -> None:
+def send_login_verification_otp_if_needed(db: Session, user: User) -> tuple[bool, str | None]:
     """On login for unverified users, send a fresh OTP if outside the 60s cooldown."""
     if user.is_email_verified:
-        return
+        return True, None
     try:
         _issue_verification_otp(db, user, respect_cooldown=True)
+        return True, None
     except VerificationCooldownError:
-        pass
-    except Exception:
-        pass
+        return True, None
+    except EmailDeliveryError as exc:
+        logger.error("Verification OTP dispatch failed on login for %s: %s", user.email, exc)
+        return False, str(exc)
 
 
 def request_email_verification(db: Session, user: User) -> None:

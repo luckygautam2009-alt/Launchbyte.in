@@ -9,6 +9,7 @@ from app.services.email.brevo import BrevoEmailBackend
 
 def test_get_email_backend_returns_brevo(monkeypatch):
     fake_settings = SimpleNamespace(
+        ENV="test",
         EMAIL_BACKEND="brevo",
         BREVO_API_KEY="xkeysib-test-secret",
         EMAIL_FROM="noreply@launchbyte.io",
@@ -24,6 +25,7 @@ def test_get_email_backend_returns_brevo(monkeypatch):
 
 def test_brevo_send_and_host_event_truthful_email_sent(client, monkeypatch, caplog):
     fake_settings = SimpleNamespace(
+        ENV="test",
         EMAIL_BACKEND="brevo",
         BREVO_API_KEY="xkeysib-super-secret-value",
         EMAIL_FROM="noreply@launchbyte.io",

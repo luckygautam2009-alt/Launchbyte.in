@@ -31,6 +31,16 @@ function VerifyEmailContent() {
   const [cooldown, setCooldown] = useState(0);
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const pendingErr = sessionStorage.getItem("lb_otp_send_err");
+      if (pendingErr) {
+        setMessage(pendingErr);
+        sessionStorage.removeItem("lb_otp_send_err");
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     if (token) {
       setLoading(true);
       api

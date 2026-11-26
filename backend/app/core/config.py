@@ -132,6 +132,32 @@ class Settings(BaseSettings):
                 raise ValueError(
                     f"Refusing to start: DEBUG must be false in non-local environments (ENV={self.ENV!r})"
                 )
+
+            email_backend = self.EMAIL_BACKEND.lower().strip()
+            if email_backend == "console" or email_backend not in {"brevo", "smtp"}:
+                raise ValueError(
+                    "EMAIL_BACKEND must be 'brevo' or 'smtp' in non-local/test environments; "
+                    "silent fallback to 'console' is disallowed."
+                )
+            if email_backend == "brevo":
+                if not self.BREVO_API_KEY.strip():
+                    raise ValueError("BREVO_API_KEY must be set when EMAIL_BACKEND='brevo'.")
+                email_from = self.EMAIL_FROM.strip()
+                if not email_from or "@" not in email_from:
+                    raise ValueError(
+                        "EMAIL_FROM must be set to a verified sender email when EMAIL_BACKEND='brevo'."
+                    )
+
+            storage_backend = self.STORAGE_BACKEND.lower().strip()
+            if storage_backend == "supabase":
+                if not self.SUPABASE_URL.strip() or not self.SUPABASE_SERVICE_ROLE_KEY.strip():
+                    raise ValueError(
+                        "SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set when STORAGE_BACKEND='supabase'."
+                    )
+                if not self.SUPABASE_STORAGE_BUCKET.strip():
+                    raise ValueError(
+                        "SUPABASE_STORAGE_BUCKET must be set when STORAGE_BACKEND='supabase'."
+                    )
         return self
 
 

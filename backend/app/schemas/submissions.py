@@ -126,6 +126,9 @@ class PublicEventSubmissionAck(BaseModel):
     id: uuid.UUID
     status: str
     email_sent: bool
+    admin_email_sent: bool = False
+    organizer_email_sent: bool = False
+    email_error: str | None = None
     message: str
 
 

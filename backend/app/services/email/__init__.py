@@ -7,9 +7,15 @@ from app.services.email.smtp import SMTPEmailBackend
 
 def get_email_backend() -> EmailBackend:
     settings = get_settings()
-    backend = settings.EMAIL_BACKEND.lower().strip()
+    backend = getattr(settings, "EMAIL_BACKEND", "console").lower().strip()
+    env = getattr(settings, "ENV", "local").lower().strip()
     if backend == "smtp":
         return SMTPEmailBackend()
     if backend == "brevo":
         return BrevoEmailBackend()
+    if env not in {"local", "test"}:
+        raise RuntimeError(
+            f"EMAIL_BACKEND={backend!r} is not allowed when ENV={env!r}. "
+            "Configure EMAIL_BACKEND='brevo' or 'smtp'."
+        )
     return ConsoleEmailBackend()

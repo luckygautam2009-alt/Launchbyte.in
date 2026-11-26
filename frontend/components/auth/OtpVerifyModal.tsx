@@ -39,8 +39,12 @@ export default function OtpVerifyModal({
       api
         .requestEmailVerification()
         .then(() => setCooldown(60))
-        .catch(() => {
-          // Cooldown may already be active from register/login
+        .catch((err: any) => {
+          const msg = String(err?.message || "");
+          // Cooldown (429) means an OTP was already sent recently; surface real send failures
+          if (!msg.toLowerCase().includes("wait at least")) {
+            setError(msg || "Failed to send verification code. Please try again.");
+          }
         });
     }
   }, [open, user]);

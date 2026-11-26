@@ -43,12 +43,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const params = new URLSearchParams();
     params.set("username", email);
     params.set("password", pass);
-    await api.login(params);
+    const res = await api.login(params);
+    if (typeof window !== "undefined" && res.verification_email_sent === false) {
+      sessionStorage.setItem(
+        "lb_otp_send_err",
+        res.verification_email_error || "Failed to send verification email. Please click Resend code."
+      );
+    }
     await refreshUser();
   };
 
   const register = async (email: string, pass: string, name?: string) => {
-    await api.register({ email, password: pass, full_name: name });
+    const regUser = await api.register({ email, password: pass, full_name: name });
+    if (typeof window !== "undefined" && regUser.verification_email_sent === false) {
+      sessionStorage.setItem(
+        "lb_otp_send_err",
+        regUser.verification_email_error || "Failed to send verification email. Please click Resend code."
+      );
+    }
     // After registration, automatically log in
     await login(email, pass);
   };

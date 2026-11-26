@@ -126,7 +126,11 @@ class ApiClient {
   }
 
   // --- Auth ---
-  async login(formData: URLSearchParams): Promise<{ access_token: string }> {
+  async login(formData: URLSearchParams): Promise<{
+    access_token: string;
+    verification_email_sent?: boolean | null;
+    verification_email_error?: string | null;
+  }> {
     const url = `${API_BASE}/auth/login`;
     const res = await fetch(url, {
       method: "POST",

@@ -43,15 +43,23 @@ def login(
             detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    verification_email_sent: bool | None = None
+    verification_email_error: str | None = None
     if not user.is_email_verified:
-        users_service.send_login_verification_otp_if_needed(db, user)
+        verification_email_sent, verification_email_error = users_service.send_login_verification_otp_if_needed(
+            db, user
+        )
 
     access_token = create_access_token(
         subject=str(user.id),
         role=user.role.value,
         token_version=user.token_version,
     )
-    return Token(access_token=access_token)
+    return Token(
+        access_token=access_token,
+        verification_email_sent=verification_email_sent,
+        verification_email_error=verification_email_error,
+    )
 
 
 @router.post(
@@ -69,6 +77,8 @@ def request_email_verification(
         users_service.request_email_verification(db, current_user)
     except users_service.VerificationCooldownError as exc:
         raise HTTPException(status_code=status.HTTP_429_TOO_MANY_REQUESTS, detail=str(exc)) from exc
+    except users_service.EmailDeliveryError as exc:
+        raise HTTPException(status_code=status.HTTP_502_BAD_GATEWAY, detail=str(exc)) from exc
 
     return MessageResponse(message="6-digit verification code sent. Please check your inbox.")
 

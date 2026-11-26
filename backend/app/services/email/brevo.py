@@ -15,7 +15,11 @@ class BrevoEmailBackend(EmailBackend):
     def __init__(self) -> None:
         settings = get_settings()
         self.api_key = settings.BREVO_API_KEY.strip()
-        self.sender_email = (settings.EMAIL_FROM or settings.SMTP_FROM).strip()
+        env = getattr(settings, "ENV", "local").lower().strip()
+        if env not in {"local", "test"}:
+            self.sender_email = settings.EMAIL_FROM.strip()
+        else:
+            self.sender_email = (settings.EMAIL_FROM or settings.SMTP_FROM).strip()
         self.frontend_url = settings.FRONTEND_URL.rstrip("/")
 
     def _send(self, to_email: str, subject: str, text_content: str) -> None:

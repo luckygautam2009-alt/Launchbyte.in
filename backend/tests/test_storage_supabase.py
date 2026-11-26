@@ -16,7 +16,7 @@ def _make_png_bytes() -> bytes:
     return buf.getvalue()
 
 
-def test_supabase_storage_sends_apikey_bearer_and_upsert(monkeypatch):
+def test_supabase_storage_sb_secret_key_uses_apikey_only_no_bearer(monkeypatch):
     fake_settings = SimpleNamespace(
         SUPABASE_URL="https://example.supabase.co/",
         SUPABASE_SERVICE_ROLE_KEY="sb_secret_test_key_123",
@@ -45,9 +45,41 @@ def test_supabase_storage_sends_apikey_bearer_and_upsert(monkeypatch):
     assert call_args[0][0] == "https://example.supabase.co/storage/v1/object/avatars/avatar.png"
     headers = call_args.kwargs["headers"]
     assert headers["apikey"] == "sb_secret_test_key_123"
-    assert headers["Authorization"] == "Bearer sb_secret_test_key_123"
+    assert "Authorization" not in headers
     assert headers["x-upsert"] == "true"
     assert headers["Content-Type"] == "image/png"
+
+
+def test_supabase_storage_legacy_jwt_key_sends_apikey_and_bearer(monkeypatch):
+    legacy_jwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoic2VydmljZV9yb2xlIn0.sig"
+    fake_settings = SimpleNamespace(
+        SUPABASE_URL="https://example.supabase.co",
+        SUPABASE_SERVICE_ROLE_KEY=legacy_jwt,
+        SUPABASE_STORAGE_BUCKET="media",
+    )
+    monkeypatch.setattr(
+        "app.services.storage.supabase.get_settings",
+        lambda: fake_settings,
+    )
+
+    mock_resp = MagicMock()
+    mock_resp.status_code = 201
+    mock_resp.text = '{"Key":"media/avatar.png"}'
+
+    mock_client = MagicMock()
+    mock_client.__enter__.return_value = mock_client
+    mock_client.__exit__.return_value = False
+    mock_client.post.return_value = mock_resp
+
+    with patch("app.services.storage.supabase.httpx.Client", return_value=mock_client):
+        backend = SupabaseStorageBackend()
+        url = backend.save(b"png-bytes", "avatar.png", "image/png")
+
+    assert url == "https://example.supabase.co/storage/v1/object/public/media/avatar.png"
+    headers = mock_client.post.call_args.kwargs["headers"]
+    assert headers["apikey"] == legacy_jwt
+    assert headers["Authorization"] == f"Bearer {legacy_jwt}"
+    assert headers["x-upsert"] == "true"
 
 
 def test_supabase_storage_logs_real_error_and_raises_runtime_error(monkeypatch, caplog):
