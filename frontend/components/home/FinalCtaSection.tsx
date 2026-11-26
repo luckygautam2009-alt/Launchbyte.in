@@ -3,11 +3,13 @@
 import React, { useRef } from "react";
 import Link from "next/link";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import { ArrowRight, ShieldCheck, Users, Trophy } from "lucide-react";
+import { ArrowRight, LayoutDashboard, ShieldCheck, Users, Trophy } from "lucide-react";
 import { Reveal, MagneticButton } from "./HomeMotion";
 import RevealHeading from "@/components/ui/RevealHeading";
+import { useAuth } from "@/lib/auth-context";
 
 export default function FinalCtaSection() {
+  const { user, loading } = useAuth();
   const sectionRef = useRef<HTMLElement>(null);
   const shouldReduceMotion = useReducedMotion();
 
@@ -78,15 +80,33 @@ export default function FinalCtaSection() {
         {/* Strong Primary CTA + Secondary Link */}
         <Reveal delay={0.2}>
           <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
-            <MagneticButton strength={0.3}>
-              <Link
-                href="/register"
-                className="px-8 py-4 rounded-2xl bg-gradient-to-r from-[#4F46E5] via-[#7C3AED] to-[#8B5CF6] hover:from-[#4338CA] hover:via-[#6D28D9] hover:to-[#7C3AED] text-white text-sm sm:text-base font-bold shadow-2xl shadow-violet-500/40 transition-all flex items-center gap-2.5 focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:outline-none group"
-              >
-                <span>Join LaunchByte</span>
-                <ArrowRight className="w-4 h-4 text-violet-200 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </MagneticButton>
+            {loading ? (
+              <div
+                aria-hidden="true"
+                className="w-[196px] h-[56px] rounded-2xl bg-violet-950/20 border border-violet-500/20 animate-pulse"
+              />
+            ) : user ? (
+              <MagneticButton strength={0.3}>
+                <Link
+                  href="/dashboard"
+                  className="px-8 py-4 rounded-2xl bg-gradient-to-r from-[#4F46E5] via-[#7C3AED] to-[#8B5CF6] hover:from-[#4338CA] hover:via-[#6D28D9] hover:to-[#7C3AED] text-white text-sm sm:text-base font-bold shadow-2xl shadow-violet-500/40 transition-all flex items-center gap-2.5 focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:outline-none group"
+                >
+                  <LayoutDashboard className="w-4 h-4 text-violet-200" />
+                  <span>Go to Dashboard</span>
+                  <ArrowRight className="w-4 h-4 text-violet-200 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </MagneticButton>
+            ) : (
+              <MagneticButton strength={0.3}>
+                <Link
+                  href="/register"
+                  className="px-8 py-4 rounded-2xl bg-gradient-to-r from-[#4F46E5] via-[#7C3AED] to-[#8B5CF6] hover:from-[#4338CA] hover:via-[#6D28D9] hover:to-[#7C3AED] text-white text-sm sm:text-base font-bold shadow-2xl shadow-violet-500/40 transition-all flex items-center gap-2.5 focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:outline-none group"
+                >
+                  <span>Join LaunchByte</span>
+                  <ArrowRight className="w-4 h-4 text-violet-200 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </MagneticButton>
+            )}
 
             <MagneticButton strength={0.2}>
               <Link

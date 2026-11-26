@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { useAuth } from "@/lib/auth-context";
 import { api } from "@/lib/api";
 import { TeamMember } from "@/lib/types";
 import { SITE_CONTENT } from "@/lib/siteContent";
@@ -22,6 +23,7 @@ import {
 } from "lucide-react";
 
 export default function AboutPage() {
+  const { user, loading: authLoading } = useAuth();
   const [team, setTeam] = useState<TeamMember[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -276,12 +278,23 @@ export default function AboutPage() {
               >
                 Explore Opportunities
               </Link>
-              <Link
-                href="/register"
-                className="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold border border-slate-700 transition text-sm"
-              >
-                Create Organizer Account
-              </Link>
+              {!authLoading && (
+                user ? (
+                  <Link
+                    href="/host"
+                    className="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold border border-slate-700 transition text-sm"
+                  >
+                    Host an Event
+                  </Link>
+                ) : (
+                  <Link
+                    href="/register"
+                    className="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold border border-slate-700 transition text-sm"
+                  >
+                    Create Organizer Account
+                  </Link>
+                )
+              )}
             </div>
           </div>
         </section>

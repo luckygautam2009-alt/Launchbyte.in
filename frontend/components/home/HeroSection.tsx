@@ -4,7 +4,8 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, LayoutDashboard, Sparkles } from "lucide-react";
+import { useAuth } from "@/lib/auth-context";
 
 // Four-point cross star SVG matching the primary reference
 function CrossStar({
@@ -33,6 +34,8 @@ function CrossStar({
 }
 
 export default function HeroSection() {
+  const { user, loading } = useAuth();
+
   return (
     <section className="relative w-full min-h-[calc(100vh-4rem)] min-h-[640px] lg:min-h-[90vh] bg-[#050510] bg-space-grid overflow-hidden flex flex-col justify-between select-none">
       {/* Ambient background glows */}
@@ -128,12 +131,27 @@ export default function HeroSection() {
               <ArrowRight className="w-4 h-4 text-violet-200 group-hover:translate-x-1 transition-transform" />
             </Link>
 
-            <Link
-              href="/register"
-              className="w-full sm:w-auto min-h-[46px] justify-center px-6 py-3.5 rounded-xl border border-violet-500/30 hover:border-violet-400/60 bg-violet-950/20 hover:bg-violet-900/30 text-[#F8FAFC] font-semibold text-sm sm:text-base transition-all hover:scale-[1.02] active:scale-[0.98] inline-flex items-center gap-2"
-            >
-              <span>Join LaunchByte</span>
-            </Link>
+            {loading ? (
+              <div
+                aria-hidden="true"
+                className="w-full sm:w-[172px] min-h-[46px] rounded-xl border border-violet-500/15 bg-violet-950/10 animate-pulse"
+              />
+            ) : user ? (
+              <Link
+                href="/dashboard"
+                className="w-full sm:w-auto min-h-[46px] justify-center px-6 py-3.5 rounded-xl border border-violet-500/30 hover:border-violet-400/60 bg-violet-950/20 hover:bg-violet-900/30 text-[#F8FAFC] font-semibold text-sm sm:text-base transition-all hover:scale-[1.02] active:scale-[0.98] inline-flex items-center gap-2"
+              >
+                <LayoutDashboard className="w-4 h-4 text-violet-300" />
+                <span>Go to Dashboard</span>
+              </Link>
+            ) : (
+              <Link
+                href="/register"
+                className="w-full sm:w-auto min-h-[46px] justify-center px-6 py-3.5 rounded-xl border border-violet-500/30 hover:border-violet-400/60 bg-violet-950/20 hover:bg-violet-900/30 text-[#F8FAFC] font-semibold text-sm sm:text-base transition-all hover:scale-[1.02] active:scale-[0.98] inline-flex items-center gap-2"
+              >
+                <span>Join LaunchByte</span>
+              </Link>
+            )}
           </div>
         </div>
       </div>

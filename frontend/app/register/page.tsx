@@ -1,15 +1,24 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/lib/toast-context";
 import { UserPlus, Mail, Lock, User as UserIcon, ArrowRight, Loader2, CheckCircle2 } from "lucide-react";
 
-export default function RegisterPage() {
+function getSafeNext(rawNext: string | null): string {
+  if (rawNext && rawNext.startsWith("/") && !rawNext.startsWith("//")) {
+    return rawNext;
+  }
+  return "/dashboard";
+}
+
+function RegisterForm() {
   const router = useRouter();
-  const { register } = useAuth();
+  const searchParams = useSearchParams();
+  const safeNext = getSafeNext(searchParams.get("next"));
+  const { user, loading, register } = useAuth();
   const { showToast } = useToast();
 
   const [name, setName] = useState("");
@@ -18,6 +27,12 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.replace(safeNext);
+    }
+  }, [loading, user, router, safeNext]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,8 +56,12 @@ export default function RegisterPage() {
 
     try {
       await register(email, password, name.trim() || undefined);
-      showToast("Account created successfully! Welcome to LaunchByte.", "success");
-      router.push("/opportunities");
+      showToast("Account created! Please verify your email with the OTP sent to your inbox.", "success");
+      const verifyTarget =
+        safeNext !== "/dashboard"
+          ? `/verify-email?next=${encodeURIComponent(safeNext)}`
+          : "/verify-email";
+      router.push(verifyTarget);
     } catch (err: any) {
       const msg = err?.message || "Failed to create account. Please try again.";
       setErrorMsg(msg);
@@ -51,6 +70,19 @@ export default function RegisterPage() {
       setSubmitting(false);
     }
   };
+
+  if (loading || user) {
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-indigo-400 animate-spin" />
+      </div>
+    );
+  }
+
+  const loginHref =
+    safeNext !== "/dashboard"
+      ? `/login?next=${encodeURIComponent(safeNext)}`
+      : "/login";
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -166,7 +198,7 @@ export default function RegisterPage() {
           <p className="text-sm text-slate-400">
             Already have an account?{" "}
             <Link
-              href="/login"
+              href={loginHref}
               className="text-indigo-400 font-medium hover:text-indigo-300 transition"
             >
               Sign in here
@@ -175,5 +207,19 @@ export default function RegisterPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function RegisterPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-[80vh] flex items-center justify-center">
+          <Loader2 className="w-8 h-8 text-indigo-400 animate-spin" />
+        </div>
+      }
+    >
+      <RegisterForm />
+    </Suspense>
   );
 }

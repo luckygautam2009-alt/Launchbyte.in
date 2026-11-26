@@ -42,7 +42,7 @@ const NAV_ITEMS: NavItem[] = [
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { user, logout } = useAuth();
+  const { user, loading, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -124,7 +124,9 @@ export default function Navbar() {
 
         {/* Right side Auth / User Menu */}
         <div className="hidden md:flex items-center gap-3">
-          {user ? (
+          {loading ? (
+            <div className="w-32 h-9 rounded-xl bg-slate-800/50 animate-pulse" aria-hidden="true" />
+          ) : user ? (
             <div className="flex items-center gap-2">
               <Link
                 href="/messages"
@@ -332,7 +334,9 @@ export default function Navbar() {
           </div>
 
           <div className="pt-4 border-t border-slate-800">
-            {user ? (
+            {loading ? (
+              <div className="h-11 rounded-xl bg-slate-800/40 animate-pulse" aria-hidden="true" />
+            ) : user ? (
               <div className="space-y-2">
                 <div className="px-3 py-1 text-xs text-slate-400">
                   Signed in as <span className="text-white font-medium">{user.email}</span>

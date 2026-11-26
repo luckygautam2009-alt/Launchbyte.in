@@ -1,21 +1,36 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/lib/toast-context";
 import { LogIn, Mail, Lock, ArrowRight, Loader2 } from "lucide-react";
 
-export default function LoginPage() {
+function getSafeNext(rawNext: string | null): string {
+  if (rawNext && rawNext.startsWith("/") && !rawNext.startsWith("//")) {
+    return rawNext;
+  }
+  return "/dashboard";
+}
+
+function LoginForm() {
   const router = useRouter();
-  const { login } = useAuth();
+  const searchParams = useSearchParams();
+  const safeNext = getSafeNext(searchParams.get("next"));
+  const { user, loading, login } = useAuth();
   const { showToast } = useToast();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.replace(safeNext);
+    }
+  }, [loading, user, router, safeNext]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +45,7 @@ export default function LoginPage() {
     try {
       await login(email, password);
       showToast("Signed in successfully!", "success");
-      router.push("/opportunities");
+      router.push(safeNext);
     } catch (err: any) {
       const msg = err?.message || "Invalid email or password.";
       setErrorMsg(msg);
@@ -39,6 +54,19 @@ export default function LoginPage() {
       setSubmitting(false);
     }
   };
+
+  if (loading || user) {
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-indigo-400 animate-spin" />
+      </div>
+    );
+  }
+
+  const registerHref =
+    safeNext !== "/dashboard"
+      ? `/register?next=${encodeURIComponent(safeNext)}`
+      : "/register";
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -127,7 +155,7 @@ export default function LoginPage() {
           <p className="text-sm text-slate-400">
             Don&apos;t have an account?{" "}
             <Link
-              href="/register"
+              href={registerHref}
               className="text-indigo-400 font-medium hover:text-indigo-300 transition"
             >
               Sign up for free
@@ -136,5 +164,19 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-[80vh] flex items-center justify-center">
+          <Loader2 className="w-8 h-8 text-indigo-400 animate-spin" />
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }
