@@ -90,7 +90,7 @@ def test_brevo_send_and_host_event_truthful_email_sent(client, monkeypatch, capl
     assert "xkeysib-super-secret-value" not in caplog.text
 
 
-def test_brevo_logs_message_id_includes_html_and_warns_unverified_sender(monkeypatch, caplog):
+def test_brevo_logs_message_id_and_includes_html_when_sender_verified(monkeypatch, caplog):
     import uuid
     from app.services.email import brevo as brevo_mod
 
@@ -108,7 +108,7 @@ def test_brevo_logs_message_id_includes_html_and_warns_unverified_sender(monkeyp
     senders_resp = MagicMock()
     senders_resp.status_code = 200
     senders_resp.json.return_value = {
-        "senders": [{"email": "other@launchbyte.io", "active": True}]
+        "senders": [{"email": "unverified@launchbyte.io", "active": True}]
     }
 
     send_resp = MagicMock()
@@ -132,7 +132,42 @@ def test_brevo_logs_message_id_includes_html_and_warns_unverified_sender(monkeyp
     assert "htmlContent" in sent_payload
     assert "123456" in sent_payload["htmlContent"]
     assert "<msg-12345@brevo>" in caplog.text
-    assert "is not an active verified sender" in caplog.text
+    assert "is not an active verified sender" not in caplog.text
+
+
+def test_brevo_raises_when_sender_not_verified(monkeypatch):
+    import uuid
+    import pytest
+    from app.services.email import brevo as brevo_mod
+
+    brevo_mod._CHECKED_SENDERS.clear()
+    fake_settings = SimpleNamespace(
+        ENV="production",
+        EMAIL_BACKEND="brevo",
+        BREVO_API_KEY="xkeysib-verify-check-key",
+        EMAIL_FROM="unverified@launchbyte.io",
+        SMTP_FROM="unverified@launchbyte.io",
+        FRONTEND_URL="https://launchbyte.io",
+    )
+    monkeypatch.setattr("app.services.email.brevo.get_settings", lambda: fake_settings)
+
+    senders_resp = MagicMock()
+    senders_resp.status_code = 200
+    senders_resp.json.return_value = {
+        "senders": [{"email": "other@launchbyte.io", "active": True}]
+    }
+
+    mock_client = MagicMock()
+    mock_client.__enter__.return_value = mock_client
+    mock_client.__exit__.return_value = False
+    mock_client.get.return_value = senders_resp
+
+    with patch("app.services.email.brevo.httpx.Client", return_value=mock_client):
+        backend = BrevoEmailBackend()
+        with pytest.raises(RuntimeError, match="not an active verified sender"):
+            backend.send_verification_email("user@example.com", "123456", uuid.uuid4())
+
+    mock_client.post.assert_not_called()
 
 
 def test_smtp_backend_uses_ssl_on_465_with_timeout_15(monkeypatch, caplog):
