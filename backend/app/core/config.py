@@ -57,7 +57,9 @@ class Settings(BaseSettings):
     TRUST_PROXY_HEADERS: bool = False
 
     # --- Email Service ---
-    EMAIL_BACKEND: str = "console"  # console | smtp
+    EMAIL_BACKEND: str = "console"  # console | smtp | brevo
+    BREVO_API_KEY: str = ""
+    EMAIL_FROM: str = ""
     ADMIN_INBOX_EMAIL: str = "launchbyte.in26@gmail.com"
     SMTP_HOST: str = "localhost"
     SMTP_PORT: int = 587
