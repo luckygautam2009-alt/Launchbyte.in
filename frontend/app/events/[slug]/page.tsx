@@ -4,10 +4,12 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { api } from "@/lib/api";
+import { resolveMediaUrl } from "@/lib/media";
 import { EventDetail, CustomQuestion } from "@/lib/types";
 import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/lib/toast-context";
 import { Countdown } from "@/components/ui/Countdown";
+import { Avatar } from "@/components/ui/Avatar";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { triggerConfetti } from "@/components/ui/Confetti";
 import {
@@ -327,7 +329,14 @@ export default function EventDetailPage() {
       {/* Banner */}
       <div className="relative h-72 md:h-96 bg-gradient-to-br from-slate-800 to-slate-900 overflow-hidden">
         {event.banner_url && (
-          <img src={event.banner_url} alt={event.title} className="w-full h-full object-cover" />
+          <Avatar
+            src={event.banner_url}
+            name={event.title}
+            size="fill"
+            shape="square"
+            className="bg-transparent"
+            fallback={<div />}
+          />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent" />
         <div className="absolute bottom-0 left-0 right-0 p-6 max-w-7xl mx-auto">
@@ -340,7 +349,7 @@ export default function EventDetailPage() {
                 {event.mode.charAt(0).toUpperCase() + event.mode.slice(1)}
               </span>
               {event.organization?.logo_url && (
-                <img src={event.organization.logo_url} alt={event.organization.name} className="w-5 h-5 rounded" />
+                <Avatar src={event.organization.logo_url} name={event.organization.name} size="xs" shape="rounded" className="rounded" />
               )}
               <span className="text-slate-400 text-xs">{event.organization?.name}</span>
             </div>
@@ -444,7 +453,16 @@ export default function EventDetailPage() {
                 {sections.sponsors.map((sponsor: any, i: number) => (
                   <a key={i} href={sponsor.link || "#"} target="_blank" rel="noopener noreferrer"
                     className="flex items-center gap-2 bg-slate-900/60 border border-slate-800 rounded-xl px-4 py-3 hover:border-slate-600 transition-colors">
-                    {sponsor.logo_url && <img src={sponsor.logo_url} alt={sponsor.name} className="h-6 w-auto object-contain" />}
+                    {sponsor.logo_url && (
+                      <Avatar
+                        src={resolveMediaUrl(sponsor.logo_url)}
+                        name={sponsor.name}
+                        size="sm"
+                        shape="rounded"
+                        className="h-6 w-6 bg-transparent"
+                        imgClassName="object-contain"
+                      />
+                    )}
                     <span className="text-slate-300 text-sm font-medium">{sponsor.name}</span>
                     {sponsor.tier && <span className="text-xs text-slate-500">· {sponsor.tier}</span>}
                   </a>

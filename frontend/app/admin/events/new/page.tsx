@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/lib/toast-context";
+import { Avatar } from "@/components/ui/Avatar";
 import { Loader2, ArrowLeft, ArrowRight, Upload, Check } from "lucide-react";
 
 type Step = 1 | 2;
@@ -196,7 +197,9 @@ export default function NewEventPage() {
                     {uploadingBanner ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
                     {bannerUrl ? "Replace" : "Upload Banner"}
                   </label>
-                  {bannerUrl && <img src={bannerUrl} alt="Banner" className="mt-2 h-16 w-full object-cover rounded-lg" />}
+                  {bannerUrl && (
+                    <Avatar src={bannerUrl} name={title || "Banner"} alt="Banner" size="fill" shape="rounded" className="mt-2 h-16 w-full rounded-lg" />
+                  )}
                 </div>
               </InputField>
               <InputField label="Thumbnail Image">
@@ -211,7 +214,9 @@ export default function NewEventPage() {
                     {uploadingThumb ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
                     {thumbnailUrl ? "Replace" : "Upload Thumbnail"}
                   </label>
-                  {thumbnailUrl && <img src={thumbnailUrl} alt="Thumb" className="mt-2 h-16 w-full object-cover rounded-lg" />}
+                  {thumbnailUrl && (
+                    <Avatar src={thumbnailUrl} name={title || "Thumb"} alt="Thumb" size="fill" shape="rounded" className="mt-2 h-16 w-full rounded-lg" />
+                  )}
                 </div>
               </InputField>
             </div>

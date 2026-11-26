@@ -17,6 +17,7 @@ import {
   Image as ImageIcon,
 } from "lucide-react";
 import { LAUNCHBYTE_SOCIALS } from "@/lib/siteContent";
+import { resolveMediaUrl } from "@/lib/media";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
@@ -433,7 +434,7 @@ export default function PublicHostEventPage() {
                 {thumbnailUrl && (
                   <div className="flex items-center gap-3">
                     <img
-                      src={thumbnailUrl}
+                      src={resolveMediaUrl(thumbnailUrl)}
                       alt="Event banner preview"
                       className="w-20 h-12 rounded-lg object-cover border border-violet-500/40"
                     />

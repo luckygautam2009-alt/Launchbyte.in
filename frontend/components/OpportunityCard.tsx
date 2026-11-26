@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { TrustBadge } from "@/components/ui/TrustBadge";
 import { Badge } from "@/components/ui/Badge";
+import { Avatar } from "@/components/ui/Avatar";
 import { cardInteractive } from "@/lib/motion";
 
 interface Props {
@@ -101,17 +102,14 @@ export default function OpportunityCard({
         {/* Top Header: Org info + Trust Badge + Save */}
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex items-center gap-3">
-            {opportunity.organization.logo_url ? (
-              <img
-                src={opportunity.organization.logo_url}
-                alt={opportunity.organization.name}
-                className="w-10 h-10 rounded-xl object-cover bg-slate-800 border border-slate-750 shrink-0"
-              />
-            ) : (
-              <div className="w-10 h-10 rounded-xl bg-slate-800 border border-slate-750 flex items-center justify-center text-slate-400 shrink-0">
-                <Building className="w-5 h-5" />
-              </div>
-            )}
+            <Avatar
+              src={opportunity.organization.logo_url}
+              name={opportunity.organization.name}
+              size="md"
+              shape="rounded"
+              className="border border-slate-750 text-slate-400"
+              fallback={<Building className="w-5 h-5" />}
+            />
             <div>
               <p className="text-xs font-semibold text-slate-400 group-hover:text-slate-300 line-clamp-1">
                 {opportunity.organization.name}

@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
-import { api, resolveMediaUrl } from "@/lib/api";
+import { api } from "@/lib/api";
+import { Avatar } from "@/components/ui/Avatar";
 import { TeammateCandidateRead } from "@/lib/types";
 import { Search, UserSearch, ExternalLink } from "lucide-react";
 import PageHero from "@/components/common/PageHero";
@@ -100,23 +101,12 @@ export default function PeopleDiscoverPage() {
             {candidates.map(c => (
               <div key={c.id} className="glass-card glow-hover rounded-2xl p-5 transition">
                 <div className="flex items-start gap-3 mb-3">
-                  <div className="w-11 h-11 rounded-full bg-slate-700 flex items-center justify-center text-white font-semibold shrink-0">
-                    {c.avatar_url ? (
-                      <img
-                        src={resolveMediaUrl(c.avatar_url)}
-                        alt=""
-                        className="w-11 h-11 rounded-full object-cover"
-                        onError={(e) => {
-                          e.currentTarget.style.display = "none";
-                          if (e.currentTarget.parentElement) {
-                            e.currentTarget.parentElement.textContent = c.full_name?.[0]?.toUpperCase() || "?";
-                          }
-                        }}
-                      />
-                    ) : (
-                      c.full_name?.[0]?.toUpperCase() || "?"
-                    )}
-                  </div>
+                  <Avatar
+                    src={c.avatar_url}
+                    name={c.full_name || "?"}
+                    size="fill"
+                    className="w-11 h-11 bg-slate-700 text-white font-semibold"
+                  />
                   <div className="min-w-0 flex-1">
                     <Link href={`/u/${c.handle}`} className="text-white font-semibold hover:text-brand-400 transition truncate block">
                       {c.full_name}

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/lib/toast-context";
@@ -29,25 +29,38 @@ export default function OtpVerifyModal({
   const [resending, setResending] = useState(false);
   const [cooldown, setCooldown] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [infoMessage, setInfoMessage] = useState<string | null>(null);
+  const requestedForOpenRef = useRef(false);
 
   useEffect(() => {
-    if (!open) return;
-    setError(null);
-    setCode("");
-    // Automatically request an OTP when modal opens if user is unverified
-    if (user && !user.is_email_verified) {
-      api
-        .requestEmailVerification()
-        .then(() => setCooldown(60))
-        .catch((err: any) => {
-          const msg = String(err?.message || "");
-          // Cooldown (429) means an OTP was already sent recently; surface real send failures
-          if (!msg.toLowerCase().includes("wait at least")) {
-            setError(msg || "Failed to send verification code. Please try again.");
-          }
-        });
+    if (!open) {
+      requestedForOpenRef.current = false;
+      setError(null);
+      setInfoMessage(null);
+      setCode("");
+      return;
     }
-  }, [open, user]);
+    if (!user?.id || user.is_email_verified || requestedForOpenRef.current) {
+      return;
+    }
+    requestedForOpenRef.current = true;
+    const recipientEmail = user.email;
+    setError(null);
+    api
+      .requestEmailVerification()
+      .then(() => {
+        setCooldown(60);
+        setInfoMessage(`Code sent to ${recipientEmail}. Check spam/promotions too.`);
+      })
+      .catch((err: any) => {
+        const msg = String(err?.message || "");
+        if (msg.toLowerCase().includes("wait at least")) {
+          setInfoMessage(`Code sent to ${recipientEmail}. Check spam/promotions too.`);
+        } else {
+          setError(msg || "Failed to send verification code. Please try again.");
+        }
+      });
+  }, [open, user?.id, user?.is_email_verified]);
 
   useEffect(() => {
     if (cooldown <= 0) return;
@@ -87,9 +100,12 @@ export default function OtpVerifyModal({
     setError(null);
     try {
       const res = await api.requestEmailVerification();
+      const recipientEmail = user?.email || "your email";
+      setInfoMessage(`Code sent to ${recipientEmail}. Check spam/promotions too.`);
       showToast(res.message || "Verification code sent!", "success");
       setCooldown(60);
     } catch (err: any) {
+      setInfoMessage(null);
       setError(err?.message || "Please wait before requesting another code.");
     } finally {
       setResending(false);
@@ -119,6 +135,12 @@ export default function OtpVerifyModal({
         </div>
 
         <p className="text-sm text-slate-300 leading-relaxed">{subtitle}</p>
+
+        {infoMessage && (
+          <div className="p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-200 text-xs">
+            {infoMessage}
+          </div>
+        )}
 
         {error && (
           <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs">

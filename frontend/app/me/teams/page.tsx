@@ -4,7 +4,8 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
-import { api, resolveMediaUrl } from "@/lib/api";
+import { api } from "@/lib/api";
+import { Avatar } from "@/components/ui/Avatar";
 import { TeamDetail } from "@/lib/types";
 import {
   UsersRound,
@@ -132,23 +133,13 @@ export default function MyTeamsPage() {
                   <div className="space-y-3">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-brand-400 font-bold text-lg overflow-hidden shrink-0">
-                          {team.avatar_url ? (
-                            <img
-                              src={resolveMediaUrl(team.avatar_url)}
-                              alt={team.name}
-                              className="w-full h-full object-cover"
-                              onError={(e) => {
-                                e.currentTarget.style.display = "none";
-                                if (e.currentTarget.parentElement) {
-                                  e.currentTarget.parentElement.textContent = team.name.charAt(0);
-                                }
-                              }}
-                            />
-                          ) : (
-                            team.name.charAt(0)
-                          )}
-                        </div>
+                        <Avatar
+                          src={team.avatar_url}
+                          name={team.name}
+                          size="lg"
+                          shape="rounded"
+                          className="border border-slate-700 text-brand-400 font-bold text-lg"
+                        />
                         <div>
                           <Link
                             href={`/teams/${team.slug}`}

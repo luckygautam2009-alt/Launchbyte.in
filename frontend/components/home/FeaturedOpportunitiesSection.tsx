@@ -16,6 +16,7 @@ import {
   Compass,
 } from "lucide-react";
 import { TrustBadge } from "@/components/ui/TrustBadge";
+import { Avatar } from "@/components/ui/Avatar";
 import { OpportunityCardSkeleton } from "@/components/ui/Skeleton";
 import { Reveal, MagneticButton } from "./HomeMotion";
 import RevealHeading from "@/components/ui/RevealHeading";
@@ -155,17 +156,15 @@ export default function FeaturedOpportunitiesSection() {
                         {/* Header: Logo/Thumbnail + Organizer + Type */}
                         <div className="flex items-start justify-between gap-3">
                           <div className="flex items-center gap-3 min-w-0">
-                            {opp.thumbnail_url || opp.organization?.logo_url ? (
-                              <img
-                                src={(opp.thumbnail_url || opp.organization?.logo_url)!}
-                                alt={opp.title}
-                                className="w-11 h-11 rounded-2xl object-cover bg-slate-800 border border-slate-700 shrink-0"
-                              />
-                            ) : (
-                              <div className="w-11 h-11 rounded-2xl bg-slate-800/90 border border-slate-700/80 flex items-center justify-center text-violet-400 shrink-0">
-                                <Building className="w-5 h-5" />
-                              </div>
-                            )}
+                            <Avatar
+                              src={opp.thumbnail_url || opp.organization?.logo_url}
+                              name={organizerName || opp.title}
+                              alt={opp.title}
+                              size="fill"
+                              shape="rounded"
+                              className="w-11 h-11 rounded-2xl bg-slate-800/90 border border-slate-700/80 text-violet-400"
+                              fallback={<Building className="w-5 h-5" />}
+                            />
                             <div className="min-w-0">
                               <p className="text-xs font-semibold text-slate-300 line-clamp-1">
                                 {organizerName}

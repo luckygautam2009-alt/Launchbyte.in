@@ -8,6 +8,7 @@ import { OpportunityDetail, OpportunityListItem } from "@/lib/types";
 import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/lib/toast-context";
 import OpportunityCard from "@/components/OpportunityCard";
+import { Avatar } from "@/components/ui/Avatar";
 import {
   ArrowLeft,
   Bookmark,
@@ -187,17 +188,14 @@ export default function OpportunityDetailPage() {
       <div className="p-6 sm:p-8 rounded-3xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-md shadow-xl space-y-6">
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
           <div className="flex items-start gap-4">
-            {opp.organization.logo_url ? (
-              <img
-                src={opp.organization.logo_url}
-                alt={opp.organization.name}
-                className="w-16 h-16 rounded-2xl object-cover bg-slate-800 border border-slate-700 shrink-0 shadow-md"
-              />
-            ) : (
-              <div className="w-16 h-16 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-400 shrink-0">
-                <Building className="w-8 h-8" />
-              </div>
-            )}
+            <Avatar
+              src={opp.organization.logo_url}
+              name={opp.organization.name}
+              size="fill"
+              shape="rounded"
+              className="w-16 h-16 rounded-2xl bg-slate-800 border border-slate-700 text-slate-400 shadow-md"
+              fallback={<Building className="w-8 h-8" />}
+            />
 
             <div>
               <div className="flex items-center gap-2">

@@ -26,14 +26,21 @@ class SMTPEmailBackend(EmailBackend):
         msg.add_alternative(body_html, subtype="html")
 
         try:
-            with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT) as server:
-                if settings.SMTP_TLS:
-                    server.starttls()
-                if settings.SMTP_USER and settings.SMTP_PASSWORD:
-                    server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
-                server.send_message(msg)
+            if settings.SMTP_PORT == 465:
+                with smtplib.SMTP_SSL(settings.SMTP_HOST, settings.SMTP_PORT, timeout=15) as server:
+                    if settings.SMTP_USER and settings.SMTP_PASSWORD:
+                        server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
+                    server.send_message(msg)
+            else:
+                with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT, timeout=15) as server:
+                    if settings.SMTP_TLS:
+                        server.starttls()
+                    if settings.SMTP_USER and settings.SMTP_PASSWORD:
+                        server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
+                    server.send_message(msg)
+            logger.info("SMTP email sent to %s | subject=%r", to_email, subject)
         except Exception as exc:
-            logger.error("Failed to send email to %s: %s", to_email, exc)
+            logger.error("Failed to send SMTP email to %s | subject=%r: %s", to_email, subject, exc)
             raise
 
     def send_verification_email(self, email: str, token: str, user_id: uuid.UUID) -> None:

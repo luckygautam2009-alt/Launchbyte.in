@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/lib/toast-context";
 import { OpportunityType, LocationType, CompensationType } from "@/lib/types";
+import { Avatar } from "@/components/ui/Avatar";
 import {
   Plus,
   Send,
@@ -367,10 +368,13 @@ export default function ContributorOpportunitiesDashboardPage() {
                   <span>Upload Cover Image (PNG/JPEG/WebP, max 5MB)</span>
                 </button>
                 {thumbnailUrl && (
-                  <img
+                  <Avatar
                     src={thumbnailUrl}
+                    name={title || "Thumbnail preview"}
                     alt="Thumbnail preview"
-                    className="w-24 h-14 rounded-lg object-cover border border-violet-500/40"
+                    size="fill"
+                    shape="rounded"
+                    className="w-24 h-14 rounded-lg border border-violet-500/40"
                   />
                 )}
               </div>
@@ -552,7 +556,14 @@ export default function ContributorOpportunitiesDashboardPage() {
                 </button>
               </div>
               {thumbnailUrl && (
-                <img src={thumbnailUrl} alt="Preview" className="w-full h-44 object-cover rounded-2xl" />
+                <Avatar
+                  src={thumbnailUrl}
+                  name={title || "Preview"}
+                  alt="Preview"
+                  size="fill"
+                  shape="rounded"
+                  className="w-full h-44 rounded-2xl"
+                />
               )}
               <h3 className="text-2xl font-bold text-white">{title || "Untitled Opportunity"}</h3>
               <p className="text-xs font-mono text-violet-300">

@@ -41,24 +41,12 @@ import {
   TeammateCandidateRead,
 } from "./types";
 
+import { resolveMediaUrl } from "./media";
+
+export { resolveMediaUrl };
+
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
-
-export function resolveMediaUrl(url?: string | null): string {
-  if (!url) return "";
-  const trimmed = url.trim();
-  if (
-    trimmed.startsWith("http://") ||
-    trimmed.startsWith("https://") ||
-    trimmed.startsWith("blob:") ||
-    trimmed.startsWith("data:")
-  ) {
-    return trimmed;
-  }
-  const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
-  const backendOrigin = apiBase.replace(/\/api\/v1\/?$/, "");
-  return `${backendOrigin.replace(/\/$/, "")}/${trimmed.replace(/^\//, "")}`;
-}
 
 class ApiClient {
   private token: string | null = null;

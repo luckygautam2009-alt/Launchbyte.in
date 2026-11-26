@@ -49,7 +49,18 @@ settings = get_settings()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logger.info("%s starting up in %s mode", settings.APP_NAME, settings.ENV)
+    email_backend = settings.EMAIL_BACKEND.lower().strip()
+    email_from = (settings.EMAIL_FROM or settings.SMTP_FROM or "").strip()
+    logger.info(
+        "%s starting up | ENV=%s | EMAIL_BACKEND=%s | EMAIL_FROM=%s | STORAGE_BACKEND=%s",
+        settings.APP_NAME,
+        settings.ENV,
+        email_backend,
+        email_from,
+        settings.STORAGE_BACKEND,
+    )
+    if email_backend == "console":
+        logger.warning("No real emails are sent; OTPs are only printed in this log.")
     yield
     logger.info("%s shutting down", settings.APP_NAME)
 

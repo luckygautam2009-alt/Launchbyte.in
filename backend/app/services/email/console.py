@@ -20,7 +20,17 @@ class ConsoleEmailBackend(EmailBackend):
 
         if settings.ENV in {"local", "test"}:
             if len(token) == 6 and token.isdigit():
-                logger.info("[EMAIL:VERIFY_OTP] To: %s | User: %s | OTP: %s", email, user_id, token)
+                banner = (
+                    "\n"
+                    "============================================================\n"
+                    f"  LAUNCHBYTE EMAIL VERIFICATION OTP\n"
+                    f"  To:   {email}\n"
+                    f"  User: {user_id}\n"
+                    f"  OTP:  {token}\n"
+                    "============================================================"
+                )
+                print(banner)
+                logger.info("[EMAIL:VERIFY_OTP] To: %s | User: %s | OTP: %s%s", email, user_id, token, banner)
             else:
                 logger.info("[EMAIL:VERIFY] To: %s | User: %s | Verification Link: %s", email, user_id, link)
         else:

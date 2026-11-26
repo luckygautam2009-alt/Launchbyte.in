@@ -88,3 +88,78 @@ def test_brevo_send_and_host_event_truthful_email_sent(client, monkeypatch, capl
     assert resp2.json()["email_sent"] is False
     assert "Key not found" in caplog.text
     assert "xkeysib-super-secret-value" not in caplog.text
+
+
+def test_brevo_logs_message_id_includes_html_and_warns_unverified_sender(monkeypatch, caplog):
+    import uuid
+    from app.services.email import brevo as brevo_mod
+
+    brevo_mod._CHECKED_SENDERS.clear()
+    fake_settings = SimpleNamespace(
+        ENV="production",
+        EMAIL_BACKEND="brevo",
+        BREVO_API_KEY="xkeysib-verify-check-key",
+        EMAIL_FROM="unverified@launchbyte.io",
+        SMTP_FROM="unverified@launchbyte.io",
+        FRONTEND_URL="https://launchbyte.io",
+    )
+    monkeypatch.setattr("app.services.email.brevo.get_settings", lambda: fake_settings)
+
+    senders_resp = MagicMock()
+    senders_resp.status_code = 200
+    senders_resp.json.return_value = {
+        "senders": [{"email": "other@launchbyte.io", "active": True}]
+    }
+
+    send_resp = MagicMock()
+    send_resp.status_code = 201
+    send_resp.json.return_value = {"messageId": "<msg-12345@brevo>"}
+
+    mock_client = MagicMock()
+    mock_client.__enter__.return_value = mock_client
+    mock_client.__exit__.return_value = False
+    mock_client.get.return_value = senders_resp
+    mock_client.post.return_value = send_resp
+
+    with caplog.at_level(logging.INFO):
+        with patch("app.services.email.brevo.httpx.Client", return_value=mock_client):
+            backend = BrevoEmailBackend()
+            backend.send_verification_email("user@example.com", "123456", uuid.uuid4())
+
+    mock_client.get.assert_called_once()
+    sent_payload = mock_client.post.call_args.kwargs["json"]
+    assert "textContent" in sent_payload
+    assert "htmlContent" in sent_payload
+    assert "123456" in sent_payload["htmlContent"]
+    assert "<msg-12345@brevo>" in caplog.text
+    assert "is not an active verified sender" in caplog.text
+
+
+def test_smtp_backend_uses_ssl_on_465_with_timeout_15(monkeypatch, caplog):
+    import uuid
+    from app.services.email.smtp import SMTPEmailBackend
+
+    fake_settings = SimpleNamespace(
+        SMTP_HOST="smtp.gmail.com",
+        SMTP_PORT=465,
+        SMTP_USER="sender@gmail.com",
+        SMTP_PASSWORD="app-password",
+        SMTP_FROM="sender@gmail.com",
+        SMTP_TLS=True,
+        FRONTEND_URL="https://launchbyte.io",
+    )
+    monkeypatch.setattr("app.services.email.smtp.get_settings", lambda: fake_settings)
+
+    mock_server = MagicMock()
+    mock_server.__enter__.return_value = mock_server
+    mock_server.__exit__.return_value = False
+
+    with caplog.at_level(logging.INFO):
+        with patch("app.services.email.smtp.smtplib.SMTP_SSL", return_value=mock_server) as ssl_cls:
+            backend = SMTPEmailBackend()
+            backend.send_verification_email("to@example.com", "654321", uuid.uuid4())
+
+    ssl_cls.assert_called_once_with("smtp.gmail.com", 465, timeout=15)
+    mock_server.login.assert_called_once_with("sender@gmail.com", "app-password")
+    mock_server.send_message.assert_called_once()
+    assert "SMTP email sent" in caplog.text

@@ -6,6 +6,7 @@ import { api } from "@/lib/api";
 import { EventListItem, EventMode } from "@/lib/types";
 import { Calendar, MapPin, Users, Wifi, Building2, Sparkles, Search, Clock } from "lucide-react";
 import PageHero from "@/components/common/PageHero";
+import { Avatar } from "@/components/ui/Avatar";
 
 function EventCard({ event }: { event: EventListItem }) {
   const starts = new Date(event.starts_at);
@@ -24,19 +25,26 @@ function EventCard({ event }: { event: EventListItem }) {
     <Link href={`/events/${event.slug}`} className="group block glass-card glow-hover rounded-2xl overflow-hidden transition-all duration-200">
       {/* Banner */}
       <div className="relative h-44 bg-gradient-to-br from-slate-800 to-slate-900 overflow-hidden">
-        {event.banner_url ? (
-          <img src={event.banner_url} alt={event.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <Sparkles className="w-10 h-10 text-slate-700" />
-          </div>
-        )}
+        <Avatar
+          src={event.banner_url}
+          name={event.title}
+          size="fill"
+          shape="square"
+          className="bg-transparent"
+          imgClassName="group-hover:scale-105 transition-transform duration-300"
+          fallback={<Sparkles className="w-10 h-10 text-slate-700" />}
+        />
         <span className="absolute top-3 right-3 flex items-center gap-1 bg-slate-900/90 backdrop-blur text-slate-300 text-xs font-medium px-2.5 py-1 rounded-full border border-slate-700">
           {modeIcon} {modeLabel}
         </span>
         {event.organization.logo_url && (
           <div className="absolute bottom-3 left-3 w-8 h-8 rounded-lg overflow-hidden bg-slate-800 border border-slate-700">
-            <img src={event.organization.logo_url} alt={event.organization.name} className="w-full h-full object-cover" />
+            <Avatar
+              src={event.organization.logo_url}
+              name={event.organization.name}
+              size="fill"
+              shape="square"
+            />
           </div>
         )}
       </div>
