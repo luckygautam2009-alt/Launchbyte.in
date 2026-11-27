@@ -48,7 +48,11 @@ def db_session():
 
 
 @pytest.fixture()
-def client(db_session) -> TestClient:
+def client(db_session, monkeypatch) -> TestClient:
+    # WebSocket handlers open short-lived sessions via SessionLocal (instead of pinning a pooled
+    # connection for the socket's lifetime); point them at the test database.
+    monkeypatch.setattr("app.routers.conversations.SessionLocal", TestingSessionLocal)
+
     def override_get_db():
         yield db_session
 
