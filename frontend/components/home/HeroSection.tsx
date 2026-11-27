@@ -299,7 +299,7 @@ export default function HeroSection() {
             priority
             className={`w-full h-auto object-contain object-bottom ${
               mounted && isLight
-                ? "drop-shadow-[0_0_28px_rgba(255,255,255,0.7)]"
+                ? "drop-shadow-[0_0_28px_rgba(125,211,252,0.55)]"
                 : "drop-shadow-[0_10px_35px_rgba(139,92,246,0.25)]"
             }`}
           />
