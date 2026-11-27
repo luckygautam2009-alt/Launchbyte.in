@@ -106,6 +106,8 @@ function TeamPortraitFrame({
               className="relative w-full h-[116%] -top-[8%] max-md:!transform-none"
             >
               <img
+                loading="lazy"
+                decoding="async"
                 src={member.photo}
                 alt={member.name}
                 onError={() => setImgError(true)}

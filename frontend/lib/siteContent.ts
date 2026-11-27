@@ -294,7 +294,7 @@ export const SITE_CONTENT = {
       role: "Founder & CEO",
       title: "Full-Stack Developer | Product Builder | AI/ML Enthusiast",
       bio: "I build technology-driven products at the intersection of full-stack development, AI/ML, and product engineering. My focus is turning ideas into functional products, solving real-world problems through technology, and building platforms that create meaningful opportunities for students and developers.",
-      photo: "/team/yash-gautam.jpg",
+      photo: "/team/yash-gautam.webp",
       linkedin: "https://www.linkedin.com/in/yash-gautam-1b9150383/",
       github: "https://github.com/luckygautam2009-alt",
       portfolio: "https://yash-gautam-portfolio-v4xf.vercel.app/",
@@ -325,7 +325,7 @@ export const SITE_CONTENT = {
       name: "Shobhit Srivastava",
       role: "Co-Founder",
       bio: "Co-founding partner driving operational alignment, product strategy, and organizational execution across LaunchByte initiatives.",
-      photo: "/team/shobhit.jpg",
+      photo: "/team/shobhit.webp",
       linkedin: "https://www.linkedin.com/in/shobhit-srivastava-7842083b9/",
       focus: [
         "Product Strategy",
@@ -338,7 +338,7 @@ export const SITE_CONTENT = {
       name: "Vidhyansh Rajput",
       role: "Head of Community & Event Management",
       bio: "Responsible for community building, event coordination, participant engagement, and event operations across LaunchByte.",
-      photo: "/team/vidhyansh.jpg",
+      photo: "/team/vidhyansh.webp",
       linkedin: "https://www.linkedin.com/in/vidhyansh-rajput-856441370/",
       github: "https://github.com/vidhyanshrajput44-a11y",
       focus: [
@@ -352,7 +352,7 @@ export const SITE_CONTENT = {
       name: "Sreyansh Dixit",
       role: "Technical Head",
       bio: "Leading technical direction, engineering execution, platform development, and technical coordination.",
-      photo: "/team/sreyansh-dixit.jpg",
+      photo: "/team/sreyansh-dixit.webp",
       linkedin: "https://www.linkedin.com/in/sreyansh-dixit-4aba56372/",
       focus: [
         "Technical Direction",
@@ -365,7 +365,7 @@ export const SITE_CONTENT = {
       name: "Saumya Bhardwaj",
       role: "Social Media & Coverage",
       bio: "Managing LaunchByte's social media presence, Instagram content strategy, community event coverage, and digital outreach.",
-      photo: "/team/saumya-bhardwaj.jpg",
+      photo: "/team/saumya-bhardwaj.webp",
       // Configurable URLs (leave empty until provided — hidden automatically if empty)
       linkedin: "",
       instagram: "",

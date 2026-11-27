@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 const INTRO_SESSION_KEY = "launchbyte_intro_v1";
-const VIDEO_SRC = "/intro/launchbyte-intro.mp4";
+const VIDEO_SRC = "/intro/launchbyte-intro-720.mp4";
 
 // Verified against intro video metadata (4.958s duration, 1920x1080, 24fps):
 // 0.00s - 1.80s: Spaceship enters from left & hovers center
