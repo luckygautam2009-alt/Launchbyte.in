@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import { useTheme } from "@/lib/theme-context";
 
 interface StarSpec {
   x: number;
@@ -22,6 +23,7 @@ interface StarSpec {
  */
 export default function GlobalCosmicParticles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { isLight, mounted } = useTheme();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -45,9 +47,17 @@ export default function GlobalCosmicParticles() {
       const layer2Count = lowHardware ? 6 : (isMobile ? 8 : 22);  // Mid-depth stars
       const layer3Count = lowHardware ? 2 : (isMobile ? 3 : 8);   // Near subtle light points
 
-      const distantColors = ["#FFFFFF", "#E2E8F0", "#DDD6FE"];
-      const midColors = ["#DDD6FE", "#BAE6FD", "#A78BFA", "#FFFFFF"];
-      const nearColors = ["#8B5CF6", "#6366F1", "#22D3EE"];
+      // In light mode, subtle cosmic glints (violet, cyan, lilac)
+      // In dark mode, preserve exact existing star colors
+      const distantColors = isLight
+        ? ["#8B5CF6", "#A78BFA", "#6366F1"]
+        : ["#FFFFFF", "#E2E8F0", "#DDD6FE"];
+      const midColors = isLight
+        ? ["#7C3AED", "#38BDF8", "#818CF8", "#A855F7"]
+        : ["#DDD6FE", "#BAE6FD", "#A78BFA", "#FFFFFF"];
+      const nearColors = isLight
+        ? ["#7552D9", "#0284C7", "#9333EA"]
+        : ["#8B5CF6", "#6366F1", "#22D3EE"];
 
       const addLayer = (
         count: number,
@@ -68,7 +78,7 @@ export default function GlobalCosmicParticles() {
             y: s2,
             r: rMin + s3 * (rMax - rMin),
             layer,
-            baseAlpha: aMin + s3 * (aMax - aMin),
+            baseAlpha: (aMin + s3 * (aMax - aMin)) * (isLight ? 0.75 : 1),
             phase: s1 * Math.PI * 2,
             speed: 0.35 + s2 * 0.65,
             driftY: drift * (0.6 + s3 * 0.8),
@@ -180,17 +190,29 @@ export default function GlobalCosmicParticles() {
       document.removeEventListener("visibilitychange", onVisibility);
       motionQuery.removeEventListener("change", onMotionChange);
     };
-  }, []);
+  }, [isLight]);
 
   return (
     <div
       aria-hidden="true"
       className="fixed inset-0 pointer-events-none select-none z-[1] overflow-hidden"
     >
-      {/* Subtle Static Violet/Indigo Nebula Ambient Wash */}
-      <div className="absolute -top-40 -left-40 w-[680px] h-[680px] rounded-full bg-violet-950/20 blur-[160px]" />
-      <div className="absolute top-1/3 -right-40 w-[620px] h-[620px] rounded-full bg-indigo-950/20 blur-[160px]" />
-      <div className="absolute -bottom-40 left-1/4 w-[650px] h-[500px] rounded-full bg-cyan-950/12 blur-[170px]" />
+      {/* Subtle Static Violet/Indigo Nebula Ambient Wash - theme aware */}
+      <div
+        className={`absolute -top-40 -left-40 w-[680px] h-[680px] rounded-full blur-[160px] transition-colors duration-500 ${
+          mounted && isLight ? "bg-violet-400/15" : "bg-violet-950/20"
+        }`}
+      />
+      <div
+        className={`absolute top-1/3 -right-40 w-[620px] h-[620px] rounded-full blur-[160px] transition-colors duration-500 ${
+          mounted && isLight ? "bg-indigo-300/15" : "bg-indigo-950/20"
+        }`}
+      />
+      <div
+        className={`absolute -bottom-40 left-1/4 w-[650px] h-[500px] rounded-full blur-[170px] transition-colors duration-500 ${
+          mounted && isLight ? "bg-cyan-300/12" : "bg-cyan-950/12"
+        }`}
+      />
 
       {/* 3-Layer Starfield Canvas */}
       <canvas ref={canvasRef} className="w-full h-full block" />

@@ -24,29 +24,29 @@ export default function MarqueeStrip() {
   return (
     <div
       aria-label="Ecosystem Opportunity Streams"
-      className="relative w-full py-4 bg-[#070716]/90 border-y border-violet-500/20 backdrop-blur-md overflow-hidden z-10 select-none group"
+      className="relative w-full py-4 bg-white/80 dark:bg-[#070716]/90 border-y border-violet-200 dark:border-violet-500/20 backdrop-blur-md overflow-hidden z-10 select-none group transition-colors duration-300"
     >
       {/* Edge gradient masks for seamless fade out */}
-      <div className="absolute left-0 inset-y-0 w-20 sm:w-32 bg-gradient-to-r from-[#050510] to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 inset-y-0 w-20 sm:w-32 bg-gradient-to-l from-[#050510] to-transparent z-10 pointer-events-none" />
+      <div className="absolute left-0 inset-y-0 w-20 sm:w-32 bg-gradient-to-r from-[#EEF2FF] dark:from-[#050510] to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 inset-y-0 w-20 sm:w-32 bg-gradient-to-l from-[#EEF2FF] dark:from-[#050510] to-transparent z-10 pointer-events-none" />
 
       {/* Marquee Content */}
       <div className="flex w-max">
         {shouldReduceMotion ? (
-          <div className="flex items-center gap-8 px-4 text-xs font-mono uppercase tracking-widest text-[#B8BAD0]">
+          <div className="flex items-center gap-8 px-4 text-xs font-mono uppercase tracking-widest text-[#424C63] dark:text-[#B8BAD0]">
             {items.map((item, i) => (
               <React.Fragment key={i}>
-                <span className="flex items-center gap-2 hover:text-[#A78BFA] transition-colors">
-                  <Sparkles className="w-3 h-3 text-cyan-400" />
+                <span className="flex items-center gap-2 hover:text-[#7552D9] dark:hover:text-[#A78BFA] transition-colors">
+                  <Sparkles className="w-3 h-3 text-[#7552D9] dark:text-cyan-400" />
                   <span>{item}</span>
                 </span>
-                <span className="text-violet-500/60">•</span>
+                <span className="text-violet-400 dark:text-violet-500/60">•</span>
               </React.Fragment>
             ))}
           </div>
         ) : (
           <motion.div
-            className="flex items-center gap-8 sm:gap-10 text-xs sm:text-sm font-mono uppercase tracking-widest text-[#B8BAD0] group-hover:[animation-play-state:paused]"
+            className="flex items-center gap-8 sm:gap-10 text-xs sm:text-sm font-mono uppercase tracking-widest text-[#424C63] dark:text-[#B8BAD0] group-hover:[animation-play-state:paused]"
             animate={{ x: ["0%", "-50%"] }}
             transition={{
               duration: 32,
@@ -56,11 +56,11 @@ export default function MarqueeStrip() {
           >
             {repeated.map((item, i) => (
               <React.Fragment key={i}>
-                <span className="inline-flex items-center gap-2.5 whitespace-nowrap text-slate-300 hover:text-white transition-colors cursor-default">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22D3EE]" />
+                <span className="inline-flex items-center gap-2.5 whitespace-nowrap text-[#252642] hover:text-[#7552D9] dark:text-slate-300 dark:hover:text-white transition-colors cursor-default">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#7552D9] dark:bg-cyan-400 shadow-[0_0_8px_rgba(117,82,217,0.5)] dark:shadow-[0_0_8px_#22D3EE]" />
                   <span>{item}</span>
                 </span>
-                <span className="text-violet-400/50 font-bold">•</span>
+                <span className="text-violet-400 dark:text-violet-400/50 font-bold">•</span>
               </React.Fragment>
             ))}
           </motion.div>

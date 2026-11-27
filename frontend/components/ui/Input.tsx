@@ -19,7 +19,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full space-y-1.5">
         {label && (
-          <label htmlFor={inputId} className="block text-xs font-semibold text-slate-300">
+          <label htmlFor={inputId} className="block text-xs font-semibold text-[#252642] dark:text-slate-300">
             {label}
           </label>
         )}
@@ -33,7 +33,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             id={inputId}
             ref={ref}
             className={clsx(
-              "w-full h-11 rounded-xl bg-slate-900/90 border border-slate-800 text-sm text-slate-100 placeholder-slate-500",
+              "w-full h-11 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-300 dark:border-slate-800 text-sm text-[#17172B] dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500",
               "transition-all duration-200 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20",
               leftIcon ? "pl-10" : "pl-3.5",
               rightIcon ? "pr-10" : "pr-3.5",

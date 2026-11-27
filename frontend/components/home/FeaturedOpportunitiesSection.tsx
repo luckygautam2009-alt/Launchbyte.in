@@ -75,14 +75,14 @@ export default function FeaturedOpportunitiesSection() {
             <div className="space-y-3 max-w-2xl">
               <RevealHeading
                 text="Featured Opportunities"
-                className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight"
+                className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#17172B] dark:text-[#F8FAFC] tracking-tight"
               />
-              <p className="text-sm sm:text-base text-[#CBD5E1] leading-relaxed">
+              <p className="text-sm sm:text-base text-[#424C63] dark:text-[#CBD5E1] leading-relaxed">
                 Verified upcoming hackathons and opportunities with direct official registration links.
               </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2 bg-[#09091B]/80 p-1.5 rounded-2xl border border-slate-800 shrink-0">
+            <div className="flex flex-wrap items-center gap-2 bg-white/85 dark:bg-[#09091B]/80 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-800 shrink-0 shadow-sm dark:shadow-none">
               {[
                 { id: "all", label: "Featured" },
                 { id: "hackathon", label: "Hackathons" },
@@ -95,7 +95,7 @@ export default function FeaturedOpportunitiesSection() {
                   className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:outline-none ${
                     activeTab === tab.id
                       ? "bg-gradient-to-r from-[#4F46E5] to-[#8B5CF6] text-white shadow-md shadow-violet-500/20"
-                      : "text-slate-400 hover:text-white hover:bg-slate-800/60"
+                      : "text-[#59647A] hover:text-[#17172B] hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800/60"
                   }`}
                 >
                   {tab.label}
@@ -162,11 +162,11 @@ export default function FeaturedOpportunitiesSection() {
                               alt={opp.title}
                               size="fill"
                               shape="rounded"
-                              className="w-11 h-11 rounded-2xl bg-slate-800/90 border border-slate-700/80 text-violet-400"
+                              className="w-11 h-11 rounded-2xl bg-slate-100 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/80 text-[#7552D9] dark:text-violet-400"
                               fallback={<Building className="w-5 h-5" />}
                             />
                             <div className="min-w-0">
-                              <p className="text-xs font-semibold text-slate-300 line-clamp-1">
+                              <p className="text-xs font-semibold text-[#59647A] dark:text-slate-300 line-clamp-1">
                                 {organizerName}
                               </p>
                               <div className="mt-0.5">
@@ -179,7 +179,7 @@ export default function FeaturedOpportunitiesSection() {
                             </div>
                           </div>
 
-                          <span className="text-[10px] font-mono uppercase tracking-wider text-violet-300 bg-violet-950/70 px-2.5 py-0.5 rounded-full border border-violet-500/30 shrink-0">
+                          <span className="text-[10px] font-mono uppercase tracking-wider text-[#7552D9] dark:text-violet-300 bg-violet-100 dark:bg-violet-950/70 px-2.5 py-0.5 rounded-full border border-violet-200 dark:border-violet-500/30 shrink-0">
                             {opp.type}
                           </span>
                         </div>
@@ -188,12 +188,12 @@ export default function FeaturedOpportunitiesSection() {
                         <div>
                           <Link
                             href={detailsHref}
-                            className="text-lg sm:text-xl font-bold text-[#F8FAFC] group-hover:text-violet-200 transition-colors line-clamp-1 block"
+                            className="text-lg sm:text-xl font-bold text-[#17172B] group-hover:text-[#7552D9] dark:text-[#F8FAFC] dark:group-hover:text-violet-200 transition-colors line-clamp-1 block"
                           >
                             {opp.title}
                           </Link>
                           {opp.summary && (
-                            <p className="text-xs sm:text-sm text-[#CBD5E1] line-clamp-2 mt-1.5 leading-relaxed">
+                            <p className="text-xs sm:text-sm text-[#424C63] dark:text-[#CBD5E1] line-clamp-2 mt-1.5 leading-relaxed">
                               {opp.summary}
                             </p>
                           )}
@@ -202,31 +202,31 @@ export default function FeaturedOpportunitiesSection() {
                         {/* Metadata Pills: Dates, Location, Format, Team Size, Entry Fee */}
                         <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono">
                           {dateRange && (
-                            <span className="inline-flex items-center gap-1.5 text-cyan-300 bg-cyan-950/40 px-2.5 py-1 rounded-lg border border-cyan-500/20">
+                            <span className="inline-flex items-center gap-1.5 text-cyan-800 dark:text-cyan-300 bg-cyan-50 dark:bg-cyan-950/40 px-2.5 py-1 rounded-lg border border-cyan-200 dark:border-cyan-500/20">
                               <Calendar className="w-3 h-3" />
                               <span>{dateRange}</span>
                             </span>
                           )}
                           {formatLabel && (
-                            <span className="inline-flex items-center gap-1 text-slate-200 bg-slate-900/70 px-2.5 py-1 rounded-lg border border-slate-800">
-                              <Globe className="w-3 h-3 text-violet-400" />
+                            <span className="inline-flex items-center gap-1 text-[#424C63] dark:text-slate-200 bg-slate-100 dark:bg-slate-900/70 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-800">
+                              <Globe className="w-3 h-3 text-[#7552D9] dark:text-violet-400" />
                               <span>{formatLabel}</span>
                             </span>
                           )}
                           {opp.location_text && (
-                            <span className="inline-flex items-center gap-1 text-slate-300 bg-slate-900/70 px-2.5 py-1 rounded-lg border border-slate-800">
-                              <MapPin className="w-3 h-3 text-amber-400" />
+                            <span className="inline-flex items-center gap-1 text-[#424C63] dark:text-slate-300 bg-slate-100 dark:bg-slate-900/70 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-800">
+                              <MapPin className="w-3 h-3 text-amber-600 dark:text-amber-400" />
                               <span className="line-clamp-1">{opp.location_text}</span>
                             </span>
                           )}
                           {opp.team_size && (
-                            <span className="inline-flex items-center gap-1 text-slate-300 bg-slate-900/70 px-2.5 py-1 rounded-lg border border-slate-800">
-                              <Users className="w-3 h-3 text-indigo-400" />
+                            <span className="inline-flex items-center gap-1 text-[#424C63] dark:text-slate-300 bg-slate-100 dark:bg-slate-900/70 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-800">
+                              <Users className="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
                               <span>{opp.team_size}</span>
                             </span>
                           )}
                           {opp.compensation_note && (
-                            <span className="inline-flex items-center gap-1 text-emerald-300 bg-emerald-950/40 px-2.5 py-1 rounded-lg border border-emerald-500/20">
+                            <span className="inline-flex items-center gap-1 text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded-lg border border-emerald-200 dark:border-emerald-500/20">
                               <span>{opp.compensation_note}</span>
                             </span>
                           )}
@@ -234,10 +234,10 @@ export default function FeaturedOpportunitiesSection() {
                       </div>
 
                       {/* Bottom CTAs: View Details + Register Now */}
-                      <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between gap-3">
+                      <div className="pt-4 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between gap-3">
                         <Link
                           href={detailsHref}
-                          className="text-xs font-mono text-slate-300 hover:text-white transition-colors inline-flex items-center gap-1"
+                          className="text-xs font-mono text-[#59647A] hover:text-[#17172B] dark:text-slate-300 dark:hover:text-white transition-colors inline-flex items-center gap-1"
                         >
                           <span>View Details</span>
                           <ArrowRight className="w-3.5 h-3.5" />
@@ -300,10 +300,10 @@ export default function FeaturedOpportunitiesSection() {
             <MagneticButton>
               <Link
                 href="/opportunities"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl glass-card hover:border-violet-500/50 text-[#F8FAFC] text-sm font-semibold transition-all shadow-lg"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl glass-card hover:border-violet-400 dark:hover:border-violet-500/50 text-[#17172B] dark:text-[#F8FAFC] text-sm font-semibold transition-all shadow-lg"
               >
                 <span>Browse All Active Opportunities</span>
-                <ArrowRight className="w-4 h-4 text-violet-400" />
+                <ArrowRight className="w-4 h-4 text-[#7552D9] dark:text-violet-400" />
               </Link>
             </MagneticButton>
           </div>

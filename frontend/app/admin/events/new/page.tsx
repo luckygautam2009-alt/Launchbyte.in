@@ -138,13 +138,13 @@ export default function NewEventPage() {
   };
 
   if (authLoading) return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+    <div className="min-h-screen bg-transparent dark:bg-slate-950 flex items-center justify-center">
       <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
     </div>
   );
 
   return (
-    <main className="min-h-screen bg-slate-950">
+    <main className="min-h-screen bg-transparent dark:bg-slate-950">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="mb-8">
           <button onClick={() => router.push("/admin/events")} className="text-xs text-slate-500 hover:text-slate-300 mb-2 flex items-center gap-1 transition-colors">

@@ -80,7 +80,7 @@ function SpotlightBentoCard({ cat }: { cat: CategoryItem }) {
             <Icon className="w-6 h-6" style={{ color: cat.accentColor }} />
           </div>
 
-          <span className="text-[11px] font-mono tracking-wider text-slate-300 bg-slate-900/80 px-2.5 py-1 rounded-full border border-slate-700/60">
+          <span className="text-[11px] font-mono tracking-wider text-[#59647A] dark:text-slate-300 bg-slate-100 dark:bg-slate-900/80 px-2.5 py-1 rounded-full border border-slate-200 dark:border-slate-700/60">
             {cat.tag}
           </span>
         </div>
@@ -92,17 +92,17 @@ function SpotlightBentoCard({ cat }: { cat: CategoryItem }) {
           >
             {cat.subtitle}
           </span>
-          <h3 className="text-xl font-bold text-[#F8FAFC] group-hover:text-white transition-colors">
+          <h3 className="text-xl font-bold text-[#17172B] group-hover:text-[#7552D9] dark:text-[#F8FAFC] dark:group-hover:text-white transition-colors">
             {cat.title}
           </h3>
-          <p className="text-xs sm:text-sm text-[#CBD5E1] leading-relaxed mt-2">
+          <p className="text-xs sm:text-sm text-[#424C63] dark:text-[#CBD5E1] leading-relaxed mt-2">
             {cat.description}
           </p>
         </div>
       </div>
 
-      <div className="relative z-10 pt-5 mt-4 border-t border-slate-800/80 flex items-center justify-between text-xs font-semibold">
-        <span className="text-slate-400 group-hover:text-slate-200 transition-colors">
+      <div className="relative z-10 pt-5 mt-4 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs font-semibold">
+        <span className="text-[#59647A] group-hover:text-[#17172B] dark:text-slate-400 dark:group-hover:text-slate-200 transition-colors">
           Explore opportunities
         </span>
         <ArrowRight
@@ -214,9 +214,9 @@ export default function ExploreCategoriesSection() {
             <div className="space-y-3 max-w-2xl">
               <RevealHeading
                 text="What You Can Explore"
-                className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight"
+                className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#17172B] dark:text-[#F8FAFC] tracking-tight"
               />
-              <p className="text-sm sm:text-base text-[#CBD5E1] leading-relaxed">
+              <p className="text-sm sm:text-base text-[#424C63] dark:text-[#CBD5E1] leading-relaxed">
                 Every phase of your technical journey is covered. Pick a domain to unlock verified opportunities, team formations, and live events.
               </p>
             </div>
@@ -224,7 +224,7 @@ export default function ExploreCategoriesSection() {
             <MagneticButton>
               <Link
                 href="/opportunities"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-violet-400 hover:text-violet-300 transition shrink-0 focus-visible:ring-2 focus-visible:ring-violet-400 rounded-lg p-1"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-[#7552D9] hover:text-[#5B39B8] dark:text-violet-400 dark:hover:text-violet-300 transition shrink-0 focus-visible:ring-2 focus-visible:ring-violet-400 rounded-lg p-1"
               >
                 <span>Browse Full Catalog</span>
                 <ArrowRight className="w-4 h-4" />
@@ -249,16 +249,16 @@ export default function ExploreCategoriesSection() {
 
           {/* Dedicated "Host an Event" CTA Banner Card */}
           <Reveal className="col-span-1 md:col-span-2 lg:col-span-12 flex" delay={0.2}>
-            <TiltCard className="w-full p-6 sm:p-8 bg-gradient-to-r from-violet-950/50 via-indigo-950/40 to-cyan-950/40 border border-violet-500/35">
+            <TiltCard className="w-full p-6 sm:p-8 bg-gradient-to-r from-violet-50/95 via-indigo-50/90 to-cyan-50/90 dark:from-violet-950/50 dark:via-indigo-950/40 dark:to-cyan-950/40 border border-violet-200 dark:border-violet-500/35">
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
                 <div className="space-y-2 max-w-2xl">
-                  <span className="text-[11px] font-mono uppercase tracking-widest text-cyan-400 font-semibold block">
+                  <span className="text-[11px] font-mono uppercase tracking-widest text-[#7552D9] dark:text-cyan-400 font-semibold block">
                     One-Click Event Launcher
                   </span>
-                  <h3 className="text-xl sm:text-2xl font-extrabold text-white">
+                  <h3 className="text-xl sm:text-2xl font-extrabold text-[#17172B] dark:text-white">
                     Organizing a Campus Hackathon or Workshop?
                   </h3>
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-[#424C63] dark:text-slate-300 leading-relaxed">
                     Set up clean event landing pages, configure registration caps, automated waitlists, and issue cryptographic QR passes with zero bureaucratic delays.
                   </p>
                 </div>

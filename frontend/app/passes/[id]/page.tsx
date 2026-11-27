@@ -94,13 +94,13 @@ export default function PassPage() {
   };
 
   if (authLoading || loading) return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+    <div className="min-h-screen bg-transparent dark:bg-slate-950 flex items-center justify-center">
       <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
     </div>
   );
 
   if (error || !pass) return (
-    <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4">
+    <div className="min-h-screen bg-transparent dark:bg-slate-950 flex flex-col items-center justify-center gap-4">
       <AlertCircle className="w-10 h-10 text-red-400" />
       <p className="text-slate-400">{error || "Pass not found"}</p>
       <Link href="/me/registrations" className="text-indigo-400 hover:text-indigo-300 underline text-sm">My Registrations</Link>
@@ -111,7 +111,7 @@ export default function PassPage() {
   const ends = new Date(pass.ends_at);
 
   return (
-    <main className={`min-h-screen transition-colors duration-300 ${brightness ? "bg-white" : "bg-slate-950"}`}>
+    <main className={`min-h-screen transition-colors duration-300 ${brightness ? "bg-white" : "bg-transparent dark:bg-slate-950"}`}>
       <div className="max-w-md mx-auto px-4 py-8">
         {!brightness && (
           <Link href="/me/registrations" className="inline-flex items-center gap-1.5 text-slate-400 hover:text-white text-sm mb-6 transition-colors font-medium">

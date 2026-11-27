@@ -26,8 +26,8 @@ export default function FinalCtaSection() {
       ref={sectionRef}
       className="relative py-20 sm:py-28 bg-transparent overflow-hidden"
     >
-      {/* Background Cinematic Nebula */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+      {/* Background Cinematic Nebula (Dark Mode only so Light Mode keeps daylight sky) */}
+      <div className="hidden dark:block absolute inset-0 z-0 pointer-events-none">
         <Image
           src="/brand/rocket-nebula.webp"
           alt="Cinematic rocket nebula background"
@@ -74,10 +74,10 @@ export default function FinalCtaSection() {
           <div className="space-y-4">
             <RevealHeading
               text="Ready to Build Your Next Breakthrough?"
-              className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#F8FAFC] tracking-tight leading-[1.15]"
+              className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[#17172B] dark:text-[#F8FAFC] tracking-tight leading-[1.15]"
             />
 
-            <p className="max-w-2xl mx-auto text-base sm:text-lg text-[#CBD5E1] leading-relaxed font-normal">
+            <p className="max-w-2xl mx-auto text-base sm:text-lg text-[#424C63] dark:text-[#CBD5E1] leading-relaxed font-normal">
               Team up with builders, explore verified hackathons and fellowships, and ship real software on LaunchByte.
             </p>
           </div>
@@ -117,9 +117,9 @@ export default function FinalCtaSection() {
             <MagneticButton strength={0.2}>
               <Link
                 href="/opportunities"
-                className="px-7 py-4 rounded-2xl glass-card glow-hover text-[#F8FAFC] text-sm sm:text-base font-semibold backdrop-blur-md transition-all flex items-center gap-2 shadow-lg focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:outline-none"
+                className="px-7 py-4 rounded-2xl glass-card glow-hover text-[#17172B] dark:text-[#F8FAFC] text-sm sm:text-base font-semibold backdrop-blur-md transition-all flex items-center gap-2 shadow-lg focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:outline-none"
               >
-                <Trophy className="w-4 h-4 text-cyan-400" />
+                <Trophy className="w-4 h-4 text-[#7552D9] dark:text-cyan-400" />
                 <span>Browse Opportunities</span>
               </Link>
             </MagneticButton>
@@ -128,19 +128,19 @@ export default function FinalCtaSection() {
 
         {/* Highlights */}
         <Reveal delay={0.3}>
-          <div className="pt-8 border-t border-slate-800/80 max-w-2xl mx-auto flex flex-wrap items-center justify-center gap-6 text-xs text-slate-300 font-mono">
+          <div className="pt-8 border-t border-slate-200 dark:border-slate-800/80 max-w-2xl mx-auto flex flex-wrap items-center justify-center gap-6 text-xs text-[#566178] dark:text-slate-300 font-mono">
             <div className="flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               <span>Free for Students</span>
             </div>
-            <span className="text-slate-600 hidden sm:inline">•</span>
+            <span className="text-slate-400 dark:text-slate-600 hidden sm:inline">•</span>
             <div className="flex items-center gap-1.5">
-              <Users className="w-4 h-4 text-violet-400" />
-              <span>Team & Squad Matching</span>
+              <Users className="w-4 h-4 text-[#7552D9] dark:text-violet-400" />
+              <span>Team &amp; Squad Matching</span>
             </div>
-            <span className="text-slate-600 hidden sm:inline">•</span>
+            <span className="text-slate-400 dark:text-slate-600 hidden sm:inline">•</span>
             <div className="flex items-center gap-1.5">
-              <Trophy className="w-4 h-4 text-cyan-400" />
+              <Trophy className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
               <span>Verified Event Listings</span>
             </div>
           </div>

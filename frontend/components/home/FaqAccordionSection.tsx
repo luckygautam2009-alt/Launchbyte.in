@@ -28,10 +28,10 @@ export default function FaqAccordionSection() {
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <Reveal>
           <div className="text-center space-y-3">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#17172B] dark:text-[#F8FAFC] tracking-tight">
               Frequently Asked Questions
             </h2>
-            <p className="text-sm sm:text-base text-[#CBD5E1]">
+            <p className="text-sm sm:text-base text-[#424C63] dark:text-[#CBD5E1]">
               Everything you need to know about participating, matching with squads, and hosting events.
             </p>
           </div>
@@ -44,7 +44,9 @@ export default function FaqAccordionSection() {
               <Reveal key={faq.id} delay={0.06 * idx}>
                 <div
                   className={`rounded-2xl glass-card transition-all duration-200 overflow-hidden ${
-                    isOpen ? "border-violet-500/50 bg-[#09091B]/95 shadow-lg shadow-violet-950/20" : "hover:border-slate-700"
+                    isOpen
+                      ? "border-violet-400 dark:border-violet-500/50 bg-white/95 dark:bg-[#09091B]/95 shadow-lg shadow-violet-500/10 dark:shadow-violet-950/20"
+                      : "hover:border-violet-300 dark:hover:border-slate-700"
                   }`}
                 >
                   <button
@@ -53,12 +55,12 @@ export default function FaqAccordionSection() {
                     aria-expanded={isOpen}
                     className="w-full p-5 sm:p-6 text-left flex items-center justify-between gap-4 cursor-pointer focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:outline-none"
                   >
-                    <span className="text-base sm:text-lg font-bold text-white pr-2">
+                    <span className="text-base sm:text-lg font-bold text-[#17172B] dark:text-white pr-2">
                       {faq.question}
                     </span>
                     <div
-                      className={`w-8 h-8 rounded-xl bg-violet-950/70 border border-violet-500/30 flex items-center justify-center text-cyan-300 shrink-0 transition-transform duration-300 ${
-                        isOpen ? "rotate-180 bg-violet-900/80" : ""
+                      className={`w-8 h-8 rounded-xl bg-violet-100 dark:bg-violet-950/70 border border-violet-200 dark:border-violet-500/30 flex items-center justify-center text-[#7552D9] dark:text-cyan-300 shrink-0 transition-transform duration-300 ${
+                        isOpen ? "rotate-180 bg-violet-200 dark:bg-violet-900/80" : ""
                       }`}
                     >
                       <ChevronDown className="w-4 h-4" />
@@ -66,13 +68,13 @@ export default function FaqAccordionSection() {
                   </button>
 
                   {isOpen && (
-                    <div className="px-5 pb-6 sm:px-6 sm:pb-6 text-xs sm:text-sm text-[#CBD5E1] leading-relaxed border-t border-slate-800/60 pt-4 space-y-3 animate-in fade-in duration-200">
+                    <div className="px-5 pb-6 sm:px-6 sm:pb-6 text-xs sm:text-sm text-[#424C63] dark:text-[#CBD5E1] leading-relaxed border-t border-slate-200 dark:border-slate-800/60 pt-4 space-y-3 animate-in fade-in duration-200">
                       <p>{faq.answer}</p>
                       {faq.ctaHref && faq.ctaLabel && (
                         <div>
                           <a
                             href={faq.ctaHref}
-                            className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-cyan-300 hover:text-white transition-colors"
+                            className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-[#7552D9] hover:text-[#5B39B8] dark:text-cyan-300 dark:hover:text-white transition-colors"
                           >
                             <span>{faq.ctaLabel}</span>
                             <span aria-hidden="true">→</span>

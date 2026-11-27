@@ -40,7 +40,7 @@ export default function PeopleDiscoverPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#050510]">
+    <div className="min-h-screen bg-transparent dark:bg-[#050510]">
       <PageHero
         eyebrow="TEAMMATE DISCOVERY"
         title={

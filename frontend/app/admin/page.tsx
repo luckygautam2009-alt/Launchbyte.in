@@ -17,7 +17,7 @@ export default function AdminDashboardPage() {
   }, [user, loading, router]);
 
   if (loading) return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+    <div className="min-h-screen bg-transparent dark:bg-slate-950 flex items-center justify-center">
       <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
     </div>
   );
@@ -42,7 +42,7 @@ export default function AdminDashboardPage() {
   const visibleCards = cards.filter((c) => user && c.roles.includes(user.role));
 
   return (
-    <main className="min-h-screen bg-slate-950">
+    <main className="min-h-screen bg-transparent dark:bg-slate-950">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="mb-10">
           <div className="flex items-center gap-2 mb-2">

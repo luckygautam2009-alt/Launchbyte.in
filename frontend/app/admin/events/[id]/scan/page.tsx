@@ -176,13 +176,13 @@ export default function ScannerPage() {
   const scanBg = scanState === "success" ? "bg-green-500/10" : scanState === "error" ? "bg-red-500/10" : "bg-transparent";
 
   if (authLoading) return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+    <div className="min-h-screen bg-transparent dark:bg-slate-950 flex items-center justify-center">
       <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
     </div>
   );
 
   return (
-    <main className="min-h-screen bg-slate-950">
+    <main className="min-h-screen bg-transparent dark:bg-slate-950">
       <div className="max-w-2xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
           <Link href={`/admin/events/${id}`} className="min-h-[44px] flex items-center gap-1.5 text-slate-400 hover:text-white text-sm transition-colors font-medium">

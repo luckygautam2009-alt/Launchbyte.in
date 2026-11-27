@@ -90,10 +90,10 @@ export default function HowItWorksSection() {
           <div className="max-w-3xl mx-auto text-center space-y-4">
             <RevealHeading
               text="How It Works: From Curiosity to Shipped Software."
-              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight leading-tight"
+              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#17172B] dark:text-[#F8FAFC] tracking-tight leading-tight"
             />
 
-            <p className="text-base sm:text-lg text-[#CBD5E1] leading-relaxed font-normal">
+            <p className="text-base sm:text-lg text-[#424C63] dark:text-[#CBD5E1] leading-relaxed font-normal">
               A frictionless, streamlined progression designed to take any student from browsing to winning hackathons and claiming career breakthroughs.
             </p>
           </div>
@@ -184,7 +184,7 @@ export default function HowItWorksSection() {
                             >
                               {step.step}
                             </span>
-                            <span className="block text-[10px] font-mono uppercase tracking-widest text-slate-400">
+                            <span className="block text-[10px] font-mono uppercase tracking-widest text-[#647084] dark:text-slate-400">
                               {step.name}
                             </span>
                           </div>
@@ -192,21 +192,21 @@ export default function HowItWorksSection() {
 
                         {/* Title & Phase */}
                         <div className="space-y-2">
-                          <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400">
+                          <span className="text-[11px] font-mono uppercase tracking-wider text-[#647084] dark:text-slate-400">
                             Phase: {step.phase}
                           </span>
-                          <h3 className="text-xl font-bold text-[#F8FAFC] leading-snug group-hover:text-white transition-colors">
+                          <h3 className="text-xl font-bold text-[#17172B] dark:text-[#F8FAFC] leading-snug group-hover:text-[#7552D9] dark:group-hover:text-white transition-colors">
                             {step.title}
                           </h3>
-                          <p className="text-xs sm:text-sm text-[#CBD5E1] leading-relaxed">
+                          <p className="text-xs sm:text-sm text-[#424C63] dark:text-[#CBD5E1] leading-relaxed">
                             {step.description}
                           </p>
                         </div>
 
                         {/* Bullets */}
-                        <ul className="space-y-2.5 pt-3 border-t border-slate-800/80">
+                        <ul className="space-y-2.5 pt-3 border-t border-slate-200 dark:border-slate-800/80">
                           {step.bullets.map((b, bIdx) => (
-                            <li key={bIdx} className="flex items-start gap-2 text-xs text-slate-300">
+                            <li key={bIdx} className="flex items-start gap-2 text-xs text-[#424C63] dark:text-slate-300">
                               <CheckCircle2
                                 className="w-4 h-4 shrink-0 mt-0.5"
                                 style={{ color: step.accent }}
@@ -218,14 +218,14 @@ export default function HowItWorksSection() {
                       </div>
 
                       {/* Bottom Action CTA */}
-                      <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between">
-                        <span className="text-[11px] font-mono text-slate-400">
+                      <div className="pt-4 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between">
+                        <span className="text-[11px] font-mono text-[#647084] dark:text-slate-400">
                           Zero friction
                         </span>
                         <MagneticButton>
                           <Link
                             href={step.linkHref}
-                            className="inline-flex items-center gap-1.5 text-xs font-semibold hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-violet-400 rounded-lg p-1"
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold hover:opacity-80 dark:hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-violet-400 rounded-lg p-1"
                             style={{ color: step.accent }}
                           >
                             <span>{step.linkText}</span>

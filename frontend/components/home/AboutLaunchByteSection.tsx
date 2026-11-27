@@ -27,10 +27,10 @@ export default function AboutLaunchByteSection() {
           <div className="max-w-3xl mx-auto text-center space-y-4">
             <RevealHeading
               text="The Launchpad Built by Builders, for the Next Generation of Tech."
-              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight leading-tight"
+              className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#17172B] dark:text-[#F8FAFC] tracking-tight leading-tight"
             />
 
-            <p className="text-base sm:text-lg text-[#CBD5E1] leading-relaxed font-normal">
+            <p className="text-base sm:text-lg text-[#424C63] dark:text-[#CBD5E1] leading-relaxed font-normal">
               Legacy student portals are slow, cluttered with spam, and disconnected from real developer needs. LaunchByte is an integrated platform engineered to help students discover verified opportunities, assemble squads, ship real products, and grow in tech.
             </p>
           </div>
@@ -41,19 +41,19 @@ export default function AboutLaunchByteSection() {
           {/* 1. Large Pillar (7 columns on desktop) */}
           <Reveal className="lg:col-span-7 flex" delay={0.1}>
             <TiltCard className="p-[1px] rounded-3xl w-full flex">
-              <div className="relative rounded-[23px] w-full bg-[#09091B]/85 glass-card glow-hover p-7 sm:p-9 flex flex-col justify-between space-y-6">
+              <div className="relative rounded-[23px] w-full bg-white/90 dark:bg-[#09091B]/85 glass-card glow-hover p-7 sm:p-9 flex flex-col justify-between space-y-6">
                 <div className="space-y-5">
-                  <div className="w-14 h-14 rounded-2xl bg-violet-950/80 border border-violet-500/40 flex items-center justify-center shadow-lg shadow-violet-900/30">
-                    <Compass className="w-7 h-7 text-cyan-400" />
+                  <div className="w-14 h-14 rounded-2xl bg-violet-100 dark:bg-violet-950/80 border border-violet-200 dark:border-violet-500/40 flex items-center justify-center shadow-sm dark:shadow-lg dark:shadow-violet-900/30">
+                    <Compass className="w-7 h-7 text-[#7552D9] dark:text-cyan-400" />
                   </div>
 
                   <div className="space-y-2">
-                    <h3 className="text-2xl sm:text-3xl font-extrabold text-[#F8FAFC] tracking-tight">
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-[#17172B] dark:text-[#F8FAFC] tracking-tight">
                       Curated Opportunity Engine
                     </h3>
                   </div>
 
-                  <p className="text-sm sm:text-base text-[#CBD5E1] leading-relaxed">
+                  <p className="text-sm sm:text-base text-[#424C63] dark:text-[#CBD5E1] leading-relaxed">
                     Verified hackathons, developer fellowships, and high-impact internships curated with zero sponsored clutter and transparent evaluation criteria so you can focus on building.
                   </p>
 
@@ -64,22 +64,22 @@ export default function AboutLaunchByteSection() {
                       "Transparent organizer criteria",
                       "Moderation & quality verification",
                     ].map((item, i) => (
-                      <div key={i} className="flex items-center gap-2 text-xs sm:text-sm text-slate-300">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                      <div key={i} className="flex items-center gap-2 text-xs sm:text-sm text-[#424C63] dark:text-slate-300">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                         <span>{item}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between">
-                  <span className="text-xs font-mono text-slate-400">
+                <div className="pt-4 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between">
+                  <span className="text-xs font-mono text-[#647084] dark:text-slate-400">
                     Verified opportunity discovery
                   </span>
                   <MagneticButton>
                     <Link
                       href="/opportunities"
-                      className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-cyan-300 hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-cyan-400 rounded-lg p-1"
+                      className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#7552D9] hover:text-[#5B39B8] dark:text-cyan-300 dark:hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-violet-400 rounded-lg p-1"
                     >
                       <span>Explore Catalog</span>
                       <ArrowRight className="w-4 h-4" />
@@ -94,22 +94,22 @@ export default function AboutLaunchByteSection() {
           <div className="lg:col-span-5 flex flex-col gap-6 justify-between">
             <Reveal delay={0.2} className="flex-1 flex">
               <div className="relative p-[1px] rounded-3xl overflow-hidden group w-full flex">
-                <div className="relative rounded-[23px] w-full bg-[#09091B]/85 glass-card glow-hover p-6 sm:p-7 flex flex-col justify-between space-y-4">
+                <div className="relative rounded-[23px] w-full bg-white/90 dark:bg-[#09091B]/85 glass-card glow-hover p-6 sm:p-7 flex flex-col justify-between space-y-4">
                   <div className="space-y-3">
-                    <div className="w-11 h-11 rounded-xl bg-blue-950/80 border border-blue-500/30 flex items-center justify-center">
-                      <Zap className="w-5 h-5 text-blue-400" />
+                    <div className="w-11 h-11 rounded-xl bg-indigo-100 dark:bg-blue-950/80 border border-indigo-200 dark:border-blue-500/30 flex items-center justify-center">
+                      <Zap className="w-5 h-5 text-indigo-600 dark:text-blue-400" />
                     </div>
 
-                    <h3 className="text-lg sm:text-xl font-bold text-[#F8FAFC]">
+                    <h3 className="text-lg sm:text-xl font-bold text-[#17172B] dark:text-[#F8FAFC]">
                       Skill Acceleration Sprints
                     </h3>
 
-                    <p className="text-xs sm:text-sm text-[#CBD5E1] leading-relaxed">
+                    <p className="text-xs sm:text-sm text-[#424C63] dark:text-[#CBD5E1] leading-relaxed">
                       Hands-on building sprints that turn classroom concepts into deployable full-stack software and real engineering portfolios.
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-2 text-xs font-mono text-blue-300">
+                  <div className="flex items-center gap-2 text-xs font-mono text-indigo-700 dark:text-blue-300">
                     <Terminal className="w-3.5 h-3.5" />
                     <span>Real-world production architectures</span>
                   </div>
@@ -119,24 +119,24 @@ export default function AboutLaunchByteSection() {
 
             <Reveal delay={0.3} className="flex-1 flex">
               <div className="relative p-[1px] rounded-3xl overflow-hidden group w-full flex">
-                <div className="relative rounded-[23px] w-full bg-[#09091B]/85 glass-card glow-hover p-6 sm:p-7 flex flex-col justify-between space-y-4">
+                <div className="relative rounded-[23px] w-full bg-white/90 dark:bg-[#09091B]/85 glass-card glow-hover p-6 sm:p-7 flex flex-col justify-between space-y-4">
                   <div className="space-y-3">
-                    <div className="w-11 h-11 rounded-xl bg-cyan-950/80 border border-cyan-500/30 flex items-center justify-center">
-                      <Users className="w-5 h-5 text-cyan-400" />
+                    <div className="w-11 h-11 rounded-xl bg-cyan-100 dark:bg-cyan-950/80 border border-cyan-200 dark:border-cyan-500/30 flex items-center justify-center">
+                      <Users className="w-5 h-5 text-cyan-700 dark:text-cyan-400" />
                     </div>
 
-                    <h3 className="text-lg sm:text-xl font-bold text-[#F8FAFC]">
-                      Team & Squad Discovery
+                    <h3 className="text-lg sm:text-xl font-bold text-[#17172B] dark:text-[#F8FAFC]">
+                      Team &amp; Squad Discovery
                     </h3>
 
-                    <p className="text-xs sm:text-sm text-[#CBD5E1] leading-relaxed">
+                    <p className="text-xs sm:text-sm text-[#424C63] dark:text-[#CBD5E1] leading-relaxed">
                       Find collaborators across complementary skillsets—frontend developers, backend engineers, AI/ML builders, and designers ready to build together.
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-2 text-xs font-mono text-cyan-300">
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Verified student & builder profiles</span>
+                  <div className="flex items-center gap-2 text-xs font-mono text-cyan-700 dark:text-cyan-300">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                    <span>Verified student &amp; builder profiles</span>
                   </div>
                 </div>
               </div>

@@ -115,21 +115,21 @@ export default function CompanyImpactStrip() {
   }
 
   return (
-    <section className="relative py-16 sm:py-24 bg-[#050510] overflow-hidden">
-      <div className="absolute inset-0 bg-space-grid opacity-15 pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[300px] bg-violet-600/10 rounded-full blur-[120px] pointer-events-none" />
+    <section className="relative py-16 sm:py-24 bg-transparent dark:bg-[#050510] overflow-hidden">
+      <div className="hidden dark:block absolute inset-0 bg-space-grid opacity-15 pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[300px] bg-violet-400/15 dark:bg-violet-600/10 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <Reveal>
           <div className="max-w-2xl mx-auto text-center space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-950/60 border border-violet-500/30 text-xs font-mono uppercase tracking-widest text-[#A78BFA]">
-              <TrendingUp className="w-3.5 h-3.5 text-cyan-400" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-100 dark:bg-violet-950/60 border border-violet-200 dark:border-violet-500/30 text-xs font-mono uppercase tracking-widest text-[#7552D9] dark:text-[#A78BFA]">
+              <TrendingUp className="w-3.5 h-3.5 text-[#7552D9] dark:text-cyan-400" />
               <span>Live Platform Snapshot</span>
             </div>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-[#F8FAFC] tracking-tight">
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-[#17172B] dark:text-[#F8FAFC] tracking-tight">
               Verified Platform Metrics
             </h2>
-            <p className="text-xs sm:text-sm text-[#CBD5E1]">
+            <p className="text-xs sm:text-sm text-[#424C63] dark:text-[#CBD5E1]">
               Real-time counts calculated directly from published LaunchByte records.
             </p>
           </div>
@@ -145,15 +145,15 @@ export default function CompanyImpactStrip() {
             return (
               <Reveal key={m.id} delay={0.08 * idx} className="flex">
                 <div className="group relative w-full p-6 sm:p-7 rounded-3xl glass-card glow-hover flex flex-col justify-between space-y-4">
-                  <div className="w-11 h-11 rounded-2xl bg-violet-950/70 border border-violet-500/30 flex items-center justify-center text-cyan-400 shadow-md">
+                  <div className="w-11 h-11 rounded-2xl bg-violet-100 dark:bg-violet-950/70 border border-violet-200 dark:border-violet-500/30 flex items-center justify-center text-[#7552D9] dark:text-cyan-400 shadow-sm dark:shadow-md">
                     <Icon className="w-5 h-5" />
                   </div>
                   <div className="space-y-1">
-                    <div className="text-3xl sm:text-4xl font-black text-white tracking-tight">
+                    <div className="text-3xl sm:text-4xl font-black text-[#17172B] dark:text-white tracking-tight">
                       <CountUp target={m.count} />
                     </div>
-                    <h3 className="text-sm font-bold text-[#A78BFA]">{m.label}</h3>
-                    <p className="text-xs text-slate-400 leading-relaxed">{m.description}</p>
+                    <h3 className="text-sm font-bold text-[#7552D9] dark:text-[#A78BFA]">{m.label}</h3>
+                    <p className="text-xs text-[#566178] dark:text-slate-400 leading-relaxed">{m.description}</p>
                   </div>
                 </div>
               </Reveal>

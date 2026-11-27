@@ -50,15 +50,15 @@ function EventCard({ event }: { event: EventListItem }) {
       </div>
       {/* Body */}
       <div className="p-4">
-        <p className="text-xs text-indigo-400 font-medium mb-1">{event.organization.name}</p>
-        <h3 className="font-semibold text-white text-sm leading-snug mb-1 group-hover:text-indigo-300 transition-colors line-clamp-2">{event.title}</h3>
-        {event.tagline && <p className="text-xs text-slate-400 mb-3 line-clamp-1">{event.tagline}</p>}
-        <div className="flex items-center gap-1.5 text-xs text-slate-400 mb-2">
+        <p className="text-xs text-[#7552D9] dark:text-indigo-400 font-medium mb-1">{event.organization.name}</p>
+        <h3 className="font-semibold text-[#17172B] dark:text-white text-sm leading-snug mb-1 group-hover:text-[#7552D9] dark:group-hover:text-indigo-300 transition-colors line-clamp-2">{event.title}</h3>
+        {event.tagline && <p className="text-xs text-[#566178] dark:text-slate-400 mb-3 line-clamp-1">{event.tagline}</p>}
+        <div className="flex items-center gap-1.5 text-xs text-[#59647A] dark:text-slate-400 mb-2">
           <Calendar className="w-3.5 h-3.5 flex-shrink-0" />
           <span>{starts.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
         </div>
         {event.venue_city && (
-          <div className="flex items-center gap-1.5 text-xs text-slate-400 mb-3">
+          <div className="flex items-center gap-1.5 text-xs text-[#59647A] dark:text-slate-400 mb-3">
             <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
             <span>{event.venue_city}</span>
           </div>
@@ -66,20 +66,20 @@ function EventCard({ event }: { event: EventListItem }) {
         {/* Capacity bar */}
         {pct !== null && (
           <div className="mt-2">
-            <div className="flex justify-between text-xs text-slate-500 mb-1">
+            <div className="flex justify-between text-xs text-[#647084] dark:text-slate-500 mb-1">
               <span className="flex items-center gap-1"><Users className="w-3 h-3" /> Spots</span>
               <span>{event.capacity_remaining} left</span>
             </div>
-            <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+            <div className="h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
               <div className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full transition-all" style={{ width: `${Math.min(pct, 100)}%` }} />
             </div>
           </div>
         )}
         {event.is_full && (
-          <span className="mt-2 inline-flex items-center text-xs font-medium text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded-full">Full — Waitlist</span>
+          <span className="mt-2 inline-flex items-center text-xs font-medium text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-400/10 px-2 py-0.5 rounded-full">Full — Waitlist</span>
         )}
         {daysLeft > 0 && daysLeft <= 30 && (
-          <div className="mt-2 flex items-center gap-1 text-xs text-purple-400">
+          <div className="mt-2 flex items-center gap-1 text-xs text-[#7552D9] dark:text-purple-400">
             <Clock className="w-3 h-3" /> {daysLeft} day{daysLeft !== 1 ? "s" : ""} to go
           </div>
         )}
@@ -147,14 +147,14 @@ export default function EventsPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#050510]">
+    <main className="min-h-screen bg-transparent dark:bg-[#050510]">
       {/* PageHero with search form inside */}
       <PageHero
         eyebrow="EVENTS HUB"
         title={
           <>
             Discover{" "}
-            <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#7552D9] via-indigo-600 to-pink-600 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
               Events
             </span>
           </>
@@ -163,13 +163,13 @@ export default function EventsPage() {
       >
         <form onSubmit={handleSearch} className="flex gap-2 max-w-lg mx-auto">
           <div className="flex-1 relative">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" />
             <input
               type="text"
               placeholder="Search events..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-slate-900/90 border border-slate-700/80 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 text-sm"
+              className="w-full pl-10 pr-4 py-2.5 bg-white/95 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 rounded-xl text-[#17172B] dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500 text-sm shadow-sm dark:shadow-none"
             />
           </div>
           <button type="submit" className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-semibold transition-colors shadow-lg shadow-indigo-600/25">
@@ -180,16 +180,16 @@ export default function EventsPage() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-wrap gap-2 mb-8">
-          <div className="flex bg-slate-900/80 border border-slate-800 rounded-xl p-1 gap-1">
+          <div className="flex bg-white/90 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-xl p-1 gap-1 shadow-sm dark:shadow-none">
             <button
               onClick={() => { setUpcoming(true); setOffset(0); }}
-              className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${upcoming ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white"}`}
+              className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${upcoming ? "bg-indigo-600 text-white" : "text-[#59647A] hover:text-[#17172B] dark:text-slate-400 dark:hover:text-white"}`}
             >
               Upcoming
             </button>
             <button
               onClick={() => { setUpcoming(false); setOffset(0); }}
-              className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${!upcoming ? "bg-indigo-600 text-white" : "text-slate-400 hover:text-white"}`}
+              className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${!upcoming ? "bg-indigo-600 text-white" : "text-[#59647A] hover:text-[#17172B] dark:text-slate-400 dark:hover:text-white"}`}
             >
               Past
             </button>
@@ -198,7 +198,7 @@ export default function EventsPage() {
             <button
               key={m.value}
               onClick={() => { setMode(m.value as EventMode | ""); setOffset(0); }}
-              className={`px-3 py-1.5 rounded-xl text-sm font-medium border transition-colors ${mode === m.value ? "bg-indigo-600 text-white border-indigo-600" : "bg-slate-900/60 text-slate-400 border-slate-800 hover:border-slate-600"}`}
+              className={`px-3 py-1.5 rounded-xl text-sm font-medium border transition-colors ${mode === m.value ? "bg-indigo-600 text-white border-indigo-600" : "bg-white/85 dark:bg-slate-900/60 text-[#424C63] dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:border-violet-300 dark:hover:border-slate-600"}`}
             >
               {m.label}
             </button>

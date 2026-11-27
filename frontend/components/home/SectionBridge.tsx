@@ -39,7 +39,7 @@ export default function SectionBridge({
   return (
     <div
       aria-hidden="true"
-      className={`relative w-full ${heightClass} bg-[#050510] pointer-events-none overflow-hidden flex flex-col items-center justify-center z-15 select-none`}
+      className={`relative w-full ${heightClass} bg-transparent dark:bg-[#050510] pointer-events-none overflow-hidden flex flex-col items-center justify-center z-15 select-none`}
     >
       {/* Central Ambient Glow */}
       <div

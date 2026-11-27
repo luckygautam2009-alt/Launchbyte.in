@@ -33,7 +33,7 @@ export function MobileBottomNav() {
   return (
     <nav
       aria-label="Mobile Bottom Navigation"
-      className="md:hidden fixed bottom-0 left-0 right-0 z-40 min-h-16 bg-slate-950/92 backdrop-blur-lg border-t border-slate-800/80 px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] pb-[env(safe-area-inset-bottom)] flex items-center justify-around select-none"
+      className="md:hidden fixed bottom-0 left-0 right-0 z-40 min-h-16 bg-white/95 dark:bg-slate-950/92 backdrop-blur-lg border-t border-slate-200 dark:border-slate-800/80 px-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] pb-[env(safe-area-inset-bottom)] flex items-center justify-around select-none transition-colors duration-200"
     >
       {items.map((item) => {
         const Icon = item.icon;
@@ -49,8 +49,8 @@ export function MobileBottomNav() {
             className={clsx(
               "flex flex-col items-center justify-center min-w-[56px] min-h-[44px] py-1 rounded-xl transition-colors duration-150",
               isActive
-                ? "text-brand-400 font-semibold"
-                : "text-slate-400 hover:text-slate-200"
+                ? "text-violet-600 dark:text-brand-400 font-semibold"
+                : "text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200"
             )}
           >
             <Icon className={clsx("w-5 h-5", isActive && "stroke-[2.4]")} />

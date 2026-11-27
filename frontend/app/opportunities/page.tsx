@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export default function OpportunitiesPage() {
   return (
     <RequireAuth>
-      <div className="min-h-screen bg-[#050510]">
+      <div className="min-h-screen bg-transparent dark:bg-[#050510]">
         <PageHero
           eyebrow="OPPORTUNITY HUB"
           title={

@@ -21,7 +21,7 @@ export default function EventsLoading() {
         {[...Array(6)].map((_, i) => (
           <div
             key={i}
-            className="rounded-2xl border border-white/[0.07] bg-[#0c0d1d]/80 overflow-hidden space-y-4"
+            className="rounded-2xl border border-slate-200 dark:border-white/[0.07] bg-white/80 dark:bg-[#0c0d1d]/80 overflow-hidden space-y-4"
           >
             <div className="h-44 w-full bg-white/[0.06]" />
             <div className="p-5 space-y-3">

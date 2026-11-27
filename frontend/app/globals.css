@@ -16,14 +16,34 @@
 }
 
 .light {
-  --background: #f8fafc;
-  --foreground: #0f172a;
-  --card: rgba(255, 255, 255, 0.9);
-  --card-border: rgba(226, 232, 240, 0.9);
-  --muted: #64748b;
-  --brand: #4f46e5;
-  --brand-hover: #4338ca;
-  --accent: #0891b2;
+  --background: #f8f9fd;
+  --foreground: #17172b;
+  --card: #ffffff;
+  --card-border: #e3e5ef;
+  --muted: #647084;
+  --brand: #7552d9;
+  --brand-hover: #6340c4;
+  --accent: #0284c7;
+  --lb-glass-bg: rgba(255, 255, 255, 0.88);
+  --lb-glass-border: rgba(117, 82, 217, 0.22);
+}
+
+html.light body {
+  background-color: #f8f9fd;
+  color: #17172b;
+}
+
+html.light ::-webkit-scrollbar-track {
+  background: rgba(226, 232, 240, 0.6);
+}
+
+html.light ::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.7);
+  border-radius: 9999px;
+}
+
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: rgba(117, 82, 217, 0.7);
 }
 
 html {
@@ -45,6 +65,7 @@ body {
 
 /* Prevent automatic iOS Safari viewport zoom on form controls */
 @media (max-width: 767px) {
+
   input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
   select,
   textarea {
@@ -79,28 +100,29 @@ body {
 
 /* Shimmer gradient for skeletons */
 .skeleton-shimmer {
-  background: linear-gradient(
-    90deg,
-    rgba(30, 41, 59, 0.5) 0%,
-    rgba(51, 65, 85, 0.5) 50%,
-    rgba(30, 41, 59, 0.5) 100%
-  );
+  background: linear-gradient(90deg,
+      rgba(30, 41, 59, 0.5) 0%,
+      rgba(51, 65, 85, 0.5) 50%,
+      rgba(30, 41, 59, 0.5) 100%);
   background-size: 200% 100%;
 }
 
 /* Space Grid Pattern */
 .bg-space-grid {
-  background-image: 
+  background-image:
     linear-gradient(to right, rgba(139, 92, 246, 0.08) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(139, 92, 246, 0.08) 1px, transparent 1px);
   background-size: 72px 72px;
 }
 
 @keyframes star-twinkle {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 0.3;
     transform: scale(0.85);
   }
+
   50% {
     opacity: 1;
     transform: scale(1.15);
@@ -123,6 +145,7 @@ body {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -141,6 +164,12 @@ body {
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
+html.light .glass-card {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(117, 82, 217, 0.18);
+  box-shadow: 0 8px 30px rgba(23, 23, 43, 0.06);
+}
+
 .glow-hover {
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -151,10 +180,16 @@ body {
   transform: translateY(-2px);
 }
 
+html.light .glow-hover:hover {
+  border-color: rgba(117, 82, 217, 0.45);
+  box-shadow: 0 12px 32px rgba(117, 82, 217, 0.15), 0 4px 16px rgba(23, 23, 43, 0.06);
+}
+
 @keyframes marquee-scroll {
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(-50%);
   }
@@ -164,6 +199,7 @@ body {
   0% {
     transform: translateX(-100%);
   }
+
   100% {
     transform: translateX(200%);
   }
@@ -179,8 +215,255 @@ body {
   animation-play-state: paused;
 }
 
+/* Light Mode only: Ken Burns, Hero, Explore & Floating Pill Animations (60fps GPU transforms) */
+@keyframes lb-ken-burns {
+  0% { transform: scale(1) translate3d(0, 0, 0); }
+  50% { transform: scale(1.06) translate3d(-1.2%, -0.8%, 0); }
+  100% { transform: scale(1.02) translate3d(0.8%, -0.4%, 0); }
+}
+
+@keyframes lb-chip-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -6px, 0); }
+}
+
+@keyframes heroDrift {
+  0%, 100% { transform: scale(1) translate3d(0, 0, 0); }
+  50% { transform: scale(1.03) translate3d(0, -8px, 0); }
+}
+
+@keyframes wm {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes slowZoom {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+@keyframes sweep {
+  0% { transform: translateX(-100%) rotate(15deg); }
+  100% { transform: translateX(200%) rotate(15deg); }
+}
+
+@keyframes floaty {
+  0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+  50% { transform: translate(-50%, -50%) translateY(-6px); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: .25; transform: scale(.9); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes heroDrift {
+
+  0%,
+  100% {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: scale(1.03) translate3d(0, -8px, 0);
+  }
+}
+
+@keyframes wm {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes riseIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes slowZoom {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+@keyframes sweep {
+  0% {
+    transform: translateX(-100%) rotate(15deg);
+  }
+
+  100% {
+    transform: translateX(200%) rotate(15deg);
+  }
+}
+
+@keyframes floaty {
+
+  0%,
+  100% {
+    transform: translate(-50%, -50%) translateY(0);
+  }
+
+  50% {
+    transform: translate(-50%, -50%) translateY(-6px);
+  }
+}
+
+@keyframes twinkle {
+
+  0%,
+  100% {
+    opacity: .25;
+    transform: scale(.9);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+html.light .lb-ken-burns-active {
+  animation: lb-ken-burns 18s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+html.light .lb-chip-float-light {
+  animation: lb-chip-float 5.2s ease-in-out infinite;
+  will-change: transform;
+}
+
+html.light .hero-bg {
+  animation: heroDrift 30s ease-in-out infinite;
+  will-change: transform;
+}
+
+html.light .hero-watermark {
+  animation: wm 10s ease-in-out infinite;
+  will-change: transform;
+}
+
+html.light .hero-content {
+  animation: riseIn .9s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+html.light .explore {
+  position: relative;
+  overflow: hidden;
+}
+
+html.light .explore-bg {
+  animation: slowZoom 24s ease-in-out infinite;
+  will-change: transform;
+}
+
+html.light .explore::after {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: linear-gradient(120deg, transparent 42%, rgba(255, 255, 255, .28) 50%, transparent 58%);
+  animation: sweep 7s linear infinite;
+  pointer-events: none;
+  z-index: 15;
+}
+
+html.light .pill {
+  animation: floaty 5.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+html.light .pill:nth-child(2n) { animation-delay: -1.4s; animation-duration: 6.2s; }
+html.light .pill:nth-child(3n) { animation-delay: -2.8s; animation-duration: 5s; }
+html.light .pill:nth-child(4n) { animation-delay: -4s; animation-duration: 6.8s; }
+
+html.light .star {
+  animation: twinkle 3.6s ease-in-out infinite;
+}
+
+html.light .hero-bg {
+  animation: heroDrift 30s ease-in-out infinite;
+  will-change: transform;
+}
+
+html.light .hero-watermark {
+  animation: wm 10s ease-in-out infinite;
+  will-change: transform;
+}
+
+html.light .hero-content {
+  animation: riseIn .9s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+html.light .explore {
+  position: relative;
+  overflow: hidden;
+}
+
+html.light .explore-bg {
+  animation: slowZoom 24s ease-in-out infinite;
+  will-change: transform;
+}
+
+html.light .explore::after {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background: linear-gradient(120deg, transparent 42%, rgba(255, 255, 255, .28) 50%, transparent 58%);
+  animation: sweep 7s linear infinite;
+  pointer-events: none;
+  z-index: 15;
+}
+
+html.light .pill {
+  animation: floaty 5.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+html.light .pill:nth-child(2n) {
+  animation-delay: -1.4s;
+  animation-duration: 6.2s;
+}
+
+html.light .pill:nth-child(3n) {
+  animation-delay: -2.8s;
+  animation-duration: 5s;
+}
+
+html.light .pill:nth-child(4n) {
+  animation-delay: -4s;
+  animation-duration: 6.8s;
+}
+
+html.light .star {
+  animation: twinkle 3.6s ease-in-out infinite;
+}
+
 /* Respect user's motion preferences */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -189,20 +472,41 @@ body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  .hero-bg, .hero-watermark, .hero-content, .explore-bg, .explore::after, .pill, .star {
+    animation: none !important;
+  }
+
+  .hero-bg,
+  .hero-watermark,
+  .hero-content,
+  .explore-bg,
+  .explore::after,
+  .pill,
+  .star {
+    animation: none !important;
+  }
 }
 
 /* Mobile / touch perf: backdrop-filter and huge blurs are GPU-expensive */
-@media (max-width: 1023px), (hover: none) and (pointer: coarse) {
+@media (max-width: 1023px),
+(hover: none) and (pointer: coarse) {
   .glass-card {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
     background: rgba(11, 11, 29, 0.9);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
   }
+
+  html.light .glass-card {
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 4px 16px rgba(23, 23, 43, 0.08);
+  }
+
   [class*="backdrop-blur"] {
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
   }
+
   [class*="blur-["] {
     --tw-blur: blur(40px) !important;
   }

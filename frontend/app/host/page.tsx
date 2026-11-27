@@ -151,18 +151,18 @@ export default function PublicHostEventPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050510] text-slate-100 py-14 sm:py-20">
+    <div className="min-h-screen bg-transparent dark:bg-[#050510] text-[#17172B] dark:text-slate-100 py-14 sm:py-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         {/* Header */}
         <div className="text-center space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-violet-950/60 border border-violet-500/30 text-xs font-mono uppercase tracking-widest text-[#A78BFA]">
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-violet-100 dark:bg-violet-950/60 border border-violet-200 dark:border-violet-500/30 text-xs font-mono uppercase tracking-widest text-[#7552D9] dark:text-[#A78BFA]">
+            <Sparkles className="w-3.5 h-3.5 text-[#7552D9] dark:text-cyan-400" />
             <span>Public Event Submission</span>
           </div>
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-[#17172B] dark:text-white tracking-tight">
             Host an Event on LaunchByte
           </h1>
-          <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-[#424C63] dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
             Submit your hackathon, workshop, or developer meetup for consideration. Every public submission is reviewed by the LaunchByte team before publishing.
           </p>
         </div>

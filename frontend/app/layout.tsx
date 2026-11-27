@@ -1,12 +1,14 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
+import { ThemeProvider } from "@/lib/theme-context";
 import { ToastProvider } from "@/lib/toast-context";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { CommandPalette } from "@/components/ui/CommandPalette";
 import GlobalCosmicParticles from "@/components/GlobalCosmicParticles";
+import GlobalThemeBackground from "@/components/GlobalThemeBackground";
 import { WarmBackend } from "@/components/WarmBackend";
 import { LAUNCHBYTE_SOCIALS } from "@/lib/siteContent";
 
@@ -106,8 +108,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
-      <body className="bg-[#050510] text-slate-100 flex flex-col min-h-screen min-h-[100dvh] antialiased selection:bg-brand-500 selection:text-white pb-[calc(4rem+env(safe-area-inset-bottom))] md:pb-0 relative">
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        {/* Anti-flash theme script: runs synchronously before body render */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("lb_theme");if(t==="light"){document.documentElement.classList.remove("dark");document.documentElement.classList.add("light");document.documentElement.setAttribute("data-theme","light");document.documentElement.style.colorScheme="light";}else{document.documentElement.classList.remove("light");document.documentElement.classList.add("dark");document.documentElement.setAttribute("data-theme","dark");document.documentElement.style.colorScheme="dark";}}catch(e){}})();`,
+          }}
+        />
+      </head>
+      <body className="bg-[#050510] text-slate-100 flex flex-col min-h-screen min-h-[100dvh] antialiased selection:bg-brand-500 selection:text-white pb-[calc(4rem+env(safe-area-inset-bottom))] md:pb-0 relative transition-colors duration-200">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -120,18 +130,22 @@ export default function RootLayout({
             __html: JSON.stringify(websiteSchema).replace(/</g, "\\u003c"),
           }}
         />
-        <AuthProvider>
-          <WarmBackend />
-          <ToastProvider>
-            {/* Global animated particles from top to bottom across the entire page */}
-            <GlobalCosmicParticles />
-            <Navbar />
-            <main className="flex-1 relative z-10">{children}</main>
-            <Footer />
-            <MobileBottomNav />
-            <CommandPalette />
-          </ToastProvider>
-        </AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <WarmBackend />
+            <ToastProvider>
+              {/* Continuous Light/Dark background atmosphere */}
+              <GlobalThemeBackground />
+              {/* Global animated particles from top to bottom across the entire page */}
+              <GlobalCosmicParticles />
+              <Navbar />
+              <main className="flex-1 relative z-10">{children}</main>
+              <Footer />
+              <MobileBottomNav />
+              <CommandPalette />
+            </ToastProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

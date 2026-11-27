@@ -63,14 +63,14 @@ export default function PartnerContactSection() {
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <Reveal>
           <div className="text-center space-y-4">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#17172B] dark:text-[#F8FAFC] tracking-tight">
               Partner with LaunchByte
             </h2>
-            <p className="text-sm sm:text-base text-[#CBD5E1] max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base text-[#424C63] dark:text-[#CBD5E1] max-w-2xl mx-auto">
               Organizations, developer communities, event organizers, and collaborators can reach out or submit events directly. Inquiries are routed to{" "}
               <a
                 href={`mailto:${LAUNCHBYTE_SOCIALS.email}`}
-                className="text-cyan-300 hover:underline font-mono text-xs sm:text-sm"
+                className="text-[#7552D9] dark:text-cyan-300 hover:underline font-mono text-xs sm:text-sm"
               >
                 {LAUNCHBYTE_SOCIALS.email}
               </a>
@@ -79,7 +79,7 @@ export default function PartnerContactSection() {
             <div className="pt-1">
               <Link
                 href="/host"
-                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-mono font-semibold text-cyan-300 hover:text-white transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-mono font-semibold text-[#7552D9] hover:text-[#5B39B8] dark:text-cyan-300 dark:hover:text-white transition-colors"
               >
                 <span>Hosting a hackathon or tech event? Submit via Host an Event</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -89,21 +89,21 @@ export default function PartnerContactSection() {
         </Reveal>
 
         <Reveal delay={0.1}>
-          <div className="p-8 sm:p-12 rounded-3xl glass-card glow-hover border border-violet-500/30">
+          <div className="p-8 sm:p-12 rounded-3xl glass-card glow-hover border border-violet-200 dark:border-violet-500/30">
             {submitted ? (
               <div className="text-center py-10 space-y-4 animate-in fade-in zoom-in-95 duration-300">
-                <div className="w-16 h-16 rounded-2xl bg-emerald-950/70 border border-emerald-500/40 flex items-center justify-center text-emerald-400 mx-auto shadow-lg shadow-emerald-950/40">
+                <div className="w-16 h-16 rounded-2xl bg-emerald-100 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-500/40 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mx-auto shadow-sm dark:shadow-lg dark:shadow-emerald-950/40">
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
-                <h3 className="text-2xl font-bold text-white">Inquiry Received</h3>
-                <p className="text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
+                <h3 className="text-2xl font-bold text-[#17172B] dark:text-white">Inquiry Received</h3>
+                <p className="text-sm text-[#424C63] dark:text-slate-300 max-w-md mx-auto leading-relaxed">
                   {serverMessage ||
                     `Thank you for reaching out. Our team will review your message at ${LAUNCHBYTE_SOCIALS.email}.`}
                 </p>
                 <button
                   type="button"
                   onClick={() => setSubmitted(false)}
-                  className="mt-4 px-6 py-2.5 rounded-xl bg-violet-950/60 hover:bg-violet-900 border border-violet-500/30 text-xs font-mono text-violet-300 transition cursor-pointer"
+                  className="mt-4 px-6 py-2.5 rounded-xl bg-violet-100 hover:bg-violet-200 dark:bg-violet-950/60 dark:hover:bg-violet-900 border border-violet-200 dark:border-violet-500/30 text-xs font-mono text-[#7552D9] dark:text-violet-300 transition cursor-pointer"
                 >
                   Send another inquiry
                 </button>
@@ -111,13 +111,13 @@ export default function PartnerContactSection() {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
                 {errorMsg && (
-                  <div className="p-4 rounded-xl bg-red-950/50 border border-red-500/40 text-red-200 text-xs sm:text-sm flex items-start gap-2.5">
-                    <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+                  <div className="p-4 rounded-xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-500/40 text-red-700 dark:text-red-200 text-xs sm:text-sm flex items-start gap-2.5">
+                    <AlertCircle className="w-4 h-4 text-red-500 dark:text-red-400 shrink-0 mt-0.5" />
                     <div className="space-y-1">
                       <p>{errorMsg}</p>
                       <a
                         href={`mailto:${LAUNCHBYTE_SOCIALS.email}`}
-                        className="inline-flex items-center gap-1 text-cyan-300 hover:underline font-mono text-xs"
+                        className="inline-flex items-center gap-1 text-[#7552D9] dark:text-cyan-300 hover:underline font-mono text-xs"
                       >
                         <Mail className="w-3 h-3" />
                         <span>Email {LAUNCHBYTE_SOCIALS.email} directly</span>
@@ -139,7 +139,7 @@ export default function PartnerContactSection() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-xs font-mono uppercase tracking-wider text-slate-300 block">
+                    <label className="text-xs font-mono uppercase tracking-wider text-[#252642] dark:text-slate-300 block">
                       Your Full Name *
                     </label>
                     <input
@@ -149,12 +149,12 @@ export default function PartnerContactSection() {
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                       placeholder="Your full name"
-                      className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:border-violet-500 outline-none transition"
+                      className="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:border-violet-500 outline-none transition"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-xs font-mono uppercase tracking-wider text-slate-300 block">
+                    <label className="text-xs font-mono uppercase tracking-wider text-[#252642] dark:text-slate-300 block">
                       Email Address *
                     </label>
                     <input
@@ -163,14 +163,14 @@ export default function PartnerContactSection() {
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="you@organization.com"
-                      className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:border-violet-500 outline-none transition"
+                      className="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:border-violet-500 outline-none transition"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-xs font-mono uppercase tracking-wider text-slate-300 block">
+                    <label className="text-xs font-mono uppercase tracking-wider text-[#252642] dark:text-slate-300 block">
                       Organization / Community
                     </label>
                     <input
@@ -178,18 +178,18 @@ export default function PartnerContactSection() {
                       value={formData.organization}
                       onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
                       placeholder="University club or company"
-                      className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:border-violet-500 outline-none transition"
+                      className="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:border-violet-500 outline-none transition"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-xs font-mono uppercase tracking-wider text-slate-300 block">
+                    <label className="text-xs font-mono uppercase tracking-wider text-[#252642] dark:text-slate-300 block">
                       Inquiry Type
                     </label>
                     <select
                       value={formData.inquiry_type}
                       onChange={(e) => setFormData({ ...formData, inquiry_type: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:border-violet-500 outline-none transition cursor-pointer"
+                      className="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white text-sm focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:border-violet-500 outline-none transition cursor-pointer"
                     >
                       <option value="sponsor">Sponsor / Prize Track</option>
                       <option value="community">Community Collaboration</option>
@@ -200,7 +200,7 @@ export default function PartnerContactSection() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300 block">
+                  <label className="text-xs font-mono uppercase tracking-wider text-[#252642] dark:text-slate-300 block">
                     Message *
                   </label>
                   <textarea
@@ -210,13 +210,13 @@ export default function PartnerContactSection() {
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     placeholder="Share details about your event, community collaboration, or inquiry..."
-                    className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:border-violet-500 outline-none transition resize-none"
+                    className="w-full px-4 py-3 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm focus-visible:ring-2 focus-visible:ring-violet-400 focus-visible:border-violet-500 outline-none transition resize-none"
                   />
                 </div>
 
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
-                  <span className="text-xs text-slate-400 font-mono flex items-center gap-1.5">
-                    <Mail className="w-3.5 h-3.5 text-cyan-400" />
+                  <span className="text-xs text-[#647084] dark:text-slate-400 font-mono flex items-center gap-1.5">
+                    <Mail className="w-3.5 h-3.5 text-[#7552D9] dark:text-cyan-400" />
                     <span>Sent to {LAUNCHBYTE_SOCIALS.email}</span>
                   </span>
 

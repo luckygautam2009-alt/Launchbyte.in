@@ -13,7 +13,7 @@ export default function DashboardLoading() {
         {[...Array(4)].map((_, i) => (
           <div
             key={i}
-            className="rounded-2xl border border-white/[0.07] bg-[#0c0d1d]/80 p-5 space-y-2"
+            className="rounded-2xl border border-slate-200 dark:border-white/[0.07] bg-white/80 dark:bg-[#0c0d1d]/80 p-5 space-y-2"
           >
             <div className="h-3 w-20 bg-white/[0.04] rounded" />
             <div className="h-7 w-16 bg-white/[0.08] rounded" />
@@ -23,8 +23,8 @@ export default function DashboardLoading() {
 
       {/* Main dashboard content sections */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 rounded-2xl border border-white/[0.07] bg-[#0c0d1d]/80 p-6 h-80" />
-        <div className="rounded-2xl border border-white/[0.07] bg-[#0c0d1d]/80 p-6 h-80" />
+        <div className="lg:col-span-2 rounded-2xl border border-slate-200 dark:border-white/[0.07] bg-white/80 dark:bg-[#0c0d1d]/80 p-6 h-80" />
+        <div className="rounded-2xl border border-slate-200 dark:border-white/[0.07] bg-white/80 dark:bg-[#0c0d1d]/80 p-6 h-80" />
       </div>
     </div>
   );

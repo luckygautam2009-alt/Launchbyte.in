@@ -37,13 +37,13 @@ function CommunityNodeCard({
     <div
       className={`relative h-full p-5 sm:p-6 rounded-2xl backdrop-blur-md transition-all duration-300 flex flex-col justify-between gap-4 border ${
         isHovered
-          ? "bg-[#0D0D26]/90 border-cyan-400/60 shadow-[0_12px_40px_-10px_rgba(34,211,238,0.35),0_0_25px_-5px_rgba(139,92,246,0.4)] -translate-y-1 scale-[1.02]"
-          : "bg-[#09091B]/75 border-violet-500/20 shadow-[0_8px_30px_rgba(0,0,0,0.45)] hover:border-violet-400/40"
+          ? "bg-white dark:bg-[#0D0D26]/90 border-violet-400 dark:border-cyan-400/60 shadow-xl shadow-violet-500/15 dark:shadow-[0_12px_40px_-10px_rgba(34,211,238,0.35),0_0_25px_-5px_rgba(139,92,246,0.4)] -translate-y-1 scale-[1.02]"
+          : "bg-white/85 dark:bg-[#09091B]/75 border-slate-200 dark:border-violet-500/20 shadow-sm dark:shadow-[0_8px_30px_rgba(0,0,0,0.45)] hover:border-violet-300 dark:hover:border-violet-400/40"
       }`}
     >
       {/* Subtle hover corner glow */}
       <div
-        className={`absolute inset-0 rounded-2xl bg-gradient-to-br from-violet-600/10 via-transparent to-cyan-500/10 pointer-events-none transition-opacity duration-300 ${
+        className={`absolute inset-0 rounded-2xl bg-gradient-to-br from-violet-500/10 via-transparent to-cyan-500/10 pointer-events-none transition-opacity duration-300 ${
           isHovered ? "opacity-100" : "opacity-0"
         }`}
       />
@@ -55,14 +55,14 @@ function CommunityNodeCard({
               <img
                 src={community.logoUrl}
                 alt={`${community.name} logo`}
-                className="w-10 h-10 rounded-xl object-contain bg-slate-900/80 border border-white/10 p-1.5 shrink-0"
+                className="w-10 h-10 rounded-xl object-contain bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-white/10 p-1.5 shrink-0"
               />
             ) : (
               <div
                 className={`w-10 h-10 rounded-xl border flex items-center justify-center font-mono font-bold text-xs shrink-0 transition-colors duration-300 ${
                   isHovered
-                    ? "bg-cyan-950/70 border-cyan-400/50 text-cyan-200"
-                    : "bg-violet-950/70 border-violet-500/30 text-violet-200"
+                    ? "bg-violet-100 dark:bg-cyan-950/70 border-violet-300 dark:border-cyan-400/50 text-[#7552D9] dark:text-cyan-200"
+                    : "bg-slate-100 dark:bg-violet-950/70 border-slate-200 dark:border-violet-500/30 text-[#7552D9] dark:text-violet-200"
                 }`}
               >
                 {monogram || <Network className="w-4 h-4" />}
@@ -70,11 +70,11 @@ function CommunityNodeCard({
             )}
             <div className="min-w-0">
               {community.shortLabel && (
-                <span className="text-[10px] font-mono uppercase tracking-wider text-violet-300/80 block">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-[#7552D9] dark:text-violet-300/80 block">
                   {community.shortLabel}
                 </span>
               )}
-              <h3 className="text-base sm:text-lg font-bold text-white leading-snug group-hover:text-cyan-100 transition-colors">
+              <h3 className="text-base sm:text-lg font-bold text-[#17172B] dark:text-white leading-snug group-hover:text-[#7552D9] dark:group-hover:text-cyan-100 transition-colors">
                 {community.name}
               </h3>
             </div>
@@ -84,25 +84,25 @@ function CommunityNodeCard({
             <ExternalLink
               className={`w-4 h-4 shrink-0 mt-1 transition-all duration-300 ${
                 isHovered
-                  ? "text-cyan-300 scale-110 translate-x-0.5 -translate-y-0.5"
-                  : "text-slate-500"
+                  ? "text-[#7552D9] dark:text-cyan-300 scale-110 translate-x-0.5 -translate-y-0.5"
+                  : "text-[#647084] dark:text-slate-500"
               }`}
               aria-hidden="true"
             />
           )}
         </div>
 
-        <p className="text-xs sm:text-sm text-slate-300/85 leading-relaxed">
+        <p className="text-xs sm:text-sm text-[#424C63] dark:text-slate-300/85 leading-relaxed">
           {community.description}
         </p>
       </div>
 
       {community.url && (
-        <div className="relative z-10 pt-2 border-t border-white/[0.06] flex items-center justify-between text-[11px] font-mono">
-          <span className="text-slate-500">Student Developer Ecosystem</span>
+        <div className="relative z-10 pt-2 border-t border-slate-200 dark:border-white/[0.06] flex items-center justify-between text-[11px] font-mono">
+          <span className="text-[#647084] dark:text-slate-500">Student Developer Ecosystem</span>
           <span
             className={`transition-colors ${
-              isHovered ? "text-cyan-300" : "text-slate-400"
+              isHovered ? "text-[#7552D9] dark:text-cyan-300" : "text-[#59647A] dark:text-slate-400"
             }`}
           >
             Visit Website →
@@ -193,13 +193,13 @@ export default function PartnersLogoRow() {
         {/* Heading Block */}
         <Reveal>
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#17172B] dark:text-[#F8FAFC] tracking-tight">
               Connected Communities
             </h2>
-            <p className="text-lg sm:text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-violet-300 via-indigo-200 to-cyan-300">
+            <p className="text-lg sm:text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#7552D9] via-indigo-600 to-cyan-600 dark:from-violet-300 dark:via-indigo-200 dark:to-cyan-300">
               Together, We Build a Stronger Developer Ecosystem.
             </p>
-            <p className="text-sm sm:text-base text-slate-300/85 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-sm sm:text-base text-[#424C63] dark:text-slate-300/85 max-w-2xl mx-auto leading-relaxed">
               Discover communities, connect with fellow builders and explore the wider student developer ecosystem.
             </p>
           </div>

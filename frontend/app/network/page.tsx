@@ -155,7 +155,7 @@ export default function NetworkPage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-[#050510]">
+      <div className="min-h-screen bg-transparent dark:bg-[#050510]">
         <PageHero
           eyebrow="BUILDER NETWORK"
           title={

@@ -43,7 +43,7 @@ export default function AboutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050510] text-[#CBD5E1]">
+    <div className="min-h-screen bg-transparent dark:bg-[#050510] text-[#424C63] dark:text-[#CBD5E1]">
       {/* 1. PageHero */}
       <PageHero
         eyebrow="THE LAUNCHBYTE STORY"
@@ -63,14 +63,14 @@ export default function AboutPage() {
         {/* 2. Our Story Timeline */}
         <section className="space-y-12">
           <div className="text-center max-w-2xl mx-auto space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-950/70 border border-violet-500/30 text-xs font-mono uppercase tracking-widest text-[#A78BFA]">
-              <Target className="w-3.5 h-3.5 text-cyan-400" />
-              <span>TRAJECTORY & MILESTONES</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-100 dark:bg-violet-950/70 border border-violet-200 dark:border-violet-500/30 text-xs font-mono uppercase tracking-widest text-[#7552D9] dark:text-[#A78BFA]">
+              <Target className="w-3.5 h-3.5 text-[#7552D9] dark:text-cyan-400" />
+              <span>TRAJECTORY &amp; MILESTONES</span>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#F8FAFC] tracking-tight">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-[#17172B] dark:text-[#F8FAFC] tracking-tight">
               Our Journey So Far
             </h2>
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-[#566178] dark:text-slate-400">
               From an internal campus sprint tool to an interconnected student builder network.
             </p>
           </div>

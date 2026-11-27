@@ -74,13 +74,13 @@ export default function MyRegistrationsPage() {
     : registrations;
 
   if (authLoading) return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+    <div className="min-h-screen bg-transparent dark:bg-slate-950 flex items-center justify-center">
       <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
     </div>
   );
 
   return (
-    <main className="min-h-screen bg-slate-950">
+    <main className="min-h-screen bg-transparent dark:bg-slate-950">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white">My Registrations</h1>

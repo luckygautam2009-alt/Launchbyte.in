@@ -294,13 +294,13 @@ export default function EventDetailPage() {
   };
 
   if (loading) return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+    <div className="min-h-screen bg-transparent dark:bg-slate-950 flex items-center justify-center">
       <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
     </div>
   );
 
   if (error || !event) return (
-    <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4">
+    <div className="min-h-screen bg-transparent dark:bg-slate-950 flex flex-col items-center justify-center gap-4">
       <AlertCircle className="w-10 h-10 text-red-400" />
       <p className="text-slate-400">{error || "Event not found"}</p>
       <Link href="/events" className="text-indigo-400 hover:text-indigo-300 underline text-sm">Browse events</Link>
@@ -317,7 +317,7 @@ export default function EventDetailPage() {
     : null;
 
   return (
-    <main className="min-h-screen bg-slate-950">
+    <main className="min-h-screen bg-transparent dark:bg-slate-950">
       {showModal && (
         <RegistrationModal
           event={event}

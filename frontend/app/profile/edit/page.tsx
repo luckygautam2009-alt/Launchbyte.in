@@ -205,14 +205,14 @@ export default function ProfileEditPage() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-transparent dark:bg-slate-950 flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-brand-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-transparent dark:bg-slate-950 text-slate-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-6">

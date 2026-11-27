@@ -208,20 +208,20 @@ function TeamMemberBlock({
           className="w-full lg:w-[50%] space-y-6 text-left"
         >
           {/* Subtle Numeric Index */}
-          <div className="font-mono text-xs uppercase tracking-widest text-cyan-400/90 font-semibold">
+          <div className="font-mono text-xs uppercase tracking-widest text-[#7552D9] dark:text-cyan-400/90 font-semibold">
             {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
           </div>
 
           {/* Name & Role */}
           <div className="space-y-2">
-            <h3 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-[#F8FAFC] tracking-tight leading-[1.12]">
+            <h3 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-[#17172B] dark:text-[#F8FAFC] tracking-tight leading-[1.12]">
               {member.name}
             </h3>
-            <p className="font-mono text-xs sm:text-sm uppercase tracking-wider font-semibold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-indigo-300 to-cyan-300">
+            <p className="font-mono text-xs sm:text-sm uppercase tracking-wider font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#7552D9] via-indigo-600 to-cyan-600 dark:from-violet-400 dark:via-indigo-300 dark:to-cyan-300">
               {member.role}
             </p>
             {member.title && (
-              <p className="font-mono text-xs sm:text-sm text-cyan-300/90 font-medium tracking-wide">
+              <p className="font-mono text-xs sm:text-sm text-cyan-700 dark:text-cyan-300/90 font-medium tracking-wide">
                 {member.title}
               </p>
             )}
@@ -229,22 +229,22 @@ function TeamMemberBlock({
 
           {/* Tagline / Core Quote */}
           {member.tagline && (
-            <blockquote className="border-l-2 border-violet-500/60 pl-4 py-1 text-base sm:text-lg text-slate-200/95 italic font-medium leading-relaxed">
+            <blockquote className="border-l-2 border-[#7552D9] dark:border-violet-500/60 pl-4 py-1 text-base sm:text-lg text-[#252642] dark:text-slate-200/95 italic font-medium leading-relaxed">
               “{member.tagline}”
             </blockquote>
           )}
 
           {/* Professional Biography */}
-          <p className="text-base sm:text-lg text-slate-300/90 leading-relaxed font-normal max-w-xl">
+          <p className="text-base sm:text-lg text-[#424C63] dark:text-slate-300/90 leading-relaxed font-normal max-w-xl">
             {member.bio}
           </p>
 
           {/* Key Achievements & Project Highlights (Typography List — NOT cards) */}
           {member.highlights && member.highlights.length > 0 && (
             <div className="pt-2 space-y-3">
-              <div className="text-[11px] font-mono uppercase tracking-widest text-slate-400/90 flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400/70" />
-                <span>PROJECTS & PLATFORMS</span>
+              <div className="text-[11px] font-mono uppercase tracking-widest text-[#647084] dark:text-slate-400/90 flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#7552D9] dark:bg-cyan-400/70" />
+                <span>PROJECTS &amp; PLATFORMS</span>
               </div>
               <div className="space-y-3 pt-1">
                 {member.highlights.map((h) => (
@@ -252,21 +252,21 @@ function TeamMemberBlock({
                     key={h.id}
                     className="group/item flex items-start gap-3 sm:gap-4 transition-colors"
                   >
-                    <span className="font-mono text-xs text-cyan-400/90 font-bold pt-0.5 tracking-wider select-none">
+                    <span className="font-mono text-xs text-[#7552D9] dark:text-cyan-400/90 font-bold pt-0.5 tracking-wider select-none">
                       {h.id} —
                     </span>
                     <div className="space-y-0.5">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-sm font-semibold tracking-wide text-white group-hover/item:text-cyan-300 transition-colors">
+                        <span className="text-sm font-semibold tracking-wide text-[#17172B] group-hover/item:text-[#7552D9] dark:text-white dark:group-hover/item:text-cyan-300 transition-colors">
                           {h.title}
                         </span>
                         {h.role && (
-                          <span className="text-[10px] font-mono tracking-wider text-slate-400 px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.08]">
+                          <span className="text-[10px] font-mono tracking-wider text-[#59647A] dark:text-slate-400 px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.08]">
                             {h.role}
                           </span>
                         )}
                       </div>
-                      <p className="text-xs sm:text-sm text-slate-300/75 leading-relaxed">
+                      <p className="text-xs sm:text-sm text-[#424C63] dark:text-slate-300/75 leading-relaxed">
                         {h.description}
                       </p>
                     </div>
@@ -278,18 +278,18 @@ function TeamMemberBlock({
 
           {/* Relevant Focus Areas / Expertise Domains */}
           {((member.focus && member.focus.length > 0) || (member.skills && member.skills.length > 0)) && (
-            <div className="pt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs font-mono text-slate-300/90">
-              <span className="text-[11px] uppercase tracking-wider text-slate-400 mr-1 select-none">
+            <div className="pt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs font-mono text-[#424C63] dark:text-slate-300/90">
+              <span className="text-[11px] uppercase tracking-wider text-[#647084] dark:text-slate-400 mr-1 select-none">
                 FOCUS AREAS:
               </span>
               {(member.focus || member.skills)!.map((s, idx) => (
                 <span key={idx} className="inline-flex items-center gap-2">
                   {idx > 0 && (
-                    <span className="text-cyan-400/60 font-bold select-none">
+                    <span className="text-[#7552D9]/60 dark:text-cyan-400/60 font-bold select-none">
                       /
                     </span>
                   )}
-                  <span className="text-slate-300 hover:text-white transition-colors">
+                  <span className="text-[#252642] hover:text-[#7552D9] dark:text-slate-300 dark:hover:text-white transition-colors">
                     {s}
                   </span>
                 </span>
@@ -307,7 +307,7 @@ function TeamMemberBlock({
                   rel="noopener noreferrer"
                   aria-label={`${member.name}'s LinkedIn profile`}
                   title="LinkedIn"
-                  className="w-11 h-11 flex items-center justify-center rounded-xl bg-violet-950/40 border border-violet-500/25 text-slate-400 hover:text-cyan-300 hover:border-cyan-400/50 hover:bg-violet-900/40 transition-all duration-200"
+                  className="w-11 h-11 flex items-center justify-center rounded-xl bg-white/90 dark:bg-violet-950/40 border border-violet-200 dark:border-violet-500/25 text-[#424C63] dark:text-slate-400 hover:text-[#7552D9] dark:hover:text-cyan-300 hover:border-violet-400 dark:hover:border-cyan-400/50 hover:bg-violet-50 dark:hover:bg-violet-900/40 shadow-sm dark:shadow-none transition-all duration-200"
                 >
                   <Linkedin className="w-4 h-4" />
                 </a>
@@ -319,7 +319,7 @@ function TeamMemberBlock({
                   rel="noopener noreferrer"
                   aria-label={`${member.name}'s GitHub profile`}
                   title="GitHub"
-                  className="w-11 h-11 flex items-center justify-center rounded-xl bg-violet-950/40 border border-violet-500/25 text-slate-400 hover:text-cyan-300 hover:border-cyan-400/50 hover:bg-violet-900/40 transition-all duration-200"
+                  className="w-11 h-11 flex items-center justify-center rounded-xl bg-white/90 dark:bg-violet-950/40 border border-violet-200 dark:border-violet-500/25 text-[#424C63] dark:text-slate-400 hover:text-[#7552D9] dark:hover:text-cyan-300 hover:border-violet-400 dark:hover:border-cyan-400/50 hover:bg-violet-50 dark:hover:bg-violet-900/40 shadow-sm dark:shadow-none transition-all duration-200"
                 >
                   <Github className="w-4 h-4" />
                 </a>
@@ -331,7 +331,7 @@ function TeamMemberBlock({
                   rel="noopener noreferrer"
                   aria-label={`${member.name}'s Portfolio website`}
                   title="Portfolio"
-                  className="w-11 h-11 flex items-center justify-center rounded-xl bg-violet-950/40 border border-violet-500/25 text-slate-400 hover:text-cyan-300 hover:border-cyan-400/50 hover:bg-violet-900/40 transition-all duration-200"
+                  className="w-11 h-11 flex items-center justify-center rounded-xl bg-white/90 dark:bg-violet-950/40 border border-violet-200 dark:border-violet-500/25 text-[#424C63] dark:text-slate-400 hover:text-[#7552D9] dark:hover:text-cyan-300 hover:border-violet-400 dark:hover:border-cyan-400/50 hover:bg-violet-50 dark:hover:bg-violet-900/40 shadow-sm dark:shadow-none transition-all duration-200"
                 >
                   <Globe className="w-4 h-4" />
                 </a>
@@ -343,7 +343,7 @@ function TeamMemberBlock({
                   rel="noopener noreferrer"
                   aria-label={`${member.name}'s Instagram profile`}
                   title="Instagram"
-                  className="w-11 h-11 flex items-center justify-center rounded-xl bg-violet-950/40 border border-violet-500/25 text-slate-400 hover:text-cyan-300 hover:border-cyan-400/50 hover:bg-violet-900/40 transition-all duration-200"
+                  className="w-11 h-11 flex items-center justify-center rounded-xl bg-white/90 dark:bg-violet-950/40 border border-violet-200 dark:border-violet-500/25 text-[#424C63] dark:text-slate-400 hover:text-[#7552D9] dark:hover:text-cyan-300 hover:border-violet-400 dark:hover:border-cyan-400/50 hover:bg-violet-50 dark:hover:bg-violet-900/40 shadow-sm dark:shadow-none transition-all duration-200"
                 >
                   <Instagram className="w-4 h-4" />
                 </a>
@@ -355,7 +355,7 @@ function TeamMemberBlock({
                   rel="noopener noreferrer"
                   aria-label={`${member.name}'s X profile`}
                   title="X"
-                  className="p-2.5 rounded-xl bg-violet-950/40 border border-violet-500/25 text-slate-400 hover:text-cyan-300 hover:border-cyan-400/50 hover:bg-violet-900/40 transition-all duration-200"
+                  className="w-11 h-11 flex items-center justify-center rounded-xl bg-white/90 dark:bg-violet-950/40 border border-violet-200 dark:border-violet-500/25 text-[#424C63] dark:text-slate-400 hover:text-[#7552D9] dark:hover:text-cyan-300 hover:border-violet-400 dark:hover:border-cyan-400/50 hover:bg-violet-50 dark:hover:bg-violet-900/40 shadow-sm dark:shadow-none transition-all duration-200"
                 >
                   <Twitter className="w-4 h-4" />
                 </a>
@@ -439,9 +439,9 @@ export default function CoreTeamSection({
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 sm:pb-14 text-center space-y-4">
         <RevealHeading
           text={title}
-          className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#F8FAFC] tracking-tight"
+          className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#17172B] dark:text-[#F8FAFC] tracking-tight"
         />
-        <p className="text-sm sm:text-base text-[#CBD5E1] leading-relaxed max-w-2xl mx-auto">
+        <p className="text-sm sm:text-base text-[#424C63] dark:text-[#CBD5E1] leading-relaxed max-w-2xl mx-auto">
           {subtitle}
         </p>
       </div>

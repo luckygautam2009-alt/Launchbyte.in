@@ -96,7 +96,7 @@ export default function OpportunityCard({
   return (
     <motion.div
       whileHover={cardInteractive.whileHover}
-      className="group relative rounded-2xl border border-slate-800/90 bg-slate-900/60 hover:bg-slate-900/90 hover:border-slate-700/80 transition-colors duration-200 p-5 flex flex-col justify-between shadow-sm hover:shadow-xl hover:shadow-brand-950/20"
+      className="group relative rounded-2xl border border-slate-200 dark:border-slate-800/90 bg-white/85 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-900/90 hover:border-violet-300 dark:hover:border-slate-700/80 backdrop-blur-sm transition-colors duration-200 p-5 flex flex-col justify-between shadow-sm hover:shadow-lg dark:hover:shadow-brand-950/20"
     >
       <div>
         {/* Top Header: Org info + Trust Badge + Save */}
@@ -107,11 +107,11 @@ export default function OpportunityCard({
               name={opportunity.organization.name}
               size="md"
               shape="rounded"
-              className="border border-slate-750 text-slate-400"
+              className="border border-slate-200 dark:border-slate-750 text-slate-400 bg-slate-50 dark:bg-slate-900"
               fallback={<Building className="w-5 h-5" />}
             />
             <div>
-              <p className="text-xs font-semibold text-slate-400 group-hover:text-slate-300 line-clamp-1">
+              <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-slate-300 line-clamp-1">
                 {opportunity.organization.name}
               </p>
               <div className="flex items-center gap-1.5 mt-0.5">
@@ -133,8 +133,8 @@ export default function OpportunityCard({
               aria-label={isSaved ? "Remove from bookmarks" : "Save opportunity"}
               className={`p-2 rounded-xl transition cursor-pointer ${
                 isSaved
-                  ? "text-brand-400 bg-brand-950/80 border border-brand-800"
-                  : "text-slate-400 hover:text-white hover:bg-slate-800 border border-transparent"
+                  ? "text-brand-600 dark:text-brand-400 bg-violet-50 dark:bg-brand-950/80 border border-violet-200 dark:border-brand-800"
+                  : "text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 border border-transparent"
               }`}
             >
               <Bookmark className={`w-4 h-4 ${isSaved ? "fill-current" : ""}`} />
@@ -144,49 +144,49 @@ export default function OpportunityCard({
 
         {/* Title */}
         <Link href={`/opportunities/${opportunity.slug}`} className="block group-hover:underline">
-          <h3 className="text-base font-bold text-white line-clamp-1 mb-1.5">
+          <h3 className="text-base font-bold text-slate-900 dark:text-white line-clamp-1 mb-1.5">
             {opportunity.title}
           </h3>
         </Link>
 
         {/* Summary */}
-        <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed mb-4">
+        <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed mb-4">
           {opportunity.summary || "No summary provided. Click to view requirements, dates, and application details."}
         </p>
       </div>
 
       <div>
         {/* Meta Pills */}
-        <div className="flex flex-wrap items-center gap-2 mb-4 text-[11px] font-medium text-slate-300">
+        <div className="flex flex-wrap items-center gap-2 mb-4 text-[11px] font-medium text-slate-600 dark:text-slate-300">
           <Badge variant="brand" size="sm">
             {opportunity.type.toUpperCase()}
           </Badge>
 
-          <span className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800/70 border border-slate-800 text-[11px]">
+          <span className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-800 text-[11px]">
             {opportunity.location_type === "remote" ? (
-              <Globe className="w-3 h-3 text-sky-400" />
+              <Globe className="w-3 h-3 text-sky-500 dark:text-sky-400" />
             ) : (
-              <MapPin className="w-3 h-3 text-amber-400" />
+              <MapPin className="w-3 h-3 text-amber-500 dark:text-amber-400" />
             )}
             {opportunity.location_text || opportunity.location_type || "Remote"}
           </span>
 
-          <span className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800/70 border border-slate-800 text-emerald-300 text-[11px]">
+          <span className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-800 text-emerald-600 dark:text-emerald-300 text-[11px]">
             <DollarSign className="w-3 h-3" />
             {getCompensationText()}
           </span>
         </div>
 
         {/* Footer: Tags + Deadline + View link */}
-        <div className="pt-3 border-t border-slate-800/60 flex items-center justify-between text-xs">
-          <span className="flex items-center gap-1.5 text-slate-400">
+        <div className="pt-3 border-t border-slate-200 dark:border-slate-800/60 flex items-center justify-between text-xs">
+          <span className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
             <Calendar className="w-3.5 h-3.5" />
             {formatDeadline(opportunity.deadline_at, opportunity.is_rolling)}
           </span>
 
           <Link
             href={`/opportunities/${opportunity.slug}`}
-            className="text-brand-400 hover:text-brand-300 font-semibold transition"
+            className="text-violet-600 hover:text-violet-700 dark:text-brand-400 dark:hover:text-brand-300 font-semibold transition"
           >
             View details →
           </Link>

@@ -12,7 +12,7 @@ export default function PeopleLoading() {
         {[...Array(8)].map((_, i) => (
           <div
             key={i}
-            className="rounded-2xl border border-white/[0.07] bg-[#0c0d1d]/80 p-5 text-center space-y-4"
+            className="rounded-2xl border border-slate-200 dark:border-white/[0.07] bg-white/80 dark:bg-[#0c0d1d]/80 p-5 text-center space-y-4"
           >
             <div className="w-20 h-20 rounded-full bg-white/[0.08] mx-auto" />
             <div className="space-y-2">

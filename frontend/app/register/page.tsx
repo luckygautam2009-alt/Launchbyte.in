@@ -94,65 +94,65 @@ function RegisterForm() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-slate-900/80 border border-slate-800 p-8 rounded-2xl shadow-2xl backdrop-blur-sm">
+      <div className="max-w-md w-full space-y-8 bg-white/90 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 p-8 rounded-2xl shadow-xl dark:shadow-2xl backdrop-blur-sm">
         <div className="text-center">
-          <div className="inline-flex p-3 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 mb-4">
+          <div className="inline-flex p-3 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20 text-[#7552D9] dark:text-indigo-400 mb-4">
             <UserPlus className="w-8 h-8" />
           </div>
-          <h2 className="text-3xl font-extrabold text-white tracking-tight">
+          <h2 className="text-3xl font-extrabold text-[#17172B] dark:text-white tracking-tight">
             Create an Account
           </h2>
-          <p className="mt-2 text-sm text-slate-400">
+          <p className="mt-2 text-sm text-[#566178] dark:text-slate-400">
             Join the community of verified hackers and ambitious builders
           </p>
         </div>
 
         {errorMsg && (
-          <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-sm text-center">
+          <div className="p-3.5 rounded-xl bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/30 text-rose-700 dark:text-rose-400 text-sm text-center">
             {errorMsg}
           </div>
         )}
 
         <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#59647A] dark:text-slate-400 mb-2">
               Full Name
             </label>
             <div className="relative">
-              <UserIcon className="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+              <UserIcon className="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Ada Lovelace"
-                className="w-full pl-11 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition text-sm"
+                className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-[#17172B] dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition text-sm"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#59647A] dark:text-slate-400 mb-2">
               Email Address
             </label>
             <div className="relative">
-              <Mail className="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+              <Mail className="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="ada@example.com"
-                className="w-full pl-11 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition text-sm"
+                className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-[#17172B] dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition text-sm"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#59647A] dark:text-slate-400 mb-2">
               Password (8+ chars)
             </label>
             <div className="relative">
-              <Lock className="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+              <Lock className="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
               <input
                 type="password"
                 required
@@ -160,17 +160,17 @@ function RegisterForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-11 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition text-sm"
+                className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-[#17172B] dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition text-sm"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#59647A] dark:text-slate-400 mb-2">
               Confirm Password
             </label>
             <div className="relative">
-              <CheckCircle2 className="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+              <CheckCircle2 className="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
               <input
                 type="password"
                 required
@@ -178,7 +178,7 @@ function RegisterForm() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-11 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition text-sm"
+                className="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl text-[#17172B] dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition text-sm"
               />
             </div>
           </div>
@@ -202,12 +202,12 @@ function RegisterForm() {
           </button>
         </form>
 
-        <div className="text-center pt-2 border-t border-slate-800">
-          <p className="text-sm text-slate-400">
+        <div className="text-center pt-2 border-t border-slate-200 dark:border-slate-800">
+          <p className="text-sm text-[#566178] dark:text-slate-400">
             Already have an account?{" "}
             <Link
               href={loginHref}
-              className="text-indigo-400 font-medium hover:text-indigo-300 transition"
+              className="text-[#7552D9] font-medium hover:text-[#5B39B8] dark:text-indigo-400 dark:hover:text-indigo-300 transition"
             >
               Sign in here
             </Link>

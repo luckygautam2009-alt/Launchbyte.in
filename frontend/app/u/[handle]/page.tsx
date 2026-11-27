@@ -49,7 +49,7 @@ export default function PublicProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-transparent dark:bg-slate-950 flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-brand-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -57,7 +57,7 @@ export default function PublicProfilePage() {
 
   if (error || !profile) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-transparent dark:bg-slate-950 text-slate-100 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-slate-900/60 border border-slate-800 rounded-2xl p-8 text-center space-y-4">
           <div className="w-12 h-12 rounded-full bg-red-950/60 border border-red-800 flex items-center justify-center mx-auto text-red-400">
             <AlertCircle className="w-6 h-6" />
@@ -80,7 +80,7 @@ export default function PublicProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-transparent dark:bg-slate-950 text-slate-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Hero Card */}
         <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-8 relative overflow-hidden">

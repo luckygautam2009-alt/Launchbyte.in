@@ -191,13 +191,13 @@ export default function AdminEventDetailPage() {
   };
 
   if (authLoading || loading) return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+    <div className="min-h-screen bg-transparent dark:bg-slate-950 flex items-center justify-center">
       <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
     </div>
   );
 
   if (error || !event) return (
-    <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4">
+    <div className="min-h-screen bg-transparent dark:bg-slate-950 flex flex-col items-center justify-center gap-4">
       <AlertCircle className="w-10 h-10 text-red-400" />
       <p className="text-slate-400">{error}</p>
       <Link href="/admin/events" className="text-indigo-400 underline text-sm">Back to Events</Link>
@@ -205,7 +205,7 @@ export default function AdminEventDetailPage() {
   );
 
   return (
-    <main className="min-h-screen bg-slate-950">
+    <main className="min-h-screen bg-transparent dark:bg-slate-950">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
         <div>
           <Link href="/admin/events" className="text-xs text-slate-500 hover:text-slate-300 mb-2 flex items-center gap-1 transition-colors">

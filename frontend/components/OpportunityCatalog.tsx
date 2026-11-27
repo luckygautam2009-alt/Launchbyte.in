@@ -228,12 +228,12 @@ export default function OpportunityCatalog({
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       {/* Title & Header */}
       {!hideHeader && (
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-slate-800">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-slate-200 dark:border-slate-800">
           <div>
-            <h1 className="text-3xl font-extrabold text-white tracking-tight sm:text-4xl">
+            <h1 className="text-3xl font-extrabold text-[#17172B] dark:text-white tracking-tight sm:text-4xl">
               {title}
             </h1>
-            <p className="mt-1.5 text-sm text-slate-400 max-w-2xl">{subtitle}</p>
+            <p className="mt-1.5 text-sm text-[#424C63] dark:text-slate-400 max-w-2xl">{subtitle}</p>
           </div>
 
           {/* Search Bar */}
@@ -244,9 +244,9 @@ export default function OpportunityCatalog({
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search title, tech, company..."
               aria-label="Search opportunities by title, tech, or company"
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500 transition"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-slate-900/90 border border-slate-300 dark:border-slate-800 text-sm text-[#17172B] dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500 transition shadow-sm dark:shadow-none"
             />
-            <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" />
+            <Search className="w-4 h-4 text-slate-400 dark:text-slate-500 absolute left-3.5 top-3.5" />
             {q && (
               <button
                 type="button"
@@ -255,7 +255,7 @@ export default function OpportunityCatalog({
                   applyFilters({ q: "" });
                 }}
                 aria-label="Clear search query"
-                className="absolute right-3 top-3 text-slate-400 hover:text-white"
+                className="absolute right-3 top-3 text-slate-400 hover:text-slate-800 dark:hover:text-white"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -270,7 +270,7 @@ export default function OpportunityCatalog({
         <div className="lg:hidden flex flex-wrap items-center justify-between gap-2 pb-2">
           <button
             onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
-            className="min-h-[44px] flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-sm font-medium text-slate-200"
+            className="min-h-[44px] flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-sm font-medium text-[#17172B] dark:text-slate-200 shadow-sm dark:shadow-none"
           >
             <SlidersHorizontal className="w-4 h-4" />
             Filters {selectedTypes.length + selectedTags.length > 0 && `(${selectedTypes.length + selectedTags.length})`}
@@ -284,7 +284,7 @@ export default function OpportunityCatalog({
               applyFilters({ sort: e.target.value });
             }}
             aria-label="Sort opportunities"
-            className="min-h-[44px] flex-1 sm:flex-none bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-sm text-slate-200 focus:outline-none"
+            className="min-h-[44px] flex-1 sm:flex-none bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-xl px-3 py-2 text-sm text-[#17172B] dark:text-slate-200 focus:outline-none shadow-sm dark:shadow-none"
           >
             <option value="deadline">Soonest Deadline</option>
             <option value="newest">Recently Published</option>
@@ -297,16 +297,16 @@ export default function OpportunityCatalog({
         <aside
           className={`lg:block ${
             mobileFilterOpen ? "block" : "hidden"
-          } space-y-6 lg:border-r lg:border-slate-800/80 lg:pr-6`}
+          } space-y-6 lg:border-r lg:border-slate-200 dark:lg:border-slate-800/80 lg:pr-6`}
         >
           <div className="flex items-center justify-between">
-            <h3 className="font-bold text-sm text-white flex items-center gap-2">
-              <Filter className="w-4 h-4 text-brand-400" />
+            <h3 className="font-bold text-sm text-[#17172B] dark:text-white flex items-center gap-2">
+              <Filter className="w-4 h-4 text-[#7552D9] dark:text-brand-400" />
               Filter Postings
             </h3>
             <button
               onClick={handleReset}
-              className="text-xs text-slate-400 hover:text-brand-300 flex items-center gap-1"
+              className="text-xs text-[#647084] hover:text-[#7552D9] dark:text-slate-400 dark:hover:text-brand-300 flex items-center gap-1"
             >
               <RotateCcw className="w-3 h-3" />
               Reset all
@@ -314,9 +314,9 @@ export default function OpportunityCatalog({
           </div>
 
           {/* Open Only Switch */}
-          <div className="p-3 rounded-xl bg-slate-900/50 border border-slate-800 flex items-center justify-between">
-            <span className="text-xs font-semibold text-slate-200">
-              Open & Active Only
+          <div className="p-3 rounded-xl bg-white/85 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 flex items-center justify-between shadow-sm dark:shadow-none">
+            <span className="text-xs font-semibold text-[#17172B] dark:text-slate-200">
+              Open &amp; Active Only
             </span>
             <input
               type="checkbox"
@@ -326,14 +326,14 @@ export default function OpportunityCatalog({
                 applyFilters({ open_only: e.target.checked });
               }}
               aria-label="Filter open and active opportunities only"
-              className="h-4 w-4 rounded border-slate-700 bg-slate-800 text-brand-500 focus:ring-brand-500"
+              className="h-4 w-4 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-brand-500 focus:ring-brand-500"
             />
           </div>
 
           {/* Type Filter (hidden if fixedType is set) */}
           {!fixedType && (
             <div className="space-y-2">
-              <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+              <label className="text-xs font-semibold uppercase tracking-wider text-[#59647A] dark:text-slate-400">
                 Opportunity Type
               </label>
               <div className="flex flex-wrap gap-1.5">
@@ -346,8 +346,8 @@ export default function OpportunityCatalog({
                       onClick={() => handleTypeToggle(t)}
                       className={`min-h-[36px] px-3 py-1.5 rounded-lg text-xs font-medium border transition ${
                         active
-                          ? "bg-brand-950 text-brand-300 border-brand-700 font-semibold"
-                          : "bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-700"
+                          ? "bg-violet-100 text-[#7552D9] border-violet-300 dark:bg-brand-950 dark:text-brand-300 dark:border-brand-700 font-semibold"
+                          : "bg-white dark:bg-slate-900 text-[#424C63] dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:border-violet-300 dark:hover:border-slate-700"
                       }`}
                     >
                       {t}
@@ -360,7 +360,7 @@ export default function OpportunityCatalog({
 
           {/* Location Type */}
           <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <label className="text-xs font-semibold uppercase tracking-wider text-[#59647A] dark:text-slate-400">
               Location Mode
             </label>
             <div className="flex flex-wrap gap-1.5">
@@ -377,8 +377,8 @@ export default function OpportunityCatalog({
                     }}
                     className={`min-h-[36px] px-3 py-1.5 rounded-lg text-xs font-medium border transition capitalize ${
                       active
-                        ? "bg-brand-950 text-brand-300 border-brand-700 font-semibold"
-                        : "bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-700"
+                        ? "bg-violet-100 text-[#7552D9] border-violet-300 dark:bg-brand-950 dark:text-brand-300 dark:border-brand-700 font-semibold"
+                        : "bg-white dark:bg-slate-900 text-[#424C63] dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:border-violet-300 dark:hover:border-slate-700"
                     }`}
                   >
                     {loc}
@@ -390,7 +390,7 @@ export default function OpportunityCatalog({
 
           {/* Compensation */}
           <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <label className="text-xs font-semibold uppercase tracking-wider text-[#59647A] dark:text-slate-400">
               Compensation
             </label>
             <div className="flex flex-wrap gap-1.5">
@@ -407,8 +407,8 @@ export default function OpportunityCatalog({
                     }}
                     className={`min-h-[36px] px-3 py-1.5 rounded-lg text-xs font-medium border transition capitalize ${
                       active
-                        ? "bg-brand-950 text-brand-300 border-brand-700 font-semibold"
-                        : "bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-700"
+                        ? "bg-violet-100 text-[#7552D9] border-violet-300 dark:bg-brand-950 dark:text-brand-300 dark:border-brand-700 font-semibold"
+                        : "bg-white dark:bg-slate-900 text-[#424C63] dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:border-violet-300 dark:hover:border-slate-700"
                     }`}
                   >
                     {c}
@@ -420,7 +420,7 @@ export default function OpportunityCatalog({
 
           {/* Verification Status */}
           <div className="space-y-2">
-            <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+            <label className="text-xs font-semibold uppercase tracking-wider text-[#59647A] dark:text-slate-400">
               Verification Badge
             </label>
             <div className="flex flex-wrap gap-1.5">
@@ -437,8 +437,8 @@ export default function OpportunityCatalog({
                     }}
                     className={`min-h-[36px] px-3 py-1.5 rounded-lg text-xs font-medium border transition capitalize ${
                       active
-                        ? "bg-brand-950 text-brand-300 border-brand-700 font-semibold"
-                        : "bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-700"
+                        ? "bg-violet-100 text-[#7552D9] border-violet-300 dark:bg-brand-950 dark:text-brand-300 dark:border-brand-700 font-semibold"
+                        : "bg-white dark:bg-slate-900 text-[#424C63] dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:border-violet-300 dark:hover:border-slate-700"
                     }`}
                   >
                     {v}
@@ -464,8 +464,8 @@ export default function OpportunityCatalog({
                       onClick={() => handleTagToggle(tag.slug)}
                       className={`px-2 py-0.5 rounded-md text-[11px] border transition ${
                         active
-                          ? "bg-brand-950 text-brand-300 border-brand-700 font-semibold"
-                          : "bg-slate-900/60 text-slate-400 border-slate-800 hover:border-slate-700"
+                          ? "bg-violet-100 text-[#7552D9] border-violet-300 dark:bg-brand-950 dark:text-brand-300 dark:border-brand-700 font-semibold"
+                          : "bg-white dark:bg-slate-900/60 text-[#424C63] dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:border-violet-300 dark:hover:border-slate-700"
                       }`}
                     >
                       #{tag.name} {tag.count !== undefined && `(${tag.count})`}
@@ -480,10 +480,10 @@ export default function OpportunityCatalog({
         {/* Catalog Content (Grid) */}
         <main className="lg:col-span-3 space-y-6">
           {/* Desktop Toolbar (Result Count & Sort) */}
-          <div className="hidden lg:flex items-center justify-between text-xs text-slate-400">
+          <div className="hidden lg:flex items-center justify-between text-xs text-[#647084] dark:text-slate-400">
             <span>
-              Showing <strong className="text-white">{items.length}</strong> of{" "}
-              <strong className="text-white">{total}</strong> opportunities
+              Showing <strong className="text-[#17172B] dark:text-white">{items.length}</strong> of{" "}
+              <strong className="text-[#17172B] dark:text-white">{total}</strong> opportunities
             </span>
 
             <div className="flex items-center gap-2">
@@ -495,7 +495,7 @@ export default function OpportunityCatalog({
                   applyFilters({ sort: e.target.value });
                 }}
                 aria-label="Sort opportunities"
-                className="bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1 text-slate-200 focus:outline-none"
+                className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 rounded-lg px-2.5 py-1 text-[#17172B] dark:text-slate-200 focus:outline-none shadow-sm dark:shadow-none"
               >
                 <option value="deadline">Soonest Deadline</option>
                 <option value="newest">Recently Published</option>
@@ -507,11 +507,11 @@ export default function OpportunityCatalog({
 
           {/* Error State */}
           {error && (
-            <div className="p-6 rounded-2xl bg-rose-950/40 border border-rose-900 text-center space-y-2">
-              <p className="text-sm font-semibold text-rose-300">{error}</p>
+            <div className="p-6 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-center space-y-2">
+              <p className="text-sm font-semibold text-rose-700 dark:text-rose-300">{error}</p>
               <button
                 onClick={handleReset}
-                className="text-xs text-rose-400 underline hover:text-white"
+                className="text-xs text-rose-600 dark:text-rose-400 underline hover:text-rose-900 dark:hover:text-white"
               >
                 Clear filters and retry
               </button>
@@ -524,7 +524,7 @@ export default function OpportunityCatalog({
               {[1, 2, 3, 4, 5, 6].map((n) => (
                 <div
                   key={n}
-                  className="h-64 rounded-2xl bg-slate-900/50 animate-pulse border border-slate-800"
+                  className="h-64 rounded-2xl bg-white/60 dark:bg-slate-900/50 animate-pulse border border-slate-200 dark:border-slate-800"
                 />
               ))}
             </div>
@@ -537,21 +537,21 @@ export default function OpportunityCatalog({
             </div>
           ) : (
             /* Empty State */
-            <div className="p-16 rounded-2xl bg-slate-900/30 border border-slate-800 text-center space-y-4">
-              <div className="w-12 h-12 rounded-2xl bg-slate-800 text-slate-400 flex items-center justify-center mx-auto">
+            <div className="p-16 rounded-2xl bg-white/80 dark:bg-slate-900/30 border border-slate-200 dark:border-slate-800 text-center space-y-4 shadow-sm dark:shadow-none">
+              <div className="w-12 h-12 rounded-2xl bg-violet-100 dark:bg-slate-800 text-[#7552D9] dark:text-slate-400 flex items-center justify-center mx-auto">
                 <Sparkles className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-white">
+                <h3 className="text-base font-bold text-[#17172B] dark:text-white">
                   No matching opportunities found
                 </h3>
-                <p className="text-xs text-slate-400 max-w-sm mx-auto mt-1">
+                <p className="text-xs text-[#647084] dark:text-slate-400 max-w-sm mx-auto mt-1">
                   Try adjusting your keywords, expanding your filter tags, or clearing specific constraints.
                 </p>
               </div>
               <button
                 onClick={handleReset}
-                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-white transition"
+                className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-xs font-semibold text-[#17172B] dark:text-white transition"
               >
                 Reset Filters
               </button>
@@ -564,20 +564,20 @@ export default function OpportunityCatalog({
               <button
                 disabled={pageParam <= 1}
                 onClick={() => applyFilters({ page: pageParam - 1 })}
-                className="p-2 rounded-xl border border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed transition"
+                className="p-2 rounded-xl border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-[#424C63] dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed transition"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
 
-              <span className="text-xs text-slate-400 px-3">
-                Page <strong className="text-white">{pageParam}</strong> of{" "}
-                <strong className="text-white">{totalPages}</strong>
+              <span className="text-xs text-[#647084] dark:text-slate-400 px-3">
+                Page <strong className="text-[#17172B] dark:text-white">{pageParam}</strong> of{" "}
+                <strong className="text-[#17172B] dark:text-white">{totalPages}</strong>
               </span>
 
               <button
                 disabled={pageParam >= totalPages}
                 onClick={() => applyFilters({ page: pageParam + 1 })}
-                className="p-2 rounded-xl border border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed transition"
+                className="p-2 rounded-xl border border-slate-300 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-[#424C63] dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed transition"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>

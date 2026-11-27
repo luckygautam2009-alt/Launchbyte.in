@@ -19,9 +19,9 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         className={clsx(
           "rounded-2xl border transition-all duration-200 relative overflow-hidden",
           glass
-            ? "bg-slate-900/75 border-slate-800/80 backdrop-blur-md"
-            : "bg-slate-900 border-slate-800",
-          hoverEffect && "hover:border-slate-700/80 hover:shadow-card cursor-pointer",
+            ? "bg-white/88 dark:bg-slate-900/75 border-slate-200 dark:border-slate-800/80 backdrop-blur-md shadow-sm dark:shadow-none"
+            : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-none",
+          hoverEffect && "hover:border-violet-300 dark:hover:border-slate-700/80 hover:shadow-md dark:hover:shadow-card cursor-pointer",
           className
         )}
         {...props}
