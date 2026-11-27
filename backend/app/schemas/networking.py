@@ -145,6 +145,19 @@ class ConversationMessagesPage(BaseModel):
     next_cursor: str | None = None
 
 
+class ConversationParticipantRead(BaseModel):
+    """Participant shape consumed by the chat UI (frontend `ConversationParticipantRead`)."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    user_id: uuid.UUID
+    user_name: str | None = None
+    user_handle: str | None = None
+    joined_at: datetime
+    muted: bool = False
+
+
 class ConversationRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
@@ -152,12 +165,15 @@ class ConversationRead(BaseModel):
     type: ConversationType
     title: str | None = None
     team_id: uuid.UUID | None = None
+    team_slug: str | None = None
     created_at: datetime
     updated_at: datetime
     last_message: MessageRead | None = None
     unread_count: int = 0
     other_user: ConnectionUserBrief | None = None
     participants_count: int = 2
+    # The chat UI reads `participants` directly; it must always be a list (never missing).
+    participants: list[ConversationParticipantRead] = Field(default_factory=list)
 
 
 class MessageReportCreate(BaseModel):

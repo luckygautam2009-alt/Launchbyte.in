@@ -396,7 +396,10 @@ export interface ConversationRead {
   updated_at: string;
   last_message?: MessageRead | null;
   unread_count: number;
-  participants: ConversationParticipantRead[];
+  /** Always sent by the API now, but UI code must tolerate it being absent. */
+  participants?: ConversationParticipantRead[];
+  participants_count?: number;
+  other_user?: { id: string; email?: string; full_name?: string | null; handle?: string | null } | null;
 }
 
 export interface ConversationMessagesPage {

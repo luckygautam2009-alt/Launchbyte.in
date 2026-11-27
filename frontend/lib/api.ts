@@ -659,7 +659,7 @@ class ApiClient {
     params: { cursor?: string; limit?: number } = {}
   ): Promise<ConversationMessagesPage> {
     const query = new URLSearchParams();
-    if (params.cursor) query.set("cursor", params.cursor);
+    if (params.cursor) query.set("before", params.cursor);
     if (params.limit) query.set("limit", String(params.limit));
     return this.request<ConversationMessagesPage>(`/conversations/${conversationId}/messages?${query.toString()}`);
   }
@@ -686,10 +686,9 @@ class ApiClient {
   }
 
   async markConversationRead(conversationId: string, messageId?: string): Promise<void> {
-    await this.request(`/conversations/${conversationId}/read`, {
-      method: "POST",
-      body: JSON.stringify({ message_id: messageId }),
-    });
+    // Backend takes `message_id` as a query parameter (a JSON body is ignored).
+    const qs = messageId ? `?message_id=${encodeURIComponent(messageId)}` : "";
+    await this.request(`/conversations/${conversationId}/read${qs}`, { method: "POST" });
   }
 
   async reportMessage(messageId: string, payload: { reason: string; details?: string }): Promise<void> {

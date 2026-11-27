@@ -25,6 +25,9 @@ if not settings.DATABASE_URL.startswith("sqlite"):
             "pool_size": 5,
             "max_overflow": 10,
             "pool_recycle": 300,
+            # Fail fast (503-ish) instead of hanging 30s when the pool is exhausted.
+            "pool_timeout": 10,
+            "connect_args": {"connect_timeout": 10},
         }
     )
 

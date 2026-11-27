@@ -1,3 +1,4 @@
+import asyncio
 import json
 import logging
 import uuid
@@ -17,6 +18,7 @@ from fastapi import (
 from app.core.config import get_settings
 from app.core.rate_limit import rate_limit
 from app.core.websocket import ticket_store, ws_manager
+from app.db.session import SessionLocal
 from app.dependencies.auth import CurrentUser
 from app.dependencies.db import DBSession
 from app.models.networking import ConversationParticipant
@@ -91,10 +93,13 @@ def get_messages(
     db: DBSession,
     current_user: CurrentUser,
     before: datetime | None = Query(default=None),
+    cursor: datetime | None = Query(default=None, description="Alias of `before` (ISO timestamp from next_cursor)"),
     limit: int = Query(default=50, ge=1, le=100),
 ):
     try:
-        return get_conversation_messages(db, current_user, conversation_id, before=before, limit=limit)
+        return get_conversation_messages(
+            db, current_user, conversation_id, before=before or cursor, limit=limit
+        )
     except MessagingError as e:
         raise HTTPException(
             status_code=e.status_code,
@@ -219,12 +224,62 @@ def get_ws_ticket(
     return WSTicketResponse(ticket=ticket, expires_in=60)
 
 
+def _ws_send_message(user_id: uuid.UUID, conv_id: uuid.UUID, body: str, client_msg_id: str | None) -> str | None:
+    """Runs in a worker thread. Returns an error message or None."""
+    with SessionLocal() as db:
+        user = db.get(User, user_id)
+        if not user or not user.is_active:
+            return "User inactive"
+        try:
+            send_message(db, user, conv_id, body, client_msg_id=client_msg_id)
+        except MessagingError as me:
+            db.rollback()
+            return me.message
+        except Exception:
+            db.rollback()
+            logger.exception("WS send_message failed")
+            return "Unable to send message"
+    return None
+
+
+def _ws_typing_audience(user_id: uuid.UUID, conv_id: uuid.UUID) -> tuple[list[uuid.UUID], str] | None:
+    with SessionLocal() as db:
+        part = db.query(ConversationParticipant).filter(
+            ConversationParticipant.conversation_id == conv_id,
+            ConversationParticipant.user_id == user_id,
+            ConversationParticipant.left_at.is_(None),
+        ).first()
+        if not part:
+            return None
+        user = db.get(User, user_id)
+        name = (user.full_name or user.handle or "Someone") if user else "Someone"
+        rows = db.query(ConversationParticipant.user_id).filter(
+            ConversationParticipant.conversation_id == conv_id,
+            ConversationParticipant.left_at.is_(None),
+        ).all()
+        return [r[0] for r in rows], name
+
+
+def _ws_mark_read(user_id: uuid.UUID, conv_id: uuid.UUID, msg_id: uuid.UUID | None) -> None:
+    with SessionLocal() as db:
+        user = db.get(User, user_id)
+        if not user:
+            return
+        try:
+            mark_conversation_read(db, user, conv_id, message_id=msg_id)
+        except MessagingError:
+            db.rollback()
+
+
 @router.websocket("/ws")
 async def websocket_endpoint(
     websocket: WebSocket,
-    db: DBSession,
     ticket: str | None = Query(default=None),
 ):
+    # NOTE: no `db: DBSession` dependency here on purpose. A FastAPI dependency lives as long as the
+    # request, i.e. for the whole websocket connection. That pinned one pooled DB connection per open
+    # chat tab (pool_size=5, max_overflow=10) and starved every REST endpoint ("app is super slow").
+
     # Enforce WebSocket Origin check when Origin header is present (CSWSH protection)
     origin = websocket.headers.get("origin")
     if origin:
@@ -275,55 +330,42 @@ async def websocket_endpoint(
                 await websocket.send_text(json.dumps({"event": "pong"}))
                 continue
 
-            # Authorized commands using session
             try:
-                user = db.get(User, user_id)
-                if not user or not user.is_active:
-                    await websocket.close(code=4003, reason="User inactive")
-                    break
-
                 # 2. send_message action
                 if action == "send_message":
                     conv_id_str = data.get("conversation_id")
                     body = data.get("body")
-                    client_msg_id = data.get("client_msg_id")
-
                     if not conv_id_str or not body:
                         await websocket.send_text(json.dumps({"event": "error", "message": "Missing conversation_id or body"}))
                         continue
-
-                    try:
-                        conv_id = uuid.UUID(conv_id_str)
-                        send_message(db, user, conv_id, body, client_msg_id=client_msg_id)
-                    except MessagingError as me:
-                        await websocket.send_text(json.dumps({"event": "error", "message": me.message}))
-                    except Exception:
-                        await websocket.send_text(json.dumps({"event": "error", "message": "Unable to send message"}))
+                    err = await asyncio.to_thread(
+                        _ws_send_message, user_id, uuid.UUID(conv_id_str), body, data.get("client_msg_id")
+                    )
+                    if err:
+                        await websocket.send_text(json.dumps({"event": "error", "message": err}))
+                        if err == "User inactive":
+                            await websocket.close(code=4003, reason="User inactive")
+                            break
 
                 # 3. typing indicator action
                 elif action == "typing":
                     conv_id_str = data.get("conversation_id")
-                    is_typing = bool(data.get("is_typing", True))
                     if conv_id_str:
                         conv_id = uuid.UUID(conv_id_str)
-                        # Check participant membership
-                        part = db.query(ConversationParticipant).filter(
-                            ConversationParticipant.conversation_id == conv_id,
-                            ConversationParticipant.user_id == user.id,
-                            ConversationParticipant.left_at.is_(None),
-                        ).first()
-                        if part:
-                            all_parts = db.query(ConversationParticipant.user_id).filter(
-                                ConversationParticipant.conversation_id == conv_id,
-                                ConversationParticipant.left_at.is_(None),
-                            ).all()
-                            participant_ids = [p[0] for p in all_parts]
+                        audience = await asyncio.to_thread(_ws_typing_audience, user_id, conv_id)
+                        if audience:
+                            participant_ids, name = audience
                             await ws_manager.broadcast_to_conversation(
                                 conv_id,
                                 participant_ids,
                                 "typing",
-                                {"conversation_id": conv_id_str, "user_id": str(user.id), "user_name": user.full_name or user.handle, "is_typing": is_typing},
-                                exclude_user_id=user.id,
+                                {
+                                    "conversation_id": conv_id_str,
+                                    "user_id": str(user_id),
+                                    "user_name": name,
+                                    "is_typing": bool(data.get("is_typing", True)),
+                                },
+                                exclude_user_id=user_id,
                             )
 
                 # 4. read action
@@ -331,18 +373,18 @@ async def websocket_endpoint(
                     conv_id_str = data.get("conversation_id")
                     msg_id_str = data.get("message_id")
                     if conv_id_str:
-                        conv_id = uuid.UUID(conv_id_str)
-                        msg_id = uuid.UUID(msg_id_str) if msg_id_str else None
-                        try:
-                            mark_conversation_read(db, user, conv_id, message_id=msg_id)
-                        except MessagingError:
-                            pass
+                        await asyncio.to_thread(
+                            _ws_mark_read,
+                            user_id,
+                            uuid.UUID(conv_id_str),
+                            uuid.UUID(msg_id_str) if msg_id_str else None,
+                        )
             except Exception as e:
-                db.rollback()
                 logger.warning(f"Error handling WebSocket action {action}: {e}")
 
     except WebSocketDisconnect:
-        ws_manager.disconnect(websocket)
+        pass
     except Exception as e:
         logger.warning(f"WebSocket error: {e}")
+    finally:
         ws_manager.disconnect(websocket)

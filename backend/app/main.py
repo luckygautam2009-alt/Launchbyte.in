@@ -116,7 +116,9 @@ async def security_and_request_id_middleware(request: Request, call_next):
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     response.headers["Permissions-Policy"] = "camera=(self), microphone=(), geolocation=()"
-    if request.url.path.startswith("/uploads"):
+    if "Content-Security-Policy" in response.headers:
+        pass  # route set its own CSP (e.g. the email one-click review page)
+    elif request.url.path.startswith("/uploads"):
         response.headers["Content-Security-Policy"] = "sandbox; default-src 'none'"
     else:
         response.headers["Content-Security-Policy"] = "default-src 'self'; frame-ancestors 'none'"

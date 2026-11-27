@@ -1,17 +1,22 @@
 """Public Host-an-Event Submissions, Public Banner Upload, Contact Inquiries, and Real Public Metrics."""
 from __future__ import annotations
 
+import html
 import io
+import logging
 import time
 import uuid
 from collections import defaultdict
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, File, HTTPException, Request, UploadFile, status
+from fastapi import APIRouter, BackgroundTasks, File, Form, HTTPException, Request, UploadFile, status
+from fastapi.responses import HTMLResponse
 from PIL import Image, UnidentifiedImageError
 from pydantic import BaseModel
 from sqlalchemy import func, or_, select
 
+from app.core.action_tokens import create_action_token, verify_action_token
+from app.core.config import get_settings
 from app.core.rate_limit import get_client_ip, limiter
 from app.dependencies.auth import StaffUser
 from app.dependencies.db import DBSession
@@ -33,6 +38,8 @@ from app.schemas.submissions import (
 )
 from app.services.email.dispatcher import send_admin_notification, send_user_notification
 from app.services.storage import get_storage_backend
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["public submissions & metrics"])
 
@@ -130,6 +137,7 @@ def submit_public_host_event(
     """
     Publicly accessible Host an Event submission endpoint.
     Submissions ALWAYS enter 'pending' moderation state and are never published instantly.
+    The admin alert contains a signed one-click Approve/Reject review link.
     """
     _check_public_rate_limit(request, "host_event", max_requests=5, window_sec=60)
 
@@ -160,9 +168,14 @@ def submit_public_host_event(
     db.commit()
     db.refresh(submission)
 
+    review_link = _review_url(request, submission.id)
+
     admin_res = send_admin_notification(
-        subject=f"[LaunchByte] Public Host-an-Event Submission: {submission.event_name}",
+        subject=f"[LaunchByte] Event review needed: {submission.event_name}",
         message=(
+            "A new public Host-an-Event request needs your decision.\n\n"
+            f">>> REVIEW (Approve / Reject): {review_link}\n"
+            "(Valid for 7 days. Opening the link only shows details; nothing changes until you press a button.)\n\n"
             f"Submission ID: {submission.id}\n"
             f"Event: {submission.event_name}\n"
             f"Category: {submission.category} ({submission.event_format})\n"
@@ -220,6 +233,140 @@ def submit_public_host_event(
         email_error="; ".join(errors) if errors else None,
         message=ack_message,
     )
+
+
+def _review_url(request: Request, submission_id: uuid.UUID) -> str:
+    settings = get_settings()
+    base = (settings.BACKEND_PUBLIC_URL or "").strip().rstrip("/") or str(request.base_url).rstrip("/")
+    token = create_action_token("host_event_review", str(submission_id))
+    return f"{base}{settings.API_V1_PREFIX}/public/host-event/review/{token}"
+
+
+# ---------- One-click review from the admin email (no login needed, signed link) ----------
+
+_REVIEW_CSP = "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'"
+
+
+def _review_page(title: str, body_html: str, status_code: int = 200) -> HTMLResponse:
+    page = (
+        "<!doctype html><html><head><meta charset='utf-8'>"
+        "<meta name='viewport' content='width=device-width,initial-scale=1'>"
+        f"<title>{html.escape(title)}</title></head>"
+        "<body style=\"margin:0;background:#050510;color:#e2e8f0;font-family:system-ui,sans-serif\">"
+        "<div style=\"max-width:640px;margin:0 auto;padding:32px 16px\">"
+        f"<h1 style=\"font-size:22px;margin:0 0 16px\">{html.escape(title)}</h1>{body_html}"
+        "</div></body></html>"
+    )
+    return HTMLResponse(page, status_code=status_code, headers={"Content-Security-Policy": _REVIEW_CSP, "Cache-Control": "no-store"})
+
+
+def _row(label: str, value: str | None) -> str:
+    return (
+        "<p style='margin:6px 0'><span style='color:#94a3b8'>"
+        f"{html.escape(label)}:</span> {html.escape(value or '-')}</p>"
+    )
+
+
+def _load_pending_by_token(db, token: str) -> tuple[PublicEventSubmission | None, HTMLResponse | None]:
+    sub_id = verify_action_token(token, "host_event_review")
+    if not sub_id:
+        return None, _review_page("Link invalid or expired", "<p>Please review this submission from the admin panel instead.</p>", 400)
+    try:
+        sub = db.get(PublicEventSubmission, uuid.UUID(sub_id))
+    except ValueError:
+        sub = None
+    if sub is None:
+        return None, _review_page("Submission not found", "<p>It may have been deleted.</p>", 404)
+    return sub, None
+
+
+@router.get("/public/host-event/review/{token}", response_class=HTMLResponse, include_in_schema=False)
+def review_host_event_page(token: str, db: DBSession, request: Request):
+    # GET never changes state (email scanners / link previews prefetch URLs).
+    sub, err = _load_pending_by_token(db, token)
+    if err:
+        return err
+    if sub.status != "pending":
+        return _review_page(f"Already {sub.status}", f"<p>'{html.escape(sub.event_name)}' was already <b>{html.escape(sub.status)}</b>. No action needed.</p>")
+    details = (
+        _row("Event", sub.event_name)
+        + _row("Organizer", f"{sub.organizer_name} ({sub.organizer_organization})")
+        + _row("Email", sub.organizer_email)
+        + _row("Category / format", f"{sub.category} / {sub.event_format}")
+        + _row("Date", sub.event_date.isoformat())
+        + _row("Registration URL", sub.registration_url)
+        + _row("Website", sub.official_website)
+        + _row("Contact", sub.contact_info)
+        + f"<p style='margin:14px 0;white-space:pre-wrap;color:#cbd5e1'>{html.escape(sub.description)}</p>"
+    )
+    form = (
+        f"<form method='post' action='{html.escape(get_settings().API_V1_PREFIX)}/public/host-event/review/{html.escape(token)}'>"
+        "<textarea name='admin_notes' rows='3' maxlength='2000' placeholder='Optional note (sent to organizer on reject)' "
+        "style='width:100%;box-sizing:border-box;padding:10px;border-radius:10px;border:1px solid #334155;background:#0f172a;color:#e2e8f0'></textarea>"
+        "<div style='display:flex;gap:12px;margin-top:14px'>"
+        "<button name='decision' value='approve' type='submit' style='flex:1;padding:14px;border:0;border-radius:12px;background:#059669;color:#fff;font-weight:700;font-size:16px'>Approve</button>"
+        "<button name='decision' value='reject' type='submit' style='flex:1;padding:14px;border:0;border-radius:12px;background:#e11d48;color:#fff;font-weight:700;font-size:16px'>Reject</button>"
+        "</div></form>"
+    )
+    return _review_page("Review event submission", details + form)
+
+
+@router.post("/public/host-event/review/{token}", response_class=HTMLResponse, include_in_schema=False)
+def review_host_event_decision(
+    token: str,
+    db: DBSession,
+    request: Request,
+    background_tasks: BackgroundTasks,
+    decision: str = Form(...),
+    admin_notes: str | None = Form(default=None),
+):
+    _check_public_rate_limit(request, "host_event_review", max_requests=20, window_sec=60)
+    sub, err = _load_pending_by_token(db, token)
+    if err:
+        return err
+    if decision not in {"approve", "reject"}:
+        return _review_page("Invalid decision", "<p>Unknown action.</p>", 400)
+    if sub.status != "pending":
+        return _review_page(f"Already {sub.status}", f"<p>This submission was already <b>{html.escape(sub.status)}</b>.</p>")
+
+    notes = (admin_notes or "").strip()[:2000] or None
+    _apply_host_event_decision(db, sub, decision, notes, staff_id=None, ip=get_client_ip(request), via="email_link")
+    background_tasks.add_task(_notify_organizer_of_decision, sub.organizer_email, sub.organizer_name, sub.event_name, decision, notes)
+    verb = "approved" if decision == "approve" else "rejected"
+    return _review_page(f"Event {verb}", f"<p>'{html.escape(sub.event_name)}' has been <b>{verb}</b>. The organizer is being notified by email.</p>")
+
+
+def _apply_host_event_decision(db, sub: PublicEventSubmission, decision: str, notes: str | None, staff_id, ip: str | None, via: str) -> None:
+    sub.status = "approved" if decision == "approve" else "rejected"
+    sub.admin_notes = notes
+    sub.reviewed_by_id = staff_id
+    sub.reviewed_at = datetime.now(timezone.utc)
+    db.add(
+        AuditLog(
+            actor_id=staff_id,
+            action=f"public_event.{sub.status}",
+            entity_type="public_event_submission",
+            entity_id=str(sub.id),
+            changes={"event_name": sub.event_name, "notes": notes, "via": via},
+            ip_address=ip,
+        )
+    )
+    db.commit()
+    db.refresh(sub)
+
+
+def _notify_organizer_of_decision(to_email: str, name: str, event_name: str, decision: str, notes: str | None) -> None:
+    if decision == "approve":
+        subject = f"LaunchByte Event Approved: {event_name}"
+        message = f"Hi {name},\n\nYour event '{event_name}' has been approved by the LaunchByte team!"
+    else:
+        subject = f"LaunchByte Event Update: {event_name}"
+        message = f"Hi {name},\n\nYour event submission '{event_name}' was not approved at this time."
+        if notes:
+            message += f"\n\nReviewer note: {notes}"
+    res = send_user_notification(to_email=to_email, subject=subject, message=message)
+    if not res.sent:
+        logger.error("Organizer decision email failed (%s): %s", event_name, res.error)
 
 
 @router.post(

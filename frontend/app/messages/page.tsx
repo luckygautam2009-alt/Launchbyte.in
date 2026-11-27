@@ -52,6 +52,9 @@ export default function MessagesPage() {
   const wsRef = useRef<WebSocket | null>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  // The WebSocket is created once; without this ref its onmessage kept a stale `selectedConv`
+  // (always null) so live messages never showed up in the open chat.
+  const wsHandlerRef = useRef<(msg: any) => void>(() => {});
 
   // 1. Initial Load of Conversations
   useEffect(() => {
@@ -135,7 +138,7 @@ export default function MessagesPage() {
         ws.onmessage = (event) => {
           try {
             const data = JSON.parse(event.data);
-            handleWsEvent(data);
+            wsHandlerRef.current(data);
           } catch (e) {
             console.error("WS parse error:", e);
           }
@@ -171,6 +174,7 @@ export default function MessagesPage() {
   }, [user]);
 
   function handleWsEvent(msg: any) {
+    if (!msg || typeof msg !== "object") return;
     if (msg.event === "message.new") {
       const newMsg = msg.data as MessageRead;
       // If currently open conversation
@@ -193,7 +197,7 @@ export default function MessagesPage() {
             ? {
                 ...c,
                 last_message: newMsg,
-                unread_count: selectedConv?.id === c.id ? 0 : c.unread_count + 1,
+                unread_count: selectedConv?.id === c.id ? 0 : (c.unread_count || 0) + 1,
               }
             : c
         )
@@ -221,6 +225,8 @@ export default function MessagesPage() {
       }
     }
   }
+
+  wsHandlerRef.current = handleWsEvent;
 
   // 4. Send Message (with optimistic update)
   async function handleSendMessage(e: React.FormEvent) {
@@ -328,9 +334,19 @@ export default function MessagesPage() {
   function getConvTitle(conv: ConversationRead): string {
     if (conv.title) return conv.title;
     if (conv.type === "team") return `Team ${conv.team_slug || "Chat"}`;
-    const other = conv.participants.find((p) => p.user_id !== user?.id);
-    return other?.user_name || (other?.user_handle ? `@${other.user_handle}` : "Direct Chat");
+    const other = (conv.participants ?? []).find((p) => p.user_id !== user?.id);
+    return (
+      other?.user_name ||
+      (other?.user_handle ? `@${other.user_handle}` : null) ||
+      conv.other_user?.full_name ||
+      (conv.other_user?.handle ? `@${conv.other_user.handle}` : null) ||
+      "Direct Chat"
+    );
   }
+
+  const participantCount = selectedConv
+    ? selectedConv.participants?.length ?? selectedConv.participants_count ?? 0
+    : 0;
 
   if (!user) {
     return (
@@ -407,7 +423,7 @@ export default function MessagesPage() {
                           : "bg-gradient-to-tr from-brand-600 to-cyan-600 text-white"
                       }`}
                     >
-                      {c.type === "team" ? <Users className="w-5 h-5" /> : title[0]?.toUpperCase() || "U"}
+                      {c.type === "team" ? <Users className="w-5 h-5" /> : (title || "U")[0]?.toUpperCase()}
                     </div>
 
                     <div className="flex-1 min-w-0">
@@ -425,7 +441,7 @@ export default function MessagesPage() {
 
                       <div className="flex items-center justify-between">
                         <p className="text-xs text-slate-400 truncate pr-2">
-                          {c.last_message ? c.last_message.body : "No messages yet"}
+                          {c.last_message?.body ?? "No messages yet"}
                         </p>
                         {c.unread_count > 0 && (
                           <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-brand-500 text-white">
@@ -471,8 +487,8 @@ export default function MessagesPage() {
                     </h3>
                     <p className="text-xs text-slate-400 flex items-center gap-1.5 mt-0.5">
                       <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-                      {selectedConv.participants.length} participant
-                      {selectedConv.participants.length === 1 ? "" : "s"}
+                      {participantCount} participant
+                      {participantCount === 1 ? "" : "s"}
                     </p>
                   </div>
                 </div>
@@ -596,7 +612,7 @@ export default function MessagesPage() {
                               </div>
                             ) : (
                               <div>
-                                <p className="whitespace-pre-wrap break-words">{m.body}</p>
+                                <p className="whitespace-pre-wrap break-words">{m.body ?? ""}</p>
                                 <div className="flex items-center justify-end gap-1.5 mt-1 text-[10px] opacity-75">
                                   {m.edited_at && !m.is_deleted && <span>(edited)</span>}
                                   <span>

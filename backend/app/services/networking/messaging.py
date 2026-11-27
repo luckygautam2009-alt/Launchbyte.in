@@ -25,6 +25,7 @@ from app.models.users import User
 from app.schemas.networking import (
     ConnectionUserBrief,
     ConversationMessagesPage,
+    ConversationParticipantRead,
     ConversationRead,
     MessageRead,
     MessageReportRead,
@@ -115,86 +116,128 @@ def create_or_get_direct_conversation(db: Session, current_user: User, target_us
     return conv
 
 
+def _message_to_read(m: Message, sender: User | None) -> MessageRead:
+    return MessageRead(
+        id=m.id,
+        conversation_id=m.conversation_id,
+        sender_id=m.sender_id,
+        client_msg_id=m.client_msg_id,
+        body="This message was deleted" if m.deleted_at else m.body,
+        created_at=m.created_at,
+        edited_at=m.edited_at,
+        is_deleted=m.deleted_at is not None,
+        sender_name=sender.full_name if sender else None,
+        sender_handle=sender.handle if sender else None,
+    )
+
+
 def list_conversations(db: Session, current_user: User) -> list[ConversationRead]:
-    # Active participants
-    participants = db.query(ConversationParticipant).filter(
+    """List the user's conversations using a constant number of queries (no N+1)."""
+    my_parts = db.query(ConversationParticipant).filter(
         ConversationParticipant.user_id == current_user.id,
         ConversationParticipant.left_at.is_(None),
     ).all()
-
-    conv_ids = [p.conversation_id for p in participants]
-    if not conv_ids:
+    if not my_parts:
         return []
 
-    p_map = {p.conversation_id: p for p in participants}
+    p_map = {p.conversation_id: p for p in my_parts}
+    conv_ids = list(p_map.keys())
 
     conversations = db.query(Conversation).filter(Conversation.id.in_(conv_ids)).all()
 
+    # All active participants of all these conversations (+ their users) in one query
+    part_rows = (
+        db.query(ConversationParticipant, User)
+        .join(User, User.id == ConversationParticipant.user_id)
+        .filter(
+            ConversationParticipant.conversation_id.in_(conv_ids),
+            ConversationParticipant.left_at.is_(None),
+        )
+        .all()
+    )
+    parts_by_conv: dict[uuid.UUID, list[tuple[ConversationParticipant, User]]] = {}
+    for part, usr in part_rows:
+        parts_by_conv.setdefault(part.conversation_id, []).append((part, usr))
+
+    # Latest non-deleted message per conversation (one query using DISTINCT ON-free approach)
+    latest_ts = (
+        db.query(Message.conversation_id.label("cid"), func.max(Message.created_at).label("ts"))
+        .filter(Message.conversation_id.in_(conv_ids), Message.deleted_at.is_(None))
+        .group_by(Message.conversation_id)
+        .subquery()
+    )
+    last_rows = (
+        db.query(Message)
+        .join(
+            latest_ts,
+            and_(Message.conversation_id == latest_ts.c.cid, Message.created_at == latest_ts.c.ts),
+        )
+        .all()
+    )
+    last_by_conv: dict[uuid.UUID, Message] = {}
+    for m in last_rows:
+        last_by_conv.setdefault(m.conversation_id, m)
+
+    # Unread counts: messages from others newer than the last-read message's timestamp
+    read_ids = [p.last_read_message_id for p in my_parts if p.last_read_message_id]
+    read_ts: dict[uuid.UUID, datetime] = {}
+    if read_ids:
+        read_ts = {mid: ts for mid, ts in db.query(Message.id, Message.created_at).filter(Message.id.in_(read_ids)).all()}
+
+    unread_by_conv: dict[uuid.UUID, int] = {}
+    for cid, part in p_map.items():
+        cutoff = read_ts.get(part.last_read_message_id) if part.last_read_message_id else None
+        q = db.query(func.count(Message.id)).filter(
+            Message.conversation_id == cid,
+            Message.deleted_at.is_(None),
+            Message.sender_id != current_user.id,
+        )
+        if cutoff is not None:
+            q = q.filter(Message.created_at > cutoff)
+        unread_by_conv[cid] = q.scalar() or 0
+
+    # Team names/slugs in one query
+    team_ids = [c.team_id for c in conversations if c.team_id]
+    teams_by_id = {t.id: t for t in db.query(Team).filter(Team.id.in_(team_ids)).all()} if team_ids else {}
+
     results: list[ConversationRead] = []
     for c in conversations:
-        p = p_map.get(c.id)
-        if not p:
-            continue
+        members = parts_by_conv.get(c.id, [])
+        users_by_id = {usr.id: usr for _, usr in members}
 
-        # Last message
-        last_msg = db.query(Message).filter(
-            Message.conversation_id == c.id,
-            Message.deleted_at.is_(None),
-        ).order_by(Message.created_at.desc()).first()
+        last_msg = last_by_conv.get(c.id)
+        last_msg_read = (
+            _message_to_read(last_msg, users_by_id.get(last_msg.sender_id) if last_msg.sender_id else None)
+            if last_msg
+            else None
+        )
 
-        last_msg_read = None
-        if last_msg:
-            sender = db.get(User, last_msg.sender_id) if last_msg.sender_id else None
-            last_msg_read = MessageRead(
-                id=last_msg.id,
-                conversation_id=last_msg.conversation_id,
-                sender_id=last_msg.sender_id,
-                client_msg_id=last_msg.client_msg_id,
-                body=last_msg.body,
-                created_at=last_msg.created_at,
-                edited_at=last_msg.edited_at,
-                is_deleted=last_msg.deleted_at is not None,
-                sender_name=sender.full_name if sender else None,
-                sender_handle=sender.handle if sender else None,
-            )
-
-        # Unread count
-        unread = 0
-        if p.last_read_message_id:
-            last_read_msg = db.get(Message, p.last_read_message_id)
-            if last_read_msg:
-                unread = db.query(func.count(Message.id)).filter(
-                    Message.conversation_id == c.id,
-                    Message.deleted_at.is_(None),
-                    Message.created_at > last_read_msg.created_at,
-                    Message.sender_id != current_user.id,
-                ).scalar() or 0
-        else:
-            unread = db.query(func.count(Message.id)).filter(
-                Message.conversation_id == c.id,
-                Message.deleted_at.is_(None),
-                Message.sender_id != current_user.id,
-            ).scalar() or 0
-
-        # Title / other user
         other_user_brief = None
         title = c.title
+        team_slug = None
         if c.type == ConversationType.DIRECT:
             other_id = c.user_b_id if c.user_a_id == current_user.id else c.user_a_id
-            if other_id:
-                other_u = db.get(User, other_id)
-                if other_u:
-                    other_user_brief = ConnectionUserBrief.model_validate(other_u)
-                    title = other_u.full_name or other_u.handle
+            other_u = users_by_id.get(other_id) if other_id else None
+            if other_u:
+                other_user_brief = ConnectionUserBrief.model_validate(other_u)
+                title = other_u.full_name or other_u.handle
         elif c.type == ConversationType.TEAM and c.team_id:
-            team = db.get(Team, c.team_id)
+            team = teams_by_id.get(c.team_id)
             if team:
                 title = team.name
+                team_slug = getattr(team, "slug", None)
 
-        count_parts = db.query(func.count(ConversationParticipant.id)).filter(
-            ConversationParticipant.conversation_id == c.id,
-            ConversationParticipant.left_at.is_(None),
-        ).scalar() or 0
+        participants = [
+            ConversationParticipantRead(
+                id=part.id,
+                user_id=part.user_id,
+                user_name=usr.full_name,
+                user_handle=usr.handle,
+                joined_at=part.joined_at,
+                muted=part.muted,
+            )
+            for part, usr in members
+        ]
 
         results.append(
             ConversationRead(
@@ -202,12 +245,14 @@ def list_conversations(db: Session, current_user: User) -> list[ConversationRead
                 type=c.type,
                 title=title,
                 team_id=c.team_id,
+                team_slug=team_slug,
                 created_at=c.created_at,
                 updated_at=c.updated_at,
                 last_message=last_msg_read,
-                unread_count=unread,
+                unread_count=unread_by_conv.get(c.id, 0),
                 other_user=other_user_brief,
-                participants_count=count_parts,
+                participants_count=len(participants),
+                participants=participants,
             )
         )
 
@@ -240,25 +285,13 @@ def get_conversation_messages(
     has_more = len(messages) > limit
     page_items = messages[:limit]
 
-    # Convert to schema
-    items = []
-    for m in reversed(page_items):  # chronologically ascending for client display
-        sender = db.get(User, m.sender_id) if m.sender_id else None
-        body = "This message was deleted" if m.deleted_at else m.body
-        items.append(
-            MessageRead(
-                id=m.id,
-                conversation_id=m.conversation_id,
-                sender_id=m.sender_id,
-                client_msg_id=m.client_msg_id,
-                body=body,
-                created_at=m.created_at,
-                edited_at=m.edited_at,
-                is_deleted=m.deleted_at is not None,
-                sender_name=sender.full_name if sender else None,
-                sender_handle=sender.handle if sender else None,
-            )
-        )
+    # Convert to schema (senders loaded in one query instead of one per message)
+    sender_ids = {m.sender_id for m in page_items if m.sender_id}
+    senders = {u.id: u for u in db.query(User).filter(User.id.in_(sender_ids)).all()} if sender_ids else {}
+    items = [
+        _message_to_read(m, senders.get(m.sender_id) if m.sender_id else None)
+        for m in reversed(page_items)  # chronologically ascending for client display
+    ]
 
     next_cursor = page_items[-1].created_at.isoformat() if has_more and page_items else None
     return ConversationMessagesPage(items=items, has_more=has_more, next_cursor=next_cursor)
@@ -318,6 +351,7 @@ def send_message(
         body=body,
     )
     db.add(msg)
+    db.flush()  # assigns msg.id (default uuid4 is applied at flush, not at construction)
     conv.updated_at = datetime.now(timezone.utc)
     part.last_read_message_id = msg.id
     db.commit()
