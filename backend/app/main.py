@@ -113,6 +113,11 @@ async def security_and_request_id_middleware(request: Request, call_next):
             process_time,
         )
     response.headers["X-Request-ID"] = request_id
+    if settings.REQUIRE_LOGIN_TO_EXPLORE:
+        cc = response.headers.get("Cache-Control", "")
+        if cc.startswith("public"):
+            # Gated content must never sit in a shared cache.
+            response.headers["Cache-Control"] = "private" + cc[len("public"):]
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"

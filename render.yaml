@@ -16,6 +16,8 @@ services:
         value: "false"
       - key: TRUST_PROXY_HEADERS
         value: "true"
+      - key: REQUIRE_LOGIN_TO_EXPLORE
+        value: "true"
       - key: APP_NAME
         value: LaunchByte Backend
       - key: SECRET_KEY

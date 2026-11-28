@@ -216,10 +216,14 @@ export default function CosmicExplorerSection() {
             style={
               mounted && isLight
                 ? {
+                  // Fade every edge (not only top/bottom) so the artwork melts into the page
+                  // background instead of showing a hard rectangle.
                   maskImage:
-                    "linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%)",
+                    "linear-gradient(to right, transparent 0%, black 14%, black 86%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
                   WebkitMaskImage:
-                    "linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%)",
+                    "linear-gradient(to right, transparent 0%, black 14%, black 86%, transparent 100%), linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
+                  maskComposite: "intersect",
+                  WebkitMaskComposite: "source-in",
                 }
                 : {
                   maskImage:

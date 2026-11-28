@@ -4,7 +4,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel, Field
 
-from app.dependencies.auth import AdminUser, CurrentUser, OptionalUser, OrganizerUser
+from app.dependencies.auth import AdminUser, CurrentUser, ExploreGate, OptionalUser, OrganizerUser
 from app.dependencies.db import DBSession
 from app.models.networking import TeamMemberRole
 from app.schemas.networking import TeamMemberRead
@@ -59,7 +59,7 @@ def post_team(
         )
 
 
-@router.get("/teams", response_model=dict)
+@router.get("/teams", response_model=dict, dependencies=[ExploreGate])
 def get_teams(
     db: DBSession,
     current_user: OptionalUser = None,
@@ -108,7 +108,7 @@ def get_my_teams(
         )
 
 
-@router.get("/teams/{slug}", response_model=TeamDetail)
+@router.get("/teams/{slug}", response_model=TeamDetail, dependencies=[ExploreGate])
 def get_team(
     slug: str,
     db: DBSession,

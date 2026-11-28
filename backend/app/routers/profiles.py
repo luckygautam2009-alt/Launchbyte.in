@@ -7,7 +7,7 @@ from PIL import Image, UnidentifiedImageError
 from pydantic import BaseModel
 
 from app.core.rate_limit import rate_limit
-from app.dependencies.auth import CurrentUser, OptionalUser
+from app.dependencies.auth import CurrentUser, ExploreGate, OptionalUser
 from app.dependencies.db import DBSession
 from app.models.profiles import UserProfile
 from app.routers.uploads import read_bounded_upload
@@ -144,7 +144,7 @@ async def upload_avatar(
     return AvatarUploadResponse(avatar_url=url)
 
 
-@router.get("/profiles/{handle}", response_model=PublicProfileRead)
+@router.get("/profiles/{handle}", response_model=PublicProfileRead, dependencies=[ExploreGate])
 def read_public_profile(
     handle: str,
     db: DBSession,
@@ -159,7 +159,7 @@ def read_public_profile(
         )
 
 
-@router.get("/people/discover", response_model=list[TeammateCandidateRead])
+@router.get("/people/discover", response_model=list[TeammateCandidateRead], dependencies=[ExploreGate])
 def search_teammates(
     db: DBSession,
     viewer: OptionalUser = None,

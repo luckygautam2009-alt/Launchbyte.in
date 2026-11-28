@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { api } from "@/lib/api";
+import { useAuth } from "@/lib/auth-context";
 import { OpportunityListItem } from "@/lib/types";
 import {
   Calendar,
@@ -39,8 +40,16 @@ export default function FeaturedOpportunitiesSection() {
   const [opportunities, setOpportunities] = useState<OpportunityListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { user, loading: authLoading } = useAuth();
+  const isGuest = !authLoading && !user;
 
   useEffect(() => {
+    if (authLoading) return;
+    if (!user) {
+      // Browsing needs an account: don't call the (login-gated) API for visitors.
+      setLoading(false);
+      return;
+    }
     async function loadData() {
       setLoading(true);
       setError(null);
@@ -61,7 +70,7 @@ export default function FeaturedOpportunitiesSection() {
       }
     }
     loadData();
-  }, [activeTab]);
+  }, [activeTab, user, authLoading]);
 
   return (
     <section className="relative py-16 sm:py-24 bg-transparent overflow-hidden">
@@ -105,7 +114,35 @@ export default function FeaturedOpportunitiesSection() {
           </div>
         </Reveal>
 
-        {loading ? (
+        {isGuest ? (
+          <Reveal>
+            <div className="rounded-3xl glass-card p-10 text-center max-w-xl mx-auto space-y-4">
+              <div className="w-12 h-12 rounded-2xl bg-violet-100 dark:bg-violet-500/15 border border-violet-300/60 dark:border-violet-400/30 flex items-center justify-center mx-auto text-violet-700 dark:text-violet-300">
+                <Compass className="w-6 h-6" />
+              </div>
+              <h3 className="text-lg font-bold text-[#17172B] dark:text-[#F8FAFC]">
+                Create a free account to explore
+              </h3>
+              <p className="text-sm text-[#424C63] dark:text-slate-300">
+                Verified hackathons, internships and events are available to LaunchByte members. It takes under a minute to join.
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-3 pt-1">
+                <Link
+                  href="/register"
+                  className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#4F46E5] to-[#8B5CF6] text-white text-sm font-semibold shadow-md shadow-violet-500/20 hover:opacity-95 transition"
+                >
+                  Get started
+                </Link>
+                <Link
+                  href="/login"
+                  className="px-5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 text-sm font-semibold text-[#17172B] dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition"
+                >
+                  Sign in
+                </Link>
+              </div>
+            </div>
+          </Reveal>
+        ) : loading || authLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <OpportunityCardSkeleton />
             <OpportunityCardSkeleton />

@@ -11,7 +11,7 @@ from sqlalchemy.orm import Session
 
 from app.core.qr import generate_qr_png_bytes
 from app.core.rate_limit import limiter
-from app.dependencies.auth import CurrentUser, OptionalUser
+from app.dependencies.auth import CurrentUser, ExploreGate, OptionalUser
 from app.dependencies.db import DBSession
 from app.models.events import CheckInResult, EventMode
 from app.schemas.common import Page
@@ -29,7 +29,7 @@ from app.services.events import service as event_svc
 router = APIRouter(tags=["events"])
 
 
-@router.get("/events", response_model=Page[EventListItem])
+@router.get("/events", response_model=Page[EventListItem], dependencies=[ExploreGate])
 def list_events(
     db: DBSession,
     response: Response,
@@ -73,7 +73,7 @@ def list_events(
     return {"items": result_items, "total": total, "limit": limit, "offset": offset}
 
 
-@router.get("/events/{slug}", response_model=EventDetailPublic)
+@router.get("/events/{slug}", response_model=EventDetailPublic, dependencies=[ExploreGate])
 def get_event_by_slug(
     slug: str,
     db: DBSession,
