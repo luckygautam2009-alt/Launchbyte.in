@@ -41,8 +41,10 @@ def _sanitize_text(val: str | None) -> str | None:
 class ConnectionUserBrief(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
+    # NOTE: deliberately NO `email` here. This brief is embedded in public/peer-visible payloads
+    # (project owners on the anonymous /projects list, team rosters, suggestions, chat) and must
+    # never leak other users' email addresses.
     id: uuid.UUID
-    email: str
     full_name: str | None = None
     handle: str | None = None
 

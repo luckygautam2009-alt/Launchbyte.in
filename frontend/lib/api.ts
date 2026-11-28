@@ -79,7 +79,16 @@ class ApiClient {
       const secureFlag = window.location.protocol === "https:" ? "; Secure" : "";
       if (token) {
         localStorage.setItem("lb_token", token);
-        document.cookie = `lb_token=${token}; path=/; max-age=3600; SameSite=Lax${secureFlag}`;
+        let maxAge = 3600;
+        try {
+          const payload = JSON.parse(atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
+          if (typeof payload.exp === "number") {
+            maxAge = Math.max(60, payload.exp - Math.floor(Date.now() / 1000));
+          }
+        } catch {
+          // fall back to 1h
+        }
+        document.cookie = `lb_token=${token}; path=/; max-age=${maxAge}; SameSite=Lax${secureFlag}`;
       } else {
         localStorage.removeItem("lb_token");
         document.cookie = `lb_token=; path=/; max-age=0; SameSite=Lax${secureFlag}`;
@@ -92,6 +101,21 @@ class ApiClient {
       this.token = localStorage.getItem("lb_token");
     }
     return this.token;
+  }
+
+  /**
+   * GETs whose response never depends on who is asking. For these we send NO Authorization and NO
+   * Content-Type header, which makes them CORS "simple requests": the browser skips the OPTIONS
+   * preflight entirely. Cross-origin (Vercel -> Render) that preflight doubled the latency of every
+   * distinct Explore/Hackathons request, and on a cold backend it doubled the wake-up wait too.
+   */
+  private isUserAgnosticGet(endpoint: string, method?: string): boolean {
+    if ((method || "GET").toUpperCase() !== "GET") return false;
+    return (
+      endpoint.startsWith("/opportunities") ||
+      endpoint.startsWith("/tags") ||
+      endpoint.startsWith("/stats")
+    );
   }
 
   private isPublicGet(endpoint: string, method?: string): boolean {
@@ -113,22 +137,29 @@ class ApiClient {
   ): Promise<T> {
     const url = `${API_BASE}${endpoint}`;
     const headers = new Headers(options.headers || {});
+    const method = (options.method || "GET").toUpperCase();
+    const agnostic = this.isUserAgnosticGet(endpoint, method);
 
-    if (this.getToken()) {
-      headers.set("Authorization", `Bearer ${this.getToken()}`);
+    if (!agnostic) {
+      await this.refreshTokenIfNeeded(endpoint);
+      if (this.getToken()) {
+        headers.set("Authorization", `Bearer ${this.getToken()}`);
+      }
     }
 
-    if (!(options.body instanceof FormData)) {
+    // Only declare a JSON body when there is one (a bare GET with Content-Type forces a preflight).
+    if (options.body && !(options.body instanceof FormData) && !headers.has("Content-Type")) {
       headers.set("Content-Type", "application/json");
     }
 
-    const res = await fetch(url, {
-      ...options,
-      headers,
-    });
+    const hadToken = !agnostic && Boolean(this.getToken());
+    const res = await this.fetchWithRetry(url, { ...options, headers }, method === "GET");
 
-    if (res.status === 401 && typeof window !== "undefined") {
+    if (res.status === 401 && typeof window !== "undefined" && hadToken) {
       this.setToken(null);
+      // Let the AuthProvider drop the stale user instead of showing a "logged in" UI whose
+      // every action silently fails.
+      window.dispatchEvent(new Event("lb:unauthorized"));
     }
 
     if (res.status === 204) {
@@ -155,6 +186,98 @@ class ApiClient {
     }
 
     return data as T;
+  }
+
+  /** fetch with a hard timeout; idempotent GETs get one automatic retry (Render cold start). */
+  private async fetchWithRetry(url: string, init: RequestInit, retry: boolean): Promise<Response> {
+    const attempt = async (timeoutMs: number): Promise<Response> => {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+      try {
+        return await fetch(url, { ...init, signal: init.signal ?? ctrl.signal });
+      } finally {
+        clearTimeout(timer);
+      }
+    };
+    const timeoutMs = retry ? 20000 : 45000;
+    try {
+      const res = await attempt(timeoutMs);
+      if (retry && [502, 503, 504].includes(res.status)) {
+        await new Promise((r) => setTimeout(r, 1500));
+        return await attempt(timeoutMs);
+      }
+      return res;
+    } catch (err) {
+      if (!retry) throw { code: "NETWORK_ERROR", message: "Network problem or the server is slow to respond. Please try again." } as ApiError;
+      await new Promise((r) => setTimeout(r, 1500));
+      try {
+        return await attempt(timeoutMs);
+      } catch {
+        throw { code: "NETWORK_ERROR", message: "The server is waking up or unreachable. Please retry in a few seconds." } as ApiError;
+      }
+    }
+  }
+
+  private tokenSecondsLeft(): number | null {
+    try {
+      const t = this.getToken();
+      if (!t) return null;
+      const payload = JSON.parse(atob(t.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
+      return typeof payload.exp === "number" ? payload.exp - Math.floor(Date.now() / 1000) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  private refreshing: Promise<void> | null = null;
+
+  /** Sliding session: swap the token for a fresh one when < 15 min are left. */
+  private async refreshTokenIfNeeded(endpoint: string): Promise<void> {
+    if (typeof window === "undefined" || endpoint.startsWith("/auth/")) return;
+    const left = this.tokenSecondsLeft();
+    if (left === null || left > 15 * 60 || left <= 0) return;
+    if (!this.refreshing) {
+      this.refreshing = (async () => {
+        try {
+          const res = await fetch(`${API_BASE}/auth/refresh`, {
+            method: "POST",
+            headers: { Authorization: `Bearer ${this.getToken()}` },
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data?.access_token) this.setToken(data.access_token);
+          }
+        } catch {
+          // keep using the current token; it is still valid
+        } finally {
+          this.refreshing = null;
+        }
+      })();
+    }
+    await this.refreshing;
+  }
+
+  /**
+   * Authenticated fetch for pages that need the raw Response (uploads, custom error handling).
+   * `path` is relative to the API base (e.g. "/contributor/opportunities"). Shares the same token,
+   * refresh, timeout and 401 handling as every other call.
+   */
+  async authFetch(path: string, init: RequestInit = {}): Promise<Response> {
+    await this.refreshTokenIfNeeded(path);
+    const headers = new Headers(init.headers || {});
+    if (this.getToken()) headers.set("Authorization", `Bearer ${this.getToken()}`);
+    if (init.body && !(init.body instanceof FormData) && !headers.has("Content-Type")) {
+      headers.set("Content-Type", "application/json");
+    }
+    const method = (init.method || "GET").toUpperCase();
+    const hadToken = Boolean(this.getToken());
+    const res = await this.fetchWithRetry(`${API_BASE}${path}`, { ...init, headers }, method === "GET");
+    if (res.status === 401 && hadToken && typeof window !== "undefined") {
+      this.setToken(null);
+      window.dispatchEvent(new Event("lb:unauthorized"));
+    }
+    if (method !== "GET") this.clearCache();
+    return res;
   }
 
   private async request<T>(

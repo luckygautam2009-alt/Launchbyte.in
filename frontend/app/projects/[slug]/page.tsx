@@ -137,8 +137,8 @@ export default function ProjectDetailPage() {
   if (error || !project) {
     return (
       <div className="max-w-xl mx-auto px-4 py-20 text-center">
-        <h2 className="text-xl font-bold text-white mb-2">Project not found</h2>
-        <p className="text-slate-400 text-sm mb-6">{error || "This project may be private or has been removed."}</p>
+        <h2 className="text-xl font-bold text-[#17172B] dark:text-white mb-2">Project not found</h2>
+        <p className="text-[#424C63] dark:text-slate-400 text-sm mb-6">{error || "This project may be private or has been removed."}</p>
         <Link
           href="/projects"
           className="px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-medium text-sm transition"
@@ -157,18 +157,18 @@ export default function ProjectDetailPage() {
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
       <Link
         href="/projects"
-        className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white mb-6 transition"
+        className="inline-flex items-center gap-1.5 text-xs text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-white mb-6 transition"
       >
         <ArrowLeft className="w-3.5 h-3.5" />
         Back to Projects
       </Link>
 
       {/* Main Card */}
-      <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl mb-8">
+      <div className="bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl mb-8">
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6 mb-6">
           <div>
             <div className="flex items-center gap-2.5 mb-2">
-              <span className="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-slate-800 text-slate-300 border border-slate-700">
+              <span className="px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-slate-100 dark:bg-slate-800 text-[#2F3A52] dark:text-slate-300 border border-slate-300 dark:border-slate-700">
                 {project.visibility}
               </span>
               <span className="text-xs text-slate-500">
@@ -176,12 +176,12 @@ export default function ProjectDetailPage() {
               </span>
             </div>
 
-            <h1 className="text-3xl font-extrabold text-white tracking-tight leading-tight mb-2">
+            <h1 className="text-3xl font-extrabold text-[#17172B] dark:text-white tracking-tight leading-tight mb-2">
               {project.title}
             </h1>
 
-            <p className="text-sm text-slate-400">
-              Created by <span className="text-slate-200 font-semibold">{project.owner_name || `@${project.owner_handle}`}</span>
+            <p className="text-sm text-[#424C63] dark:text-slate-400">
+              Created by <span className="text-[#17172B] dark:text-slate-200 font-semibold">{project.owner_name || `@${project.owner_handle}`}</span>
             </p>
           </div>
 
@@ -190,7 +190,7 @@ export default function ProjectDetailPage() {
             {isOwner ? (
               <button
                 onClick={handleDeleteProject}
-                className="px-3.5 py-2 rounded-xl border border-rose-900/60 hover:bg-rose-950/40 text-rose-400 text-xs font-semibold flex items-center gap-1.5 transition"
+                className="px-3.5 py-2 rounded-xl border border-rose-200 dark:border-rose-900/60 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-rose-600 dark:text-rose-400 text-xs font-semibold flex items-center gap-1.5 transition"
               >
                 <Trash2 className="w-3.5 h-3.5" />
                 Delete Project
@@ -206,20 +206,20 @@ export default function ProjectDetailPage() {
                 </Link>
                 <button
                   onClick={handleLeave}
-                  className="px-3 py-2 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-400 text-xs font-medium transition"
+                  className="px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-[#424C63] dark:text-slate-400 text-xs font-medium transition"
                 >
                   Leave
                 </button>
               </div>
             ) : isPending ? (
               <div className="flex items-center gap-2">
-                <span className="px-3 py-1.5 rounded-xl bg-amber-950/40 border border-amber-800/60 text-amber-300 text-xs font-medium flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-amber-400" />
+                <span className="px-3 py-1.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 text-amber-700 dark:text-amber-300 text-xs font-medium flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
                   Request Pending
                 </span>
                 <button
                   onClick={handleWithdraw}
-                  className="px-3 py-1.5 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-400 text-xs font-medium transition"
+                  className="px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-[#424C63] dark:text-slate-400 text-xs font-medium transition"
                 >
                   Withdraw
                 </button>
@@ -245,15 +245,15 @@ export default function ProjectDetailPage() {
 
         {/* Links bar */}
         {(project.repo_url || project.demo_url) && (
-          <div className="flex items-center gap-4 py-3 px-4 rounded-2xl bg-slate-950/40 border border-slate-800 mb-6 text-xs">
+          <div className="flex items-center gap-4 py-3 px-4 rounded-2xl bg-white/90 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800 mb-6 text-xs">
             {project.repo_url && (
               <a
                 href={project.repo_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-slate-300 hover:text-white font-medium transition"
+                className="flex items-center gap-1.5 text-[#2F3A52] dark:text-slate-300 hover:text-[#17172B] dark:hover:text-white font-medium transition"
               >
-                <Github className="w-4 h-4 text-slate-400" />
+                <Github className="w-4 h-4 text-[#424C63] dark:text-slate-400" />
                 Repository
               </a>
             )}
@@ -262,9 +262,9 @@ export default function ProjectDetailPage() {
                 href={project.demo_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-slate-300 hover:text-white font-medium transition"
+                className="flex items-center gap-1.5 text-[#2F3A52] dark:text-slate-300 hover:text-[#17172B] dark:hover:text-white font-medium transition"
               >
-                <Globe className="w-4 h-4 text-slate-400" />
+                <Globe className="w-4 h-4 text-[#424C63] dark:text-slate-400" />
                 Live Demo
               </a>
             )}
@@ -273,22 +273,22 @@ export default function ProjectDetailPage() {
 
         {/* Summary */}
         {project.summary && (
-          <p className="text-base text-slate-200 leading-relaxed mb-6 font-medium">
+          <p className="text-base text-[#17172B] dark:text-slate-200 leading-relaxed mb-6 font-medium">
             {project.summary}
           </p>
         )}
 
         {/* Looking For */}
         {project.looking_for && project.looking_for.length > 0 && (
-          <div className="mb-6 p-4 rounded-2xl bg-emerald-950/20 border border-emerald-900/40">
-            <h4 className="text-xs font-bold text-emerald-400 mb-2 uppercase tracking-wider flex items-center gap-1.5">
+          <div className="mb-6 p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40">
+            <h4 className="text-xs font-bold text-emerald-700 dark:text-emerald-400 mb-2 uppercase tracking-wider flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5" /> Open Roles / Looking For
             </h4>
             <div className="flex flex-wrap gap-2">
               {project.looking_for.map((role) => (
                 <span
                   key={role}
-                  className="px-3 py-1 rounded-lg text-xs font-semibold bg-emerald-950/60 text-emerald-200 border border-emerald-800/60"
+                  className="px-3 py-1 rounded-lg text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-200 border border-emerald-200 dark:border-emerald-800/60"
                 >
                   {role}
                 </span>
@@ -300,14 +300,14 @@ export default function ProjectDetailPage() {
         {/* Tech Stack */}
         {project.tech_stack && project.tech_stack.length > 0 && (
           <div className="mb-8">
-            <h4 className="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">
+            <h4 className="text-xs font-bold text-[#424C63] dark:text-slate-400 mb-2 uppercase tracking-wider">
               Tech Stack
             </h4>
             <div className="flex flex-wrap gap-1.5">
               {project.tech_stack.map((t) => (
                 <span
                   key={t}
-                  className="px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-200 border border-slate-700/60"
+                  className="px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 text-[#17172B] dark:text-slate-200 border border-slate-300 dark:border-slate-700/60"
                 >
                   {t}
                 </span>
@@ -318,11 +318,11 @@ export default function ProjectDetailPage() {
 
         {/* Full Markdown Description */}
         {project.description && (
-          <div className="pt-6 border-t border-slate-800">
-            <h3 className="text-sm font-bold text-white mb-3 uppercase tracking-wider text-slate-300">
+          <div className="pt-6 border-t border-slate-200 dark:border-slate-800">
+            <h3 className="text-sm font-bold text-[#17172B] dark:text-white mb-3 uppercase tracking-wider text-[#2F3A52] dark:text-slate-300">
               About the Project
             </h3>
-            <div className="prose prose-invert max-w-none text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">
+            <div className="prose prose-invert max-w-none text-sm text-[#2F3A52] dark:text-slate-300 leading-relaxed whitespace-pre-wrap">
               {project.description}
             </div>
           </div>
@@ -332,26 +332,26 @@ export default function ProjectDetailPage() {
       {/* Collaborators & Requests Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Collaborators List */}
-        <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 shadow-xl">
-          <h3 className="text-base font-bold text-white mb-4 flex items-center gap-2">
-            <Users className="w-5 h-5 text-brand-400" />
+        <div className="bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-xl">
+          <h3 className="text-base font-bold text-[#17172B] dark:text-white mb-4 flex items-center gap-2">
+            <Users className="w-5 h-5 text-[#7552D9] dark:text-brand-400" />
             Project Members ({project.members.length})
           </h3>
-          <div className="divide-y divide-slate-800">
+          <div className="divide-y divide-slate-200 dark:divide-slate-800">
             {project.members.map((m) => (
               <div key={m.id} className="py-3 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-slate-800 flex items-center justify-center text-xs font-bold text-slate-200">
+                  <div className="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-xs font-bold text-[#17172B] dark:text-slate-200">
                     {m.user?.full_name?.[0]?.toUpperCase() || m.user?.handle?.[0]?.toUpperCase() || "U"}
                   </div>
                   <div>
-                    <h5 className="font-semibold text-white text-sm">
+                    <h5 className="font-semibold text-[#17172B] dark:text-white text-sm">
                       {m.user?.full_name || `@${m.user?.handle}`}
                     </h5>
-                    <p className="text-xs text-slate-400">@{m.user?.handle}</p>
+                    <p className="text-xs text-[#424C63] dark:text-slate-400">@{m.user?.handle}</p>
                   </div>
                 </div>
-                <span className="px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-slate-800 text-slate-300 border border-slate-700">
+                <span className="px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider bg-slate-100 dark:bg-slate-800 text-[#2F3A52] dark:text-slate-300 border border-slate-300 dark:border-slate-700">
                   {m.role}
                 </span>
               </div>
@@ -361,9 +361,9 @@ export default function ProjectDetailPage() {
 
         {/* If Owner: Pending Inbound Collaboration Requests */}
         {isOwner && (
-          <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-6 shadow-xl">
-            <h3 className="text-base font-bold text-white mb-4 flex items-center gap-2">
-              <UserPlus className="w-5 h-5 text-emerald-400" />
+          <div className="bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-xl">
+            <h3 className="text-base font-bold text-[#17172B] dark:text-white mb-4 flex items-center gap-2">
+              <UserPlus className="w-5 h-5 text-emerald-700 dark:text-emerald-400" />
               Inbound Collab Requests ({collabRequests.length})
             </h3>
             {collabRequests.length === 0 ? (
@@ -375,10 +375,10 @@ export default function ProjectDetailPage() {
                 {collabRequests.map((req) => (
                   <div
                     key={req.id}
-                    className="p-4 rounded-2xl bg-slate-950/40 border border-slate-800"
+                    className="p-4 rounded-2xl bg-white/90 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800"
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-semibold text-sm text-white">
+                      <span className="font-semibold text-sm text-[#17172B] dark:text-white">
                         {req.user?.full_name || `@${req.user?.handle}`}
                       </span>
                       <span className="text-[10px] text-slate-500">
@@ -387,7 +387,7 @@ export default function ProjectDetailPage() {
                     </div>
 
                     {req.message && (
-                      <p className="text-xs text-slate-300 italic mb-3 bg-slate-900 p-2.5 rounded-xl border border-slate-800">
+                      <p className="text-xs text-[#2F3A52] dark:text-slate-300 italic mb-3 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800">
                         "{req.message}"
                       </p>
                     )}
@@ -397,7 +397,7 @@ export default function ProjectDetailPage() {
                         {req.user.skills.map((s) => (
                           <span
                             key={s}
-                            className="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300"
+                            className="px-2 py-0.5 rounded text-[10px] bg-slate-100 dark:bg-slate-800 text-[#2F3A52] dark:text-slate-300"
                           >
                             {s}
                           </span>
@@ -405,7 +405,7 @@ export default function ProjectDetailPage() {
                       </div>
                     )}
 
-                    <div className="flex items-center gap-2 pt-2 border-t border-slate-800">
+                    <div className="flex items-center gap-2 pt-2 border-t border-slate-200 dark:border-slate-800">
                       <button
                         onClick={() => handleAcceptRequest(req.id)}
                         className="flex-1 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold flex items-center justify-center gap-1 transition"
@@ -414,7 +414,7 @@ export default function ProjectDetailPage() {
                       </button>
                       <button
                         onClick={() => handleRejectRequest(req.id)}
-                        className="px-4 py-1.5 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-medium transition"
+                        className="px-4 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-[#2F3A52] dark:text-slate-300 text-xs font-medium transition"
                       >
                         Reject
                       </button>
@@ -430,11 +430,11 @@ export default function ProjectDetailPage() {
       {/* Collab Request Modal */}
       {showCollabModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-          <div className="max-w-md w-full bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-2xl">
-            <h3 className="text-lg font-bold text-white mb-1">
+          <div className="max-w-md w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-2xl">
+            <h3 className="text-lg font-bold text-[#17172B] dark:text-white mb-1">
               Join {project.title}
             </h3>
-            <p className="text-xs text-slate-400 mb-4">
+            <p className="text-xs text-[#424C63] dark:text-slate-400 mb-4">
               Tell the project owner about your background, relevant skills, and how you want to contribute.
             </p>
 
@@ -443,13 +443,13 @@ export default function ProjectDetailPage() {
               placeholder="Hi, I'd love to help with frontend architecture and smart contract testing..."
               value={collabMessage}
               onChange={(e) => setCollabMessage(e.target.value)}
-              className="w-full p-3.5 rounded-xl bg-slate-800 border border-slate-700 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 mb-4"
+              className="w-full p-3.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm text-[#17172B] dark:text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 mb-4"
             />
 
             <div className="flex items-center justify-end gap-2">
               <button
                 onClick={() => setShowCollabModal(false)}
-                className="px-4 py-2 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-medium transition"
+                className="px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-[#2F3A52] dark:text-slate-300 text-xs font-medium transition"
               >
                 Cancel
               </button>

@@ -97,20 +97,20 @@ export default function MyInvitesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-transparent dark:bg-slate-950 text-slate-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-transparent dark:bg-slate-950 text-[#17172B] dark:text-slate-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-6">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Team Invitations</h1>
-            <p className="text-slate-400 text-sm mt-1">
+            <p className="text-[#424C63] dark:text-slate-400 text-sm mt-1">
               Review invites sent by team leaders to join their hackathon teams.
             </p>
           </div>
           <div className="flex items-center gap-2">
             <Link
               href="/teams"
-              className="px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 text-sm font-medium transition"
+              className="px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-[#2F3A52] dark:text-slate-300 hover:text-[#17172B] dark:hover:text-white hover:border-slate-300 dark:hover:border-slate-700 text-sm font-medium transition"
             >
               Browse Teams
             </Link>
@@ -125,26 +125,26 @@ export default function MyInvitesPage() {
 
         {/* Alerts */}
         {error && (
-          <div className="p-4 rounded-xl bg-red-950/60 border border-red-800 text-red-200 flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
+          <div className="p-4 rounded-xl bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-200 flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
             <div className="text-sm">{error}</div>
           </div>
         )}
         {success && (
-          <div className="p-4 rounded-xl bg-emerald-950/60 border border-emerald-800 text-emerald-200 flex items-start gap-3">
-            <CheckCircle className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+          <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-200 flex items-start gap-3">
+            <CheckCircle className="w-5 h-5 text-emerald-700 dark:text-emerald-400 shrink-0 mt-0.5" />
             <div className="text-sm">{success}</div>
           </div>
         )}
 
         {/* Tabs */}
-        <div className="flex gap-2 border-b border-slate-800 pb-4">
+        <div className="flex gap-2 border-b border-slate-200 dark:border-slate-800 pb-4">
           <button
             onClick={() => setFilter("pending")}
             className={`px-4 py-1.5 rounded-lg text-sm font-medium transition ${
               filter === "pending"
                 ? "bg-brand-600 text-white"
-                : "bg-slate-900 text-slate-400 hover:text-slate-200"
+                : "bg-white dark:bg-slate-900 text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-slate-200"
             }`}
           >
             Pending ({invites.filter((i) => i.status === "pending").length})
@@ -154,7 +154,7 @@ export default function MyInvitesPage() {
             className={`px-4 py-1.5 rounded-lg text-sm font-medium transition ${
               filter === "responded"
                 ? "bg-brand-600 text-white"
-                : "bg-slate-900 text-slate-400 hover:text-slate-200"
+                : "bg-white dark:bg-slate-900 text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-slate-200"
             }`}
           >
             Past / Responded ({invites.filter((i) => i.status !== "pending").length})
@@ -164,7 +164,7 @@ export default function MyInvitesPage() {
             className={`px-4 py-1.5 rounded-lg text-sm font-medium transition ${
               filter === "all"
                 ? "bg-brand-600 text-white"
-                : "bg-slate-900 text-slate-400 hover:text-slate-200"
+                : "bg-white dark:bg-slate-900 text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-slate-200"
             }`}
           >
             All ({invites.length})
@@ -173,9 +173,9 @@ export default function MyInvitesPage() {
 
         {/* List */}
         {filteredInvites.length === 0 ? (
-          <div className="bg-slate-900/40 border border-slate-800 rounded-2xl p-12 text-center space-y-4">
+          <div className="bg-white/90 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 rounded-2xl p-12 text-center space-y-4">
             <Mail className="w-10 h-10 text-slate-600 mx-auto" />
-            <p className="text-slate-400 text-sm">
+            <p className="text-[#424C63] dark:text-slate-400 text-sm">
               {filter === "pending"
                 ? "You have no pending team invitations."
                 : "No invitations match this view."}
@@ -183,7 +183,7 @@ export default function MyInvitesPage() {
             <div className="pt-2">
               <Link
                 href="/people"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sm font-medium transition"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-sm font-medium transition"
               >
                 Find Hackers & Teams
               </Link>
@@ -198,13 +198,13 @@ export default function MyInvitesPage() {
               return (
                 <div
                   key={invite.id}
-                  className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6"
+                  className="bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6"
                 >
                   <div className="space-y-2 flex-1">
                     <div className="flex flex-wrap items-center gap-3">
                       <Link
                         href={`/teams/${invite.team_slug}`}
-                        className="text-lg font-semibold hover:text-brand-400 transition flex items-center gap-1.5"
+                        className="text-lg font-semibold hover:text-[#7552D9] dark:hover:text-brand-400 transition flex items-center gap-1.5"
                       >
                         {invite.team_name}
                         <ExternalLink className="w-4 h-4 text-slate-500" />
@@ -213,23 +213,23 @@ export default function MyInvitesPage() {
                       <span
                         className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${
                           invite.status === "pending"
-                            ? "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                            ? "bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20"
                             : invite.status === "accepted"
-                            ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                            : "bg-slate-800 text-slate-400"
+                            ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20"
+                            : "bg-slate-100 dark:bg-slate-800 text-[#424C63] dark:text-slate-400"
                         }`}
                       >
                         {invite.status.toUpperCase()}
                       </span>
                     </div>
 
-                    <p className="text-xs text-slate-400">
-                      Invited by <strong className="text-slate-200">{invite.inviter_name}</strong> on{" "}
+                    <p className="text-xs text-[#424C63] dark:text-slate-400">
+                      Invited by <strong className="text-[#17172B] dark:text-slate-200">{invite.inviter_name}</strong> on{" "}
                       {new Date(invite.created_at).toLocaleDateString()}
                     </p>
 
                     {invite.message && (
-                      <p className="text-sm text-slate-300 italic bg-slate-950/60 p-3 rounded-xl border border-slate-800/80">
+                      <p className="text-sm text-[#2F3A52] dark:text-slate-300 italic bg-white/90 dark:bg-slate-950/60 p-3 rounded-xl border border-slate-200 dark:border-slate-800/80">
                         "{invite.message}"
                       </p>
                     )}
@@ -253,7 +253,7 @@ export default function MyInvitesPage() {
                       <button
                         onClick={() => handleDecline(invite.id)}
                         disabled={isBusy}
-                        className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white text-sm font-medium transition border border-slate-700 disabled:opacity-50"
+                        className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[#2F3A52] dark:text-slate-300 hover:text-[#17172B] dark:hover:text-white text-sm font-medium transition border border-slate-300 dark:border-slate-700 disabled:opacity-50"
                       >
                         <XCircle className="w-4 h-4" />
                         Decline

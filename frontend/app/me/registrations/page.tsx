@@ -13,12 +13,12 @@ import {
 } from "lucide-react";
 
 const STATUS_CONFIG: Record<RegistrationStatus, { label: string; color: string; icon: React.ReactNode }> = {
-  registered: { label: "Registered", color: "text-green-400 bg-green-400/10 border-green-400/20", icon: <CheckCircle2 className="w-3.5 h-3.5" /> },
-  waitlisted: { label: "Waitlisted", color: "text-amber-400 bg-amber-400/10 border-amber-400/20", icon: <Clock className="w-3.5 h-3.5" /> },
-  pending_approval: { label: "Pending", color: "text-blue-400 bg-blue-400/10 border-blue-400/20", icon: <Clock className="w-3.5 h-3.5" /> },
-  checked_in: { label: "Checked In", color: "text-indigo-400 bg-indigo-400/10 border-indigo-400/20", icon: <CheckCircle2 className="w-3.5 h-3.5" /> },
-  rejected: { label: "Rejected", color: "text-red-400 bg-red-400/10 border-red-400/20", icon: <XCircle className="w-3.5 h-3.5" /> },
-  cancelled: { label: "Cancelled", color: "text-slate-400 bg-slate-400/10 border-slate-400/20", icon: <Ban className="w-3.5 h-3.5" /> },
+  registered: { label: "Registered", color: "text-green-700 dark:text-green-400 bg-green-400/10 border-green-400/20", icon: <CheckCircle2 className="w-3.5 h-3.5" /> },
+  waitlisted: { label: "Waitlisted", color: "text-amber-700 dark:text-amber-400 bg-amber-400/10 border-amber-400/20", icon: <Clock className="w-3.5 h-3.5" /> },
+  pending_approval: { label: "Pending", color: "text-blue-700 dark:text-blue-400 bg-blue-400/10 border-blue-400/20", icon: <Clock className="w-3.5 h-3.5" /> },
+  checked_in: { label: "Checked In", color: "text-indigo-700 dark:text-indigo-400 bg-indigo-400/10 border-indigo-400/20", icon: <CheckCircle2 className="w-3.5 h-3.5" /> },
+  rejected: { label: "Rejected", color: "text-red-600 dark:text-red-400 bg-red-400/10 border-red-400/20", icon: <XCircle className="w-3.5 h-3.5" /> },
+  cancelled: { label: "Cancelled", color: "text-[#424C63] dark:text-slate-400 bg-slate-400/10 border-slate-400/20", icon: <Ban className="w-3.5 h-3.5" /> },
 };
 
 const CANCELLABLE: RegistrationStatus[] = ["registered", "waitlisted", "pending_approval"];
@@ -75,7 +75,7 @@ export default function MyRegistrationsPage() {
 
   if (authLoading) return (
     <div className="min-h-screen bg-transparent dark:bg-slate-950 flex items-center justify-center">
-      <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
+      <Loader2 className="w-8 h-8 animate-spin text-indigo-700 dark:text-indigo-400" />
     </div>
   );
 
@@ -83,8 +83,8 @@ export default function MyRegistrationsPage() {
     <main className="min-h-screen bg-transparent dark:bg-slate-950">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white">My Registrations</h1>
-          <p className="text-slate-400 mt-1">Your event registrations and passes.</p>
+          <h1 className="text-3xl font-bold text-[#17172B] dark:text-white">My Registrations</h1>
+          <p className="text-[#424C63] dark:text-slate-400 mt-1">Your event registrations and passes.</p>
         </div>
 
         {/* Status filter */}
@@ -99,7 +99,7 @@ export default function MyRegistrationsPage() {
             <button
               key={val}
               onClick={() => setStatusFilter(val as RegistrationStatus | "")}
-              className={`px-3 py-1.5 rounded-xl text-sm font-medium border transition-colors ${statusFilter === val ? "bg-indigo-600 text-white border-indigo-600" : "bg-slate-900 text-slate-400 border-slate-800 hover:border-slate-600"}`}
+              className={`px-3 py-1.5 rounded-xl text-sm font-medium border transition-colors ${statusFilter === val ? "bg-indigo-600 text-white border-indigo-600" : "bg-white dark:bg-slate-900 text-[#424C63] dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-600"}`}
             >
               {label}
             </button>
@@ -110,22 +110,22 @@ export default function MyRegistrationsPage() {
         {loading ? (
           <div className="space-y-3">
             {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="h-24 bg-slate-900/60 border border-slate-800 rounded-2xl animate-pulse" />
+              <div key={i} className="h-24 bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl animate-pulse" />
             ))}
           </div>
         ) : error ? (
           <div className="text-center py-16">
-            <AlertCircle className="w-10 h-10 text-red-400 mx-auto mb-3" />
-            <p className="text-slate-400">{error}</p>
-            <button onClick={fetchRegistrations} className="mt-3 text-indigo-400 hover:text-indigo-300 text-sm underline">Retry</button>
+            <AlertCircle className="w-10 h-10 text-red-600 dark:text-red-400 mx-auto mb-3" />
+            <p className="text-[#424C63] dark:text-slate-400">{error}</p>
+            <button onClick={fetchRegistrations} className="mt-3 text-indigo-700 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 text-sm underline">Retry</button>
           </div>
         ) : filtered.length === 0 ? (
           <div className="text-center py-16">
             <Ticket className="w-10 h-10 text-slate-700 mx-auto mb-4" />
-            <p className="text-slate-400">
+            <p className="text-[#424C63] dark:text-slate-400">
               {statusFilter ? `No ${statusFilter} registrations.` : "You haven't registered for any events yet."}
             </p>
-            <Link href="/events" className="mt-3 inline-block text-indigo-400 hover:text-indigo-300 text-sm underline">
+            <Link href="/events" className="mt-3 inline-block text-indigo-700 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 text-sm underline">
               Browse Events
             </Link>
           </div>
@@ -135,17 +135,17 @@ export default function MyRegistrationsPage() {
               const cfg = STATUS_CONFIG[reg.status] || STATUS_CONFIG.registered;
               const starts = reg.starts_at ? new Date(reg.starts_at) : null;
               return (
-                <div key={reg.id} className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 hover:border-slate-700 transition-colors">
+                <div key={reg.id} className="bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
                       <Link
                         href={reg.event_slug ? `/events/${reg.event_slug}` : "#"}
-                        className="font-semibold text-white hover:text-indigo-300 transition-colors line-clamp-1"
+                        className="font-semibold text-[#17172B] dark:text-white hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors line-clamp-1"
                       >
                         {reg.event_title || "Event"}
                       </Link>
                       {starts && (
-                        <div className="flex items-center gap-1.5 text-xs text-slate-400 mt-1">
+                        <div className="flex items-center gap-1.5 text-xs text-[#424C63] dark:text-slate-400 mt-1">
                           <Calendar className="w-3.5 h-3.5" />
                           {starts.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric", year: "numeric" })}
                         </div>
@@ -173,7 +173,7 @@ export default function MyRegistrationsPage() {
                         <button
                           onClick={() => handleCancel(reg)}
                           disabled={cancelling === reg.id}
-                          className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-colors disabled:opacity-50"
+                          className="p-2 text-slate-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-colors disabled:opacity-50"
                           aria-label="Cancel registration"
                         >
                           {cancelling === reg.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <XCircle className="w-4 h-4" />}

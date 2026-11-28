@@ -23,7 +23,7 @@ export function Tabs({ items, activeId, onChange, className }: TabsProps) {
     <div
       role="tablist"
       className={clsx(
-        "flex items-center gap-1.5 p-1 rounded-xl bg-slate-900/90 border border-slate-800/80 overflow-x-auto scrollbar-none",
+        "flex items-center gap-1.5 p-1 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800/80 overflow-x-auto scrollbar-none",
         className
       )}
     >
@@ -37,7 +37,7 @@ export function Tabs({ items, activeId, onChange, className }: TabsProps) {
             onClick={() => onChange(tab.id)}
             className={clsx(
               "relative flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold select-none cursor-pointer transition-colors duration-150 whitespace-nowrap",
-              isActive ? "text-white" : "text-slate-400 hover:text-slate-200"
+              isActive ? "text-[#17172B] dark:text-white" : "text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-slate-200"
             )}
           >
             {isActive && (
@@ -54,7 +54,7 @@ export function Tabs({ items, activeId, onChange, className }: TabsProps) {
                 <span
                   className={clsx(
                     "text-[10px] px-1.5 py-0.2 rounded-full font-mono",
-                    isActive ? "bg-brand-700/80 text-white" : "bg-slate-800 text-slate-400"
+                    isActive ? "bg-brand-700/80 text-white" : "bg-slate-100 dark:bg-slate-800 text-[#424C63] dark:text-slate-400"
                   )}
                 >
                   {tab.badge}

@@ -1,5 +1,6 @@
 "use client";
 
+import { api } from "@/lib/api";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
@@ -15,7 +16,6 @@ import {
 } from "lucide-react";
 import { LAUNCHBYTE_SOCIALS } from "@/lib/siteContent";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
 export default function RequestContributorAccessPage() {
   const { user, loading: authLoading } = useAuth();
@@ -45,9 +45,7 @@ export default function RequestContributorAccessPage() {
   async function loadStatus() {
     setStatusLoading(true);
     try {
-      const token = localStorage.getItem("lb_token");
-      const res = await fetch(`${API_BASE}/contributor-access/me`, {
-        headers: { Authorization: `Bearer ${token}` },
+      const res = await api.authFetch(`/contributor-access/me`, {
       });
       if (res.ok) {
         const data = await res.json();
@@ -68,12 +66,10 @@ export default function RequestContributorAccessPage() {
     setSubmitting(true);
 
     try {
-      const token = localStorage.getItem("lb_token");
-      const res = await fetch(`${API_BASE}/contributor-access/request`, {
+      const res = await api.authFetch(`/contributor-access/request`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           full_name: fullName.trim(),
@@ -100,33 +96,33 @@ export default function RequestContributorAccessPage() {
 
   if (authLoading || statusLoading) {
     return (
-      <div className="min-h-screen bg-[#050510] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-violet-400 animate-spin" />
+      <div className="min-h-screen bg-transparent dark:bg-[#050510] flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-violet-700 dark:text-violet-400 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#050510] text-slate-100 py-16 sm:py-24">
+    <div className="min-h-screen bg-transparent dark:bg-[#050510] text-[#17172B] dark:text-slate-100 py-16 sm:py-24">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 space-y-8">
         <div className="text-center space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-950/60 border border-violet-500/30 text-xs font-mono uppercase tracking-widest text-[#A78BFA]">
-            <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-50 dark:bg-violet-950/60 border border-violet-500/30 text-xs font-mono uppercase tracking-widest text-[#A78BFA]">
+            <ShieldCheck className="w-3.5 h-3.5 text-cyan-700 dark:text-cyan-400" />
             <span>Contributor Permissions</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#17172B] dark:text-white">
             Request Opportunity Listing Access
           </h1>
-          <p className="text-sm text-slate-300 leading-relaxed">
+          <p className="text-sm text-[#2F3A52] dark:text-slate-300 leading-relaxed">
             LaunchByte core team members can request contributor access to draft and submit verified opportunities for admin review.
           </p>
         </div>
 
         {!user ? (
           <div className="p-8 rounded-3xl glass-card border border-violet-500/30 text-center space-y-4">
-            <Lock className="w-10 h-10 text-violet-400 mx-auto" />
-            <h2 className="text-xl font-bold text-white">Sign In Required</h2>
-            <p className="text-xs sm:text-sm text-slate-300">
+            <Lock className="w-10 h-10 text-violet-700 dark:text-violet-400 mx-auto" />
+            <h2 className="text-xl font-bold text-[#17172B] dark:text-white">Sign In Required</h2>
+            <p className="text-xs sm:text-sm text-[#2F3A52] dark:text-slate-300">
               Please sign in with your verified LaunchByte account before requesting opportunity listing access.
             </p>
             <Link
@@ -139,14 +135,14 @@ export default function RequestContributorAccessPage() {
           </div>
         ) : !user.is_email_verified ? (
           <div className="p-8 rounded-3xl glass-card border border-amber-500/30 text-center space-y-4">
-            <AlertCircle className="w-10 h-10 text-amber-400 mx-auto" />
-            <h2 className="text-xl font-bold text-white">Email Verification Required</h2>
-            <p className="text-xs sm:text-sm text-slate-300">
+            <AlertCircle className="w-10 h-10 text-amber-700 dark:text-amber-400 mx-auto" />
+            <h2 className="text-xl font-bold text-[#17172B] dark:text-white">Email Verification Required</h2>
+            <p className="text-xs sm:text-sm text-[#2F3A52] dark:text-slate-300">
               Your email ({user.email}) must be verified before you can request contributor permissions.
             </p>
             <Link
               href="/verify-email"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-600/20 border border-amber-500/40 text-amber-200 text-sm font-semibold"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-600/20 border border-amber-500/40 text-amber-700 dark:text-amber-200 text-sm font-semibold"
             >
               <span>Verify Email</span>
               <ArrowRight className="w-4 h-4" />
@@ -154,9 +150,9 @@ export default function RequestContributorAccessPage() {
           </div>
         ) : hasAccess ? (
           <div className="p-8 rounded-3xl glass-card border border-emerald-500/30 text-center space-y-4">
-            <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
-            <h2 className="text-xl font-bold text-white">Listing Access Active</h2>
-            <p className="text-xs sm:text-sm text-slate-300">
+            <CheckCircle2 className="w-10 h-10 text-emerald-700 dark:text-emerald-400 mx-auto" />
+            <h2 className="text-xl font-bold text-[#17172B] dark:text-white">Listing Access Active</h2>
+            <p className="text-xs sm:text-sm text-[#2F3A52] dark:text-slate-300">
               Your account has contributor permissions. You can create drafts, preview opportunities, and submit them for publishing.
             </p>
             <Link
@@ -169,32 +165,32 @@ export default function RequestContributorAccessPage() {
           </div>
         ) : latestRequest?.status === "pending" ? (
           <div className="p-8 rounded-3xl glass-card border border-cyan-500/30 text-center space-y-4">
-            <Clock className="w-10 h-10 text-cyan-400 mx-auto" />
-            <h2 className="text-xl font-bold text-white">Request Pending Admin Review</h2>
-            <p className="text-xs sm:text-sm text-slate-300">
+            <Clock className="w-10 h-10 text-cyan-700 dark:text-cyan-400 mx-auto" />
+            <h2 className="text-xl font-bold text-[#17172B] dark:text-white">Request Pending Admin Review</h2>
+            <p className="text-xs sm:text-sm text-[#2F3A52] dark:text-slate-300">
               Your access request ({latestRequest.team_role}) is currently awaiting review by the LaunchByte admin.
             </p>
-            <div className="text-xs font-mono text-slate-400">
+            <div className="text-xs font-mono text-[#424C63] dark:text-slate-400">
               Submitted on {new Date(latestRequest.created_at).toLocaleDateString()}
             </div>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="p-6 sm:p-8 rounded-3xl glass-card border border-violet-500/30 space-y-5">
             {errorMsg && (
-              <div className="p-3.5 rounded-xl bg-red-950/50 border border-red-500/40 text-red-200 text-xs flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+              <div className="p-3.5 rounded-xl bg-red-50 dark:bg-red-950/50 border border-red-500/40 text-red-600 dark:text-red-200 text-xs flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400 shrink-0" />
                 <span>{errorMsg}</span>
               </div>
             )}
             {successMsg && (
-              <div className="p-3.5 rounded-xl bg-emerald-950/50 border border-emerald-500/40 text-emerald-200 text-xs flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+              <div className="p-3.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-500/40 text-emerald-700 dark:text-emerald-200 text-xs flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-emerald-700 dark:text-emerald-400 shrink-0" />
                 <span>{successMsg}</span>
               </div>
             )}
 
             <div className="space-y-1.5">
-              <label className="text-xs font-mono uppercase tracking-wider text-slate-300">
+              <label className="text-xs font-mono uppercase tracking-wider text-[#2F3A52] dark:text-slate-300">
                 Full Name *
               </label>
               <input
@@ -203,12 +199,12 @@ export default function RequestContributorAccessPage() {
                 minLength={2}
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm outline-none"
+                className="w-full px-4 py-3 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white text-sm outline-none"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-mono uppercase tracking-wider text-slate-300">
+              <label className="text-xs font-mono uppercase tracking-wider text-[#2F3A52] dark:text-slate-300">
                 Verified Account Email *
               </label>
               <input
@@ -216,18 +212,18 @@ export default function RequestContributorAccessPage() {
                 required
                 readOnly
                 value={email}
-                className="w-full px-4 py-3 rounded-xl bg-slate-900/50 border border-slate-800 text-slate-400 text-sm outline-none cursor-not-allowed"
+                className="w-full px-4 py-3 rounded-xl bg-white/90 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 text-[#424C63] dark:text-slate-400 text-sm outline-none cursor-not-allowed"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-mono uppercase tracking-wider text-slate-300">
+              <label className="text-xs font-mono uppercase tracking-wider text-[#2F3A52] dark:text-slate-300">
                 Team Role *
               </label>
               <select
                 value={teamRole}
                 onChange={(e) => setTeamRole(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm outline-none cursor-pointer"
+                className="w-full px-4 py-3 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white text-sm outline-none cursor-pointer"
               >
                 <option value="Co-Founder">Co-Founder</option>
                 <option value="Head of Community & Event Management">Head of Community & Event Management</option>
@@ -237,7 +233,7 @@ export default function RequestContributorAccessPage() {
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-mono uppercase tracking-wider text-slate-300">
+              <label className="text-xs font-mono uppercase tracking-wider text-[#2F3A52] dark:text-slate-300">
                 Reason for Requesting Access *
               </label>
               <textarea
@@ -247,7 +243,7 @@ export default function RequestContributorAccessPage() {
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
                 placeholder="Describe which opportunities or hackathons you plan to curate and list..."
-                className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm outline-none resize-none"
+                className="w-full px-4 py-3 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white text-sm outline-none resize-none"
               />
             </div>
 

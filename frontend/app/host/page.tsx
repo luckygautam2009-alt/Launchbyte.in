@@ -169,28 +169,28 @@ export default function PublicHostEventPage() {
 
         {submissionAck ? (
           <div className="p-8 sm:p-12 rounded-3xl glass-card border border-emerald-500/30 text-center space-y-5">
-            <div className="w-16 h-16 rounded-2xl bg-emerald-950/70 border border-emerald-500/40 flex items-center justify-center text-emerald-400 mx-auto">
+            <div className="w-16 h-16 rounded-2xl bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-500/40 flex items-center justify-center text-emerald-700 dark:text-emerald-400 mx-auto">
               <CheckCircle2 className="w-8 h-8" />
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white">Event Submission Received</h2>
-            <p className="text-sm text-slate-300 max-w-lg mx-auto leading-relaxed">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#17172B] dark:text-white">Event Submission Received</h2>
+            <p className="text-sm text-[#2F3A52] dark:text-slate-300 max-w-lg mx-auto leading-relaxed">
               {submissionAck.message}
             </p>
-            <div className="inline-block px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-cyan-300">
+            <div className="inline-block px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-mono text-cyan-700 dark:text-cyan-300">
               Submission ID: {submissionAck.id} • Status: {submissionAck.status.toUpperCase()}
             </div>
             {submissionAck.email_sent ? (
-              <p className="text-xs text-emerald-300">
-                Notification delivered to <span className="text-cyan-300 font-mono">{LAUNCHBYTE_SOCIALS.email}</span>
+              <p className="text-xs text-emerald-700 dark:text-emerald-300">
+                Notification delivered to <span className="text-cyan-700 dark:text-cyan-300 font-mono">{LAUNCHBYTE_SOCIALS.email}</span>
                 {organizerEmail ? (
                   <>
-                    {" "}and confirmation sent to <span className="text-cyan-300 font-mono">{organizerEmail}</span>
+                    {" "}and confirmation sent to <span className="text-cyan-700 dark:text-cyan-300 font-mono">{organizerEmail}</span>
                   </>
                 ) : null}
                 .
               </p>
             ) : (
-              <div className="max-w-lg mx-auto p-3.5 rounded-xl bg-amber-950/40 border border-amber-500/30 text-amber-200 text-xs space-y-1">
+              <div className="max-w-lg mx-auto p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-500/30 text-amber-700 dark:text-amber-200 text-xs space-y-1">
                 <p className="font-semibold">
                   Submission saved, but email notification could not be fully delivered.
                 </p>
@@ -211,7 +211,7 @@ export default function PublicHostEventPage() {
                   setEventName("");
                   setDescription("");
                 }}
-                className="px-6 py-3 rounded-xl bg-violet-600/20 border border-violet-500/40 text-violet-200 text-xs font-semibold hover:bg-violet-600/30 transition cursor-pointer"
+                className="px-6 py-3 rounded-xl bg-violet-600/20 border border-violet-500/40 text-violet-700 dark:text-violet-200 text-xs font-semibold hover:bg-violet-600/30 transition cursor-pointer"
               >
                 Submit Another Event
               </button>
@@ -226,8 +226,8 @@ export default function PublicHostEventPage() {
         ) : (
           <form onSubmit={handleSubmit} className="p-6 sm:p-10 rounded-3xl glass-card border border-violet-500/25 space-y-8">
             {submitError && (
-              <div className="p-4 rounded-xl bg-red-950/50 border border-red-500/40 text-red-200 text-xs sm:text-sm flex items-start gap-2.5">
-                <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+              <div className="p-4 rounded-xl bg-red-50 dark:bg-red-950/50 border border-red-500/40 text-red-600 dark:text-red-200 text-xs sm:text-sm flex items-start gap-2.5">
+                <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
                 <span>{submitError}</span>
               </div>
             )}
@@ -245,13 +245,13 @@ export default function PublicHostEventPage() {
 
             {/* 1. Event Basics */}
             <div className="space-y-5">
-              <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-2">
+              <h2 className="text-lg font-bold text-[#17172B] dark:text-white border-b border-slate-200 dark:border-slate-800 pb-2">
                 1. Event Details
               </h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="space-y-1.5 sm:col-span-2">
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300">
+                  <label className="text-xs font-mono uppercase tracking-wider text-[#2F3A52] dark:text-slate-300">
                     Event Name *
                   </label>
                   <input
@@ -261,18 +261,18 @@ export default function PublicHostEventPage() {
                     value={eventName}
                     onChange={(e) => setEventName(e.target.value)}
                     placeholder="e.g. National AI & Systems Hackathon 2027"
-                    className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm focus-visible:ring-2 focus-visible:ring-violet-400 outline-none"
+                    className="w-full px-4 py-3 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white text-sm focus-visible:ring-2 focus-visible:ring-violet-400 outline-none"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300">
+                  <label className="text-xs font-mono uppercase tracking-wider text-[#2F3A52] dark:text-slate-300">
                     Event Category *
                   </label>
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm outline-none cursor-pointer"
+                    className="w-full px-4 py-3 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white text-sm outline-none cursor-pointer"
                   >
                     <option value="Hackathon">Hackathon</option>
                     <option value="Workshop">Workshop</option>
@@ -283,13 +283,13 @@ export default function PublicHostEventPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300">
+                  <label className="text-xs font-mono uppercase tracking-wider text-[#2F3A52] dark:text-slate-300">
                     Event Format *
                   </label>
                   <select
                     value={eventFormat}
                     onChange={(e) => setEventFormat(e.target.value as any)}
-                    className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm outline-none cursor-pointer"
+                    className="w-full px-4 py-3 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white text-sm outline-none cursor-pointer"
                   >
                     <option value="online">Online</option>
                     <option value="offline">Offline (In-Person)</option>
@@ -298,7 +298,7 @@ export default function PublicHostEventPage() {
                 </div>
 
                 <div className="space-y-1.5 sm:col-span-2">
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300">
+                  <label className="text-xs font-mono uppercase tracking-wider text-[#2F3A52] dark:text-slate-300">
                     Venue / Location {eventFormat !== "online" && "*"}
                   </label>
                   <input
@@ -311,12 +311,12 @@ export default function PublicHostEventPage() {
                         ? "Online (optional platform note)"
                         : "Campus / City / Venue address"
                     }
-                    className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm outline-none"
+                    className="w-full px-4 py-3 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white text-sm outline-none"
                   />
                 </div>
 
                 <div className="space-y-1.5 sm:col-span-2">
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300">
+                  <label className="text-xs font-mono uppercase tracking-wider text-[#2F3A52] dark:text-slate-300">
                     Event Description * (min 20 chars)
                   </label>
                   <textarea
@@ -326,7 +326,7 @@ export default function PublicHostEventPage() {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Describe themes, tracks, eligibility, format, and what attendees will build or learn..."
-                    className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm outline-none resize-y"
+                    className="w-full px-4 py-3 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white text-sm outline-none resize-y"
                   />
                 </div>
               </div>
@@ -334,13 +334,13 @@ export default function PublicHostEventPage() {
 
             {/* 2. Dates & Links */}
             <div className="space-y-5">
-              <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-2">
+              <h2 className="text-lg font-bold text-[#17172B] dark:text-white border-b border-slate-200 dark:border-slate-800 pb-2">
                 2. Schedule & Registration Links
               </h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300">
+                  <label className="text-xs font-mono uppercase tracking-wider text-[#2F3A52] dark:text-slate-300">
                     Event Start Date *
                   </label>
                   <input
@@ -348,38 +348,38 @@ export default function PublicHostEventPage() {
                     required
                     value={eventDate}
                     onChange={(e) => setEventDate(e.target.value)}
-                    className="w-full px-3 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-xs outline-none"
+                    className="w-full px-3 py-3 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white text-xs outline-none"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300">
+                  <label className="text-xs font-mono uppercase tracking-wider text-[#2F3A52] dark:text-slate-300">
                     Event End Date
                   </label>
                   <input
                     type="datetime-local"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full px-3 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-xs outline-none"
+                    className="w-full px-3 py-3 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white text-xs outline-none"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300">
+                  <label className="text-xs font-mono uppercase tracking-wider text-[#2F3A52] dark:text-slate-300">
                     Registration Deadline
                   </label>
                   <input
                     type="datetime-local"
                     value={registrationDeadline}
                     onChange={(e) => setRegistrationDeadline(e.target.value)}
-                    className="w-full px-3 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-xs outline-none"
+                    className="w-full px-3 py-3 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white text-xs outline-none"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300">
+                  <label className="text-xs font-mono uppercase tracking-wider text-[#2F3A52] dark:text-slate-300">
                     Registration URL *
                   </label>
                   <input
@@ -388,12 +388,12 @@ export default function PublicHostEventPage() {
                     value={registrationUrl}
                     onChange={(e) => setRegistrationUrl(e.target.value)}
                     placeholder="https://unstop.com/..."
-                    className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm outline-none"
+                    className="w-full px-4 py-3 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white text-sm outline-none"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300">
+                  <label className="text-xs font-mono uppercase tracking-wider text-[#2F3A52] dark:text-slate-300">
                     Official Event Website
                   </label>
                   <input
@@ -401,7 +401,7 @@ export default function PublicHostEventPage() {
                     value={officialWebsite}
                     onChange={(e) => setOfficialWebsite(e.target.value)}
                     placeholder="https://yourevent.org"
-                    className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm outline-none"
+                    className="w-full px-4 py-3 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white text-sm outline-none"
                   />
                 </div>
               </div>
@@ -409,7 +409,7 @@ export default function PublicHostEventPage() {
 
             {/* 3. Thumbnail / Banner Upload */}
             <div className="space-y-4">
-              <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-2">
+              <h2 className="text-lg font-bold text-[#17172B] dark:text-white border-b border-slate-200 dark:border-slate-800 pb-2">
                 3. Event Thumbnail / Banner (Optional)
               </h2>
 
@@ -425,7 +425,7 @@ export default function PublicHostEventPage() {
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={uploading}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-violet-950/60 hover:bg-violet-900/60 border border-violet-500/30 text-xs font-semibold text-violet-200 transition cursor-pointer"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-violet-50 dark:bg-violet-950/60 hover:bg-violet-100 dark:hover:bg-violet-900/60 border border-violet-500/30 text-xs font-semibold text-violet-700 dark:text-violet-200 transition cursor-pointer"
                 >
                   {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
                   <span>{uploading ? "Uploading..." : "Upload Banner (PNG/JPEG/WebP, max 5MB)"}</span>
@@ -438,22 +438,22 @@ export default function PublicHostEventPage() {
                       alt="Event banner preview"
                       className="w-20 h-12 rounded-lg object-cover border border-violet-500/40"
                     />
-                    <span className="text-xs font-mono text-emerald-400">Uploaded</span>
+                    <span className="text-xs font-mono text-emerald-700 dark:text-emerald-400">Uploaded</span>
                   </div>
                 )}
               </div>
-              {uploadError && <p className="text-xs text-red-400">{uploadError}</p>}
+              {uploadError && <p className="text-xs text-red-600 dark:text-red-400">{uploadError}</p>}
             </div>
 
             {/* 4. Organizer Details */}
             <div className="space-y-5">
-              <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-2">
+              <h2 className="text-lg font-bold text-[#17172B] dark:text-white border-b border-slate-200 dark:border-slate-800 pb-2">
                 4. Organizer Information
               </h2>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300">
+                  <label className="text-xs font-mono uppercase tracking-wider text-[#2F3A52] dark:text-slate-300">
                     Organizer Name *
                   </label>
                   <input
@@ -463,12 +463,12 @@ export default function PublicHostEventPage() {
                     value={organizerName}
                     onChange={(e) => setOrganizerName(e.target.value)}
                     placeholder="Full name"
-                    className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm outline-none"
+                    className="w-full px-4 py-3 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white text-sm outline-none"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300">
+                  <label className="text-xs font-mono uppercase tracking-wider text-[#2F3A52] dark:text-slate-300">
                     Organizer Email *
                   </label>
                   <input
@@ -477,12 +477,12 @@ export default function PublicHostEventPage() {
                     value={organizerEmail}
                     onChange={(e) => setOrganizerEmail(e.target.value)}
                     placeholder="organizer@institution.edu"
-                    className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm outline-none"
+                    className="w-full px-4 py-3 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white text-sm outline-none"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300">
+                  <label className="text-xs font-mono uppercase tracking-wider text-[#2F3A52] dark:text-slate-300">
                     Organization / Institution *
                   </label>
                   <input
@@ -492,12 +492,12 @@ export default function PublicHostEventPage() {
                     value={organizerOrg}
                     onChange={(e) => setOrganizerOrg(e.target.value)}
                     placeholder="University club, company, or community"
-                    className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm outline-none"
+                    className="w-full px-4 py-3 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white text-sm outline-none"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300">
+                  <label className="text-xs font-mono uppercase tracking-wider text-[#2F3A52] dark:text-slate-300">
                     Contact Information *
                   </label>
                   <input
@@ -507,12 +507,12 @@ export default function PublicHostEventPage() {
                     value={contactInfo}
                     onChange={(e) => setContactInfo(e.target.value)}
                     placeholder="Email, phone, or official Discord/Telegram"
-                    className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm outline-none"
+                    className="w-full px-4 py-3 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white text-sm outline-none"
                   />
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300">
+                  <label className="text-xs font-mono uppercase tracking-wider text-[#2F3A52] dark:text-slate-300">
                     Expected Audience (Optional)
                   </label>
                   <input
@@ -520,12 +520,12 @@ export default function PublicHostEventPage() {
                     value={expectedAudience}
                     onChange={(e) => setExpectedAudience(e.target.value)}
                     placeholder="e.g. College developers & AI builders"
-                    className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm outline-none"
+                    className="w-full px-4 py-3 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white text-sm outline-none"
                   />
                 </div>
 
                 <div className="space-y-1.5 sm:col-span-2">
-                  <label className="text-xs font-mono uppercase tracking-wider text-slate-300">
+                  <label className="text-xs font-mono uppercase tracking-wider text-[#2F3A52] dark:text-slate-300">
                     Additional Details (Optional)
                   </label>
                   <textarea
@@ -533,15 +533,15 @@ export default function PublicHostEventPage() {
                     value={additionalDetails}
                     onChange={(e) => setAdditionalDetails(e.target.value)}
                     placeholder="Any notes for the LaunchByte review team..."
-                    className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-700/80 text-white text-sm outline-none resize-none"
+                    className="w-full px-4 py-3 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 text-[#17172B] dark:text-white text-sm outline-none resize-none"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="pt-4 border-t border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="flex items-center gap-2 text-xs text-slate-400">
-                <ShieldCheck className="w-4 h-4 text-cyan-400 shrink-0" />
+            <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-2 text-xs text-[#424C63] dark:text-slate-400">
+                <ShieldCheck className="w-4 h-4 text-cyan-700 dark:text-cyan-400 shrink-0" />
                 <span>Submissions are reviewed by LaunchByte moderators before going live.</span>
               </div>
 

@@ -66,7 +66,7 @@ export function Avatar({
   return (
     <div
       className={clsx(
-        "relative overflow-hidden bg-slate-800 flex items-center justify-center font-semibold text-slate-200 shrink-0 select-none",
+        "relative overflow-hidden bg-slate-100 dark:bg-slate-800 flex items-center justify-center font-semibold text-[#17172B] dark:text-slate-200 shrink-0 select-none",
         containerSize,
         SHAPE_CLASSES[shape],
         className

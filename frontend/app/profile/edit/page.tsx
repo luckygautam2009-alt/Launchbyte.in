@@ -212,22 +212,22 @@ export default function ProfileEditPage() {
   }
 
   return (
-    <div className="min-h-screen bg-transparent dark:bg-slate-950 text-slate-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-transparent dark:bg-slate-950 text-[#17172B] dark:text-slate-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-6">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Edit Profile</h1>
-            <p className="text-slate-400 text-sm mt-1">
+            <p className="text-[#424C63] dark:text-slate-400 text-sm mt-1">
               Manage your personal info, developer showcase, and teammate matching preferences.
             </p>
           </div>
           {handle && (
             <Link
               href={`/u/${handle}`}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 text-sm font-medium transition"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-[#2F3A52] dark:text-slate-300 hover:text-[#17172B] dark:hover:text-white hover:border-slate-300 dark:hover:border-slate-700 text-sm font-medium transition"
             >
-              <Eye className="w-4 h-4 text-brand-400" />
+              <Eye className="w-4 h-4 text-[#7552D9] dark:text-brand-400" />
               View Public Profile
             </Link>
           )}
@@ -235,35 +235,35 @@ export default function ProfileEditPage() {
 
         {/* Alerts */}
         {error && (
-          <div className="p-4 rounded-xl bg-red-950/60 border border-red-800 text-red-200 flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
+          <div className="p-4 rounded-xl bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-200 flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
             <div className="text-sm">{error}</div>
           </div>
         )}
         {success && (
-          <div className="p-4 rounded-xl bg-emerald-950/60 border border-emerald-800 text-emerald-200 flex items-start gap-3">
-            <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+          <div className="p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-200 flex items-start gap-3">
+            <CheckCircle2 className="w-5 h-5 text-emerald-700 dark:text-emerald-400 shrink-0 mt-0.5" />
             <div className="text-sm">{success}</div>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Section: Avatar & Handle */}
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+          <div className="bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
             <h2 className="text-xl font-semibold flex items-center gap-2">
-              <User className="w-5 h-5 text-brand-400" />
+              <User className="w-5 h-5 text-[#7552D9] dark:text-brand-400" />
               Identity & Handle
             </h2>
 
             <div className="flex flex-col sm:flex-row items-center gap-6">
               <div className="relative group">
-                <div className="w-24 h-24 rounded-full overflow-hidden bg-slate-800 border-2 border-slate-700 flex items-center justify-center text-slate-400 text-2xl font-bold">
+                <div className="w-24 h-24 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-700 flex items-center justify-center text-[#424C63] dark:text-slate-400 text-2xl font-bold">
                   <Avatar
                     src={avatarLoadError ? null : avatarUrl}
                     name={user?.full_name || user?.email || "U"}
                     alt="Avatar"
                     size="fill"
-                    className="bg-slate-800 text-slate-400 text-2xl font-bold"
+                    className="bg-slate-100 dark:bg-slate-800 text-[#424C63] dark:text-slate-400 text-2xl font-bold"
                     onError={() => {
                       setAvatarLoadError(true);
                       setError("Avatar uploaded but the image URL is not reachable");
@@ -271,8 +271,8 @@ export default function ProfileEditPage() {
                   />
                 </div>
                 <label className="absolute inset-0 bg-black/60 rounded-full flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 cursor-pointer transition">
-                  <Upload className="w-5 h-5 text-white" />
-                  <span className="text-[10px] text-white mt-1">Upload</span>
+                  <Upload className="w-5 h-5 text-[#17172B] dark:text-white" />
+                  <span className="text-[10px] text-[#17172B] dark:text-white mt-1">Upload</span>
                   <input
                     type="file"
                     accept="image/*"
@@ -283,17 +283,17 @@ export default function ProfileEditPage() {
                 </label>
               </div>
               <div className="space-y-1 text-center sm:text-left">
-                <p className="text-sm font-medium text-slate-200">Profile Photo</p>
-                <p className="text-xs text-slate-400">
+                <p className="text-sm font-medium text-[#17172B] dark:text-slate-200">Profile Photo</p>
+                <p className="text-xs text-[#424C63] dark:text-slate-400">
                   PNG, JPEG, or WebP up to 2MB. Stored securely.
                 </p>
-                {uploadingAvatar && <p className="text-xs text-brand-400 animate-pulse">Uploading...</p>}
+                {uploadingAvatar && <p className="text-xs text-[#7552D9] dark:text-brand-400 animate-pulse">Uploading...</p>}
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-slate-800/80">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4 border-t border-slate-200 dark:border-slate-800/80">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Username / Handle</label>
+                <label className="block text-sm font-medium text-[#2F3A52] dark:text-slate-300 mb-2">Username / Handle</label>
                 <div className="relative">
                   <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500 text-sm">
                     @
@@ -303,7 +303,7 @@ export default function ProfileEditPage() {
                     value={handle}
                     onChange={(e) => setHandle(e.target.value.toLowerCase())}
                     placeholder="janedoe"
-                    className="w-full pl-8 pr-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
+                    className="w-full pl-8 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[#17172B] dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
                   />
                 </div>
                 <p className="text-xs text-slate-500 mt-2">
@@ -317,41 +317,41 @@ export default function ProfileEditPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Headline</label>
+                <label className="block text-sm font-medium text-[#2F3A52] dark:text-slate-300 mb-2">Headline</label>
                 <input
                   type="text"
                   value={headline}
                   onChange={(e) => setHeadline(e.target.value)}
                   placeholder="Full-Stack Engineer & AI Enthusiast"
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[#17172B] dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
                 />
                 <p className="text-xs text-slate-500 mt-2">A short one-line pitch shown on cards and search results.</p>
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Bio</label>
+              <label className="block text-sm font-medium text-[#2F3A52] dark:text-slate-300 mb-2">Bio</label>
               <textarea
                 rows={3}
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
                 placeholder="Share your background, recent projects, hackathon wins, or tech interests..."
-                className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 resize-none"
+                className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[#17172B] dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 resize-none"
               />
             </div>
           </div>
 
           {/* Section: Teammate Discovery & Availability */}
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+          <div className="bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
             <h2 className="text-xl font-semibold flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-brand-400" />
+              <Sparkles className="w-5 h-5 text-[#7552D9] dark:text-brand-400" />
               Teammate Discovery & Matching
             </h2>
 
-            <div className="flex items-center justify-between p-4 rounded-xl bg-slate-950 border border-slate-800">
+            <div className="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
               <div className="space-y-0.5">
-                <span className="text-sm font-medium text-slate-200">Open to Teaming Up</span>
-                <p className="text-xs text-slate-400">
+                <span className="text-sm font-medium text-[#17172B] dark:text-slate-200">Open to Teaming Up</span>
+                <p className="text-xs text-[#424C63] dark:text-slate-400">
                   Allow other hackers and team leads to find you in the Teammate Discovery directory.
                 </p>
               </div>
@@ -362,80 +362,80 @@ export default function ProfileEditPage() {
                   onChange={(e) => setOpenToTeams(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-600"></div>
+                <div className="w-11 h-6 bg-slate-100 dark:bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-600"></div>
               </label>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Technical Skills</label>
+                <label className="block text-sm font-medium text-[#2F3A52] dark:text-slate-300 mb-2">Technical Skills</label>
                 <input
                   type="text"
                   value={skillsInput}
                   onChange={(e) => setSkillsInput(e.target.value)}
                   placeholder="React, TypeScript, Python, PyTorch, Docker"
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[#17172B] dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
                 />
                 <p className="text-xs text-slate-500 mt-2">Comma-separated list used for smart skill matching.</p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Roles You Fill</label>
+                <label className="block text-sm font-medium text-[#2F3A52] dark:text-slate-300 mb-2">Roles You Fill</label>
                 <input
                   type="text"
                   value={lookingForRolesInput}
                   onChange={(e) => setLookingForRolesInput(e.target.value)}
                   placeholder="Frontend, ML Engineer, UI/UX Designer"
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[#17172B] dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
                 />
                 <p className="text-xs text-slate-500 mt-2">Roles you want to play on hackathon teams.</p>
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-2">Availability & Hackathon Preferences</label>
+              <label className="block text-sm font-medium text-[#2F3A52] dark:text-slate-300 mb-2">Availability & Hackathon Preferences</label>
               <textarea
                 rows={2}
                 value={availabilityNote}
                 onChange={(e) => setAvailabilityNote(e.target.value)}
                 placeholder="Available weekends, looking for in-person teams in SF, or building AI agents..."
-                className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 resize-none"
+                className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[#17172B] dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 resize-none"
               />
             </div>
           </div>
 
           {/* Section: Education & Background */}
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+          <div className="bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
             <h2 className="text-xl font-semibold flex items-center gap-2">
-              <GraduationCap className="w-5 h-5 text-brand-400" />
+              <GraduationCap className="w-5 h-5 text-[#7552D9] dark:text-brand-400" />
               Education & Background
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">University / College / School</label>
+                <label className="block text-sm font-medium text-[#2F3A52] dark:text-slate-300 mb-2">University / College / School</label>
                 <input
                   type="text"
                   value={institution}
                   onChange={(e) => setInstitution(e.target.value)}
                   placeholder="Stanford University"
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[#17172B] dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Field of Study</label>
+                <label className="block text-sm font-medium text-[#2F3A52] dark:text-slate-300 mb-2">Field of Study</label>
                 <input
                   type="text"
                   value={fieldOfStudy}
                   onChange={(e) => setFieldOfStudy(e.target.value)}
                   placeholder="Computer Science"
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[#17172B] dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Graduation Year</label>
+                <label className="block text-sm font-medium text-[#2F3A52] dark:text-slate-300 mb-2">Graduation Year</label>
                 <input
                   type="number"
                   value={graduationYear}
@@ -443,97 +443,97 @@ export default function ProfileEditPage() {
                   placeholder="2026"
                   min="1970"
                   max="2035"
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[#17172B] dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Location (City, State)</label>
+                <label className="block text-sm font-medium text-[#2F3A52] dark:text-slate-300 mb-2">Location (City, State)</label>
                 <input
                   type="text"
                   value={location}
                   onChange={(e) => setLocation(e.target.value)}
                   placeholder="San Francisco, CA"
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[#17172B] dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
                 />
               </div>
             </div>
           </div>
 
           {/* Section: Links & Showcase */}
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+          <div className="bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
             <h2 className="text-xl font-semibold flex items-center gap-2">
-              <Globe className="w-5 h-5 text-brand-400" />
+              <Globe className="w-5 h-5 text-[#7552D9] dark:text-brand-400" />
               Links & Portfolio
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2 flex items-center gap-1.5">
-                  <Github className="w-4 h-4 text-slate-400" /> GitHub URL
+                <label className="block text-sm font-medium text-[#2F3A52] dark:text-slate-300 mb-2 flex items-center gap-1.5">
+                  <Github className="w-4 h-4 text-[#424C63] dark:text-slate-400" /> GitHub URL
                 </label>
                 <input
                   type="url"
                   value={githubUrl}
                   onChange={(e) => setGithubUrl(e.target.value)}
                   placeholder="https://github.com/username"
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[#17172B] dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2 flex items-center gap-1.5">
-                  <Linkedin className="w-4 h-4 text-slate-400" /> LinkedIn URL
+                <label className="block text-sm font-medium text-[#2F3A52] dark:text-slate-300 mb-2 flex items-center gap-1.5">
+                  <Linkedin className="w-4 h-4 text-[#424C63] dark:text-slate-400" /> LinkedIn URL
                 </label>
                 <input
                   type="url"
                   value={linkedinUrl}
                   onChange={(e) => setLinkedinUrl(e.target.value)}
                   placeholder="https://linkedin.com/in/username"
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[#17172B] dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2 flex items-center gap-1.5">
-                  <Globe className="w-4 h-4 text-slate-400" /> Portfolio Website
+                <label className="block text-sm font-medium text-[#2F3A52] dark:text-slate-300 mb-2 flex items-center gap-1.5">
+                  <Globe className="w-4 h-4 text-[#424C63] dark:text-slate-400" /> Portfolio Website
                 </label>
                 <input
                   type="url"
                   value={portfolioUrl}
                   onChange={(e) => setPortfolioUrl(e.target.value)}
                   placeholder="https://portfolio.me"
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[#17172B] dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2 flex items-center gap-1.5">
-                  <FileText className="w-4 h-4 text-slate-400" /> Resume / CV Link
+                <label className="block text-sm font-medium text-[#2F3A52] dark:text-slate-300 mb-2 flex items-center gap-1.5">
+                  <FileText className="w-4 h-4 text-[#424C63] dark:text-slate-400" /> Resume / CV Link
                 </label>
                 <input
                   type="url"
                   value={resumeUrl}
                   onChange={(e) => setResumeUrl(e.target.value)}
                   placeholder="https://drive.google.com/..."
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
+                  className="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[#17172B] dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500"
                 />
               </div>
             </div>
           </div>
 
           {/* Section: Privacy Settings */}
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
+          <div className="bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 space-y-6">
             <h2 className="text-xl font-semibold flex items-center gap-2">
-              <Lock className="w-5 h-5 text-brand-400" />
+              <Lock className="w-5 h-5 text-[#7552D9] dark:text-brand-400" />
               Privacy & Visibility
             </h2>
 
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 rounded-xl bg-slate-950 border border-slate-800">
+              <div className="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
                 <div>
-                  <span className="text-sm font-medium text-slate-200">Public Profile</span>
-                  <p className="text-xs text-slate-400">
+                  <span className="text-sm font-medium text-[#17172B] dark:text-slate-200">Public Profile</span>
+                  <p className="text-xs text-[#424C63] dark:text-slate-400">
                     If disabled, your profile will only be visible to you and organizers of events you join.
                   </p>
                 </div>
@@ -541,31 +541,31 @@ export default function ProfileEditPage() {
                   type="checkbox"
                   checked={isPublic}
                   onChange={(e) => setIsPublic(e.target.checked)}
-                  className="w-5 h-5 rounded border-slate-700 bg-slate-900 text-brand-600 focus:ring-brand-500"
+                  className="w-5 h-5 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-brand-600 focus:ring-brand-500"
                 />
               </div>
 
-              <div className="flex items-center justify-between p-4 rounded-xl bg-slate-950 border border-slate-800">
+              <div className="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
                 <div>
-                  <span className="text-sm font-medium text-slate-200">Show GitHub on Public Profile</span>
+                  <span className="text-sm font-medium text-[#17172B] dark:text-slate-200">Show GitHub on Public Profile</span>
                 </div>
                 <input
                   type="checkbox"
                   checked={showGithub}
                   onChange={(e) => setShowGithub(e.target.checked)}
-                  className="w-5 h-5 rounded border-slate-700 bg-slate-900 text-brand-600 focus:ring-brand-500"
+                  className="w-5 h-5 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-brand-600 focus:ring-brand-500"
                 />
               </div>
 
-              <div className="flex items-center justify-between p-4 rounded-xl bg-slate-950 border border-slate-800">
+              <div className="flex items-center justify-between p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
                 <div>
-                  <span className="text-sm font-medium text-slate-200">Show LinkedIn on Public Profile</span>
+                  <span className="text-sm font-medium text-[#17172B] dark:text-slate-200">Show LinkedIn on Public Profile</span>
                 </div>
                 <input
                   type="checkbox"
                   checked={showLinkedin}
                   onChange={(e) => setShowLinkedin(e.target.checked)}
-                  className="w-5 h-5 rounded border-slate-700 bg-slate-900 text-brand-600 focus:ring-brand-500"
+                  className="w-5 h-5 rounded border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-brand-600 focus:ring-brand-500"
                 />
               </div>
             </div>

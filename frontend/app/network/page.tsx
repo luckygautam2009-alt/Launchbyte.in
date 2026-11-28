@@ -180,7 +180,7 @@ export default function NetworkPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#050510]">
+    <div className="min-h-screen bg-transparent dark:bg-[#050510]">
       {/* PageHero */}
       <PageHero
         eyebrow="BUILDER NETWORK"
@@ -198,14 +198,14 @@ export default function NetworkPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Quick Connect By Handle */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 p-4 glass-card rounded-2xl">
-          <p className="text-sm text-slate-300">Invite a developer directly:</p>
+          <p className="text-sm text-[#2F3A52] dark:text-slate-300">Invite a developer directly:</p>
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <input
               type="text"
               placeholder="Enter @handle..."
               value={targetHandle}
               onChange={(e) => setTargetHandle(e.target.value)}
-              className="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-brand-500 flex-1 sm:w-60"
+              className="px-3.5 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-[#17172B] dark:text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-brand-500 flex-1 sm:w-60"
             />
             <button
               onClick={() => handleSendRequest(undefined, targetHandle.replace("@", ""))}
@@ -219,22 +219,22 @@ export default function NetworkPage() {
         </div>
 
         {requestSuccess && (
-          <div className="mb-6 p-3 rounded-xl bg-emerald-950/40 border border-emerald-800 text-emerald-300 text-sm flex items-center justify-between">
+          <div className="mb-6 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-sm flex items-center justify-between">
             <span>{requestSuccess}</span>
-            <button onClick={() => setRequestSuccess(null)} className="text-emerald-400 hover:text-emerald-200">
+            <button onClick={() => setRequestSuccess(null)} className="text-emerald-700 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-200">
               <X className="w-4 h-4" />
             </button>
           </div>
         )}
 
         {/* Tabs */}
-        <div className="flex items-center gap-2 border-b border-slate-800 mb-8 overflow-x-auto pb-1">
+        <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 mb-8 overflow-x-auto pb-1">
           <button
             onClick={() => setActiveTab("connections")}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl text-sm font-semibold border-b-2 transition ${
               activeTab === "connections"
-                ? "border-brand-500 text-brand-400 bg-slate-900/40"
-                : "border-transparent text-slate-400 hover:text-slate-200"
+                ? "border-brand-500 text-[#7552D9] dark:text-brand-400 bg-white/90 dark:bg-slate-900/40"
+                : "border-transparent text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-slate-200"
             }`}
           >
             <UserCheck className="w-4 h-4" />
@@ -245,8 +245,8 @@ export default function NetworkPage() {
             onClick={() => setActiveTab("requests")}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl text-sm font-semibold border-b-2 transition ${
               activeTab === "requests"
-                ? "border-brand-500 text-brand-400 bg-slate-900/40"
-                : "border-transparent text-slate-400 hover:text-slate-200"
+                ? "border-brand-500 text-[#7552D9] dark:text-brand-400 bg-white/90 dark:bg-slate-900/40"
+                : "border-transparent text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-slate-200"
             }`}
           >
             <Clock className="w-4 h-4" />
@@ -257,8 +257,8 @@ export default function NetworkPage() {
             onClick={() => setActiveTab("suggestions")}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl text-sm font-semibold border-b-2 transition ${
               activeTab === "suggestions"
-                ? "border-brand-500 text-brand-400 bg-slate-900/40"
-                : "border-transparent text-slate-400 hover:text-slate-200"
+                ? "border-brand-500 text-[#7552D9] dark:text-brand-400 bg-white/90 dark:bg-slate-900/40"
+                : "border-transparent text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-slate-200"
             }`}
           >
             <Sparkles className="w-4 h-4" />
@@ -269,8 +269,8 @@ export default function NetworkPage() {
             onClick={() => setActiveTab("blocked")}
             className={`flex items-center gap-2 px-4 py-2.5 rounded-t-xl text-sm font-semibold border-b-2 transition ${
               activeTab === "blocked"
-                ? "border-brand-500 text-brand-400 bg-slate-900/40"
-                : "border-transparent text-slate-400 hover:text-slate-200"
+                ? "border-brand-500 text-[#7552D9] dark:text-brand-400 bg-white/90 dark:bg-slate-900/40"
+                : "border-transparent text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-slate-200"
             }`}
           >
             <ShieldAlert className="w-4 h-4" />
@@ -289,7 +289,7 @@ export default function NetworkPage() {
                 {connections.length === 0 ? (
                   <div className="text-center py-16 glass-card rounded-2xl">
                     <UserCheck className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-                    <p className="text-slate-300 font-medium">No connections yet</p>
+                    <p className="text-[#2F3A52] dark:text-slate-300 font-medium">No connections yet</p>
                     <p className="text-slate-500 text-sm mt-1 mb-4">
                       Explore suggestions or invite peers using their handle.
                     </p>
@@ -317,31 +317,31 @@ export default function NetworkPage() {
                                   {u.full_name?.[0]?.toUpperCase() || u.handle?.[0]?.toUpperCase() || "U"}
                                 </div>
                                 <div>
-                                  <h3 className="font-semibold text-white leading-tight">
+                                  <h3 className="font-semibold text-[#17172B] dark:text-white leading-tight">
                                     {u.full_name || `@${u.handle}`}
                                   </h3>
-                                  <p className="text-xs text-slate-400">@{u.handle}</p>
+                                  <p className="text-xs text-[#424C63] dark:text-slate-400">@{u.handle}</p>
                                 </div>
                               </div>
                               <button
                                 onClick={() => handleRemove(c.id)}
                                 disabled={actionLoading === c.id}
                                 title="Remove connection"
-                                className="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-950/20 transition"
+                                className="p-1.5 rounded-lg text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/20 transition"
                               >
                                 <Trash2 className="w-4 h-4" />
                               </button>
                             </div>
 
                             {u.institution && (
-                              <p className="text-xs text-slate-400 flex items-center gap-1.5 mb-2">
+                              <p className="text-xs text-[#424C63] dark:text-slate-400 flex items-center gap-1.5 mb-2">
                                 <Building className="w-3.5 h-3.5 text-slate-500" />
                                 {u.institution}
                               </p>
                             )}
 
                             {u.headline && (
-                              <p className="text-xs text-slate-300 italic mb-3 line-clamp-2">"{u.headline}"</p>
+                              <p className="text-xs text-[#2F3A52] dark:text-slate-300 italic mb-3 line-clamp-2">"{u.headline}"</p>
                             )}
 
                             {u.skills && u.skills.length > 0 && (
@@ -349,7 +349,7 @@ export default function NetworkPage() {
                                 {u.skills.slice(0, 4).map((s) => (
                                   <span
                                     key={s}
-                                    className="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-800 text-slate-300 border border-slate-700/50"
+                                    className="px-2 py-0.5 rounded text-[10px] font-medium bg-slate-100 dark:bg-slate-800 text-[#2F3A52] dark:text-slate-300 border border-slate-300 dark:border-slate-700/50"
                                   >
                                     {s}
                                   </span>
@@ -363,18 +363,18 @@ export default function NetworkPage() {
                             )}
                           </div>
 
-                          <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between">
+                          <div className="pt-3 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between">
                             <Link
                               href={`/messages`}
-                              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium transition"
+                              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[#17172B] dark:text-slate-200 text-xs font-medium transition"
                             >
-                              <MessageSquare className="w-3.5 h-3.5 text-brand-400" />
+                              <MessageSquare className="w-3.5 h-3.5 text-[#7552D9] dark:text-brand-400" />
                               Send Message
                             </Link>
 
                             <button
                               onClick={() => handleBlock(u.id)}
-                              className="text-[11px] text-slate-500 hover:text-rose-400 transition"
+                              className="text-[11px] text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 transition"
                             >
                               Block
                             </button>
@@ -391,8 +391,8 @@ export default function NetworkPage() {
             {activeTab === "requests" && (
               <div className="space-y-8">
                 <div>
-                  <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                    <UserPlus className="w-5 h-5 text-brand-400" />
+                  <h2 className="text-lg font-bold text-[#17172B] dark:text-white mb-4 flex items-center gap-2">
+                    <UserPlus className="w-5 h-5 text-[#7552D9] dark:text-brand-400" />
                     Incoming Requests ({incoming.length})
                   </h2>
                   {incoming.length === 0 ? (
@@ -410,23 +410,23 @@ export default function NetworkPage() {
                                 {req.user?.full_name?.[0]?.toUpperCase() || "U"}
                               </div>
                               <div>
-                                <h4 className="font-semibold text-white leading-tight">
+                                <h4 className="font-semibold text-[#17172B] dark:text-white leading-tight">
                                   {req.user?.full_name || `@${req.user?.handle}`}
                                 </h4>
-                                <p className="text-xs text-slate-400">@{req.user?.handle}</p>
+                                <p className="text-xs text-[#424C63] dark:text-slate-400">@{req.user?.handle}</p>
                               </div>
                             </div>
                             {req.message && (
-                              <div className="p-2.5 rounded-xl bg-slate-800/50 border border-slate-700/50 text-xs text-slate-300 italic mb-3">
+                              <div className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-700/50 text-xs text-[#2F3A52] dark:text-slate-300 italic mb-3">
                                 "{req.message}"
                               </div>
                             )}
                             {req.user?.institution && (
-                              <p className="text-xs text-slate-400 mb-2">{req.user.institution}</p>
+                              <p className="text-xs text-[#424C63] dark:text-slate-400 mb-2">{req.user.institution}</p>
                             )}
                           </div>
 
-                          <div className="flex items-center gap-2 pt-3 border-t border-slate-800">
+                          <div className="flex items-center gap-2 pt-3 border-t border-slate-200 dark:border-slate-800">
                             <button
                               onClick={() => handleAccept(req.id)}
                               disabled={actionLoading === req.id}
@@ -438,7 +438,7 @@ export default function NetworkPage() {
                             <button
                               onClick={() => handleDecline(req.id)}
                               disabled={actionLoading === req.id}
-                              className="px-3 py-1.5 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-medium transition"
+                              className="px-3 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-[#2F3A52] dark:text-slate-300 text-xs font-medium transition"
                             >
                               Decline
                             </button>
@@ -449,9 +449,9 @@ export default function NetworkPage() {
                   )}
                 </div>
 
-                <div className="pt-6 border-t border-slate-800">
-                  <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                    <Clock className="w-5 h-5 text-slate-400" />
+                <div className="pt-6 border-t border-slate-200 dark:border-slate-800">
+                  <h2 className="text-lg font-bold text-[#17172B] dark:text-white mb-4 flex items-center gap-2">
+                    <Clock className="w-5 h-5 text-[#424C63] dark:text-slate-400" />
                     Sent Requests ({outgoing.length})
                   </h2>
                   {outgoing.length === 0 ? (
@@ -464,7 +464,7 @@ export default function NetworkPage() {
                           className="p-4 rounded-2xl glass-card flex items-center justify-between"
                         >
                           <div>
-                            <h4 className="font-medium text-white text-sm">
+                            <h4 className="font-medium text-[#17172B] dark:text-white text-sm">
                               {req.user?.full_name || `@${req.user?.handle}`}
                             </h4>
                             <p className="text-xs text-slate-500">Sent on {new Date(req.created_at).toLocaleDateString()}</p>
@@ -472,7 +472,7 @@ export default function NetworkPage() {
                           <button
                             onClick={() => handleCancel(req.id)}
                             disabled={actionLoading === req.id}
-                            className="px-3 py-1 rounded-lg border border-slate-700 hover:bg-slate-800 text-xs text-slate-400 hover:text-white transition"
+                            className="px-3 py-1 rounded-lg border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-white transition"
                           >
                             Cancel
                           </button>
@@ -487,14 +487,14 @@ export default function NetworkPage() {
             {/* TAB 3: SUGGESTIONS */}
             {activeTab === "suggestions" && (
               <div>
-                <p className="text-sm text-slate-400 mb-6">
+                <p className="text-sm text-[#424C63] dark:text-slate-400 mb-6">
                   Recommended developers based on shared hackathons, complementary skills, and institutions.
                 </p>
 
                 {suggestions.length === 0 ? (
                   <div className="text-center py-16 glass-card rounded-2xl">
                     <Sparkles className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-                    <p className="text-slate-300 font-medium">No new suggestions at the moment</p>
+                    <p className="text-[#2F3A52] dark:text-slate-300 font-medium">No new suggestions at the moment</p>
                     <p className="text-slate-500 text-sm mt-1">
                       Complete your profile skills or join events to see smart teammate recommendations.
                     </p>
@@ -515,13 +515,13 @@ export default function NetworkPage() {
                                   {u.full_name?.[0]?.toUpperCase() || u.handle?.[0]?.toUpperCase() || "U"}
                                 </div>
                                 <div>
-                                  <h3 className="font-semibold text-white leading-tight">
+                                  <h3 className="font-semibold text-[#17172B] dark:text-white leading-tight">
                                     {u.full_name || `@${u.handle}`}
                                   </h3>
-                                  <p className="text-xs text-slate-400">@{u.handle}</p>
+                                  <p className="text-xs text-[#424C63] dark:text-slate-400">@{u.handle}</p>
                                 </div>
                               </div>
-                              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-brand-950 text-brand-400 border border-brand-800/60">
+                              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-violet-50 dark:bg-brand-950 text-[#7552D9] dark:text-brand-400 border border-violet-200 dark:border-brand-800/60">
                                 {sug.score}% Match
                               </span>
                             </div>
@@ -530,16 +530,16 @@ export default function NetworkPage() {
                               {sug.reasons.map((r, i) => (
                                 <span
                                   key={i}
-                                  className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-cyan-950/40 text-cyan-300 border border-cyan-800/40 flex items-center gap-1"
+                                  className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-cyan-50 dark:bg-cyan-950/40 text-cyan-700 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800/40 flex items-center gap-1"
                                 >
-                                  <Sparkles className="w-3 h-3 text-cyan-400" />
+                                  <Sparkles className="w-3 h-3 text-cyan-700 dark:text-cyan-400" />
                                   {r}
                                 </span>
                               ))}
                             </div>
 
                             {u.institution && (
-                              <p className="text-xs text-slate-400 flex items-center gap-1.5 mb-2">
+                              <p className="text-xs text-[#424C63] dark:text-slate-400 flex items-center gap-1.5 mb-2">
                                 <Building className="w-3.5 h-3.5 text-slate-500" />
                                 {u.institution}
                               </p>
@@ -550,7 +550,7 @@ export default function NetworkPage() {
                                 {u.skills.map((skill) => (
                                   <span
                                     key={skill}
-                                    className="px-2 py-0.5 rounded text-[10px] bg-slate-800 text-slate-300"
+                                    className="px-2 py-0.5 rounded text-[10px] bg-slate-100 dark:bg-slate-800 text-[#2F3A52] dark:text-slate-300"
                                   >
                                     {skill}
                                   </span>
@@ -559,7 +559,7 @@ export default function NetworkPage() {
                             )}
                           </div>
 
-                          <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
+                          <div className="pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
                             <button
                               onClick={() =>
                                 setModalUser({ id: u.id, name: u.full_name || `@${u.handle}`, handle: u.handle })
@@ -581,7 +581,7 @@ export default function NetworkPage() {
             {/* TAB 4: BLOCKED USERS */}
             {activeTab === "blocked" && (
               <div>
-                <p className="text-sm text-slate-400 mb-6">
+                <p className="text-sm text-[#424C63] dark:text-slate-400 mb-6">
                   Blocked users cannot send you connection requests, message you, or see your activity.
                 </p>
                 {blocks.length === 0 ? (
@@ -589,11 +589,11 @@ export default function NetworkPage() {
                     You have not blocked any users.
                   </div>
                 ) : (
-                  <div className="max-w-2xl divide-y divide-slate-800 rounded-2xl glass-card">
+                  <div className="max-w-2xl divide-y divide-slate-200 dark:divide-slate-800 rounded-2xl glass-card">
                     {blocks.map((b) => (
                       <div key={b.id} className="p-4 flex items-center justify-between">
                         <div>
-                          <p className="text-sm font-semibold text-white">
+                          <p className="text-sm font-semibold text-[#17172B] dark:text-white">
                             {b.blocked_user?.full_name || `@${b.blocked_user?.handle}` || "User"}
                           </p>
                           <p className="text-xs text-slate-500">
@@ -602,7 +602,7 @@ export default function NetworkPage() {
                         </div>
                         <button
                           onClick={() => handleUnblock(b.blocked_id)}
-                          className="px-3 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-xs font-medium text-slate-200 transition"
+                          className="px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-medium text-[#17172B] dark:text-slate-200 transition"
                         >
                           Unblock
                         </button>
@@ -618,9 +618,9 @@ export default function NetworkPage() {
         {/* Connect Modal */}
         {modalUser && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-            <div className="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl">
-              <h3 className="text-lg font-bold text-white mb-1">Connect with {modalUser.name}</h3>
-              <p className="text-xs text-slate-400 mb-4">
+            <div className="max-w-md w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-2xl">
+              <h3 className="text-lg font-bold text-[#17172B] dark:text-white mb-1">Connect with {modalUser.name}</h3>
+              <p className="text-xs text-[#424C63] dark:text-slate-400 mb-4">
                 Add a personalized message explaining why you'd like to connect.
               </p>
 
@@ -629,13 +629,13 @@ export default function NetworkPage() {
                 placeholder="Hey, I noticed we both know Python and are interested in hackathons..."
                 value={requestMsg}
                 onChange={(e) => setRequestMsg(e.target.value)}
-                className="w-full p-3 rounded-xl bg-slate-800 border border-slate-700 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 mb-4"
+                className="w-full p-3 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm text-[#17172B] dark:text-slate-100 placeholder-slate-500 focus:outline-none focus:border-brand-500 mb-4"
               />
 
               <div className="flex items-center justify-end gap-2">
                 <button
                   onClick={() => setModalUser(null)}
-                  className="px-4 py-2 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-300 text-sm font-medium transition"
+                  className="px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-[#2F3A52] dark:text-slate-300 text-sm font-medium transition"
                 >
                   Cancel
                 </button>

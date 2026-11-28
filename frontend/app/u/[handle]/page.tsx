@@ -57,19 +57,19 @@ export default function PublicProfilePage() {
 
   if (error || !profile) {
     return (
-      <div className="min-h-screen bg-transparent dark:bg-slate-950 text-slate-100 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-slate-900/60 border border-slate-800 rounded-2xl p-8 text-center space-y-4">
-          <div className="w-12 h-12 rounded-full bg-red-950/60 border border-red-800 flex items-center justify-center mx-auto text-red-400">
+      <div className="min-h-screen bg-transparent dark:bg-slate-950 text-[#17172B] dark:text-slate-100 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-8 text-center space-y-4">
+          <div className="w-12 h-12 rounded-full bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800 flex items-center justify-center mx-auto text-red-600 dark:text-red-400">
             <AlertCircle className="w-6 h-6" />
           </div>
           <h2 className="text-xl font-bold">Profile Unavailable</h2>
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-[#424C63] dark:text-slate-400">
             {error || "This profile either does not exist or has been made private by the user."}
           </p>
           <div className="pt-2">
             <Link
               href="/people"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-sm font-medium transition"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-sm font-medium transition"
             >
               Browse Teammate Directory
             </Link>
@@ -80,46 +80,46 @@ export default function PublicProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-transparent dark:bg-slate-950 text-slate-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-transparent dark:bg-slate-950 text-[#17172B] dark:text-slate-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Hero Card */}
-        <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 sm:p-8 relative overflow-hidden">
+        <div className="bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-72 h-72 bg-brand-600/10 rounded-full blur-3xl pointer-events-none" />
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 relative z-10">
-            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-slate-800 border-2 border-slate-700 flex items-center justify-center text-slate-400 text-3xl font-bold shrink-0">
+            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-700 flex items-center justify-center text-[#424C63] dark:text-slate-400 text-3xl font-bold shrink-0">
               <Avatar
                 src={profile.avatar_url}
                 name={profile.full_name || "U"}
                 size="fill"
-                className="text-slate-400 text-3xl font-bold"
+                className="text-[#424C63] dark:text-slate-400 text-3xl font-bold"
               />
             </div>
 
             <div className="space-y-2 flex-1">
               <div className="flex flex-wrap items-center gap-3">
                 <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">{profile.full_name}</h1>
-                <span className="text-sm text-brand-400 font-medium bg-brand-500/10 px-2.5 py-0.5 rounded-full border border-brand-500/20">
+                <span className="text-sm text-[#7552D9] dark:text-brand-400 font-medium bg-brand-500/10 px-2.5 py-0.5 rounded-full border border-brand-500/20">
                   @{profile.handle}
                 </span>
                 {profile.open_to_teams ? (
-                  <span className="inline-flex items-center gap-1.5 text-xs text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20 font-medium">
+                  <span className="inline-flex items-center gap-1.5 text-xs text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20 font-medium">
                     <Sparkles className="w-3 h-3" />
                     Open to teams
                   </span>
                 ) : (
-                  <span className="text-xs text-slate-400 bg-slate-800 px-2.5 py-0.5 rounded-full border border-slate-700">
+                  <span className="text-xs text-[#424C63] dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2.5 py-0.5 rounded-full border border-slate-300 dark:border-slate-700">
                     Not looking
                   </span>
                 )}
               </div>
 
               {profile.headline && (
-                <p className="text-base text-slate-300 font-medium">{profile.headline}</p>
+                <p className="text-base text-[#2F3A52] dark:text-slate-300 font-medium">{profile.headline}</p>
               )}
 
               {profile.institution && (
-                <div className="flex items-center gap-2 text-xs text-slate-400">
+                <div className="flex items-center gap-2 text-xs text-[#424C63] dark:text-slate-400">
                   <GraduationCap className="w-4 h-4 text-slate-500 shrink-0" />
                   <span>
                     {profile.institution}
@@ -138,7 +138,7 @@ export default function PublicProfilePage() {
                     href={profile.github_url}
                     target="_blank"
                     rel="noreferrer"
-                    className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition border border-slate-700/60"
+                    className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[#2F3A52] dark:text-slate-300 hover:text-[#17172B] dark:hover:text-white transition border border-slate-300 dark:border-slate-700/60"
                     title="GitHub"
                   >
                     <Github className="w-4 h-4" />
@@ -149,7 +149,7 @@ export default function PublicProfilePage() {
                     href={profile.linkedin_url}
                     target="_blank"
                     rel="noreferrer"
-                    className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition border border-slate-700/60"
+                    className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[#2F3A52] dark:text-slate-300 hover:text-[#17172B] dark:hover:text-white transition border border-slate-300 dark:border-slate-700/60"
                     title="LinkedIn"
                   >
                     <Linkedin className="w-4 h-4" />
@@ -160,7 +160,7 @@ export default function PublicProfilePage() {
                     href={profile.portfolio_url}
                     target="_blank"
                     rel="noreferrer"
-                    className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition border border-slate-700/60"
+                    className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[#2F3A52] dark:text-slate-300 hover:text-[#17172B] dark:hover:text-white transition border border-slate-300 dark:border-slate-700/60"
                     title="Portfolio"
                   >
                     <Globe className="w-4 h-4" />
@@ -179,8 +179,8 @@ export default function PublicProfilePage() {
 
           {/* Bio */}
           {profile.bio && (
-            <div className="mt-6 pt-6 border-t border-slate-800/80">
-              <p className="text-sm text-slate-300 whitespace-pre-line leading-relaxed">
+            <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800/80">
+              <p className="text-sm text-[#2F3A52] dark:text-slate-300 whitespace-pre-line leading-relaxed">
                 {profile.bio}
               </p>
             </div>
@@ -189,9 +189,9 @@ export default function PublicProfilePage() {
 
         {/* Roles & Availability */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 space-y-4">
-            <h2 className="text-base font-semibold flex items-center gap-2 text-slate-200">
-              <Briefcase className="w-4 h-4 text-brand-400" />
+          <div className="bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 space-y-4">
+            <h2 className="text-base font-semibold flex items-center gap-2 text-[#17172B] dark:text-slate-200">
+              <Briefcase className="w-4 h-4 text-[#7552D9] dark:text-brand-400" />
               Target Roles & Teaming
             </h2>
             {profile.looking_for_roles && profile.looking_for_roles.length > 0 ? (
@@ -199,7 +199,7 @@ export default function PublicProfilePage() {
                 {profile.looking_for_roles.map((role) => (
                   <span
                     key={role}
-                    className="px-3 py-1 rounded-lg bg-brand-950/60 border border-brand-800 text-brand-300 text-xs font-medium"
+                    className="px-3 py-1 rounded-lg bg-violet-50 dark:bg-brand-950/60 border border-violet-200 dark:border-brand-800 text-[#7552D9] dark:text-brand-300 text-xs font-medium"
                   >
                     {role}
                   </span>
@@ -210,16 +210,16 @@ export default function PublicProfilePage() {
             )}
 
             {profile.availability_note && (
-              <div className="pt-2 border-t border-slate-800/60">
-                <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Note</span>
-                <p className="text-xs text-slate-300 mt-1">{profile.availability_note}</p>
+              <div className="pt-2 border-t border-slate-200 dark:border-slate-800/60">
+                <span className="text-xs font-medium text-[#424C63] dark:text-slate-400 uppercase tracking-wider">Note</span>
+                <p className="text-xs text-[#2F3A52] dark:text-slate-300 mt-1">{profile.availability_note}</p>
               </div>
             )}
           </div>
 
-          <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 space-y-4">
-            <h2 className="text-base font-semibold flex items-center gap-2 text-slate-200">
-              <Sparkles className="w-4 h-4 text-brand-400" />
+          <div className="bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 space-y-4">
+            <h2 className="text-base font-semibold flex items-center gap-2 text-[#17172B] dark:text-slate-200">
+              <Sparkles className="w-4 h-4 text-[#7552D9] dark:text-brand-400" />
               Skills & Tech Stack
             </h2>
             {profile.skills && profile.skills.length > 0 ? (
@@ -227,7 +227,7 @@ export default function PublicProfilePage() {
                 {profile.skills.map((skill) => (
                   <span
                     key={skill}
-                    className="px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 text-xs font-medium"
+                    className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-[#17172B] dark:text-slate-200 text-xs font-medium"
                   >
                     {skill}
                   </span>
@@ -238,13 +238,13 @@ export default function PublicProfilePage() {
             )}
 
             {profile.interests && profile.interests.length > 0 && (
-              <div className="pt-2 border-t border-slate-800/60 space-y-2">
-                <span className="text-xs font-medium text-slate-400 uppercase tracking-wider">Interests</span>
+              <div className="pt-2 border-t border-slate-200 dark:border-slate-800/60 space-y-2">
+                <span className="text-xs font-medium text-[#424C63] dark:text-slate-400 uppercase tracking-wider">Interests</span>
                 <div className="flex flex-wrap gap-1.5">
                   {profile.interests.map((interest) => (
                     <span
                       key={interest}
-                      className="px-2 py-0.5 rounded-md bg-slate-800/50 text-slate-400 text-xs"
+                      className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800/50 text-[#424C63] dark:text-slate-400 text-xs"
                     >
                       {interest}
                     </span>

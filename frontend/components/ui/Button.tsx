@@ -45,11 +45,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       accent:
         "bg-accent-500 hover:bg-accent-400 text-slate-950 font-semibold shadow-lg shadow-accent-500/25 border border-accent-400/40",
       secondary:
-        "bg-slate-850 hover:bg-slate-800 text-slate-200 border border-slate-750/80 hover:text-white",
+        "bg-slate-100 dark:bg-slate-850 hover:bg-slate-200 dark:hover:bg-slate-800 text-[#17172B] dark:text-slate-200 border border-slate-300 dark:border-slate-750/80 hover:text-[#17172B] dark:hover:text-white",
       outline:
-        "bg-transparent hover:bg-slate-900/60 text-slate-300 hover:text-white border border-slate-700/80",
+        "bg-transparent hover:bg-white/90 dark:hover:bg-slate-900/60 text-[#2F3A52] dark:text-slate-300 hover:text-[#17172B] dark:hover:text-white border border-slate-300 dark:border-slate-700/80",
       ghost:
-        "bg-transparent hover:bg-slate-850/60 text-slate-300 hover:text-white border border-transparent",
+        "bg-transparent hover:bg-slate-100 dark:hover:bg-slate-850/60 text-[#2F3A52] dark:text-slate-300 hover:text-[#17172B] dark:hover:text-white border border-transparent",
       danger:
         "bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-600/25 border border-red-500/30",
     };

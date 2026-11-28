@@ -361,12 +361,13 @@ def list_teams(
         query = query.filter(Team.event_id == event_id)
 
     if q and q.strip():
-        q_clean = f"%{q.strip().lower()}%"
+        _q = q.strip().lower().replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+        q_clean = f"%{_q}%"
         query = query.filter(
             or_(
-                func.lower(Team.name).ilike(q_clean),
-                func.coalesce(func.lower(Team.description), "").ilike(q_clean),
-                cast(Team.looking_for_skills, String).ilike(q_clean),
+                func.lower(Team.name).ilike(q_clean, escape="\\"),
+                func.coalesce(func.lower(Team.description), "").ilike(q_clean, escape="\\"),
+                cast(Team.looking_for_skills, String).ilike(q_clean, escape="\\"),
             )
         )
 

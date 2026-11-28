@@ -352,8 +352,8 @@ export default function MessagesPage() {
     return (
       <div className="max-w-4xl mx-auto px-4 py-20 text-center">
         <MessageSquare className="w-16 h-16 text-slate-600 mx-auto mb-4" />
-        <h1 className="text-2xl font-bold text-white mb-2">Direct & Team Messaging</h1>
-        <p className="text-slate-400 mb-6">Sign in to communicate in real time with teammates and peers.</p>
+        <h1 className="text-2xl font-bold text-[#17172B] dark:text-white mb-2">Direct & Team Messaging</h1>
+        <p className="text-[#424C63] dark:text-slate-400 mb-6">Sign in to communicate in real time with teammates and peers.</p>
         <Link
           href="/login"
           className="px-6 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-medium transition"
@@ -366,38 +366,38 @@ export default function MessagesPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6">
-      <div className="bg-slate-900/60 border border-slate-800 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row h-[calc(100dvh-10.5rem-env(safe-area-inset-bottom))] min-h-[460px] md:h-[min(780px,calc(100dvh-7.5rem))]">
+      <div className="bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row h-[calc(100dvh-10.5rem-env(safe-area-inset-bottom))] min-h-[460px] md:h-[min(780px,calc(100dvh-7.5rem))]">
         {/* LEFT COLUMN: CONVERSATION LIST (Full-width on mobile when no chat selected) */}
         <div
-          className={`w-full md:w-80 lg:w-96 md:border-r border-slate-800 flex-col bg-slate-950/40 min-h-0 flex-1 md:flex-none ${
+          className={`w-full md:w-80 lg:w-96 md:border-r border-slate-200 dark:border-slate-800 flex-col bg-white/90 dark:bg-slate-950/40 min-h-0 flex-1 md:flex-none ${
             selectedConv ? "hidden md:flex" : "flex"
           }`}
         >
-          <div className="p-4 border-b border-slate-800 flex items-center justify-between gap-2">
-            <h2 className="font-bold text-white text-lg flex items-center gap-2">
-              <MessageSquare className="w-5 h-5 text-brand-400" />
+          <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">
+            <h2 className="font-bold text-[#17172B] dark:text-white text-lg flex items-center gap-2">
+              <MessageSquare className="w-5 h-5 text-[#7552D9] dark:text-brand-400" />
               Messages
             </h2>
             <Link
               href="/network"
-              className="min-h-[36px] inline-flex items-center px-2 text-xs text-brand-400 hover:text-brand-300 font-medium transition"
+              className="min-h-[36px] inline-flex items-center px-2 text-xs text-[#7552D9] dark:text-brand-400 hover:text-[#7552D9] dark:hover:text-brand-300 font-medium transition"
             >
               Find Peers &rarr;
             </Link>
           </div>
 
-          <div className="flex-1 overflow-y-auto divide-y divide-slate-800/60">
+          <div className="flex-1 overflow-y-auto divide-y divide-slate-200 dark:divide-slate-800/60">
             {convLoading ? (
               <div className="p-8 text-center text-xs text-slate-500">Loading conversations...</div>
             ) : conversations.length === 0 ? (
               <div className="p-8 text-center">
-                <p className="text-slate-400 text-sm font-medium">No conversations yet</p>
+                <p className="text-[#424C63] dark:text-slate-400 text-sm font-medium">No conversations yet</p>
                 <p className="text-slate-500 text-xs mt-1 mb-3">
                   Connect with peers or join a team to start chatting.
                 </p>
                 <Link
                   href="/network"
-                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200"
+                  className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-semibold text-[#17172B] dark:text-slate-200"
                 >
                   Explore Network
                 </Link>
@@ -412,8 +412,8 @@ export default function MessagesPage() {
                     onClick={() => setSelectedConv(c)}
                     className={`w-full text-left p-4 transition flex items-start gap-3 ${
                       isSelected
-                        ? "bg-slate-800/80 border-l-4 border-brand-500"
-                        : "hover:bg-slate-900/60"
+                        ? "bg-slate-100 dark:bg-slate-800/80 border-l-4 border-brand-500"
+                        : "hover:bg-white/90 dark:hover:bg-slate-900/60"
                     }`}
                   >
                     <div
@@ -428,7 +428,7 @@ export default function MessagesPage() {
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-1 mb-1">
-                        <span className="font-semibold text-sm text-white truncate">{title}</span>
+                        <span className="font-semibold text-sm text-[#17172B] dark:text-white truncate">{title}</span>
                         {c.last_message && (
                           <span className="text-[10px] text-slate-500">
                             {new Date(c.last_message.created_at).toLocaleTimeString([], {
@@ -440,7 +440,7 @@ export default function MessagesPage() {
                       </div>
 
                       <div className="flex items-center justify-between">
-                        <p className="text-xs text-slate-400 truncate pr-2">
+                        <p className="text-xs text-[#424C63] dark:text-slate-400 truncate pr-2">
                           {c.last_message?.body ?? "No messages yet"}
                         </p>
                         {c.unread_count > 0 && (
@@ -459,33 +459,33 @@ export default function MessagesPage() {
 
         {/* RIGHT COLUMN: ACTIVE CHAT PANEL (Full-width on mobile when chat selected) */}
         <div
-          className={`flex-1 flex-col bg-slate-900/30 min-w-0 min-h-0 ${
+          className={`flex-1 flex-col bg-white/90 dark:bg-slate-900/30 min-w-0 min-h-0 ${
             selectedConv ? "flex" : "hidden md:flex"
           }`}
         >
           {selectedConv ? (
             <>
               {/* Chat Header */}
-              <div className="p-3 sm:p-4 border-b border-slate-800 bg-slate-950/30 flex items-center justify-between gap-2">
+              <div className="p-3 sm:p-4 border-b border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/30 flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2 min-w-0">
                   <button
                     type="button"
                     onClick={() => setSelectedConv(null)}
                     aria-label="Back to conversations"
-                    className="md:hidden min-w-[44px] min-h-[44px] -ml-1 flex items-center justify-center rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/80 transition shrink-0"
+                    className="md:hidden min-w-[44px] min-h-[44px] -ml-1 flex items-center justify-center rounded-xl text-[#2F3A52] dark:text-slate-300 hover:text-[#17172B] dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/80 transition shrink-0"
                   >
                     &larr;
                   </button>
                   <div className="min-w-0">
-                    <h3 className="font-bold text-white text-sm sm:text-base flex items-center gap-2 truncate">
+                    <h3 className="font-bold text-[#17172B] dark:text-white text-sm sm:text-base flex items-center gap-2 truncate">
                       <span className="truncate">{getConvTitle(selectedConv)}</span>
                       {selectedConv.type === "team" && (
-                        <span className="px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider bg-purple-950/60 text-purple-300 border border-purple-800/60 shrink-0">
+                        <span className="px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800/60 shrink-0">
                           Team
                         </span>
                       )}
                     </h3>
-                    <p className="text-xs text-slate-400 flex items-center gap-1.5 mt-0.5">
+                    <p className="text-xs text-[#424C63] dark:text-slate-400 flex items-center gap-1.5 mt-0.5">
                       <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
                       {participantCount} participant
                       {participantCount === 1 ? "" : "s"}
@@ -496,7 +496,7 @@ export default function MessagesPage() {
                 {selectedConv.type === "team" && selectedConv.team_slug && (
                   <Link
                     href={`/projects`}
-                    className="min-h-[36px] inline-flex items-center text-xs text-slate-300 hover:text-white px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800 transition shrink-0"
+                    className="min-h-[36px] inline-flex items-center text-xs text-[#2F3A52] dark:text-slate-300 hover:text-[#17172B] dark:hover:text-white px-3 py-1.5 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 transition shrink-0"
                   >
                     View Project
                   </Link>
@@ -510,7 +510,7 @@ export default function MessagesPage() {
                     <button
                       onClick={() => nextCursor && loadMessages(selectedConv.id, nextCursor)}
                       disabled={loadingMessages}
-                      className="px-3 py-1 rounded-lg text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 transition"
+                      className="px-3 py-1 rounded-lg text-xs bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[#2F3A52] dark:text-slate-300 transition"
                     >
                       {loadingMessages ? "Loading..." : "Load Older Messages"}
                     </button>
@@ -532,7 +532,7 @@ export default function MessagesPage() {
                         className={`group flex flex-col ${isMe ? "items-end" : "items-start"}`}
                       >
                         {!isMe && (
-                          <span className="text-[11px] font-semibold text-slate-400 ml-2 mb-1">
+                          <span className="text-[11px] font-semibold text-[#424C63] dark:text-slate-400 ml-2 mb-1">
                             {m.sender_name || (m.sender_handle ? `@${m.sender_handle}` : "Peer")}
                           </span>
                         )}
@@ -547,7 +547,7 @@ export default function MessagesPage() {
                                   setEditBody(m.body);
                                 }}
                                 aria-label="Edit message"
-                                className="min-w-[34px] min-h-[34px] flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
+                                className="min-w-[34px] min-h-[34px] flex items-center justify-center rounded-lg text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/60"
                                 title="Edit message"
                               >
                                 <Edit2 className="w-3.5 h-3.5" />
@@ -555,7 +555,7 @@ export default function MessagesPage() {
                               <button
                                 onClick={() => handleDeleteMessage(m.id)}
                                 aria-label="Delete message"
-                                className="min-w-[34px] min-h-[34px] flex items-center justify-center rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-800/60"
+                                className="min-w-[34px] min-h-[34px] flex items-center justify-center rounded-lg text-[#424C63] dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-slate-100 dark:hover:bg-slate-800/60"
                                 title="Delete message"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
@@ -568,7 +568,7 @@ export default function MessagesPage() {
                               <button
                                 onClick={() => setReportModalMsg(m)}
                                 aria-label="Report message"
-                                className="min-w-[34px] min-h-[34px] flex items-center justify-center rounded-lg text-slate-400 hover:text-amber-400 hover:bg-slate-800/60"
+                                className="min-w-[34px] min-h-[34px] flex items-center justify-center rounded-lg text-[#424C63] dark:text-slate-400 hover:text-amber-700 dark:hover:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-800/60"
                                 title="Report message"
                               >
                                 <Flag className="w-3.5 h-3.5" />
@@ -580,10 +580,10 @@ export default function MessagesPage() {
                           <div
                             className={`p-3.5 rounded-2xl text-sm leading-relaxed ${
                               m.is_deleted
-                                ? "bg-slate-800/40 border border-slate-700/40 text-slate-500 italic"
+                                ? "bg-slate-100 dark:bg-slate-800/40 border border-slate-300 dark:border-slate-700/40 text-slate-500 italic"
                                 : isMe
                                 ? "bg-brand-600 text-white rounded-br-none shadow-md shadow-brand-600/10"
-                                : "bg-slate-800 text-slate-100 rounded-bl-none border border-slate-700/50"
+                                : "bg-slate-100 dark:bg-slate-800 text-[#17172B] dark:text-slate-100 rounded-bl-none border border-slate-300 dark:border-slate-700/50"
                             }`}
                           >
                             {isEditing ? (
@@ -592,13 +592,13 @@ export default function MessagesPage() {
                                   type="text"
                                   value={editBody}
                                   onChange={(e) => setEditBody(e.target.value)}
-                                  className="w-full px-2 py-1 bg-slate-900 border border-slate-700 rounded text-xs text-white"
+                                  className="w-full px-2 py-1 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded text-xs text-[#17172B] dark:text-white"
                                   autoFocus
                                 />
                                 <div className="flex justify-end gap-1">
                                   <button
                                     onClick={() => setEditingMessageId(null)}
-                                    className="px-2 py-0.5 text-[10px] text-slate-300"
+                                    className="px-2 py-0.5 text-[10px] text-[#2F3A52] dark:text-slate-300"
                                   >
                                     Cancel
                                   </button>
@@ -636,20 +636,20 @@ export default function MessagesPage() {
 
               {/* Typing Indicators */}
               {Object.keys(typingUsers).length > 0 && (
-                <div className="px-4 py-1 text-xs text-brand-400 italic bg-slate-950/20 flex items-center gap-1.5">
+                <div className="px-4 py-1 text-xs text-[#7552D9] dark:text-brand-400 italic bg-white/90 dark:bg-slate-950/20 flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse"></span>
                   {Object.values(typingUsers).join(", ")} is typing...
                 </div>
               )}
 
               {/* Chat Input */}
-              <form onSubmit={handleSendMessage} className="p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] border-t border-slate-800 bg-slate-950/40 flex items-center gap-2">
+              <form onSubmit={handleSendMessage} className="p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] border-t border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-950/40 flex items-center gap-2">
                 <input
                   type="text"
                   placeholder="Type a message..."
                   value={inputBody}
                   onChange={(e) => handleTypingChange(e.target.value)}
-                  className="min-w-0 flex-1 min-h-[44px] px-4 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-slate-100 placeholder-slate-500 text-base md:text-sm focus:outline-none focus:border-brand-500"
+                  className="min-w-0 flex-1 min-h-[44px] px-4 py-2.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-[#17172B] dark:text-slate-100 placeholder-slate-500 text-base md:text-sm focus:outline-none focus:border-brand-500"
                 />
                 <button
                   type="submit"
@@ -664,7 +664,7 @@ export default function MessagesPage() {
           ) : (
             <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-slate-500">
               <MessageSquare className="w-14 h-14 mb-3 text-slate-700" />
-              <p className="text-base font-semibold text-slate-300">Select a conversation</p>
+              <p className="text-base font-semibold text-[#2F3A52] dark:text-slate-300">Select a conversation</p>
               <p className="text-xs text-slate-500 mt-1">Choose a conversation from the sidebar to chat.</p>
             </div>
           )}
@@ -674,21 +674,21 @@ export default function MessagesPage() {
       {/* Report Modal */}
       {reportModalMsg && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-          <div className="max-w-md w-full bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl">
-            <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
-              <Flag className="w-5 h-5 text-amber-400" />
+          <div className="max-w-md w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-2xl">
+            <h3 className="text-lg font-bold text-[#17172B] dark:text-white mb-2 flex items-center gap-2">
+              <Flag className="w-5 h-5 text-amber-700 dark:text-amber-400" />
               Report Message
             </h3>
-            <p className="text-xs text-slate-400 mb-4">
+            <p className="text-xs text-[#424C63] dark:text-slate-400 mb-4">
               Help keep LaunchByte safe. Flag abusive, harmful, or spam content for review.
             </p>
 
             <div className="mb-4">
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Reason</label>
+              <label className="block text-xs font-semibold text-[#2F3A52] dark:text-slate-300 mb-1">Reason</label>
               <select
                 value={reportReason}
                 onChange={(e) => setReportReason(e.target.value)}
-                className="w-full p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-sm text-slate-200"
+                className="w-full p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm text-[#17172B] dark:text-slate-200"
               >
                 <option value="spam">Spam or Unsolicited Promotion</option>
                 <option value="harassment">Harassment or Abuse</option>
@@ -699,20 +699,20 @@ export default function MessagesPage() {
             </div>
 
             <div className="mb-4">
-              <label className="block text-xs font-semibold text-slate-300 mb-1">Details (Optional)</label>
+              <label className="block text-xs font-semibold text-[#2F3A52] dark:text-slate-300 mb-1">Details (Optional)</label>
               <textarea
                 rows={3}
                 value={reportDetails}
                 onChange={(e) => setReportDetails(e.target.value)}
                 placeholder="Provide additional context for moderators..."
-                className="w-full p-2.5 rounded-xl bg-slate-800 border border-slate-700 text-sm text-slate-200 placeholder-slate-500"
+                className="w-full p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm text-[#17172B] dark:text-slate-200 placeholder-slate-500"
               />
             </div>
 
             <div className="flex items-center justify-end gap-2">
               <button
                 onClick={() => setReportModalMsg(null)}
-                className="px-4 py-2 rounded-xl border border-slate-700 hover:bg-slate-800 text-slate-300 text-xs font-medium"
+                className="px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-[#2F3A52] dark:text-slate-300 text-xs font-medium"
               >
                 Cancel
               </button>

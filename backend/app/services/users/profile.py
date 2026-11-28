@@ -213,13 +213,14 @@ def discover_teammates(
         query = query.filter(User.id.in_(active_regs))
 
     if q:
-        q_clean = f"%{q.strip().lower()}%"
+        _q = q.strip().lower().replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+        q_clean = f"%{_q}%"
         query = query.filter(
             or_(
-                func.lower(User.full_name).ilike(q_clean),
-                func.lower(User.handle).ilike(q_clean),
-                func.lower(UserProfile.institution).ilike(q_clean),
-                func.lower(UserProfile.headline).ilike(q_clean),
+                func.lower(User.full_name).ilike(q_clean, escape="\\"),
+                func.lower(User.handle).ilike(q_clean, escape="\\"),
+                func.lower(UserProfile.institution).ilike(q_clean, escape="\\"),
+                func.lower(UserProfile.headline).ilike(q_clean, escape="\\"),
             )
         )
 

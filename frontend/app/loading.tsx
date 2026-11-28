@@ -5,7 +5,7 @@ export default function Loading() {
     <div
       role="status"
       aria-label="Loading LaunchByte"
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#050510] transition-opacity duration-300"
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white dark:bg-[#050510] transition-opacity duration-300"
     >
       {/* Background Soft Cosmic Glow */}
       <div className="absolute w-72 h-72 rounded-full bg-violet-600/15 blur-3xl pointer-events-none animate-pulse" />

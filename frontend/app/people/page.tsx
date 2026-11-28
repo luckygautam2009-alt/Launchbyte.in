@@ -64,7 +64,7 @@ export default function PeopleDiscoverPage() {
               placeholder="Search by name, handle, or institution..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-slate-900/90 border border-slate-700/80 rounded-xl text-sm text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none transition"
+              className="w-full pl-10 pr-4 py-2.5 bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 rounded-xl text-sm text-[#17172B] dark:text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none transition"
             />
           </div>
           <input
@@ -72,14 +72,14 @@ export default function PeopleDiscoverPage() {
             placeholder="Skills (comma-separated)"
             value={skillFilter}
             onChange={e => setSkillFilter(e.target.value)}
-            className="sm:w-56 px-4 py-2.5 bg-slate-900/90 border border-slate-700/80 rounded-xl text-sm text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none transition"
+            className="sm:w-56 px-4 py-2.5 bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 rounded-xl text-sm text-[#17172B] dark:text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none transition"
           />
           <input
             type="text"
             placeholder="Event ID (optional)"
             value={eventId}
             onChange={e => setEventId(e.target.value)}
-            className="sm:w-56 px-4 py-2.5 bg-slate-900/90 border border-slate-700/80 rounded-xl text-sm text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none transition"
+            className="sm:w-56 px-4 py-2.5 bg-white/90 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 rounded-xl text-sm text-[#17172B] dark:text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none transition"
           />
         </div>
 
@@ -93,7 +93,7 @@ export default function PeopleDiscoverPage() {
         ) : candidates.length === 0 ? (
           <div className="text-center py-20">
             <UserSearch className="w-12 h-12 text-slate-700 mx-auto mb-4" />
-            <p className="text-slate-400 text-lg">No teammates found</p>
+            <p className="text-[#424C63] dark:text-slate-400 text-lg">No teammates found</p>
             <p className="text-slate-500 text-sm mt-1">Try different search criteria</p>
           </div>
         ) : (
@@ -105,18 +105,18 @@ export default function PeopleDiscoverPage() {
                     src={c.avatar_url}
                     name={c.full_name || "?"}
                     size="fill"
-                    className="w-11 h-11 bg-slate-700 text-white font-semibold"
+                    className="w-11 h-11 bg-slate-200 dark:bg-slate-700 text-[#17172B] dark:text-white font-semibold"
                   />
                   <div className="min-w-0 flex-1">
-                    <Link href={`/u/${c.handle}`} className="text-white font-semibold hover:text-brand-400 transition truncate block">
+                    <Link href={`/u/${c.handle}`} className="text-[#17172B] dark:text-white font-semibold hover:text-[#7552D9] dark:hover:text-brand-400 transition truncate block">
                       {c.full_name}
                     </Link>
                     <p className="text-xs text-slate-500 truncate">@{c.handle}</p>
-                    {c.headline && <p className="text-xs text-slate-400 mt-0.5 truncate">{c.headline}</p>}
+                    {c.headline && <p className="text-xs text-[#424C63] dark:text-slate-400 mt-0.5 truncate">{c.headline}</p>}
                   </div>
                   {/* Match Score */}
                   <div className="shrink-0 flex flex-col items-center">
-                    <div className={`text-lg font-bold ${c.match_score >= 70 ? "text-emerald-400" : c.match_score >= 40 ? "text-amber-400" : "text-slate-500"}`}>
+                    <div className={`text-lg font-bold ${c.match_score >= 70 ? "text-emerald-700 dark:text-emerald-400" : c.match_score >= 40 ? "text-amber-700 dark:text-amber-400" : "text-slate-500"}`}>
                       {c.match_score}%
                     </div>
                     <span className="text-[10px] text-slate-500">match</span>
@@ -134,8 +134,8 @@ export default function PeopleDiscoverPage() {
                         key={skill}
                         className={`text-xs px-2 py-0.5 rounded-full border ${
                           c.shared_skills.includes(skill.toLowerCase())
-                            ? "bg-emerald-950 text-emerald-300 border-emerald-800/50"
-                            : "bg-slate-800 text-slate-400 border-slate-700/50"
+                            ? "bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800/50"
+                            : "bg-slate-100 dark:bg-slate-800 text-[#424C63] dark:text-slate-400 border-slate-300 dark:border-slate-700/50"
                         }`}
                       >
                         {skill}
@@ -145,13 +145,13 @@ export default function PeopleDiscoverPage() {
                   </div>
                 )}
 
-                <div className="flex items-center justify-between mt-3 pt-2 border-t border-slate-800/50">
+                <div className="flex items-center justify-between mt-3 pt-2 border-t border-slate-200 dark:border-slate-800/50">
                   {c.looking_for_roles.length > 0 && (
                     <span className="text-[10px] text-slate-500">
                       Looking for: {c.looking_for_roles.slice(0, 2).join(", ")}
                     </span>
                   )}
-                  <Link href={`/u/${c.handle}`} className="text-xs text-brand-400 hover:text-brand-300 transition flex items-center gap-1">
+                  <Link href={`/u/${c.handle}`} className="text-xs text-[#7552D9] dark:text-brand-400 hover:text-[#7552D9] dark:hover:text-brand-300 transition flex items-center gap-1">
                     Profile <ExternalLink className="w-3 h-3" />
                   </Link>
                 </div>

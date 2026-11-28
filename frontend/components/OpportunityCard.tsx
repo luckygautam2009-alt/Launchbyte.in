@@ -107,7 +107,7 @@ export default function OpportunityCard({
               name={opportunity.organization.name}
               size="md"
               shape="rounded"
-              className="border border-slate-200 dark:border-slate-750 text-slate-400 bg-slate-50 dark:bg-slate-900"
+              className="border border-slate-200 dark:border-slate-750 text-[#424C63] dark:text-slate-400 bg-slate-50 dark:bg-slate-900"
               fallback={<Building className="w-5 h-5" />}
             />
             <div>

@@ -37,7 +37,7 @@ export function AvatarGroup({ users, max = 4, size = "md", className }: AvatarGr
           whileHover={{ y: -3, scale: 1.1, zIndex: 10 }}
           transition={{ type: "spring", stiffness: 400, damping: 25 }}
           className={clsx(
-            "relative rounded-full bg-slate-800 border-slate-950 flex items-center justify-center font-bold text-slate-300 overflow-hidden shrink-0 shadow",
+            "relative rounded-full bg-slate-100 dark:bg-slate-800 border-white dark:border-slate-950 flex items-center justify-center font-bold text-[#2F3A52] dark:text-slate-300 overflow-hidden shrink-0 shadow",
             sizeStyles[size]
           )}
           title={`${u.name}${u.role ? ` (${u.role})` : ""}`}
@@ -46,7 +46,7 @@ export function AvatarGroup({ users, max = 4, size = "md", className }: AvatarGr
             src={u.avatarUrl}
             name={u.name}
             size="fill"
-            className="bg-transparent text-slate-300 font-bold"
+            className="bg-transparent text-[#2F3A52] dark:text-slate-300 font-bold"
           />
         </motion.div>
       ))}
@@ -54,7 +54,7 @@ export function AvatarGroup({ users, max = 4, size = "md", className }: AvatarGr
       {remaining > 0 && (
         <div
           className={clsx(
-            "relative rounded-full bg-slate-850 border-slate-950 flex items-center justify-center font-semibold text-slate-400 font-mono shrink-0 shadow",
+            "relative rounded-full bg-slate-200 dark:bg-slate-850 border-white dark:border-slate-950 flex items-center justify-center font-semibold text-[#424C63] dark:text-slate-400 font-mono shrink-0 shadow",
             sizeStyles[size]
           )}
           title={`+${remaining} more`}

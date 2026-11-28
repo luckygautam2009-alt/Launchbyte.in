@@ -17,7 +17,6 @@ import {
   Ban,
 } from "lucide-react";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
 export default function AdminModerationPage() {
   const router = useRouter();
@@ -34,18 +33,15 @@ export default function AdminModerationPage() {
   const fetchAll = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("lb_token");
       if (tab === "opportunities") {
         const res = await api.listAdminOpportunities({ status: statusFilter, limit: 50 });
         setOpportunities(res.items);
       } else if (tab === "access") {
-        const res = await fetch(`${API_BASE}/admin/contributor-access`, {
-          headers: { Authorization: `Bearer ${token}` },
+        const res = await api.authFetch(`/admin/contributor-access`, {
         });
         if (res.ok) setAccessRequests(await res.json());
       } else {
-        const res = await fetch(`${API_BASE}/admin/host-events`, {
-          headers: { Authorization: `Bearer ${token}` },
+        const res = await api.authFetch(`/admin/host-events`, {
         });
         if (res.ok) setEventSubmissions(await res.json());
       }
@@ -93,12 +89,10 @@ export default function AdminModerationPage() {
 
   async function handleAccessAction(id: string, action: "approve" | "reject" | "revoke") {
     try {
-      const token = localStorage.getItem("lb_token");
-      const res = await fetch(`${API_BASE}/admin/contributor-access/${id}/${action}`, {
+      const res = await api.authFetch(`/admin/contributor-access/${id}/${action}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({}),
       });
@@ -112,12 +106,10 @@ export default function AdminModerationPage() {
 
   async function handleEventAction(id: string, action: "approve" | "reject") {
     try {
-      const token = localStorage.getItem("lb_token");
-      const res = await fetch(`${API_BASE}/admin/host-events/${id}/${action}`, {
+      const res = await api.authFetch(`/admin/host-events/${id}/${action}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({}),
       });
@@ -131,21 +123,21 @@ export default function AdminModerationPage() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-[#050510] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-violet-400 animate-spin" />
+      <div className="min-h-screen bg-transparent dark:bg-[#050510] flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-violet-700 dark:text-violet-400 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#050510] text-slate-100 py-12 sm:py-16">
+    <div className="min-h-screen bg-transparent dark:bg-[#050510] text-[#17172B] dark:text-slate-100 py-12 sm:py-16">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <ShieldCheck className="w-7 h-7 text-cyan-400" />
+            <ShieldCheck className="w-7 h-7 text-cyan-700 dark:text-cyan-400" />
             <div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-white">LaunchByte Admin Moderation</h1>
-              <p className="text-xs sm:text-sm text-slate-400">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-[#17172B] dark:text-white">LaunchByte Admin Moderation</h1>
+              <p className="text-xs sm:text-sm text-[#424C63] dark:text-slate-400">
                 Review opportunities, contributor access requests, and public event submissions.
               </p>
             </div>
@@ -164,7 +156,7 @@ export default function AdminModerationPage() {
                 className={`px-4 py-2 rounded-xl text-xs font-semibold cursor-pointer transition ${
                   tab === t.id
                     ? "bg-gradient-to-r from-[#4F46E5] to-[#8B5CF6] text-white"
-                    : "bg-slate-900 border border-slate-800 text-slate-400 hover:text-white"
+                    : "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-white"
                 }`}
               >
                 {t.label}
@@ -183,7 +175,7 @@ export default function AdminModerationPage() {
                 className={`min-h-[38px] px-3 py-1.5 rounded-lg text-xs font-mono cursor-pointer ${
                   statusFilter === s
                     ? "bg-violet-600/30 border border-violet-400 text-white"
-                    : "bg-slate-900 border border-slate-800 text-slate-400"
+                    : "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-[#424C63] dark:text-slate-400"
                 }`}
               >
                 {s}
@@ -194,12 +186,12 @@ export default function AdminModerationPage() {
 
         {loading ? (
           <div className="py-12 flex justify-center">
-            <Loader2 className="w-7 h-7 text-violet-400 animate-spin" />
+            <Loader2 className="w-7 h-7 text-violet-700 dark:text-violet-400 animate-spin" />
           </div>
         ) : tab === "opportunities" ? (
           <div className="space-y-3">
             {opportunities.length === 0 ? (
-              <div className="p-8 rounded-2xl glass-card text-center text-sm text-slate-400">
+              <div className="p-8 rounded-2xl glass-card text-center text-sm text-[#424C63] dark:text-slate-400">
                 No opportunities in &ldquo;{statusFilter}&rdquo;.
               </div>
             ) : (
@@ -209,8 +201,8 @@ export default function AdminModerationPage() {
                   className="p-5 rounded-2xl glass-card border border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                 >
                   <div className="space-y-1 min-w-0 flex-1">
-                    <h3 className="font-bold text-white break-words">{opp.title}</h3>
-                    <p className="text-xs text-slate-400">
+                    <h3 className="font-bold text-[#17172B] dark:text-white break-words">{opp.title}</h3>
+                    <p className="text-xs text-[#424C63] dark:text-slate-400">
                       {opp.organizer_name_override || opp.organization?.name} • {opp.type} • {opp.status}
                     </p>
                     {opp.application_url && (
@@ -218,7 +210,7 @@ export default function AdminModerationPage() {
                         href={opp.application_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs font-mono text-cyan-300 inline-flex items-center gap-1 hover:underline break-all"
+                        className="text-xs font-mono text-cyan-700 dark:text-cyan-300 inline-flex items-center gap-1 hover:underline break-all"
                       >
                         <span>{opp.application_url}</span>
                         <ExternalLink className="w-3 h-3 shrink-0" />
@@ -230,7 +222,7 @@ export default function AdminModerationPage() {
                       <button
                         type="button"
                         onClick={() => handleOppApprove(opp)}
-                        className="min-h-[42px] inline-flex items-center gap-1 px-3.5 py-2 rounded-xl bg-emerald-600/20 border border-emerald-500/40 text-emerald-300 text-xs font-semibold cursor-pointer"
+                        className="min-h-[42px] inline-flex items-center gap-1 px-3.5 py-2 rounded-xl bg-emerald-600/20 border border-emerald-500/40 text-emerald-700 dark:text-emerald-300 text-xs font-semibold cursor-pointer"
                       >
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         <span>Approve & Publish</span>
@@ -240,7 +232,7 @@ export default function AdminModerationPage() {
                       <button
                         type="button"
                         onClick={() => handleOppReject(opp)}
-                        className="min-h-[42px] inline-flex items-center gap-1 px-3.5 py-2 rounded-xl bg-red-600/20 border border-red-500/40 text-red-300 text-xs font-semibold cursor-pointer"
+                        className="min-h-[42px] inline-flex items-center gap-1 px-3.5 py-2 rounded-xl bg-red-600/20 border border-red-500/40 text-red-600 dark:text-red-300 text-xs font-semibold cursor-pointer"
                       >
                         <XCircle className="w-3.5 h-3.5" />
                         <span>Reject</span>
@@ -254,7 +246,7 @@ export default function AdminModerationPage() {
         ) : tab === "access" ? (
           <div className="space-y-3">
             {accessRequests.length === 0 ? (
-              <div className="p-8 rounded-2xl glass-card text-center text-sm text-slate-400">
+              <div className="p-8 rounded-2xl glass-card text-center text-sm text-[#424C63] dark:text-slate-400">
                 No contributor access requests yet.
               </div>
             ) : (
@@ -265,16 +257,16 @@ export default function AdminModerationPage() {
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <Users className="w-4 h-4 text-cyan-400" />
-                      <span className="font-bold text-white">{req.full_name}</span>
-                      <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-violet-950 border border-violet-500/30 text-violet-200">
+                      <Users className="w-4 h-4 text-cyan-700 dark:text-cyan-400" />
+                      <span className="font-bold text-[#17172B] dark:text-white">{req.full_name}</span>
+                      <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-violet-50 dark:bg-violet-950 border border-violet-500/30 text-violet-700 dark:text-violet-200">
                         {req.status}
                       </span>
                     </div>
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-[#424C63] dark:text-slate-400">
                       {req.email} • {req.team_role}
                     </p>
-                    <p className="text-xs text-slate-300">{req.reason}</p>
+                    <p className="text-xs text-[#2F3A52] dark:text-slate-300">{req.reason}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     {req.status === "pending" && (
@@ -282,14 +274,14 @@ export default function AdminModerationPage() {
                         <button
                           type="button"
                           onClick={() => handleAccessAction(req.id, "approve")}
-                          className="px-3.5 py-2 rounded-xl bg-emerald-600/20 border border-emerald-500/40 text-emerald-300 text-xs font-semibold cursor-pointer"
+                          className="px-3.5 py-2 rounded-xl bg-emerald-600/20 border border-emerald-500/40 text-emerald-700 dark:text-emerald-300 text-xs font-semibold cursor-pointer"
                         >
                           Approve
                         </button>
                         <button
                           type="button"
                           onClick={() => handleAccessAction(req.id, "reject")}
-                          className="px-3.5 py-2 rounded-xl bg-red-600/20 border border-red-500/40 text-red-300 text-xs font-semibold cursor-pointer"
+                          className="px-3.5 py-2 rounded-xl bg-red-600/20 border border-red-500/40 text-red-600 dark:text-red-300 text-xs font-semibold cursor-pointer"
                         >
                           Reject
                         </button>
@@ -299,7 +291,7 @@ export default function AdminModerationPage() {
                       <button
                         type="button"
                         onClick={() => handleAccessAction(req.id, "revoke")}
-                        className="inline-flex items-center gap-1 px-3.5 py-2 rounded-xl bg-amber-600/20 border border-amber-500/40 text-amber-300 text-xs font-semibold cursor-pointer"
+                        className="inline-flex items-center gap-1 px-3.5 py-2 rounded-xl bg-amber-600/20 border border-amber-500/40 text-amber-700 dark:text-amber-300 text-xs font-semibold cursor-pointer"
                       >
                         <Ban className="w-3.5 h-3.5" />
                         <span>Revoke Access</span>
@@ -313,7 +305,7 @@ export default function AdminModerationPage() {
         ) : (
           <div className="space-y-3">
             {eventSubmissions.length === 0 ? (
-              <div className="p-8 rounded-2xl glass-card text-center text-sm text-slate-400">
+              <div className="p-8 rounded-2xl glass-card text-center text-sm text-[#424C63] dark:text-slate-400">
                 No public event submissions yet.
               </div>
             ) : (
@@ -324,20 +316,20 @@ export default function AdminModerationPage() {
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-cyan-400" />
-                      <span className="font-bold text-white">{sub.event_name}</span>
-                      <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-violet-950 border border-violet-500/30 text-violet-200">
+                      <Calendar className="w-4 h-4 text-cyan-700 dark:text-cyan-400" />
+                      <span className="font-bold text-[#17172B] dark:text-white">{sub.event_name}</span>
+                      <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-violet-50 dark:bg-violet-950 border border-violet-500/30 text-violet-700 dark:text-violet-200">
                         {sub.status}
                       </span>
                     </div>
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-[#424C63] dark:text-slate-400">
                       {sub.organizer_name} ({sub.organizer_organization}) • {sub.organizer_email}
                     </p>
                     <a
                       href={sub.registration_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs font-mono text-cyan-300 hover:underline inline-flex items-center gap-1"
+                      className="text-xs font-mono text-cyan-700 dark:text-cyan-300 hover:underline inline-flex items-center gap-1"
                     >
                       <span>{sub.registration_url}</span>
                       <ExternalLink className="w-3 h-3" />
@@ -349,14 +341,14 @@ export default function AdminModerationPage() {
                         <button
                           type="button"
                           onClick={() => handleEventAction(sub.id, "approve")}
-                          className="px-3.5 py-2 rounded-xl bg-emerald-600/20 border border-emerald-500/40 text-emerald-300 text-xs font-semibold cursor-pointer"
+                          className="px-3.5 py-2 rounded-xl bg-emerald-600/20 border border-emerald-500/40 text-emerald-700 dark:text-emerald-300 text-xs font-semibold cursor-pointer"
                         >
                           Approve
                         </button>
                         <button
                           type="button"
                           onClick={() => handleEventAction(sub.id, "reject")}
-                          className="px-3.5 py-2 rounded-xl bg-red-600/20 border border-red-500/40 text-red-300 text-xs font-semibold cursor-pointer"
+                          className="px-3.5 py-2 rounded-xl bg-red-600/20 border border-red-500/40 text-red-600 dark:text-red-300 text-xs font-semibold cursor-pointer"
                         >
                           Reject
                         </button>

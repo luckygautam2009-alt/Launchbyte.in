@@ -593,3 +593,27 @@ html.light .star {
     --tw-blur: blur(40px) !important;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Phone performance pass.
+   Huge blurred "glow" blobs (blur-[120px..170px], blur-3xl) are rasterised on the GPU every frame
+   while scrolling and are the main reason low/mid-range phones stutter. They are purely decorative
+   and only ~10-20% opacity, so on phones they are not rendered at all. Continuous background
+   animations are paused for the same reason.
+--------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+  [class*="blur-["]:not([class*="blur-[2px]"]),
+  .blur-2xl,
+  .blur-3xl {
+    display: none !important;
+  }
+
+  html.light .lb-ken-burns-active,
+  html.light .lb-chip-float-light,
+  html.light .hero-bg,
+  .hero-bg,
+  .animate-pulse.blur-2xl {
+    animation: none !important;
+    will-change: auto !important;
+  }
+}

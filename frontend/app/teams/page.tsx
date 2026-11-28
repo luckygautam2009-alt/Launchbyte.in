@@ -228,7 +228,7 @@ export default function TeamsDiscoverPage() {
                     {(team.members || []).slice(0, 4).map((m) => (
                       <div
                         key={m.id}
-                        className="w-7 h-7 rounded-full bg-slate-700 border-2 border-slate-900 flex items-center justify-center text-xs text-white font-medium"
+                        className="w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-900 flex items-center justify-center text-xs text-[#17172B] dark:text-white font-medium"
                         title={m.full_name}
                       >
                         {m.full_name?.[0]?.toUpperCase() || "?"}
@@ -236,7 +236,7 @@ export default function TeamsDiscoverPage() {
                     ))}
                   </div>
                   {team.open_spots > 0 ? (
-                    <span className="text-xs text-emerald-400">
+                    <span className="text-xs text-emerald-700 dark:text-emerald-400">
                       {team.open_spots} spot{team.open_spots !== 1 ? "s" : ""}{" "}
                       open
                     </span>
@@ -255,18 +255,18 @@ export default function TeamsDiscoverPage() {
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-400 hover:text-white disabled:opacity-40 transition"
+              className="p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-white disabled:opacity-40 transition"
               aria-label="Previous page"
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="text-sm text-slate-400">
+            <span className="text-sm text-[#424C63] dark:text-slate-400">
               Page {page} of {totalPages}
             </span>
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
-              className="p-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-400 hover:text-white disabled:opacity-40 transition"
+              className="p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-white disabled:opacity-40 transition"
               aria-label="Next page"
             >
               <ChevronRight className="w-4 h-4" />

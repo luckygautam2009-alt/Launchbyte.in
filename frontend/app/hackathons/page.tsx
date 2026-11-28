@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import OpportunityCatalog from "@/components/OpportunityCatalog";
 import PageHero from "@/components/common/PageHero";
-import RequireAuth from "@/components/auth/RequireAuth";
+import ExploreGate from "@/components/auth/ExploreGate";
 
 export const metadata: Metadata = {
   title: "Hackathons",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 
 export default function HackathonsPage() {
   return (
-    <RequireAuth>
+    <ExploreGate>
       <div className="min-h-screen bg-transparent dark:bg-[#050510]">
         <PageHero
           eyebrow="HACKATHON ARENA"
@@ -33,7 +33,7 @@ export default function HackathonsPage() {
           }
           subtitle="Compete, build production-grade prototypes, and win prizes in verified global hackathons."
         />
-        <Suspense fallback={<div className="max-w-7xl mx-auto px-4 py-16 text-center text-slate-400">Loading hackathons...</div>}>
+        <Suspense fallback={<div className="max-w-7xl mx-auto px-4 py-16 text-center text-[#424C63] dark:text-slate-400">Loading hackathons...</div>}>
           <OpportunityCatalog
             fixedType="hackathon"
             title="Hackathons"
@@ -42,6 +42,6 @@ export default function HackathonsPage() {
           />
         </Suspense>
       </div>
-    </RequireAuth>
+    </ExploreGate>
   );
 }

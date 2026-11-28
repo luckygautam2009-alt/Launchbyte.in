@@ -114,36 +114,36 @@ export default function OtpVerifyModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-      <div className="relative w-full max-w-md rounded-2xl bg-slate-900 border border-slate-800 p-6 shadow-2xl space-y-5">
+      <div className="relative w-full max-w-md rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 shadow-2xl space-y-5">
         <button
           type="button"
           onClick={onClose}
           aria-label="Close verification modal"
-          className="absolute top-4 right-4 text-slate-400 hover:text-white transition"
+          className="absolute top-4 right-4 text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-white transition"
         >
           <X className="w-5 h-5" />
         </button>
 
         <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-400 flex items-center justify-center">
+          <div className="w-11 h-11 rounded-xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-700 dark:text-indigo-400 flex items-center justify-center">
             <MailCheck className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-white">{title}</h3>
-            {user?.email && <p className="text-xs text-slate-400">{user.email}</p>}
+            <h3 className="text-lg font-bold text-[#17172B] dark:text-white">{title}</h3>
+            {user?.email && <p className="text-xs text-[#424C63] dark:text-slate-400">{user.email}</p>}
           </div>
         </div>
 
-        <p className="text-sm text-slate-300 leading-relaxed">{subtitle}</p>
+        <p className="text-sm text-[#2F3A52] dark:text-slate-300 leading-relaxed">{subtitle}</p>
 
         {infoMessage && (
-          <div className="p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-200 text-xs">
+          <div className="p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-700 dark:text-indigo-200 text-xs">
             {infoMessage}
           </div>
         )}
 
         {error && (
-          <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs">
+          <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-300 text-xs">
             {error}
           </div>
         )}
@@ -157,7 +157,7 @@ export default function OtpVerifyModal({
             value={code}
             onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
             placeholder="000000"
-            className="w-full text-center tracking-[0.5em] text-2xl font-mono py-3.5 px-4 rounded-xl bg-slate-950 border border-slate-700 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+            className="w-full text-center tracking-[0.5em] text-2xl font-mono py-3.5 px-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-700 text-[#17172B] dark:text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
           />
 
           <button
@@ -176,13 +176,13 @@ export default function OtpVerifyModal({
           </button>
         </form>
 
-        <div className="flex items-center justify-between pt-2 border-t border-slate-800 text-xs">
-          <span className="text-slate-400">Didn&apos;t receive a code?</span>
+        <div className="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-slate-800 text-xs">
+          <span className="text-[#424C63] dark:text-slate-400">Didn&apos;t receive a code?</span>
           <button
             type="button"
             onClick={handleResend}
             disabled={resending || cooldown > 0}
-            className="inline-flex items-center gap-1.5 text-indigo-400 hover:text-indigo-300 disabled:text-slate-500 font-medium transition"
+            className="inline-flex items-center gap-1.5 text-indigo-700 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 disabled:text-slate-500 font-medium transition"
           >
             {resending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <RefreshCw className="w-3.5 h-3.5" />}
             {cooldown > 0 ? `Resend in ${cooldown}s` : "Resend code"}
