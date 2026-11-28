@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { Bell, CheckCheck } from "lucide-react";
+import { Bell, CheckCheck, Trash2 } from "lucide-react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import type { NotificationItem } from "@/lib/types";
@@ -150,6 +150,18 @@ export default function NotificationBell({ variant = "desktop" }: { variant?: "d
     }
   }
 
+  async function handleClearAll() {
+    const prev = items;
+    setItems([]);
+    setUnread(0);
+    try {
+      await api.clearAllNotifications();
+    } catch {
+      setItems(prev);
+      void fetchCount();
+    }
+  }
+
   const btnSize =
     variant === "mobile" ? "min-w-[44px] min-h-[44px]" : "w-9 h-9 xl:w-10 xl:h-10";
 
@@ -184,15 +196,26 @@ export default function NotificationBell({ variant = "desktop" }: { variant?: "d
         >
           <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-slate-800">
             <h3 className="text-sm font-bold">Notifications</h3>
-            <button
-              type="button"
-              onClick={handleMarkAll}
-              disabled={unread === 0}
-              className="inline-flex items-center gap-1 text-xs font-semibold text-violet-700 dark:text-violet-300 disabled:opacity-40"
-            >
-              <CheckCheck className="w-3.5 h-3.5" />
-              Mark all read
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={handleMarkAll}
+                disabled={unread === 0}
+                className="inline-flex items-center gap-1 text-xs font-semibold text-violet-700 dark:text-violet-300 disabled:opacity-40"
+              >
+                <CheckCheck className="w-3.5 h-3.5" />
+                Mark all read
+              </button>
+              <button
+                type="button"
+                onClick={handleClearAll}
+                disabled={!items || items.length === 0}
+                className="inline-flex items-center gap-1 text-xs font-semibold text-rose-600 dark:text-rose-400 disabled:opacity-40"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                Clear all
+              </button>
+            </div>
           </div>
 
           <div className="max-h-[min(70vh,440px)] overflow-y-auto overscroll-contain">

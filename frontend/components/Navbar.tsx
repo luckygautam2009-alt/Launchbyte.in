@@ -206,7 +206,7 @@ export default function Navbar() {
         <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-violet-500/35 to-transparent pointer-events-none" />
       )}
 
-      <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-2 xl:gap-4 ${
+      <div className={`max-w-[88rem] mx-auto px-4 sm:px-6 lg:px-6 xl:px-8 flex items-center justify-between gap-3 xl:gap-6 ${
         mounted && isLight
           ? "h-16"
           : "pt-[env(safe-area-inset-top)] h-[calc(4rem+env(safe-area-inset-top))]"
@@ -232,7 +232,7 @@ export default function Navbar() {
         {/* Desktop Navigation */}
         <nav
           aria-label="Primary Navigation"
-          className="hidden md:flex items-center gap-0.5 xl:gap-1 min-w-0"
+          className="hidden md:flex items-center gap-0.5 xl:gap-1 min-w-0 flex-1 justify-center"
         >
           {PRIMARY_NAV_BEFORE_TEAMS.map(renderNavLink)}
 
