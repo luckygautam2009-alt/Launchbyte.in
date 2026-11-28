@@ -22,6 +22,11 @@ def list_notifications(
     return {"items": items, "total": total, "limit": limit, "offset": offset}
 
 
+@router.get("/unread-count")
+def unread_count(db: DBSession, current_user: CurrentUser):
+    return {"unread": svc.count_unread_notifications(db, current_user.id)}
+
+
 @router.post("/{notification_id}/read", response_model=NotificationRead)
 def mark_read(
     db: DBSession,

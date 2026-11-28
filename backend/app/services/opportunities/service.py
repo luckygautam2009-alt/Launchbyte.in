@@ -737,6 +737,17 @@ def list_notifications(db: Session, user_id: uuid.UUID, limit: int, offset: int)
     return _page(db, stmt, (Notification.created_at.desc(), Notification.id), limit, offset)
 
 
+def count_unread_notifications(db: Session, user_id: uuid.UUID) -> int:
+    return (
+        db.scalar(
+            select(func.count())
+            .select_from(Notification)
+            .where(Notification.user_id == user_id, Notification.read_at.is_(None))
+        )
+        or 0
+    )
+
+
 def mark_notification_read(db: Session, user_id: uuid.UUID, notification_id: uuid.UUID) -> Notification | None:
     notif = db.scalar(
         select(Notification).where(
