@@ -97,3 +97,20 @@ def get_optional_user(db: DBSession, token: Annotated[str | None, Depends(oauth2
 
 
 OptionalUser = Annotated[User | None, Depends(get_optional_user)]
+
+
+def require_login_to_explore(
+    db: DBSession, token: Annotated[str | None, Depends(oauth2_scheme_optional)]
+) -> None:
+    """Route dependency: with REQUIRE_LOGIN_TO_EXPLORE on, anonymous callers get 401."""
+    if not get_settings().REQUIRE_LOGIN_TO_EXPLORE:
+        return
+    if get_optional_user(db, token) is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Sign in to explore LaunchByte",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+
+ExploreGate = Depends(require_login_to_explore)

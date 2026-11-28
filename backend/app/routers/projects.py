@@ -2,7 +2,7 @@ import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
-from app.dependencies.auth import CurrentUser, OptionalUser
+from app.dependencies.auth import CurrentUser, ExploreGate, OptionalUser
 from app.dependencies.db import DBSession
 from app.models.networking import ProjectStatus
 from app.schemas.networking import (
@@ -34,7 +34,7 @@ from app.services.networking.projects import (
 router = APIRouter(tags=["projects"])
 
 
-@router.get("/projects", response_model=Page[ProjectListItem])
+@router.get("/projects", response_model=Page[ProjectListItem], dependencies=[ExploreGate])
 def get_projects(
     db: DBSession,
     current_user: OptionalUser,
@@ -58,7 +58,7 @@ def get_projects(
     return Page[ProjectListItem](items=items, total=total, limit=limit, offset=offset)
 
 
-@router.get("/projects/{slug}", response_model=ProjectDetail)
+@router.get("/projects/{slug}", response_model=ProjectDetail, dependencies=[ExploreGate])
 def get_project(
     slug: str,
     db: DBSession,
@@ -217,7 +217,7 @@ def post_leave_project(
         )
 
 
-@router.get("/profiles/{handle}/projects", response_model=list[ProjectListItem])
+@router.get("/profiles/{handle}/projects", response_model=list[ProjectListItem], dependencies=[ExploreGate])
 def get_user_projects(
     handle: str,
     db: DBSession,

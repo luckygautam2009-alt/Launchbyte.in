@@ -14,7 +14,7 @@ const WAVE_SHOW_AT_SEC = 2.05;
 const WAVE_HIDE_AT_SEC = 3.6;
 const EXIT_BEFORE_END_SEC = 0.52;
 const EXIT_FADE_MS = 550;
-const LOAD_WATCHDOG_MS = 4000;
+const LOAD_WATCHDOG_MS = 2500;
 const FALLBACK_DWELL_MS = 1800;
 
 type IntroStage = "idle" | "playing" | "fallback" | "exiting" | "done";
@@ -28,7 +28,10 @@ declare global {
 function hasSeenIntro(): boolean {
   if (typeof window === "undefined") return false;
   try {
-    if (window.sessionStorage.getItem(INTRO_SESSION_KEY) === "1") {
+    if (
+      window.localStorage.getItem(INTRO_SESSION_KEY) === "1" ||
+      window.sessionStorage.getItem(INTRO_SESSION_KEY) === "1"
+    ) {
       return true;
     }
   } catch {
@@ -41,6 +44,8 @@ function markIntroSeen() {
   if (typeof window === "undefined") return;
   window.__lbIntroFallbackSeen = true;
   try {
+    // localStorage: the intro plays once per device, not on every new tab / visit.
+    window.localStorage.setItem(INTRO_SESSION_KEY, "1");
     window.sessionStorage.setItem(INTRO_SESSION_KEY, "1");
   } catch {
     // Safe no-op when sessionStorage is blocked

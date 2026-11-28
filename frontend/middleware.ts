@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  // Explore/Hackathons are public unless explicitly gated (keeps SEO + first paint fast).
-  if (process.env.NEXT_PUBLIC_REQUIRE_LOGIN_TO_EXPLORE !== "true") {
+  // Browsing needs an account. Set NEXT_PUBLIC_REQUIRE_LOGIN_TO_EXPLORE=false to open it up again.
+  if (process.env.NEXT_PUBLIC_REQUIRE_LOGIN_TO_EXPLORE === "false") {
     return NextResponse.next();
   }
 
@@ -20,5 +20,14 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/opportunities", "/opportunities/:path*", "/hackathons", "/hackathons/:path*"],
+  matcher: [
+    "/opportunities/:path*",
+    "/hackathons/:path*",
+    "/events/:path*",
+    "/projects/:path*",
+    "/teams/:path*",
+    "/people/:path*",
+    "/network/:path*",
+    "/u/:path*",
+  ],
 };

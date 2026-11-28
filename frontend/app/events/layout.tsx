@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import ExploreGate from "@/components/auth/ExploreGate";
 import { buildPublicMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = buildPublicMetadata(
@@ -8,5 +9,5 @@ export const metadata: Metadata = buildPublicMetadata(
 );
 
 export default function EventsLayout({ children }: { children: React.ReactNode }) {
-  return children;
+  return <ExploreGate>{children}</ExploreGate>;
 }

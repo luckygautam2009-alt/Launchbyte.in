@@ -111,11 +111,8 @@ class ApiClient {
    */
   private isUserAgnosticGet(endpoint: string, method?: string): boolean {
     if ((method || "GET").toUpperCase() !== "GET") return false;
-    return (
-      endpoint.startsWith("/opportunities") ||
-      endpoint.startsWith("/tags") ||
-      endpoint.startsWith("/stats")
-    );
+    // Opportunities / tags are login-gated now, so they must send the token.
+    return endpoint.startsWith("/stats");
   }
 
   private isPublicGet(endpoint: string, method?: string): boolean {

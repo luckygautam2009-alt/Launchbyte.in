@@ -15,7 +15,8 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
-const THEME_STORAGE_KEY = "lb_theme";
+// v2: everyone starts in dark mode again (older builds saved "light" during testing).
+const THEME_STORAGE_KEY = "lb_theme_v2";
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>("dark");

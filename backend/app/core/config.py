@@ -57,6 +57,11 @@ class Settings(BaseSettings):
     RATE_LIMIT_AUTH_PER_MINUTE: int = 10
     TRUST_PROXY_HEADERS: bool = False
 
+    # --- Privacy ---
+    # When true, browsing opportunities / events / projects / teams / people needs a signed-in user
+    # (the public API returns 401 otherwise). Off by default so local dev and tests stay open.
+    REQUIRE_LOGIN_TO_EXPLORE: bool = False
+
     # --- Email Service ---
     EMAIL_BACKEND: str = "console"  # console | smtp | brevo
     BREVO_API_KEY: str = ""

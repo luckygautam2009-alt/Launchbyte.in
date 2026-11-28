@@ -617,3 +617,22 @@ html.light .star {
     will-change: auto !important;
   }
 }
+
+/* ===== Visual polish (safe, additive) ===== */
+::selection {
+  background: rgba(139, 92, 246, 0.35);
+  color: inherit;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+  text-rendering: optimizeLegibility;
+}
+
+/* Gentle press feedback on touch devices (inline transforms from motion libs still win) */
+@media (hover: none) {
+  button:not(:disabled):active,
+  a[role="button"]:active {
+    opacity: 0.88;
+  }
+}

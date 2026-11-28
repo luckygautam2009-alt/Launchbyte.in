@@ -5,7 +5,7 @@ from typing import Annotated, Literal
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response, status
 
 from app.core.rate_limit import rate_limit
-from app.dependencies.auth import CurrentUser, OrganizerUser
+from app.dependencies.auth import CurrentUser, ExploreGate, OrganizerUser
 from app.dependencies.db import DBSession
 from app.models.enums import (
     CompensationType,
@@ -37,7 +37,7 @@ def _ip(request: Request) -> str | None:
 
 # ---------- Public endpoints ----------
 
-@router.get("/opportunities", response_model=Page[OpportunityListItem])
+@router.get("/opportunities", response_model=Page[OpportunityListItem], dependencies=[ExploreGate])
 def list_opportunities(
     db: DBSession,
     response: Response,
@@ -88,21 +88,21 @@ def list_opportunities(
     return {"items": items, "total": total, "limit": effective_limit, "offset": effective_offset}
 
 
-@router.get("/opportunities/types", response_model=list[TypeWithCount])
+@router.get("/opportunities/types", response_model=list[TypeWithCount], dependencies=[ExploreGate])
 def get_opportunity_types(db: DBSession, response: Response):
     """Returns opportunity types with counts of published listings."""
     response.headers["Cache-Control"] = "public, max-age=60, stale-while-revalidate=300"
     return svc.get_types_with_counts(db)
 
 
-@router.get("/tags", response_model=list[TagWithCount])
+@router.get("/tags", response_model=list[TagWithCount], dependencies=[ExploreGate])
 def get_tags(db: DBSession, response: Response):
     """Returns tags with counts of published listings."""
     response.headers["Cache-Control"] = "public, max-age=60, stale-while-revalidate=300"
     return svc.get_tags_with_counts(db)
 
 
-@router.get("/opportunities/{slug}", response_model=OpportunityDetail)
+@router.get("/opportunities/{slug}", response_model=OpportunityDetail, dependencies=[ExploreGate])
 def get_opportunity(db: DBSession, slug: str, response: Response):
     opp = svc.get_public_by_slug(db, slug)
     if opp is None:

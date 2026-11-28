@@ -168,7 +168,7 @@ def _hydrate_teams(
                 is_locked=team.is_locked,
                 created_at=team.created_at,
                 members=brief_members,
-                conversation_id=conv_by_team.get(team.id),
+                conversation_id=conv_by_team.get(team.id) if is_member else None,
                 is_leader=is_leader,
                 is_member=is_member,
                 has_pending_join_request=has_pending,
