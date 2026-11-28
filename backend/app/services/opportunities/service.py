@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 from decimal import Decimal
 from enum import Enum
 
-from sqlalchemy import func, or_, select, update
+from sqlalchemy import delete, func, or_, select, update
 from sqlalchemy.orm import Session, selectinload
 
 from app.core.config import get_settings
@@ -769,5 +769,11 @@ def mark_all_notifications_read(db: Session, user_id: uuid.UUID) -> int:
         .where(Notification.user_id == user_id, Notification.read_at.is_(None))
         .values(read_at=_now())
     )
+    db.commit()
+    return result.rowcount
+
+
+def clear_all_notifications(db: Session, user_id: uuid.UUID) -> int:
+    result = db.execute(delete(Notification).where(Notification.user_id == user_id))
     db.commit()
     return result.rowcount

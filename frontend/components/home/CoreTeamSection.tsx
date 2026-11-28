@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import { api } from "@/lib/api";
 import { TeamMember } from "@/lib/types";
 import { SITE_CONTENT, CoreTeamMember } from "@/lib/siteContent";
 import RevealHeading from "@/components/ui/RevealHeading";
-import { Linkedin, Github, Twitter, Globe, Instagram, ChevronDown } from "lucide-react";
+import { Linkedin, Github, Twitter, Globe, Instagram, ChevronRight, X } from "lucide-react";
 
 const SOCIALS = [
   { key: "linkedin", label: "LinkedIn", Icon: Linkedin },
@@ -15,6 +16,118 @@ const SOCIALS = [
   { key: "instagram", label: "Instagram", Icon: Instagram },
   { key: "twitter", label: "X", Icon: Twitter },
 ] as const;
+
+function MemberModal({
+  member,
+  focus,
+  initials,
+  onClose,
+}: {
+  member: CoreTeamMember;
+  focus: string[];
+  initials: string;
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [onClose]);
+
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[80] flex items-end sm:items-center justify-center p-0 sm:p-6 bg-black/60"
+      onClick={onClose}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${member.name} details`}
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full sm:max-w-lg max-h-[88vh] overflow-y-auto overscroll-contain rounded-t-3xl sm:rounded-3xl border p-5 sm:p-6 space-y-4
+          bg-white border-slate-200 text-[#17172B]
+          dark:bg-[#0B0B1E] dark:border-violet-500/25 dark:text-white"
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-xl border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10"
+        >
+          <X className="w-4 h-4" />
+        </button>
+
+        <div className="flex items-center gap-3 pr-10">
+          <div className="w-14 h-14 rounded-2xl overflow-hidden bg-slate-950 shrink-0 flex items-center justify-center">
+            {member.photo ? (
+              <img src={member.photo} alt="" className="w-full h-full object-cover" style={{ objectPosition: "center 20%" }} />
+            ) : (
+              <span className="font-mono font-bold text-cyan-300">{initials}</span>
+            )}
+          </div>
+          <div className="min-w-0">
+            <h3 className="text-lg font-bold leading-tight">{member.name}</h3>
+            <p className="font-mono text-[11px] uppercase tracking-wider font-semibold text-[#7552D9] dark:text-violet-300">
+              {member.role}
+            </p>
+          </div>
+        </div>
+
+        {member.title && <p className="font-mono text-xs text-cyan-700 dark:text-cyan-300/90">{member.title}</p>}
+        {member.tagline && (
+          <p className="text-sm italic text-[#424C63] dark:text-slate-300/90">“{member.tagline}”</p>
+        )}
+        {member.bio && (
+          <p className="text-sm text-[#424C63] dark:text-slate-300/90 leading-relaxed">{member.bio}</p>
+        )}
+
+        {member.highlights && member.highlights.length > 0 && (
+          <div className="space-y-3">
+            <div className="text-[10px] font-mono uppercase tracking-widest text-[#647084] dark:text-slate-400">
+              Projects &amp; platforms
+            </div>
+            {member.highlights.map((h) => (
+              <div key={h.id} className="space-y-0.5">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="font-semibold">{h.title}</span>
+                  {h.role && (
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/[0.05] border border-slate-200 dark:border-white/10 text-[#59647A] dark:text-slate-400">
+                      {h.role}
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-[#424C63] dark:text-slate-300/80 leading-relaxed">{h.description}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {focus.length > 0 && (
+          <div className="flex flex-wrap gap-1.5">
+            {focus.map((f, i) => (
+              <span
+                key={`${f}-${i}`}
+                className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-violet-50 text-[#5B39B8] border border-violet-200 dark:bg-violet-950/40 dark:text-violet-200 dark:border-violet-500/20"
+              >
+                {f}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>,
+    document.body
+  );
+}
 
 function MemberCard({ member, index }: { member: CoreTeamMember; index: number }) {
   const reduce = useReducedMotion();
@@ -81,73 +194,26 @@ function MemberCard({ member, index }: { member: CoreTeamMember; index: number }
           <p className="font-mono text-[11px] text-cyan-700 dark:text-cyan-300/90">{member.title}</p>
         )}
         {member.tagline && (
-          <p
-            className={`pt-1 text-sm italic text-[#424C63] dark:text-slate-300/90 leading-relaxed ${
-              open ? "" : "line-clamp-2"
-            }`}
-          >
+          <p className="pt-1 text-sm italic text-[#424C63] dark:text-slate-300/90 leading-relaxed line-clamp-2">
             “{member.tagline}”
           </p>
         )}
       </div>
 
-      {/* Expandable details */}
       {hasMore && (
-        <>
-          <button
-            type="button"
-            onClick={() => setOpen((o) => !o)}
-            aria-expanded={open}
-            className="mt-2 mx-1 self-start inline-flex items-center gap-1 text-xs font-semibold text-[#7552D9] dark:text-cyan-300 hover:underline min-h-[32px]"
-          >
-            {open ? "Show less" : "Read more"}
-            <ChevronDown className={`w-3.5 h-3.5 transition-transform ${open ? "rotate-180" : ""}`} />
-          </button>
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          aria-haspopup="dialog"
+          className="mt-2 mx-1 self-start inline-flex items-center gap-1 text-xs font-semibold text-[#7552D9] dark:text-cyan-300 hover:underline min-h-[32px]"
+        >
+          Read more
+          <ChevronRight className="w-3.5 h-3.5" />
+        </button>
+      )}
 
-          {open && (
-            <div className="mt-2 px-1 space-y-4 text-sm">
-              {member.bio && (
-                <p className="text-[#424C63] dark:text-slate-300/90 leading-relaxed">{member.bio}</p>
-              )}
-
-              {member.highlights && member.highlights.length > 0 && (
-                <div className="space-y-2.5">
-                  <div className="text-[10px] font-mono uppercase tracking-widest text-[#647084] dark:text-slate-400">
-                    Projects &amp; platforms
-                  </div>
-                  {member.highlights.map((h) => (
-                    <div key={h.id} className="space-y-0.5">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-semibold text-[#17172B] dark:text-white">{h.title}</span>
-                        {h.role && (
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 dark:bg-white/[0.05] border border-slate-200 dark:border-white/10 text-[#59647A] dark:text-slate-400">
-                            {h.role}
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-xs text-[#424C63] dark:text-slate-300/80 leading-relaxed">
-                        {h.description}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {focus.length > 0 && (
-                <div className="flex flex-wrap gap-1.5">
-                  {focus.map((s, i) => (
-                    <span
-                      key={`${s}-${i}`}
-                      className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-violet-50 text-[#5B39B8] border border-violet-200 dark:bg-violet-950/40 dark:text-violet-200 dark:border-violet-500/20"
-                    >
-                      {s}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-        </>
+      {open && (
+        <MemberModal member={member} focus={focus} initials={initials} onClose={() => setOpen(false)} />
       )}
 
       {/* Socials (only real links) */}

@@ -523,6 +523,10 @@ class ApiClient {
     return this.request<NotificationItem>(`/notifications/${id}/read`, { method: "POST" });
   }
 
+  async clearAllNotifications(): Promise<void> {
+    await this.request(`/notifications`, { method: "DELETE" });
+  }
+
   async markAllNotificationsRead(): Promise<void> {
     await this.request(`/notifications/read-all`, { method: "POST" });
   }

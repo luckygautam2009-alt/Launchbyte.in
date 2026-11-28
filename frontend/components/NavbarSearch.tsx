@@ -140,11 +140,11 @@ export function NavbarSearch() {
         className={`relative flex items-center h-9 rounded-xl border transition-all duration-300 ease-out ${
           isOpen
             ? mounted && isLight
-              ? "w-64 xl:w-80 bg-white border-violet-500 shadow-[0_0_24px_rgba(117,82,217,0.2)] ring-2 ring-violet-500/20"
-              : "w-64 xl:w-80 bg-[#0B0B1E] border-violet-500/70 shadow-[0_0_24px_rgba(124,58,237,0.28)] ring-2 ring-violet-500/20"
+              ? "w-56 xl:w-64 2xl:w-80 bg-white border-violet-500 shadow-[0_0_24px_rgba(117,82,217,0.2)] ring-2 ring-violet-500/20"
+              : "w-56 xl:w-64 2xl:w-80 bg-[#0B0B1E] border-violet-500/70 shadow-[0_0_24px_rgba(124,58,237,0.28)] ring-2 ring-violet-500/20"
             : mounted && isLight
-              ? "w-44 xl:w-56 bg-slate-100/90 border-slate-300 hover:border-violet-400 hover:bg-slate-50 shadow-sm"
-              : "w-44 xl:w-56 bg-[#09091B]/85 border-slate-800/90 hover:border-violet-500/40 hover:bg-[#0D0D22] shadow-sm"
+              ? "w-36 xl:w-40 2xl:w-52 bg-slate-100/90 border-slate-300 hover:border-violet-400 hover:bg-slate-50 shadow-sm"
+              : "w-36 xl:w-40 2xl:w-52 bg-[#09091B]/85 border-slate-800/90 hover:border-violet-500/40 hover:bg-[#0D0D22] shadow-sm"
         }`}
       >
         <div className="pl-3 pr-2 flex items-center pointer-events-none shrink-0">

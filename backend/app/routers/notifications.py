@@ -46,3 +46,12 @@ def mark_all_read(
 ):
     count = svc.mark_all_notifications_read(db, current_user.id)
     return {"message": f"{count} notifications marked as read."}
+
+
+@router.delete("")
+def clear_all(
+    db: DBSession,
+    current_user: CurrentUser,
+):
+    count = svc.clear_all_notifications(db, current_user.id)
+    return {"message": f"{count} notifications cleared."}
