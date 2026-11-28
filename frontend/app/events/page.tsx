@@ -22,9 +22,12 @@ function EventCard({ event }: { event: EventListItem }) {
     : null;
 
   return (
-    <Link href={`/events/${event.slug}`} className="group block glass-card glow-hover rounded-2xl overflow-hidden transition-all duration-200">
+    <Link
+      href={`/events/${event.slug}`}
+      className="group block glass-card glow-hover rounded-2xl overflow-hidden transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/60"
+    >
       {/* Banner */}
-      <div className="relative h-44 bg-gradient-to-br from-white dark:from-slate-800 to-white dark:to-slate-900 overflow-hidden">
+      <div className="relative h-44 bg-gradient-to-br from-slate-50 dark:from-slate-800 to-slate-100 dark:to-slate-900 overflow-hidden">
         <Avatar
           src={event.banner_url}
           name={event.title}
@@ -32,9 +35,9 @@ function EventCard({ event }: { event: EventListItem }) {
           shape="square"
           className="bg-transparent"
           imgClassName="group-hover:scale-105 transition-transform duration-300"
-          fallback={<Sparkles className="w-10 h-10 text-slate-700" />}
+          fallback={<Sparkles className="w-10 h-10 text-slate-400 dark:text-slate-600" />}
         />
-        <span className="absolute top-3 right-3 flex items-center gap-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur text-[#2F3A52] dark:text-slate-300 text-xs font-medium px-2.5 py-1 rounded-full border border-slate-300 dark:border-slate-700">
+        <span className="absolute top-3 right-3 flex items-center gap-1 bg-white/90 dark:bg-slate-900/90 md:backdrop-blur text-[#2F3A52] dark:text-slate-200 text-xs font-medium px-2.5 py-1 rounded-full border border-slate-300 dark:border-slate-700">
           {modeIcon} {modeLabel}
         </span>
         {event.organization.logo_url && (
@@ -161,35 +164,39 @@ export default function EventsPage() {
         }
         subtitle="Find hackathons, workshops, and competitions from verified organizations."
       >
-        <form onSubmit={handleSearch} className="flex gap-2 max-w-lg mx-auto">
+        <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-2 max-w-lg mx-auto">
           <div className="flex-1 relative">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-500" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 dark:text-slate-400 pointer-events-none" />
             <input
               type="text"
               placeholder="Search events..."
+              aria-label="Search events"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-white/95 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 rounded-xl text-[#17172B] dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500 text-sm shadow-sm dark:shadow-none"
+              className="w-full min-h-[44px] pl-10 pr-4 py-2.5 bg-white/95 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700/80 rounded-xl text-[#17172B] dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 text-sm shadow-sm dark:shadow-none"
             />
           </div>
-          <button type="submit" className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-semibold transition-colors shadow-lg shadow-indigo-600/25">
+          <button
+            type="submit"
+            className="min-h-[44px] px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-semibold transition-colors shadow-lg shadow-indigo-600/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-400"
+          >
             Search
           </button>
         </form>
       </PageHero>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-wrap gap-2 mb-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+        <div className="flex flex-wrap items-center gap-2 mb-8">
           <div className="flex bg-white/90 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-xl p-1 gap-1 shadow-sm dark:shadow-none">
             <button
               onClick={() => { setUpcoming(true); setOffset(0); }}
-              className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${upcoming ? "bg-indigo-600 text-white" : "text-[#59647A] hover:text-[#17172B] dark:text-slate-400 dark:hover:text-white"}`}
+              className={`min-h-[44px] sm:min-h-[34px] px-4 py-1.5 rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 ${upcoming ? "bg-indigo-600 text-white" : "text-[#4B5565] hover:text-[#17172B] dark:text-slate-300 dark:hover:text-white"}`}
             >
               Upcoming
             </button>
             <button
               onClick={() => { setUpcoming(false); setOffset(0); }}
-              className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${!upcoming ? "bg-indigo-600 text-white" : "text-[#59647A] hover:text-[#17172B] dark:text-slate-400 dark:hover:text-white"}`}
+              className={`min-h-[44px] sm:min-h-[34px] px-4 py-1.5 rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 ${!upcoming ? "bg-indigo-600 text-white" : "text-[#4B5565] hover:text-[#17172B] dark:text-slate-300 dark:hover:text-white"}`}
             >
               Past
             </button>
@@ -198,7 +205,7 @@ export default function EventsPage() {
             <button
               key={m.value}
               onClick={() => { setMode(m.value as EventMode | ""); setOffset(0); }}
-              className={`px-3 py-1.5 rounded-xl text-sm font-medium border transition-colors ${mode === m.value ? "bg-indigo-600 text-white border-indigo-600" : "bg-white/85 dark:bg-slate-900/60 text-[#424C63] dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:border-violet-300 dark:hover:border-slate-600"}`}
+              className={`min-h-[44px] sm:min-h-[38px] px-3.5 py-1.5 rounded-xl text-sm font-medium border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60 ${mode === m.value ? "bg-indigo-600 text-white border-indigo-600" : "bg-white/85 dark:bg-slate-900/60 text-[#424C63] dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:border-violet-300 dark:hover:border-slate-600"}`}
             >
               {m.label}
             </button>
@@ -206,40 +213,50 @@ export default function EventsPage() {
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
             {Array.from({ length: 8 }).map((_, i) => <EventCardSkeleton key={i} />)}
           </div>
         ) : error ? (
-          <div className="text-center py-24 text-[#424C63] dark:text-slate-400">
-            <p className="text-red-600 dark:text-red-400 mb-2">{error}</p>
-            <button onClick={fetchEvents} className="text-indigo-700 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 text-sm underline">Try again</button>
+          <div className="p-8 rounded-2xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/60 text-center max-w-md mx-auto space-y-3">
+            <p className="text-sm font-medium text-rose-700 dark:text-rose-300">{error}</p>
+            <button
+              onClick={fetchEvents}
+              className="min-h-[44px] inline-flex items-center justify-center px-4 py-2 rounded-xl bg-rose-100 hover:bg-rose-200 dark:bg-rose-900/40 dark:hover:bg-rose-900/60 text-rose-800 dark:text-rose-200 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/60"
+            >
+              Try again
+            </button>
           </div>
         ) : events.length === 0 ? (
-          <div className="text-center py-24">
-            <Sparkles className="w-10 h-10 text-slate-700 mx-auto mb-4" />
-            <p className="text-[#424C63] dark:text-slate-400">No events found. Check back soon!</p>
+          <div className="p-10 sm:p-14 rounded-2xl bg-white/85 dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800 text-center max-w-md mx-auto space-y-3 shadow-sm dark:shadow-none">
+            <div className="w-12 h-12 rounded-2xl bg-violet-100 dark:bg-slate-800 text-[#5B3DF5] dark:text-violet-300 flex items-center justify-center mx-auto">
+              <Sparkles className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-bold text-[#17172B] dark:text-white">No events found</h3>
+            <p className="text-sm text-[#4B5565] dark:text-slate-300 leading-relaxed">
+              Try switching between Upcoming and Past or clearing your mode filter to explore more events.
+            </p>
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 sm:gap-6">
               {events.map((ev) => <EventCard key={ev.id} event={ev} />)}
             </div>
             {total > LIMIT && (
-              <div className="flex justify-center gap-3 mt-10">
+              <div className="flex items-center justify-center gap-3 mt-10">
                 <button
                   onClick={() => setOffset(Math.max(0, offset - LIMIT))}
                   disabled={offset === 0}
-                  className="px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-[#424C63] dark:text-slate-400 disabled:opacity-40 hover:border-slate-300 dark:hover:border-slate-600 transition-colors"
+                  className="min-h-[44px] px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-medium text-[#424C63] dark:text-slate-300 disabled:opacity-40 hover:border-slate-300 dark:hover:border-slate-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60"
                 >
                   Previous
                 </button>
-                <span className="px-4 py-2 text-sm text-[#424C63] dark:text-slate-400">
+                <span className="px-3 py-2 text-sm text-[#4B5565] dark:text-slate-300">
                   {Math.floor(offset / LIMIT) + 1} / {Math.ceil(total / LIMIT)}
                 </span>
                 <button
                   onClick={() => setOffset(offset + LIMIT)}
                   disabled={offset + LIMIT >= total}
-                  className="px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-[#424C63] dark:text-slate-400 disabled:opacity-40 hover:border-slate-300 dark:hover:border-slate-600 transition-colors"
+                  className="min-h-[44px] px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-medium text-[#424C63] dark:text-slate-300 disabled:opacity-40 hover:border-slate-300 dark:hover:border-slate-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/60"
                 >
                   Next
                 </button>

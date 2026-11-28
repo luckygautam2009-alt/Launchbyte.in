@@ -49,7 +49,7 @@ export default function ProjectsPage() {
         title={
           <>
             Collaborative{" "}
-            <span className="bg-gradient-to-r from-indigo-400 via-teal-400 to-emerald-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-indigo-600 via-teal-600 to-emerald-600 dark:from-indigo-400 dark:via-teal-400 dark:to-emerald-400 bg-clip-text text-transparent">
               Projects
             </span>
           </>
@@ -59,7 +59,7 @@ export default function ProjectsPage() {
         {user && (
           <Link
             href="/projects/new"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm transition shadow-lg shadow-brand-600/25"
+            className="min-h-[44px] inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-semibold text-sm transition shadow-lg shadow-brand-600/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400"
           >
             <Plus className="w-4 h-4" />
             New Project
@@ -67,62 +67,73 @@ export default function ProjectsPage() {
         )}
       </PageHero>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
         {/* Search and Filters */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-8">
           <div className="relative">
-            <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" />
+            <Search className="w-4 h-4 text-slate-500 dark:text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="text"
               placeholder="Search projects..."
+              aria-label="Search projects"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 text-[#17172B] dark:text-slate-200 placeholder-slate-500 text-sm focus:outline-none focus:border-brand-500"
+              className="w-full min-h-[44px] pl-10 pr-4 py-2.5 rounded-xl bg-white/95 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-800 text-[#17172B] dark:text-slate-200 placeholder-slate-500 dark:placeholder-slate-400 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/60 shadow-sm dark:shadow-none"
             />
           </div>
 
           <input
             type="text"
             placeholder="Filter by tech stack (e.g. react, python)..."
+            aria-label="Filter by tech stack"
             value={techFilter}
             onChange={(e) => setTechFilter(e.target.value)}
-            className="px-4 py-2.5 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 text-[#17172B] dark:text-slate-200 placeholder-slate-500 text-sm focus:outline-none focus:border-brand-500"
+            className="min-h-[44px] px-4 py-2.5 rounded-xl bg-white/95 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-800 text-[#17172B] dark:text-slate-200 placeholder-slate-500 dark:placeholder-slate-400 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/60 shadow-sm dark:shadow-none"
           />
 
           <input
             type="text"
             placeholder="Filter by looking for (e.g. frontend, designer)..."
+            aria-label="Filter by looking for role"
             value={lookingForFilter}
             onChange={(e) => setLookingForFilter(e.target.value)}
-            className="px-4 py-2.5 rounded-xl bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 text-[#17172B] dark:text-slate-200 placeholder-slate-500 text-sm focus:outline-none focus:border-brand-500"
+            className="min-h-[44px] px-4 py-2.5 rounded-xl bg-white/95 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-800 text-[#17172B] dark:text-slate-200 placeholder-slate-500 dark:placeholder-slate-400 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500/60 shadow-sm dark:shadow-none"
           />
         </div>
 
         {/* Projects Grid */}
         {loading ? (
-          <div className="py-20 text-center text-slate-500">Loading projects...</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="h-56 glass-card rounded-2xl animate-pulse" />
+            ))}
+          </div>
         ) : projects.length === 0 ? (
-          <div className="text-center py-20 glass-card rounded-3xl">
-            <FolderGit2 className="w-14 h-14 text-slate-600 mx-auto mb-3" />
-            <h3 className="text-lg font-bold text-[#17172B] dark:text-white mb-1">No projects found</h3>
-            <p className="text-[#424C63] dark:text-slate-400 text-sm mb-4">
-              Be the first to share an ambitious project or adjust your search filters.
-            </p>
+          <div className="p-10 sm:p-14 text-center glass-card rounded-2xl max-w-md mx-auto space-y-4">
+            <div className="w-12 h-12 rounded-2xl bg-violet-100 dark:bg-slate-800 text-[#5B3DF5] dark:text-violet-300 flex items-center justify-center mx-auto">
+              <FolderGit2 className="w-6 h-6" />
+            </div>
+            <div className="space-y-1.5">
+              <h3 className="text-base font-bold text-[#17172B] dark:text-white">No projects found</h3>
+              <p className="text-[#4B5565] dark:text-slate-300 text-sm leading-relaxed">
+                Be the first to share an ambitious project or adjust your search filters.
+              </p>
+            </div>
             {user && (
               <Link
                 href="/projects/new"
-                className="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-semibold hover:bg-brand-500 transition"
+                className="min-h-[44px] inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-brand-600 text-white text-sm font-semibold hover:bg-brand-500 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400"
               >
                 Create a Project
               </Link>
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             {projects.map((p) => (
               <div
                 key={p.id}
-                className="p-6 rounded-3xl glass-card glow-hover transition flex flex-col justify-between group shadow-lg"
+                className="p-5 rounded-2xl glass-card glow-hover transition flex flex-col justify-between group shadow-sm dark:shadow-lg"
               >
                 <div>
                   <div className="flex items-start justify-between gap-2 mb-2">
@@ -189,7 +200,7 @@ export default function ProjectsPage() {
 
                   <Link
                     href={`/projects/${p.slug}`}
-                    className="font-semibold text-[#7552D9] dark:text-brand-400 hover:text-[#7552D9] dark:hover:text-brand-300 flex items-center gap-1 transition"
+                    className="min-h-[44px] sm:min-h-0 inline-flex items-center font-semibold text-[#5B3DF5] dark:text-brand-400 hover:underline gap-1 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/60 rounded"
                   >
                     View Details &rarr;
                   </Link>

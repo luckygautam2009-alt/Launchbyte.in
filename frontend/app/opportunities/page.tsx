@@ -26,7 +26,7 @@ export default function OpportunitiesPage() {
           title={
             <>
               Explore{" "}
-              <span className="bg-gradient-to-r from-indigo-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-indigo-600 via-violet-600 to-cyan-600 dark:from-indigo-400 dark:via-cyan-400 dark:to-purple-400 bg-clip-text text-transparent">
                 Opportunities
               </span>
             </>
