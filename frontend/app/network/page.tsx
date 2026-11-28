@@ -49,18 +49,23 @@ export default function NetworkPage() {
     setLoading(true);
     setError(null);
     try {
-      const [connRes, incRes, outRes, suggRes, blkRes] = await Promise.all([
+      const [connRes, incRes, outRes, suggRes, blkRes] = await Promise.allSettled([
         api.listConnections({ per_page: 50 }),
         api.listConnectionRequests("incoming"),
         api.listConnectionRequests("outgoing"),
         api.getNetworkSuggestions(20),
         api.listBlocks(),
       ]);
-      setConnections(connRes.items);
-      setIncoming(incRes);
-      setOutgoing(outRes);
-      setSuggestions(suggRes);
-      setBlocks(blkRes);
+      const results = [connRes, incRes, outRes, suggRes, blkRes];
+      if (results.every((r) => r.status === "rejected")) {
+        const first = connRes as PromiseRejectedResult;
+        throw first.reason;
+      }
+      setConnections(connRes.status === "fulfilled" ? connRes.value?.items ?? [] : []);
+      setIncoming(incRes.status === "fulfilled" ? incRes.value ?? [] : []);
+      setOutgoing(outRes.status === "fulfilled" ? outRes.value ?? [] : []);
+      setSuggestions(suggRes.status === "fulfilled" && Array.isArray(suggRes.value) ? suggRes.value : []);
+      setBlocks(blkRes.status === "fulfilled" ? blkRes.value ?? [] : []);
     } catch (err: any) {
       setError(err?.message || "Failed to load network data");
     } finally {
@@ -503,6 +508,14 @@ export default function NetworkPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                     {suggestions.map((sug) => {
                       const u = sug.user;
+                      if (!u) return null;
+                      const reasons: string[] = Array.isArray(sug.reasons)
+                        ? sug.reasons
+                        : sug.reason
+                        ? [sug.reason]
+                        : [];
+                      const institution = sug.institution ?? u.institution ?? null;
+                      const skills: string[] = sug.skills ?? u.skills ?? [];
                       return (
                         <div
                           key={u.id}
@@ -521,13 +534,15 @@ export default function NetworkPage() {
                                   <p className="text-xs text-[#424C63] dark:text-slate-400">@{u.handle}</p>
                                 </div>
                               </div>
-                              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-violet-50 dark:bg-brand-950 text-[#7552D9] dark:text-brand-400 border border-violet-200 dark:border-brand-800/60">
-                                {sug.score}% Match
-                              </span>
+                              {typeof sug.score === "number" && (
+                                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-violet-50 dark:bg-brand-950 text-[#7552D9] dark:text-brand-400 border border-violet-200 dark:border-brand-800/60">
+                                  {sug.score}% Match
+                                </span>
+                              )}
                             </div>
 
                             <div className="flex flex-wrap gap-1.5 mb-3">
-                              {sug.reasons.map((r, i) => (
+                              {reasons.map((r, i) => (
                                 <span
                                   key={i}
                                   className="px-2 py-0.5 rounded-md text-[11px] font-medium bg-cyan-50 dark:bg-cyan-950/40 text-cyan-700 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-800/40 flex items-center gap-1"
@@ -538,16 +553,16 @@ export default function NetworkPage() {
                               ))}
                             </div>
 
-                            {u.institution && (
+                            {institution && (
                               <p className="text-xs text-[#424C63] dark:text-slate-400 flex items-center gap-1.5 mb-2">
                                 <Building className="w-3.5 h-3.5 text-slate-500" />
-                                {u.institution}
+                                {institution}
                               </p>
                             )}
 
-                            {u.skills && u.skills.length > 0 && (
+                            {skills.length > 0 && (
                               <div className="flex flex-wrap gap-1 mb-4">
-                                {u.skills.map((skill) => (
+                                {skills.map((skill) => (
                                   <span
                                     key={skill}
                                     className="px-2 py-0.5 rounded text-[10px] bg-slate-100 dark:bg-slate-800 text-[#2F3A52] dark:text-slate-300"

@@ -56,6 +56,12 @@ interface CacheEntry<T> {
 const CACHE_TTL_MS = 60 * 1000; // 60s fresh
 const SWR_WINDOW_MS = 300 * 1000; // 300s stale-while-revalidate
 
+/** The backend names the "other person" `other_user`; the UI reads `user`. Accept both. */
+function normalizeConnection(c: ConnectionRead): ConnectionRead {
+  const raw = c as ConnectionRead & { other_user?: ConnectionRead["user"] };
+  return { ...c, user: raw.user ?? raw.other_user ?? null };
+}
+
 class ApiClient {
   private token: string | null = null;
   private getCache = new Map<string, CacheEntry<any>>();
@@ -719,11 +725,13 @@ class ApiClient {
         query.set(k, String(v));
       }
     });
-    return this.request<Page<ConnectionRead>>(`/connections?${query.toString()}`);
+    const page = await this.request<Page<ConnectionRead>>(`/connections?${query.toString()}`);
+    return { ...page, items: (page?.items ?? []).map(normalizeConnection) };
   }
 
   async listConnectionRequests(direction: "incoming" | "outgoing" = "incoming"): Promise<ConnectionRead[]> {
-    return this.request<ConnectionRead[]>(`/connections/requests?direction=${direction}`);
+    const rows = await this.request<ConnectionRead[]>(`/connections/requests?direction=${direction}`);
+    return (Array.isArray(rows) ? rows : []).map(normalizeConnection);
   }
 
   async acceptConnection(requestId: string): Promise<ConnectionRead> {
