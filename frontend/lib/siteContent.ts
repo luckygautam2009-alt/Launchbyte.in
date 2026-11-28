@@ -87,10 +87,10 @@ export const SITE_CONTENT = {
     mission: {
       title: "Our Mission",
       statement:
-        "To dismantle the bureaucratic friction of student tech by curating verified, zero-scam hackathons, fostering multi-disciplinary squads, and giving every ambitious student engineer verifiable proof of execution.",
+        "To make student tech opportunities easier to trust and easier to act on: verified hackathons and internships, teammates to build with, and a place to show what you have shipped.",
       points: [
-        "Curate opportunities with zero sponsored spam or paywalls.",
-        "Guarantee transparent evaluation rubrics and verified schedules.",
+        "Curate opportunities without sponsored spam or paywalls.",
+        "Keep schedules, rules and official registration links clear and verified.",
         "Empower student squads to build production-grade software.",
       ],
     },
@@ -100,8 +100,8 @@ export const SITE_CONTENT = {
         "An open builder economy where talent is recognized by shipped software and peer reputation, rather than institutional pedigree or resume buzzwords.",
       points: [
         "Global interconnected network of campus developer ecosystems.",
-        "Cryptographically signed builder portfolios recognized by top tech teams.",
-        "Continuous support pipeline from first weekend sprint to venture backing.",
+        "Builder profiles and project showcases that speak for your work.",
+        "A path from your first weekend sprint to bigger builds and collaborations.",
       ],
     },
   },
