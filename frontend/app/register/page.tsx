@@ -202,6 +202,13 @@ function RegisterForm() {
           </button>
         </form>
 
+        <p className="text-center text-xs text-[#566178] dark:text-slate-400">
+          By creating an account you agree to our{" "}
+          <Link href="/terms" className="underline hover:text-[#7552D9] dark:hover:text-indigo-300">Terms</Link>{" "}
+          and{" "}
+          <Link href="/privacy" className="underline hover:text-[#7552D9] dark:hover:text-indigo-300">Privacy Policy</Link>.
+        </p>
+
         <div className="text-center pt-2 border-t border-slate-200 dark:border-slate-800">
           <p className="text-sm text-[#566178] dark:text-slate-400">
             Already have an account?{" "}

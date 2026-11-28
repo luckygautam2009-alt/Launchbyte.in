@@ -119,7 +119,7 @@ export default function Footer() {
 
         <div className="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
           <p>&copy; {new Date().getFullYear()} LaunchByte. All rights reserved.</p>
-          <div className="flex gap-6">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
             <Link href="/about" className="hover:text-slate-800 dark:hover:text-slate-300 transition">
               About
             </Link>
@@ -128,6 +128,12 @@ export default function Footer() {
             </Link>
             <Link href="/contributor/request-access" className="hover:text-slate-800 dark:hover:text-slate-300 transition">
               Contributor Access
+            </Link>
+            <Link href="/privacy" className="hover:text-slate-800 dark:hover:text-slate-300 transition">
+              Privacy
+            </Link>
+            <Link href="/terms" className="hover:text-slate-800 dark:hover:text-slate-300 transition">
+              Terms
             </Link>
           </div>
         </div>
