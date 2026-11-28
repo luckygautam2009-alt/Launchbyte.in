@@ -25,7 +25,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
         <div className="relative flex items-center">
           {leftIcon && (
-            <div className="absolute left-3.5 pointer-events-none text-slate-400 flex items-center">
+            <div className="absolute left-3.5 pointer-events-none text-[#424C63] dark:text-slate-400 flex items-center">
               {leftIcon}
             </div>
           )}
@@ -43,13 +43,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           {rightIcon && (
-            <div className="absolute right-3.5 pointer-events-none text-slate-400 flex items-center">
+            <div className="absolute right-3.5 pointer-events-none text-[#424C63] dark:text-slate-400 flex items-center">
               {rightIcon}
             </div>
           )}
         </div>
         {error ? (
-          <p className="text-xs text-red-400 flex items-center gap-1 mt-1">
+          <p className="text-xs text-red-600 dark:text-red-400 flex items-center gap-1 mt-1">
             <AlertCircle className="w-3.5 h-3.5 shrink-0" />
             <span>{error}</span>
           </p>

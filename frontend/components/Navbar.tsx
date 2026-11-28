@@ -43,7 +43,8 @@ const PRIMARY_NAV_BEFORE_TEAMS: NavItem[] = [
 
 const PRIMARY_NAV_AFTER_TEAMS: NavItem[] = [
   { label: "Host an Event", href: "/host" },
-  { label: "Organizations", href: "/network" },
+  { label: "Events", href: "/events" },
+  { label: "Network", href: "/network" },
   { label: "About", href: "/about" },
 ];
 

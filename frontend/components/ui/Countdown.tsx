@@ -45,7 +45,7 @@ export function Countdown({ targetDate, label = "Ends in", className }: Countdow
 
   if (timeLeft.expired) {
     return (
-      <div className={clsx("inline-flex items-center gap-1.5 text-xs text-rose-400 font-semibold", className)}>
+      <div className={clsx("inline-flex items-center gap-1.5 text-xs text-rose-600 dark:text-rose-400 font-semibold", className)}>
         <Clock className="w-3.5 h-3.5" />
         <span>Event Ended</span>
       </div>
@@ -54,21 +54,21 @@ export function Countdown({ targetDate, label = "Ends in", className }: Countdow
 
   return (
     <div className={clsx("flex items-center gap-2", className)}>
-      {label && <span className="text-xs font-medium text-slate-400">{label}</span>}
-      <div className="flex items-center gap-1 font-mono text-xs font-bold text-slate-100">
-        <div className="px-2 py-1 rounded-md bg-slate-800 border border-slate-700/80">
+      {label && <span className="text-xs font-medium text-[#424C63] dark:text-slate-400">{label}</span>}
+      <div className="flex items-center gap-1 font-mono text-xs font-bold text-[#17172B] dark:text-slate-100">
+        <div className="px-2 py-1 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700/80">
           {String(timeLeft.days).padStart(2, "0")}d
         </div>
         <span className="text-slate-500">:</span>
-        <div className="px-2 py-1 rounded-md bg-slate-800 border border-slate-700/80">
+        <div className="px-2 py-1 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700/80">
           {String(timeLeft.hours).padStart(2, "0")}h
         </div>
         <span className="text-slate-500">:</span>
-        <div className="px-2 py-1 rounded-md bg-slate-800 border border-slate-700/80">
+        <div className="px-2 py-1 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700/80">
           {String(timeLeft.minutes).padStart(2, "0")}m
         </div>
         <span className="text-slate-500">:</span>
-        <div className="px-2 py-1 rounded-md bg-slate-800 border border-slate-700/80 text-brand-400">
+        <div className="px-2 py-1 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700/80 text-[#7552D9] dark:text-brand-400">
           {String(timeLeft.seconds).padStart(2, "0")}s
         </div>
       </div>

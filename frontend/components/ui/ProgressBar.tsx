@@ -33,16 +33,16 @@ export function ProgressBar({
   return (
     <div className={clsx("w-full space-y-1.5", className)}>
       {(label || showValue) && (
-        <div className="flex items-center justify-between text-xs text-slate-400">
-          {label && <span className="font-medium text-slate-300">{label}</span>}
+        <div className="flex items-center justify-between text-xs text-[#424C63] dark:text-slate-400">
+          {label && <span className="font-medium text-[#2F3A52] dark:text-slate-300">{label}</span>}
           {showValue && (
-            <span className="font-mono text-slate-400">
+            <span className="font-mono text-[#424C63] dark:text-slate-400">
               {value} / {max} ({Math.round(percentage)}%)
             </span>
           )}
         </div>
       )}
-      <div className="h-2 w-full rounded-full bg-slate-800/80 overflow-hidden">
+      <div className="h-2 w-full rounded-full bg-slate-100 dark:bg-slate-800/80 overflow-hidden">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${percentage}%` }}

@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import OpportunityCatalog from "@/components/OpportunityCatalog";
 import PageHero from "@/components/common/PageHero";
-import RequireAuth from "@/components/auth/RequireAuth";
+import ExploreGate from "@/components/auth/ExploreGate";
 
 export const metadata: Metadata = {
   title: "Explore Opportunities",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 
 export default function OpportunitiesPage() {
   return (
-    <RequireAuth>
+    <ExploreGate>
       <div className="min-h-screen bg-transparent dark:bg-[#050510]">
         <PageHero
           eyebrow="OPPORTUNITY HUB"
@@ -33,7 +33,7 @@ export default function OpportunitiesPage() {
           }
           subtitle="Discover verified hackathons, internships, fellowships, and expert workshops from top tech organizations."
         />
-        <Suspense fallback={<div className="max-w-7xl mx-auto px-4 py-16 text-center text-slate-400">Loading catalog...</div>}>
+        <Suspense fallback={<div className="max-w-7xl mx-auto px-4 py-16 text-center text-[#424C63] dark:text-slate-400">Loading catalog...</div>}>
           <OpportunityCatalog
             title="Explore Opportunities"
             subtitle="Discover verified hackathons, internships, fellowships, and expert workshops from top tech organizations."
@@ -41,6 +41,6 @@ export default function OpportunitiesPage() {
           />
         </Suspense>
       </div>
-    </RequireAuth>
+    </ExploreGate>
   );
 }

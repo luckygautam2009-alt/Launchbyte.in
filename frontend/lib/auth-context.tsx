@@ -39,6 +39,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     refreshUser();
   }, []);
 
+  // A 401 anywhere (expired / revoked token) must flip the UI to "logged out" right away.
+  useEffect(() => {
+    const onUnauthorized = () => setUser(null);
+    window.addEventListener("lb:unauthorized", onUnauthorized);
+    return () => window.removeEventListener("lb:unauthorized", onUnauthorized);
+  }, []);
+
   const login = async (email: string, pass: string) => {
     const params = new URLSearchParams();
     params.set("username", email);

@@ -80,6 +80,9 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
+// Backend origin (without /api/v1): used to preconnect + wake the server as early as possible.
+const apiOrigin = (process.env.NEXT_PUBLIC_API_URL || "").replace(/\/api\/v1\/?$/, "").replace(/\/$/, "");
+
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -110,6 +113,18 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <head>
+        {apiOrigin && /^https?:\/\//.test(apiOrigin) && (
+          <>
+            <link rel="preconnect" href={apiOrigin} crossOrigin="anonymous" />
+            <link rel="dns-prefetch" href={apiOrigin} />
+            {/* Wake the (possibly sleeping) backend + DB pool while the JS bundle is still downloading. */}
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `try{fetch(${JSON.stringify(apiOrigin + "/health/ready")},{mode:"no-cors",credentials:"omit",keepalive:true}).catch(function(){})}catch(e){}`,
+              }}
+            />
+          </>
+        )}
         {/* Anti-flash theme script: runs synchronously before body render */}
         <script
           dangerouslySetInnerHTML={{

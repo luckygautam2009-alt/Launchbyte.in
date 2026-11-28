@@ -45,9 +45,7 @@ def list_events(
 
     result_items = []
     for evt in items:
-        active_count = sum(
-            1 for r in evt.registrations if r.status in ["registered", "checked_in"]
-        )
+        active_count = getattr(evt, "active_registration_count", 0)
         cap_rem = max(0, evt.capacity - active_count) if evt.capacity is not None else None
         is_full = evt.capacity is not None and active_count >= evt.capacity
         result_items.append(

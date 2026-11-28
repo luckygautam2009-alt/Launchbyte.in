@@ -93,8 +93,20 @@ export default function OpportunityCatalog({
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [slowLoad, setSlowLoad] = useState(false);
+  const [reloadTick, setReloadTick] = useState(0);
 
   const limit = 12;
+
+  // If the backend is waking up (free-tier cold start) tell the user instead of a silent skeleton.
+  useEffect(() => {
+    if (!loading) {
+      setSlowLoad(false);
+      return;
+    }
+    const t = setTimeout(() => setSlowLoad(true), 5000);
+    return () => clearTimeout(t);
+  }, [loading]);
 
   // Load available tags
   useEffect(() => {
@@ -159,6 +171,7 @@ export default function OpportunityCatalog({
     verParam,
     openParam,
     fixedType,
+    reloadTick,
   ]);
 
   // Sync to URL
@@ -451,7 +464,7 @@ export default function OpportunityCatalog({
           {/* Tags */}
           {availableTags.length > 0 && (
             <div className="space-y-2">
-              <label className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+              <label className="text-xs font-semibold uppercase tracking-wider text-[#424C63] dark:text-slate-400">
                 Popular Tags
               </label>
               <div className="flex flex-wrap gap-1.5 max-h-48 overflow-y-auto pr-1">
@@ -510,6 +523,12 @@ export default function OpportunityCatalog({
             <div className="p-6 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900 text-center space-y-2">
               <p className="text-sm font-semibold text-rose-700 dark:text-rose-300">{error}</p>
               <button
+                onClick={() => setReloadTick((n) => n + 1)}
+                className="mr-4 text-xs font-semibold text-rose-700 dark:text-rose-300 underline"
+              >
+                Retry
+              </button>
+              <button
                 onClick={handleReset}
                 className="text-xs text-rose-600 dark:text-rose-400 underline hover:text-rose-900 dark:hover:text-white"
               >
@@ -519,6 +538,11 @@ export default function OpportunityCatalog({
           )}
 
           {/* Loading Skeleton */}
+          {loading && slowLoad && (
+            <p className="text-center text-sm text-[#647084] dark:text-slate-400">
+              Waking up the server — the first load can take a few seconds…
+            </p>
+          )}
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[1, 2, 3, 4, 5, 6].map((n) => (

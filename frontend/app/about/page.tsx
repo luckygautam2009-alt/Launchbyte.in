@@ -36,10 +36,10 @@ export default function AboutPage() {
   }, []);
 
   const valueIconMap: Record<string, React.ReactNode> = {
-    Zap: <Zap className="w-6 h-6 text-indigo-400" />,
-    ShieldCheck: <ShieldCheck className="w-6 h-6 text-emerald-400" />,
-    Users: <Users2 className="w-6 h-6 text-cyan-400" />,
-    Sparkles: <Sparkles className="w-6 h-6 text-purple-400" />,
+    Zap: <Zap className="w-6 h-6 text-indigo-700 dark:text-indigo-400" />,
+    ShieldCheck: <ShieldCheck className="w-6 h-6 text-emerald-700 dark:text-emerald-400" />,
+    Users: <Users2 className="w-6 h-6 text-cyan-700 dark:text-cyan-400" />,
+    Sparkles: <Sparkles className="w-6 h-6 text-purple-700 dark:text-purple-400" />,
   };
 
   return (
@@ -94,7 +94,7 @@ export default function AboutPage() {
                     }`}
                   >
                     {/* Center Node Marker */}
-                    <div className="absolute left-6 sm:left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-slate-900 border-2 border-indigo-500 shadow-lg shadow-indigo-500/30 flex items-center justify-center z-10">
+                    <div className="absolute left-6 sm:left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-white dark:bg-slate-900 border-2 border-indigo-500 shadow-lg shadow-indigo-500/30 flex items-center justify-center z-10">
                       <div className="w-2.5 h-2.5 rounded-full bg-indigo-400 animate-pulse" />
                     </div>
 
@@ -106,15 +106,15 @@ export default function AboutPage() {
                     >
                       <div className="glass-card glow-hover rounded-2xl p-6 transition">
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-indigo-950/80 border border-indigo-700/60 text-indigo-300">
+                          <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/80 border border-indigo-200 dark:border-indigo-700/60 text-indigo-700 dark:text-indigo-300">
                             {item.year}
                           </span>
-                          <span className="text-[11px] font-mono text-cyan-400 uppercase tracking-wider">
+                          <span className="text-[11px] font-mono text-cyan-700 dark:text-cyan-400 uppercase tracking-wider">
                             {item.tag}
                           </span>
                         </div>
-                        <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
-                        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        <h3 className="text-lg font-bold text-[#17172B] dark:text-white mb-2">{item.title}</h3>
+                        <p className="text-xs sm:text-sm text-[#2F3A52] dark:text-slate-300 leading-relaxed">
                           {item.description}
                         </p>
                       </div>
@@ -132,7 +132,7 @@ export default function AboutPage() {
             <h2 className="text-3xl sm:text-4xl font-extrabold text-[#F8FAFC] tracking-tight">
               Why LaunchByte is Different
             </h2>
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-[#424C63] dark:text-slate-400">
               Three founding architectural pillars behind every feature we deploy.
             </p>
           </div>
@@ -145,11 +145,11 @@ export default function AboutPage() {
               transition={{ duration: 0.5, delay: 0 }}
               className="glass-card glow-hover rounded-2xl p-8 transition"
             >
-              <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mb-6">
+              <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-700 dark:text-indigo-400 flex items-center justify-center mb-6">
                 <ShieldCheck className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">Uncompromising Trust</h3>
-              <p className="text-sm text-slate-400 leading-relaxed">
+              <h3 className="text-xl font-bold text-[#17172B] dark:text-white mb-2">Uncompromising Trust</h3>
+              <p className="text-sm text-[#424C63] dark:text-slate-400 leading-relaxed">
                 Every listing passes through strict moderation and automated anti-ghosting checks. We flag suspicious postings and verify legitimate organizations so hackers never waste time on scams.
               </p>
             </motion.div>
@@ -161,11 +161,11 @@ export default function AboutPage() {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="glass-card glow-hover rounded-2xl p-8 transition"
             >
-              <div className="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center mb-6">
+              <div className="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-700 dark:text-purple-400 flex items-center justify-center mb-6">
                 <Zap className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">Speed of Hosting</h3>
-              <p className="text-sm text-slate-400 leading-relaxed">
+              <h3 className="text-xl font-bold text-[#17172B] dark:text-white mb-2">Speed of Hosting</h3>
+              <p className="text-sm text-[#424C63] dark:text-slate-400 leading-relaxed">
                 No endless paperwork or 2-week delays. Organizers publish clean hackathon microsites with countdowns, rich markdown descriptions, and automated review queues in minutes.
               </p>
             </motion.div>
@@ -177,11 +177,11 @@ export default function AboutPage() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="glass-card glow-hover rounded-2xl p-8 transition"
             >
-              <div className="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/20 text-pink-400 flex items-center justify-center mb-6">
+              <div className="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/20 text-pink-700 dark:text-pink-400 flex items-center justify-center mb-6">
                 <Users2 className="w-6 h-6" />
               </div>
-              <h3 className="text-xl font-bold text-white mb-2">Teammate Discovery</h3>
-              <p className="text-sm text-slate-400 leading-relaxed">
+              <h3 className="text-xl font-bold text-[#17172B] dark:text-white mb-2">Teammate Discovery</h3>
+              <p className="text-sm text-[#424C63] dark:text-slate-400 leading-relaxed">
                 Find collaborators who match your exact stack, timezone, and project vision. Form balanced squads and never compete alone unless you choose to.
               </p>
             </motion.div>
@@ -191,14 +191,14 @@ export default function AboutPage() {
         {/* 4. Core Values Grid */}
         <section className="space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-950/70 border border-violet-500/30 text-xs font-mono uppercase tracking-widest text-[#A78BFA]">
-              <Flag className="w-3.5 h-3.5 text-cyan-400" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-50 dark:bg-violet-950/70 border border-violet-500/30 text-xs font-mono uppercase tracking-widest text-[#A78BFA]">
+              <Flag className="w-3.5 h-3.5 text-cyan-700 dark:text-cyan-400" />
               <span>THE CODE WE LIVE BY</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-[#F8FAFC] tracking-tight">
               Our Core Values
             </h2>
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-[#424C63] dark:text-slate-400">
               Principles guiding how we build software, treat student builders, and scale the ecosystem.
             </p>
           </div>
@@ -213,12 +213,12 @@ export default function AboutPage() {
                 transition={{ duration: 0.45, delay: idx * 0.1 }}
                 className="glass-card glow-hover rounded-2xl p-7 flex items-start gap-5 transition"
               >
-                <div className="w-12 h-12 rounded-xl bg-violet-950/70 border border-violet-700/50 flex items-center justify-center shrink-0">
-                  {valueIconMap[val.iconName] || <Sparkles className="w-6 h-6 text-indigo-400" />}
+                <div className="w-12 h-12 rounded-xl bg-violet-50 dark:bg-violet-950/70 border border-violet-200 dark:border-violet-700/50 flex items-center justify-center shrink-0">
+                  {valueIconMap[val.iconName] || <Sparkles className="w-6 h-6 text-indigo-700 dark:text-indigo-400" />}
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white mb-1.5">{val.title}</h3>
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  <h3 className="text-lg font-bold text-[#17172B] dark:text-white mb-1.5">{val.title}</h3>
+                  <p className="text-xs sm:text-sm text-[#2F3A52] dark:text-slate-300 leading-relaxed">
                     {val.description}
                   </p>
                 </div>
@@ -230,8 +230,8 @@ export default function AboutPage() {
         {/* 5. Trust & Standards Comparison */}
         <section className="glass-card rounded-3xl p-8 sm:p-12">
           <div className="max-w-3xl mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">Setting a New Standard</h2>
-            <p className="text-sm text-slate-400">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#17172B] dark:text-white mb-2">Setting a New Standard</h2>
+            <p className="text-sm text-[#424C63] dark:text-slate-400">
               How LaunchByte outpaces legacy platforms like Devfolio, Unstop, and Hack2skill
             </p>
           </div>
@@ -244,9 +244,9 @@ export default function AboutPage() {
               "Clean keyboard accessibility, responsive mobile-first layouts, and zero bloat",
               "100% typed API client with zero runtime schema drift",
             ].map((item, idx) => (
-              <div key={idx} className="flex items-start gap-3 p-3.5 rounded-xl bg-slate-950/60 border border-slate-800/80">
-                <CheckCircle className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
-                <span className="text-sm text-slate-300 font-medium">{item}</span>
+              <div key={idx} className="flex items-start gap-3 p-3.5 rounded-xl bg-white/90 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800/80">
+                <CheckCircle className="w-5 h-5 text-indigo-700 dark:text-indigo-400 shrink-0 mt-0.5" />
+                <span className="text-sm text-[#2F3A52] dark:text-slate-300 font-medium">{item}</span>
               </div>
             ))}
           </div>
@@ -265,10 +265,10 @@ export default function AboutPage() {
         <section className="text-center py-12 rounded-3xl glass-card border border-indigo-500/30 p-8 sm:p-12 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-violet-600/10 via-indigo-600/10 to-cyan-500/10 pointer-events-none" />
           <div className="relative z-10 max-w-2xl mx-auto space-y-4">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#17172B] dark:text-white">
               Ready to Host or Compete?
             </h2>
-            <p className="text-slate-300 text-sm max-w-xl mx-auto leading-relaxed">
+            <p className="text-[#2F3A52] dark:text-slate-300 text-sm max-w-xl mx-auto leading-relaxed">
               Whether you are launching your university’s flagship hackathon or applying to summer engineering fellowships, LaunchByte is your home.
             </p>
             <div className="flex flex-wrap justify-center gap-4 pt-4">
@@ -282,14 +282,14 @@ export default function AboutPage() {
                 user ? (
                   <Link
                     href="/host"
-                    className="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold border border-slate-700 transition text-sm"
+                    className="px-6 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[#17172B] dark:text-white font-semibold border border-slate-300 dark:border-slate-700 transition text-sm"
                   >
                     Host an Event
                   </Link>
                 ) : (
                   <Link
                     href="/register"
-                    className="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold border border-slate-700 transition text-sm"
+                    className="px-6 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[#17172B] dark:text-white font-semibold border border-slate-300 dark:border-slate-700 transition text-sm"
                   >
                     Create Organizer Account
                   </Link>

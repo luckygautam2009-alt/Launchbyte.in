@@ -28,7 +28,7 @@ export default function CreateTeamPage() {
     return (
       <div className="max-w-2xl mx-auto px-4 py-20 text-center">
         <Users className="w-12 h-12 text-slate-700 mx-auto mb-4" />
-        <p className="text-slate-400 text-lg mb-4">
+        <p className="text-[#424C63] dark:text-slate-400 text-lg mb-4">
           You need to be logged in to create a team
         </p>
         <Link
@@ -89,22 +89,22 @@ export default function CreateTeamPage() {
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10">
       <Link
         href="/teams"
-        className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-white transition mb-6"
+        className="inline-flex items-center gap-1.5 text-sm text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-white transition mb-6"
       >
         <ArrowLeft className="w-4 h-4" />
         Back to Teams
       </Link>
 
-      <h1 className="text-3xl font-bold text-white flex items-center gap-3 mb-2">
-        <Plus className="w-8 h-8 text-brand-400" />
+      <h1 className="text-3xl font-bold text-[#17172B] dark:text-white flex items-center gap-3 mb-2">
+        <Plus className="w-8 h-8 text-[#7552D9] dark:text-brand-400" />
         Create a Team
       </h1>
-      <p className="text-slate-400 mb-8">
+      <p className="text-[#424C63] dark:text-slate-400 mb-8">
         Assemble your squad for a hackathon or project
       </p>
 
       {error && (
-        <div className="mb-6 px-4 py-3 rounded-xl bg-rose-950/50 border border-rose-800/50 text-rose-300 text-sm">
+        <div className="mb-6 px-4 py-3 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800/50 text-rose-600 dark:text-rose-300 text-sm">
           {error}
         </div>
       )}
@@ -112,7 +112,7 @@ export default function CreateTeamPage() {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Name */}
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-1.5">
+          <label className="block text-sm font-medium text-[#2F3A52] dark:text-slate-300 mb-1.5">
             Team Name *
           </label>
           <input
@@ -122,13 +122,13 @@ export default function CreateTeamPage() {
             placeholder="e.g. Code Crafters"
             maxLength={100}
             required
-            className="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none transition"
+            className="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-[#17172B] dark:text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none transition"
           />
         </div>
 
         {/* Slug */}
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-1.5">
+          <label className="block text-sm font-medium text-[#2F3A52] dark:text-slate-300 mb-1.5">
             Slug{" "}
             <span className="text-slate-500 font-normal">(optional, auto-generated)</span>
           </label>
@@ -138,13 +138,13 @@ export default function CreateTeamPage() {
             onChange={(e) => setSlug(e.target.value)}
             placeholder="code-crafters"
             maxLength={50}
-            className="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none transition"
+            className="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-[#17172B] dark:text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none transition"
           />
         </div>
 
         {/* Description */}
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-1.5">
+          <label className="block text-sm font-medium text-[#2F3A52] dark:text-slate-300 mb-1.5">
             Description
           </label>
           <textarea
@@ -153,7 +153,7 @@ export default function CreateTeamPage() {
             placeholder="What is your team working on?"
             maxLength={500}
             rows={3}
-            className="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none transition resize-none"
+            className="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-[#17172B] dark:text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none transition resize-none"
           />
           <p className="text-xs text-slate-500 mt-1">
             {description.length}/500
@@ -162,7 +162,7 @@ export default function CreateTeamPage() {
 
         {/* Visibility */}
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-2">
+          <label className="block text-sm font-medium text-[#2F3A52] dark:text-slate-300 mb-2">
             Visibility
           </label>
           <div className="flex gap-3">
@@ -178,8 +178,8 @@ export default function CreateTeamPage() {
                 onClick={() => setVisibility(opt.value)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl border text-sm font-medium transition ${
                   visibility === opt.value
-                    ? "bg-brand-600/20 border-brand-500 text-brand-300"
-                    : "bg-slate-900 border-slate-700 text-slate-400 hover:border-slate-600"
+                    ? "bg-brand-600/20 border-brand-500 text-[#7552D9] dark:text-brand-300"
+                    : "bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 text-[#424C63] dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600"
                 }`}
               >
                 <opt.icon className="w-4 h-4" />
@@ -192,7 +192,7 @@ export default function CreateTeamPage() {
         {/* Max Size + Accept Requests */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-slate-300 mb-1.5">
+            <label className="block text-sm font-medium text-[#2F3A52] dark:text-slate-300 mb-1.5">
               Max Team Size
             </label>
             <input
@@ -201,11 +201,11 @@ export default function CreateTeamPage() {
               max={10}
               value={maxSize}
               onChange={(e) => setMaxSize(Number(e.target.value))}
-              className="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white focus:border-brand-500 focus:outline-none transition"
+              className="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-[#17172B] dark:text-white focus:border-brand-500 focus:outline-none transition"
             />
           </div>
           <div className="flex items-end">
-            <label className="flex items-center gap-2.5 px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-sm text-slate-300 cursor-pointer w-full">
+            <label className="flex items-center gap-2.5 px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-sm text-[#2F3A52] dark:text-slate-300 cursor-pointer w-full">
               <input
                 type="checkbox"
                 checked={acceptingRequests}
@@ -219,7 +219,7 @@ export default function CreateTeamPage() {
 
         {/* Looking for Skills */}
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-1.5">
+          <label className="block text-sm font-medium text-[#2F3A52] dark:text-slate-300 mb-1.5">
             Looking for Skills
           </label>
           <input
@@ -227,13 +227,13 @@ export default function CreateTeamPage() {
             value={skillsInput}
             onChange={(e) => setSkillsInput(e.target.value)}
             placeholder="React, Python, UI/UX (comma-separated)"
-            className="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none transition"
+            className="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-[#17172B] dark:text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none transition"
           />
         </div>
 
         {/* Event ID (optional) */}
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-1.5">
+          <label className="block text-sm font-medium text-[#2F3A52] dark:text-slate-300 mb-1.5">
             Event ID{" "}
             <span className="text-slate-500 font-normal">(optional — for event-scoped teams)</span>
           </label>
@@ -242,7 +242,7 @@ export default function CreateTeamPage() {
             value={eventId}
             onChange={(e) => setEventId(e.target.value)}
             placeholder="Paste event UUID if creating a team for a specific event"
-            className="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none transition"
+            className="w-full px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-[#17172B] dark:text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none transition"
           />
         </div>
 

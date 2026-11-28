@@ -19,15 +19,15 @@ const TIMEZONES = [
 function InputField({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
   return (
     <div>
-      <label className="block text-sm font-medium text-slate-300 mb-1.5">
-        {label} {required && <span className="text-red-400">*</span>}
+      <label className="block text-sm font-medium text-[#2F3A52] dark:text-slate-300 mb-1.5">
+        {label} {required && <span className="text-red-600 dark:text-red-400">*</span>}
       </label>
       {children}
     </div>
   );
 }
 
-const inputCls = "w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2.5 text-white text-sm placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors";
+const inputCls = "w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-3 py-2.5 text-[#17172B] dark:text-white text-sm placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors";
 const textareaCls = `${inputCls} resize-none`;
 
 export default function NewEventPage() {
@@ -139,7 +139,7 @@ export default function NewEventPage() {
 
   if (authLoading) return (
     <div className="min-h-screen bg-transparent dark:bg-slate-950 flex items-center justify-center">
-      <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
+      <Loader2 className="w-8 h-8 animate-spin text-indigo-700 dark:text-indigo-400" />
     </div>
   );
 
@@ -147,11 +147,11 @@ export default function NewEventPage() {
     <main className="min-h-screen bg-transparent dark:bg-slate-950">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="mb-8">
-          <button onClick={() => router.push("/admin/events")} className="text-xs text-slate-500 hover:text-slate-300 mb-2 flex items-center gap-1 transition-colors">
+          <button onClick={() => router.push("/admin/events")} className="text-xs text-slate-500 hover:text-[#2F3A52] dark:hover:text-slate-300 mb-2 flex items-center gap-1 transition-colors">
             <ArrowLeft className="w-3.5 h-3.5" /> Admin Events
           </button>
-          <h1 className="text-3xl font-bold text-white">New Event</h1>
-          <p className="text-slate-400 mt-1 text-sm">Host an event in under 3 minutes.</p>
+          <h1 className="text-3xl font-bold text-[#17172B] dark:text-white">New Event</h1>
+          <p className="text-[#424C63] dark:text-slate-400 mt-1 text-sm">Host an event in under 3 minutes.</p>
         </div>
 
         <div className="flex items-center gap-3 mb-8">
@@ -159,11 +159,11 @@ export default function NewEventPage() {
             <React.Fragment key={s}>
               <button
                 onClick={() => s === 1 || validateStep1() ? setStep(s as Step) : null}
-                className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold transition-colors ${step === s ? "bg-indigo-600 text-white" : step > s ? "bg-indigo-900 text-indigo-400" : "bg-slate-800 text-slate-500"}`}
+                className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold transition-colors ${step === s ? "bg-indigo-600 text-white" : step > s ? "bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-400" : "bg-slate-100 dark:bg-slate-800 text-slate-500"}`}
               >
                 {step > s ? <Check className="w-4 h-4" /> : s}
               </button>
-              {s < 2 && <div className={`flex-1 h-px transition-colors ${step > s ? "bg-indigo-600" : "bg-slate-800"}`} />}
+              {s < 2 && <div className={`flex-1 h-px transition-colors ${step > s ? "bg-indigo-600" : "bg-slate-100 dark:bg-slate-800"}`} />}
             </React.Fragment>
           ))}
         </div>
@@ -173,7 +173,7 @@ export default function NewEventPage() {
         </div>
 
         {step === 1 && (
-          <div className="space-y-5 bg-slate-900/60 border border-slate-800 rounded-2xl p-6">
+          <div className="space-y-5 bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-6">
             <InputField label="Event Title" required>
               <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} maxLength={120}
                 placeholder="HackQuantum 2026" className={inputCls} />
@@ -193,7 +193,7 @@ export default function NewEventPage() {
                     className="hidden" id="banner-upload"
                   />
                   <label htmlFor="banner-upload"
-                    className="flex items-center gap-2 cursor-pointer w-full bg-slate-800 border border-slate-700 border-dashed rounded-xl px-3 py-6 justify-center text-slate-400 hover:border-indigo-500 hover:text-indigo-400 transition-colors text-sm">
+                    className="flex items-center gap-2 cursor-pointer w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 border-dashed rounded-xl px-3 py-6 justify-center text-[#424C63] dark:text-slate-400 hover:border-indigo-500 hover:text-indigo-700 dark:hover:text-indigo-400 transition-colors text-sm">
                     {uploadingBanner ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
                     {bannerUrl ? "Replace" : "Upload Banner"}
                   </label>
@@ -210,7 +210,7 @@ export default function NewEventPage() {
                     className="hidden" id="thumb-upload"
                   />
                   <label htmlFor="thumb-upload"
-                    className="flex items-center gap-2 cursor-pointer w-full bg-slate-800 border border-slate-700 border-dashed rounded-xl px-3 py-6 justify-center text-slate-400 hover:border-indigo-500 hover:text-indigo-400 transition-colors text-sm">
+                    className="flex items-center gap-2 cursor-pointer w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 border-dashed rounded-xl px-3 py-6 justify-center text-[#424C63] dark:text-slate-400 hover:border-indigo-500 hover:text-indigo-700 dark:hover:text-indigo-400 transition-colors text-sm">
                     {uploadingThumb ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
                     {thumbnailUrl ? "Replace" : "Upload Thumbnail"}
                   </label>
@@ -243,7 +243,7 @@ export default function NewEventPage() {
                     key={m}
                     type="button"
                     onClick={() => setMode(m)}
-                    className={`flex-1 py-2 rounded-xl text-sm font-medium border transition-colors ${mode === m ? "bg-indigo-600 text-white border-indigo-600" : "bg-slate-800 text-slate-400 border-slate-700 hover:border-slate-500"}`}
+                    className={`flex-1 py-2 rounded-xl text-sm font-medium border transition-colors ${mode === m ? "bg-indigo-600 text-white border-indigo-600" : "bg-slate-100 dark:bg-slate-800 text-[#424C63] dark:text-slate-400 border-slate-300 dark:border-slate-700 hover:border-slate-500"}`}
                   >
                     {m.charAt(0).toUpperCase() + m.slice(1)}
                   </button>
@@ -292,7 +292,7 @@ export default function NewEventPage() {
         )}
 
         {step === 2 && (
-          <div className="space-y-5 bg-slate-900/60 border border-slate-800 rounded-2xl p-6">
+          <div className="space-y-5 bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-6">
             <InputField label="Description (HTML/Markdown supported)">
               <textarea rows={6} value={description} onChange={(e) => setDescription(e.target.value)}
                 placeholder="Tell participants about your event..." className={textareaCls} />
@@ -306,7 +306,7 @@ export default function NewEventPage() {
               <InputField label="Theme Accent Color">
                 <div className="flex gap-2">
                   <input type="color" value={themeAccent} onChange={(e) => setThemeAccent(e.target.value)}
-                    className="w-12 h-10 rounded-lg border border-slate-700 bg-slate-800 cursor-pointer" />
+                    className="w-12 h-10 rounded-lg border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 cursor-pointer" />
                   <input type="text" value={themeAccent} onChange={(e) => setThemeAccent(e.target.value)}
                     maxLength={7} className={`${inputCls} flex-1`} />
                 </div>
@@ -319,34 +319,34 @@ export default function NewEventPage() {
                   type="checkbox"
                   checked={waitlistEnabled}
                   onChange={(e) => setWaitlistEnabled(e.target.checked)}
-                  className="rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-0"
+                  className="rounded border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-indigo-600 focus:ring-0"
                 />
-                <span className="text-sm text-slate-300">Enable waitlist when full</span>
+                <span className="text-sm text-[#2F3A52] dark:text-slate-300">Enable waitlist when full</span>
               </label>
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={requiresApproval}
                   onChange={(e) => setRequiresApproval(e.target.checked)}
-                  className="rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-0"
+                  className="rounded border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-indigo-600 focus:ring-0"
                 />
-                <span className="text-sm text-slate-300">Requires organizer approval</span>
+                <span className="text-sm text-[#2F3A52] dark:text-slate-300">Requires organizer approval</span>
               </label>
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={publishNow}
                   onChange={(e) => setPublishNow(e.target.checked)}
-                  className="rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-0"
+                  className="rounded border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-indigo-600 focus:ring-0"
                 />
-                <span className="text-sm text-slate-300">Publish immediately</span>
+                <span className="text-sm text-[#2F3A52] dark:text-slate-300">Publish immediately</span>
               </label>
             </div>
 
             <div className="flex gap-3 pt-2">
               <button
                 onClick={() => setStep(1)}
-                className="flex items-center gap-2 px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-medium transition-colors"
+                className="flex items-center gap-2 px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[#2F3A52] dark:text-slate-300 rounded-xl text-sm font-medium transition-colors"
               >
                 <ArrowLeft className="w-4 h-4" /> Back
               </button>

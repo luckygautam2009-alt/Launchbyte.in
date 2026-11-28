@@ -63,6 +63,26 @@ def login(
 
 
 @router.post(
+    "/refresh",
+    response_model=Token,
+    dependencies=[Depends(rate_limit(max_requests=30, window_seconds=60))],
+)
+def refresh_access_token(current_user: CurrentUser) -> Token:
+    """Sliding session: trade a still-valid access token for a fresh one.
+
+    Without this every user was silently logged out exactly ACCESS_TOKEN_EXPIRE_MINUTES after login
+    (all calls started failing with 401 while the UI still looked signed-in).
+    """
+    return Token(
+        access_token=create_access_token(
+            subject=str(current_user.id),
+            role=current_user.role.value,
+            token_version=current_user.token_version,
+        )
+    )
+
+
+@router.post(
     "/verify-email/request",
     response_model=MessageResponse,
     dependencies=[Depends(rate_limit(max_requests=5, window_seconds=60))],

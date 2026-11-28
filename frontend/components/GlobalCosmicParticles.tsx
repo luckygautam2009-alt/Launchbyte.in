@@ -32,7 +32,10 @@ export default function GlobalCosmicParticles() {
     if (!ctx) return;
 
     const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let reduceMotion = motionQuery.matches;
+    // Phones / low-core CPUs: draw the starfield ONCE (no 60fps canvas loop competing with scrolling).
+    const lowPowerDevice =
+      window.innerWidth < 768 || (navigator.hardwareConcurrency || 4) <= 4;
+    let reduceMotion = motionQuery.matches || lowPowerDevice;
     let isMobile = window.innerWidth < 768;
     let width = window.innerWidth;
     let height = window.innerHeight;
@@ -150,7 +153,7 @@ export default function GlobalCosmicParticles() {
 
     const onScroll = () => {
       scrollY = window.scrollY;
-      if (reduceMotion) drawFrame(0);
+      if (reduceMotion && !lowPowerDevice) drawFrame(0);
     };
 
     const onVisibility = () => {
@@ -162,7 +165,7 @@ export default function GlobalCosmicParticles() {
     };
 
     const onMotionChange = (e: MediaQueryListEvent) => {
-      reduceMotion = e.matches;
+      reduceMotion = e.matches || lowPowerDevice;
       cancelAnimationFrame(rafId);
       drawFrame(0);
       if (!reduceMotion && !document.hidden) {

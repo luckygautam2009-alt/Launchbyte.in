@@ -83,7 +83,7 @@ export default function TeamDashboardPage() {
   if (loading) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-20">
-        <div className="h-48 bg-slate-900/60 rounded-2xl animate-pulse" />
+        <div className="h-48 bg-white/90 dark:bg-slate-900/60 rounded-2xl animate-pulse" />
       </div>
     );
   }
@@ -92,8 +92,8 @@ export default function TeamDashboardPage() {
     return (
       <div className="max-w-4xl mx-auto px-4 py-20 text-center">
         <Users className="w-12 h-12 text-slate-700 mx-auto mb-4" />
-        <p className="text-slate-400 text-lg">{error || "Team not found"}</p>
-        <Link href="/teams" className="text-brand-400 hover:text-brand-300 text-sm mt-4 inline-block">
+        <p className="text-[#424C63] dark:text-slate-400 text-lg">{error || "Team not found"}</p>
+        <Link href="/teams" className="text-[#7552D9] dark:text-brand-400 hover:text-[#7552D9] dark:hover:text-brand-300 text-sm mt-4 inline-block">
           ← Back to Teams
         </Link>
       </div>
@@ -217,45 +217,45 @@ export default function TeamDashboardPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10">
-      <Link href="/teams" className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-white transition mb-6">
+      <Link href="/teams" className="inline-flex items-center gap-1.5 text-sm text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-white transition mb-6">
         <ArrowLeft className="w-4 h-4" /> Back to Teams
       </Link>
 
       {/* Header */}
-      <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-6 mb-6">
+      <div className="bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 mb-6">
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-white flex items-center gap-3">
+            <h1 className="text-2xl font-bold text-[#17172B] dark:text-white flex items-center gap-3">
               {team.name}
               {team.is_locked && (
                 <span title="Teams locked">
-                  <Lock className="w-5 h-5 text-amber-400" />
+                  <Lock className="w-5 h-5 text-amber-700 dark:text-amber-400" />
                 </span>
               )}
             </h1>
             <div className="flex flex-wrap items-center gap-2 mt-2">
-              <span className="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">
+              <span className="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[#424C63] dark:text-slate-400">
                 {team.visibility}
               </span>
-              <span className="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">
+              <span className="text-xs px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[#424C63] dark:text-slate-400">
                 {team.members.length}/{team.max_size} members
               </span>
               {team.event_title && (
-                <span className="text-xs px-2 py-0.5 rounded-full bg-indigo-950 text-indigo-300 border border-indigo-800/50">
+                <span className="text-xs px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800/50">
                   {team.event_title}
                 </span>
               )}
               {team.open_spots > 0 && (
-                <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300">
+                <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300">
                   {team.open_spots} open spot{team.open_spots !== 1 ? "s" : ""}
                 </span>
               )}
             </div>
-            {team.description && <p className="text-slate-400 text-sm mt-3">{team.description}</p>}
+            {team.description && <p className="text-[#424C63] dark:text-slate-400 text-sm mt-3">{team.description}</p>}
             {team.looking_for_skills.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mt-3">
                 {team.looking_for_skills.map((s) => (
-                  <span key={s} className="text-xs px-2 py-0.5 rounded-full bg-brand-950 text-brand-300 border border-brand-800/40">
+                  <span key={s} className="text-xs px-2 py-0.5 rounded-full bg-violet-50 dark:bg-brand-950 text-[#7552D9] dark:text-brand-300 border border-violet-200 dark:border-brand-800/40">
                     {s}
                   </span>
                 ))}
@@ -267,16 +267,16 @@ export default function TeamDashboardPage() {
           <div className="flex flex-wrap gap-2 shrink-0">
             {team.is_leader && (
               <>
-                <button onClick={() => setShowTransferModal(true)} className="px-3 py-2 text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition">
+                <button onClick={() => setShowTransferModal(true)} className="px-3 py-2 text-xs bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[#2F3A52] dark:text-slate-300 rounded-lg transition">
                   <Crown className="w-3.5 h-3.5 inline mr-1" /> Transfer
                 </button>
-                <button onClick={() => setShowDisbandModal(true)} className="px-3 py-2 text-xs bg-rose-950/50 hover:bg-rose-900/50 text-rose-400 rounded-lg transition">
+                <button onClick={() => setShowDisbandModal(true)} className="px-3 py-2 text-xs bg-rose-50 dark:bg-rose-950/50 hover:bg-rose-50 dark:hover:bg-rose-900/50 text-rose-600 dark:text-rose-400 rounded-lg transition">
                   <Trash2 className="w-3.5 h-3.5 inline mr-1" /> Disband
                 </button>
               </>
             )}
             {team.is_member && !team.is_leader && (
-              <button onClick={() => setShowLeaveModal(true)} className="px-3 py-2 text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition">
+              <button onClick={() => setShowLeaveModal(true)} className="px-3 py-2 text-xs bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[#2F3A52] dark:text-slate-300 rounded-lg transition">
                 <LogOut className="w-3.5 h-3.5 inline mr-1" /> Leave
               </button>
             )}
@@ -286,7 +286,7 @@ export default function TeamDashboardPage() {
               </button>
             )}
             {team.has_pending_join_request && (
-              <span className="px-4 py-2 text-sm bg-slate-800 text-slate-400 rounded-xl flex items-center gap-1.5">
+              <span className="px-4 py-2 text-sm bg-slate-100 dark:bg-slate-800 text-[#424C63] dark:text-slate-400 rounded-xl flex items-center gap-1.5">
                 <Clock className="w-4 h-4" /> Pending...
               </span>
             )}
@@ -295,20 +295,20 @@ export default function TeamDashboardPage() {
       </div>
 
       {actionError && (
-        <div className="mb-4 px-4 py-3 rounded-xl bg-rose-950/50 border border-rose-800/50 text-rose-300 text-sm">
+        <div className="mb-4 px-4 py-3 rounded-xl bg-rose-50 dark:bg-rose-950/50 border border-rose-200 dark:border-rose-800/50 text-rose-600 dark:text-rose-300 text-sm">
           {actionError}
         </div>
       )}
 
       {/* Tabs */}
       {team.is_member && (
-        <div className="flex gap-1 mb-6 bg-slate-900/60 border border-slate-800 rounded-xl p-1">
+        <div className="flex gap-1 mb-6 bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl p-1">
           {(["members", ...(team.is_leader ? ["invites", "requests"] : [])] as Tab[]).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`flex-1 py-2 text-sm font-medium rounded-lg transition capitalize ${
-                activeTab === tab ? "bg-slate-800 text-white" : "text-slate-400 hover:text-slate-200"
+                activeTab === tab ? "bg-slate-100 dark:bg-slate-800 text-[#17172B] dark:text-white" : "text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-slate-200"
               }`}
             >
               {tab}
@@ -321,18 +321,18 @@ export default function TeamDashboardPage() {
       {activeTab === "members" && (
         <div className="space-y-3">
           {team.members.map((m) => (
-            <div key={m.id} className="flex items-center justify-between bg-slate-900/60 border border-slate-800 rounded-xl px-4 py-3">
+            <div key={m.id} className="flex items-center justify-between bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-slate-700 flex items-center justify-center text-sm text-white font-semibold">
+                <div className="w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-sm text-[#17172B] dark:text-white font-semibold">
                   {m.full_name?.[0]?.toUpperCase() || "?"}
                 </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <Link href={`/u/${m.handle || m.user_id}`} className="text-white font-medium hover:text-brand-400 transition">
+                    <Link href={`/u/${m.handle || m.user_id}`} className="text-[#17172B] dark:text-white font-medium hover:text-[#7552D9] dark:hover:text-brand-400 transition">
                       {m.full_name}
                     </Link>
                     {m.role === "leader" && (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-900/50 text-amber-300 font-semibold uppercase">
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-50 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 font-semibold uppercase">
                         Leader
                       </span>
                     )}
@@ -341,7 +341,7 @@ export default function TeamDashboardPage() {
                 </div>
               </div>
               {team.is_leader && m.role !== "leader" && (
-                <button onClick={() => handleRemoveMember(m.user_id)} className="p-2 text-slate-500 hover:text-rose-400 transition" title="Remove">
+                <button onClick={() => handleRemoveMember(m.user_id)} className="p-2 text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 transition" title="Remove">
                   <UserMinus className="w-4 h-4" />
                 </button>
               )}
@@ -359,7 +359,7 @@ export default function TeamDashboardPage() {
               value={inviteHandle}
               onChange={(e) => setInviteHandle(e.target.value)}
               placeholder="@handle"
-              className="flex-1 px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none transition"
+              className="flex-1 px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-xl text-[#17172B] dark:text-white placeholder-slate-500 focus:border-brand-500 focus:outline-none transition"
             />
             <button type="submit" disabled={inviting || !inviteHandle.trim()} className="px-4 py-2.5 bg-brand-600 hover:bg-brand-500 text-white rounded-xl transition disabled:opacity-50 flex items-center gap-2">
               <Send className="w-4 h-4" />
@@ -371,13 +371,13 @@ export default function TeamDashboardPage() {
           ) : (
             <div className="space-y-3">
               {invites.map((inv) => (
-                <div key={inv.id} className="flex items-center justify-between bg-slate-900/60 border border-slate-800 rounded-xl px-4 py-3">
+                <div key={inv.id} className="flex items-center justify-between bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3">
                   <div>
-                    <p className="text-white text-sm font-medium">{inv.invited_handle || inv.invited_name || "Invited User"}</p>
+                    <p className="text-[#17172B] dark:text-white text-sm font-medium">{inv.invited_handle || inv.invited_name || "Invited User"}</p>
                     <p className="text-xs text-slate-500">{inv.status} · expires {new Date(inv.expires_at).toLocaleDateString()}</p>
                   </div>
                   {inv.status === "pending" && (
-                    <button onClick={() => handleRevokeInvite(inv.id)} className="text-xs text-slate-400 hover:text-rose-400 transition">
+                    <button onClick={() => handleRevokeInvite(inv.id)} className="text-xs text-[#424C63] dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 transition">
                       Revoke
                     </button>
                   )}
@@ -396,17 +396,17 @@ export default function TeamDashboardPage() {
           ) : (
             <div className="space-y-3">
               {joinRequests.map((req) => (
-                <div key={req.id} className="flex items-center justify-between bg-slate-900/60 border border-slate-800 rounded-xl px-4 py-3">
+                <div key={req.id} className="flex items-center justify-between bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full bg-slate-700 flex items-center justify-center text-sm text-white font-semibold">
+                    <div className="w-9 h-9 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-sm text-[#17172B] dark:text-white font-semibold">
                       {req.user_name?.[0]?.toUpperCase() || "?"}
                     </div>
                     <div>
-                      <p className="text-white text-sm font-medium">{req.user_name}</p>
+                      <p className="text-[#17172B] dark:text-white text-sm font-medium">{req.user_name}</p>
                       {req.user_skills.length > 0 && (
                         <div className="flex gap-1 mt-0.5">
                           {req.user_skills.slice(0, 3).map((s) => (
-                            <span key={s} className="text-[10px] px-1.5 py-0.5 rounded-full bg-brand-950 text-brand-300">{s}</span>
+                            <span key={s} className="text-[10px] px-1.5 py-0.5 rounded-full bg-violet-50 dark:bg-brand-950 text-[#7552D9] dark:text-brand-300">{s}</span>
                           ))}
                         </div>
                       )}
@@ -414,10 +414,10 @@ export default function TeamDashboardPage() {
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <button onClick={() => handleAcceptRequest(req.id)} className="p-2 text-emerald-400 hover:bg-emerald-950/50 rounded-lg transition" title="Accept">
+                    <button onClick={() => handleAcceptRequest(req.id)} className="p-2 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/50 rounded-lg transition" title="Accept">
                       <Check className="w-4 h-4" />
                     </button>
-                    <button onClick={() => handleRejectRequest(req.id)} className="p-2 text-rose-400 hover:bg-rose-950/50 rounded-lg transition" title="Reject">
+                    <button onClick={() => handleRejectRequest(req.id)} className="p-2 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-lg transition" title="Reject">
                       <X className="w-4 h-4" />
                     </button>
                   </div>
@@ -431,12 +431,12 @@ export default function TeamDashboardPage() {
       {/* Transfer Modal */}
       {showTransferModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 w-full max-w-md mx-4">
-            <h3 className="text-lg font-semibold text-white mb-4">Transfer Leadership</h3>
+          <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-2xl p-6 w-full max-w-md mx-4">
+            <h3 className="text-lg font-semibold text-[#17172B] dark:text-white mb-4">Transfer Leadership</h3>
             <select
               value={transferTarget}
               onChange={(e) => setTransferTarget(e.target.value)}
-              className="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-white mb-4"
+              className="w-full px-4 py-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl text-[#17172B] dark:text-white mb-4"
             >
               <option value="">Select a member</option>
               {nonLeaderMembers.map((m) => (
@@ -444,7 +444,7 @@ export default function TeamDashboardPage() {
               ))}
             </select>
             <div className="flex gap-3 justify-end">
-              <button onClick={() => setShowTransferModal(false)} className="px-4 py-2 text-sm text-slate-400 hover:text-white transition">Cancel</button>
+              <button onClick={() => setShowTransferModal(false)} className="px-4 py-2 text-sm text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-white transition">Cancel</button>
               <button onClick={handleTransfer} disabled={!transferTarget || actionLoading} className="px-4 py-2 text-sm bg-brand-600 hover:bg-brand-500 text-white rounded-xl transition disabled:opacity-50">
                 {actionLoading ? "..." : "Transfer"}
               </button>
@@ -456,11 +456,11 @@ export default function TeamDashboardPage() {
       {/* Disband Modal */}
       {showDisbandModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 w-full max-w-md mx-4">
-            <h3 className="text-lg font-semibold text-white mb-2">Disband Team</h3>
-            <p className="text-slate-400 text-sm mb-6">This will permanently disband &quot;{team.name}&quot;. This action cannot be undone.</p>
+          <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-2xl p-6 w-full max-w-md mx-4">
+            <h3 className="text-lg font-semibold text-[#17172B] dark:text-white mb-2">Disband Team</h3>
+            <p className="text-[#424C63] dark:text-slate-400 text-sm mb-6">This will permanently disband &quot;{team.name}&quot;. This action cannot be undone.</p>
             <div className="flex gap-3 justify-end">
-              <button onClick={() => setShowDisbandModal(false)} className="px-4 py-2 text-sm text-slate-400 hover:text-white transition">Cancel</button>
+              <button onClick={() => setShowDisbandModal(false)} className="px-4 py-2 text-sm text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-white transition">Cancel</button>
               <button onClick={handleDisband} disabled={actionLoading} className="px-4 py-2 text-sm bg-rose-600 hover:bg-rose-500 text-white rounded-xl transition disabled:opacity-50">
                 {actionLoading ? "..." : "Disband"}
               </button>
@@ -472,11 +472,11 @@ export default function TeamDashboardPage() {
       {/* Leave Modal */}
       {showLeaveModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 w-full max-w-md mx-4">
-            <h3 className="text-lg font-semibold text-white mb-2">Leave Team</h3>
-            <p className="text-slate-400 text-sm mb-6">Are you sure you want to leave &quot;{team.name}&quot;?</p>
+          <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-2xl p-6 w-full max-w-md mx-4">
+            <h3 className="text-lg font-semibold text-[#17172B] dark:text-white mb-2">Leave Team</h3>
+            <p className="text-[#424C63] dark:text-slate-400 text-sm mb-6">Are you sure you want to leave &quot;{team.name}&quot;?</p>
             <div className="flex gap-3 justify-end">
-              <button onClick={() => setShowLeaveModal(false)} className="px-4 py-2 text-sm text-slate-400 hover:text-white transition">Cancel</button>
+              <button onClick={() => setShowLeaveModal(false)} className="px-4 py-2 text-sm text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-white transition">Cancel</button>
               <button onClick={handleLeave} disabled={actionLoading} className="px-4 py-2 text-sm bg-rose-600 hover:bg-rose-500 text-white rounded-xl transition disabled:opacity-50">
                 {actionLoading ? "..." : "Leave"}
               </button>

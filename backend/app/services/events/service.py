@@ -392,18 +392,36 @@ def list_public_events(
         stmt = stmt.where(Event.mode == mode)
 
     if q:
-        safe_q = f"%{q.strip()}%"
-        stmt = stmt.where(or_(Event.title.ilike(safe_q), Event.tagline.ilike(safe_q)))
+        escaped = q.strip().replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+        safe_q = f"%{escaped}%"
+        stmt = stmt.where(
+            or_(Event.title.ilike(safe_q, escape="\\"), Event.tagline.ilike(safe_q, escape="\\"))
+        )
 
     count_stmt = select(func.count()).select_from(stmt.subquery())
     total = db.scalar(count_stmt) or 0
 
     items = db.scalars(
-        stmt.options(selectinload(Event.registrations), selectinload(Event.organization))
+        stmt.options(selectinload(Event.organization))
         .order_by(order)
         .limit(limit)
         .offset(offset)
     ).all()
+
+    # One grouped COUNT for the page instead of loading every registration row of every event.
+    counts: dict[uuid.UUID, int] = {}
+    if items:
+        rows = db.execute(
+            select(EventRegistration.event_id, func.count(EventRegistration.id))
+            .where(
+                EventRegistration.event_id.in_([e.id for e in items]),
+                EventRegistration.status.in_([RegistrationStatus.REGISTERED, RegistrationStatus.CHECKED_IN]),
+            )
+            .group_by(EventRegistration.event_id)
+        ).all()
+        counts = {event_id: cnt for event_id, cnt in rows}
+    for e in items:
+        e.active_registration_count = counts.get(e.id, 0)  # transient attribute for the router
     return items, total
 
 

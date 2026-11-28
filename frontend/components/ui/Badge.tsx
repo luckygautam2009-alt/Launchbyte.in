@@ -23,13 +23,13 @@ export function Badge({
   };
 
   const variantStyles = {
-    brand: "bg-brand-500/15 text-brand-300 border border-brand-500/30",
+    brand: "bg-brand-500/15 text-[#7552D9] dark:text-brand-300 border border-brand-500/30",
     accent: "bg-accent-500/15 text-accent-300 border border-accent-500/30",
-    emerald: "bg-emerald-500/15 text-emerald-300 border border-emerald-500/30",
-    amber: "bg-amber-500/15 text-amber-300 border border-amber-500/30",
-    rose: "bg-rose-500/15 text-rose-300 border border-rose-500/30",
-    purple: "bg-purple-500/15 text-purple-300 border border-purple-500/30",
-    slate: "bg-slate-800/80 text-slate-300 border border-slate-700/80",
+    emerald: "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30",
+    amber: "bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-500/30",
+    rose: "bg-rose-500/15 text-rose-600 dark:text-rose-300 border border-rose-500/30",
+    purple: "bg-purple-500/15 text-purple-700 dark:text-purple-300 border border-purple-500/30",
+    slate: "bg-slate-100 dark:bg-slate-800/80 text-[#2F3A52] dark:text-slate-300 border border-slate-300 dark:border-slate-700/80",
   };
 
   const dotColors = {

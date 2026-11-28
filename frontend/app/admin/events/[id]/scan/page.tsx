@@ -177,7 +177,7 @@ export default function ScannerPage() {
 
   if (authLoading) return (
     <div className="min-h-screen bg-transparent dark:bg-slate-950 flex items-center justify-center">
-      <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
+      <Loader2 className="w-8 h-8 animate-spin text-indigo-700 dark:text-indigo-400" />
     </div>
   );
 
@@ -185,26 +185,26 @@ export default function ScannerPage() {
     <main className="min-h-screen bg-transparent dark:bg-slate-950">
       <div className="max-w-2xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
-          <Link href={`/admin/events/${id}`} className="min-h-[44px] flex items-center gap-1.5 text-slate-400 hover:text-white text-sm transition-colors font-medium">
+          <Link href={`/admin/events/${id}`} className="min-h-[44px] flex items-center gap-1.5 text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-white text-sm transition-colors font-medium">
             <ChevronLeft className="w-4 h-4" /> Back to Event
           </Link>
-          <h1 className="text-lg font-bold text-white flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-brand-400" /> Check-in Scanner
+          <h1 className="text-lg font-bold text-[#17172B] dark:text-white flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-[#7552D9] dark:text-brand-400" /> Check-in Scanner
           </h1>
           <div className="w-16" />
         </div>
 
         {/* Tab Switch */}
-        <div className="flex bg-slate-900 border border-slate-800 rounded-xl p-1 gap-1 mb-6">
+        <div className="flex bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-1 gap-1 mb-6">
           <button
             onClick={() => setTab("camera")}
-            className={`min-h-[44px] flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-semibold transition-all ${tab === "camera" ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/20" : "text-slate-400 hover:text-white"}`}
+            className={`min-h-[44px] flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-semibold transition-all ${tab === "camera" ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/20" : "text-[#424C63] dark:text-slate-400 hover:text-white"}`}
           >
             <QrCode className="w-4 h-4" /> Camera Scan
           </button>
           <button
             onClick={() => setTab("manual")}
-            className={`min-h-[44px] flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-semibold transition-all ${tab === "manual" ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/20" : "text-slate-400 hover:text-white"}`}
+            className={`min-h-[44px] flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-semibold transition-all ${tab === "manual" ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/20" : "text-[#424C63] dark:text-slate-400 hover:text-white"}`}
           >
             <KeyRound className="w-4 h-4" /> Manual Code
           </button>
@@ -221,26 +221,26 @@ export default function ScannerPage() {
               transition={SPRING.bouncy}
               className={`mb-6 p-5 rounded-2xl border flex items-center gap-4 transition-all shadow-xl ${
                 lastResult.success
-                  ? "bg-emerald-950/40 border-emerald-500/40 shadow-emerald-500/10"
-                  : "bg-rose-950/40 border-rose-500/40 shadow-rose-500/10"
+                  ? "bg-emerald-50 dark:bg-emerald-950/40 border-emerald-500/40 shadow-emerald-500/10"
+                  : "bg-rose-50 dark:bg-rose-950/40 border-rose-500/40 shadow-rose-500/10"
               }`}
             >
               {lastResult.success ? (
                 <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center flex-shrink-0">
-                  <CheckCircle2 className="w-7 h-7 text-emerald-400" />
+                  <CheckCircle2 className="w-7 h-7 text-emerald-700 dark:text-emerald-400" />
                 </div>
               ) : (
                 <div className="w-12 h-12 rounded-2xl bg-rose-500/20 border border-rose-500/40 flex items-center justify-center flex-shrink-0">
-                  <XCircle className="w-7 h-7 text-rose-400" />
+                  <XCircle className="w-7 h-7 text-rose-600 dark:text-rose-400" />
                 </div>
               )}
               <div className="min-w-0 flex-1">
-                <p className={`font-bold text-base ${lastResult.success ? "text-emerald-400" : "text-rose-400"}`}>
+                <p className={`font-bold text-base ${lastResult.success ? "text-emerald-700 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}>
                   {lastResult.success ? "Check-in Confirmed!" : "Check-in Failed"}
                 </p>
-                <p className="text-sm font-medium text-slate-200 mt-0.5 truncate">{lastResult.attendee_name || lastResult.message}</p>
+                <p className="text-sm font-medium text-[#17172B] dark:text-slate-200 mt-0.5 truncate">{lastResult.attendee_name || lastResult.message}</p>
                 {lastResult.registration_code && (
-                  <p className="text-xs text-slate-400 font-mono mt-0.5">{lastResult.registration_code}</p>
+                  <p className="text-xs text-[#424C63] dark:text-slate-400 font-mono mt-0.5">{lastResult.registration_code}</p>
                 )}
               </div>
             </motion.div>
@@ -248,12 +248,12 @@ export default function ScannerPage() {
         </AnimatePresence>
 
         {tab === "camera" && (
-          <div className={`bg-slate-900/60 border border-slate-800 rounded-2xl overflow-hidden transition-colors ${scanBg}`}>
+          <div className={`bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden transition-colors ${scanBg}`}>
             {cameraError ? (
               <div className="p-8 text-center">
-                <AlertCircle className="w-10 h-10 text-amber-400 mx-auto mb-3" />
-                <p className="text-slate-300 text-sm">{cameraError}</p>
-                <button onClick={() => setTab("manual")} className="min-h-[44px] mt-3 inline-flex items-center text-indigo-400 hover:text-indigo-300 text-sm font-medium underline">
+                <AlertCircle className="w-10 h-10 text-amber-700 dark:text-amber-400 mx-auto mb-3" />
+                <p className="text-[#2F3A52] dark:text-slate-300 text-sm">{cameraError}</p>
+                <button onClick={() => setTab("manual")} className="min-h-[44px] mt-3 inline-flex items-center text-indigo-700 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 text-sm font-medium underline">
                   Use manual entry
                 </button>
               </div>
@@ -261,8 +261,8 @@ export default function ScannerPage() {
               <div className="relative">
                 <video ref={videoRef} className="w-full aspect-square object-cover" playsInline muted />
                 {!scannerReady && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-slate-900/80">
-                    <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
+                  <div className="absolute inset-0 flex items-center justify-center bg-white/90 dark:bg-slate-900/80">
+                    <Loader2 className="w-8 h-8 animate-spin text-indigo-700 dark:text-indigo-400" />
                   </div>
                 )}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -277,24 +277,24 @@ export default function ScannerPage() {
 
                     {scanState === "scanning" && (
                       <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-                        <Loader2 className="w-8 h-8 animate-spin text-indigo-400" />
+                        <Loader2 className="w-8 h-8 animate-spin text-indigo-700 dark:text-indigo-400" />
                       </div>
                     )}
                   </div>
                 </div>
               </div>
             )}
-            <div className="p-3 text-center border-t border-slate-800/80">
-              <p className="text-xs text-slate-400">Point camera at attendee QR code or digital pass</p>
+            <div className="p-3 text-center border-t border-slate-200 dark:border-slate-800/80">
+              <p className="text-xs text-[#424C63] dark:text-slate-400">Point camera at attendee QR code or digital pass</p>
             </div>
           </div>
         )}
 
         {tab === "manual" && (
-          <div className={`bg-slate-900/60 border border-slate-800 rounded-2xl p-6 transition-colors ${scanBg}`}>
+          <div className={`bg-white/90 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 transition-colors ${scanBg}`}>
             <form onSubmit={handleManualSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-[#2F3A52] dark:text-slate-300 mb-2">
                   Registration Code
                 </label>
                 <input
@@ -302,7 +302,7 @@ export default function ScannerPage() {
                   value={manualCode}
                   onChange={(e) => setManualCode(e.target.value.toUpperCase())}
                   placeholder="e.g. HQ26-ABCD1234"
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white font-mono text-lg placeholder-slate-500 focus:outline-none focus:border-indigo-500 uppercase tracking-widest text-center"
+                  className="w-full bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl px-4 py-3 text-[#17172B] dark:text-white font-mono text-lg placeholder-slate-500 focus:outline-none focus:border-indigo-500 uppercase tracking-widest text-center"
                   autoFocus
                   autoComplete="off"
                 />
@@ -320,18 +320,18 @@ export default function ScannerPage() {
 
         {recentScans.length > 0 && (
           <div className="mt-8">
-            <h2 className="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
-              <Users className="w-4 h-4 text-brand-400" /> Recent Scans ({recentScans.length})
+            <h2 className="text-sm font-semibold text-[#2F3A52] dark:text-slate-300 mb-3 flex items-center gap-2">
+              <Users className="w-4 h-4 text-[#7552D9] dark:text-brand-400" /> Recent Scans ({recentScans.length})
             </h2>
             <div className="space-y-2">
               {recentScans.map((scan) => (
-                <div key={scan.id} className={`flex items-center gap-3 p-3.5 rounded-xl border text-sm ${scan.success ? "bg-emerald-950/20 border-emerald-500/20" : "bg-rose-950/20 border-rose-500/20"}`}>
+                <div key={scan.id} className={`flex items-center gap-3 p-3.5 rounded-xl border text-sm ${scan.success ? "bg-emerald-50 dark:bg-emerald-950/20 border-emerald-500/20" : "bg-rose-50 dark:bg-rose-950/20 border-rose-500/20"}`}>
                   {scan.success
-                    ? <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
-                    : <XCircle className="w-4 h-4 text-rose-400 flex-shrink-0" />}
+                    ? <CheckCircle2 className="w-4 h-4 text-emerald-700 dark:text-emerald-400 flex-shrink-0" />
+                    : <XCircle className="w-4 h-4 text-rose-600 dark:text-rose-400 flex-shrink-0" />}
                   <div className="flex-1 min-w-0">
-                    <p className="text-white font-medium truncate">{scan.attendee_name || scan.message}</p>
-                    <p className="text-xs text-slate-400 font-mono">{scan.registration_code || scan.code.slice(0, 20)}</p>
+                    <p className="text-[#17172B] dark:text-white font-medium truncate">{scan.attendee_name || scan.message}</p>
+                    <p className="text-xs text-[#424C63] dark:text-slate-400 font-mono">{scan.registration_code || scan.code.slice(0, 20)}</p>
                   </div>
                   <span className="text-xs text-slate-500 flex-shrink-0 font-mono">
                     {scan.timestamp.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}

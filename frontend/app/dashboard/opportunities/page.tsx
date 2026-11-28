@@ -1,5 +1,6 @@
 "use client";
 
+import { api } from "@/lib/api";
 import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -85,9 +86,7 @@ export default function ContributorOpportunitiesDashboardPage() {
   async function fetchSubmissions() {
     setLoading(true);
     try {
-      const token = localStorage.getItem("lb_token");
-      const res = await fetch(`${API_BASE}/contributor/opportunities`, {
-        headers: { Authorization: `Bearer ${token}` },
+      const res = await api.authFetch(`/contributor/opportunities`, {
       });
       if (res.ok) {
         setSubmissions(await res.json());
@@ -112,12 +111,10 @@ export default function ContributorOpportunitiesDashboardPage() {
     }
     setUploadingImage(true);
     try {
-      const token = localStorage.getItem("lb_token");
       const fd = new FormData();
       fd.append("file", file);
-      const res = await fetch(`${API_BASE}/uploads/images`, {
+      const res = await api.authFetch(`/uploads/images`, {
         method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
         body: fd,
       });
       const data = await res.json();
@@ -139,7 +136,6 @@ export default function ContributorOpportunitiesDashboardPage() {
     }
     setSubmitting(true);
     try {
-      const token = localStorage.getItem("lb_token");
       const skills = skillsInput
         .split(",")
         .map((s) => s.trim())
@@ -173,11 +169,10 @@ export default function ContributorOpportunitiesDashboardPage() {
         submit_for_review: submitForReview,
       };
 
-      const res = await fetch(`${API_BASE}/contributor/opportunities`, {
+      const res = await api.authFetch(`/contributor/opportunities`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });
@@ -205,10 +200,8 @@ export default function ContributorOpportunitiesDashboardPage() {
 
   async function handleSubmitDraft(id: string) {
     try {
-      const token = localStorage.getItem("lb_token");
-      const res = await fetch(`${API_BASE}/contributor/opportunities/${id}/submit`, {
+      const res = await api.authFetch(`/contributor/opportunities/${id}/submit`, {
         method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
       });
       if (!res.ok) throw new Error("Failed to submit draft");
       showToast("Submitted for admin review!", "success");
@@ -220,19 +213,19 @@ export default function ContributorOpportunitiesDashboardPage() {
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen bg-[#050510] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-violet-400 animate-spin" />
+      <div className="min-h-screen bg-transparent dark:bg-[#050510] flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-violet-700 dark:text-violet-400 animate-spin" />
       </div>
     );
   }
 
   if (!hasContributorAccess) {
     return (
-      <div className="min-h-screen bg-[#050510] text-slate-100 py-20 px-4">
+      <div className="min-h-screen bg-transparent dark:bg-[#050510] text-[#17172B] dark:text-slate-100 py-20 px-4">
         <div className="max-w-xl mx-auto p-8 rounded-3xl glass-card border border-violet-500/30 text-center space-y-4">
-          <AlertCircle className="w-10 h-10 text-amber-400 mx-auto" />
-          <h1 className="text-2xl font-bold text-white">Contributor Access Required</h1>
-          <p className="text-sm text-slate-300">
+          <AlertCircle className="w-10 h-10 text-amber-700 dark:text-amber-400 mx-auto" />
+          <h1 className="text-2xl font-bold text-[#17172B] dark:text-white">Contributor Access Required</h1>
+          <p className="text-sm text-[#2F3A52] dark:text-slate-300">
             You need approved opportunity-contributor permissions to create and submit opportunities.
           </p>
           <Link
@@ -248,12 +241,12 @@ export default function ContributorOpportunitiesDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#050510] text-slate-100 py-12 sm:py-16">
+    <div className="min-h-screen bg-transparent dark:bg-[#050510] text-[#17172B] dark:text-slate-100 py-12 sm:py-16">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-extrabold text-white">Contributor Opportunity Studio</h1>
-            <p className="text-sm text-slate-400 mt-1">
+            <h1 className="text-3xl font-extrabold text-[#17172B] dark:text-white">Contributor Opportunity Studio</h1>
+            <p className="text-sm text-[#424C63] dark:text-slate-400 mt-1">
               Draft, preview, and submit verified opportunities for admin review and publishing.
             </p>
           </div>
@@ -271,7 +264,7 @@ export default function ContributorOpportunitiesDashboardPage() {
           <div className="p-6 sm:p-8 rounded-3xl glass-card border border-violet-500/30 space-y-8">
             {/* Basic Info */}
             <div className="space-y-4">
-              <h2 className="text-base font-bold text-cyan-300 font-mono uppercase tracking-wider">
+              <h2 className="text-base font-bold text-cyan-700 dark:text-cyan-300 font-mono uppercase tracking-wider">
                 1. Basic Information
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -280,12 +273,12 @@ export default function ContributorOpportunitiesDashboardPage() {
                   placeholder="Opportunity Title *"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white sm:col-span-2"
+                  className="px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm text-[#17172B] dark:text-white sm:col-span-2"
                 />
                 <select
                   value={oppType}
                   onChange={(e) => setOppType(e.target.value as OpportunityType)}
-                  className="px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white"
+                  className="px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm text-[#17172B] dark:text-white"
                 >
                   <option value="hackathon">Hackathon</option>
                   <option value="internship">Internship</option>
@@ -301,34 +294,34 @@ export default function ContributorOpportunitiesDashboardPage() {
                   placeholder="Organizer / Company / Institution *"
                   value={organizerName}
                   onChange={(e) => setOrganizerName(e.target.value)}
-                  className="px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white"
+                  className="px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm text-[#17172B] dark:text-white"
                 />
                 <input
                   type="text"
                   placeholder="Short Tagline * (max 500 chars)"
                   value={summary}
                   onChange={(e) => setSummary(e.target.value)}
-                  className="px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white sm:col-span-2"
+                  className="px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm text-[#17172B] dark:text-white sm:col-span-2"
                 />
                 <textarea
                   rows={4}
                   placeholder="Full Description *"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white sm:col-span-2"
+                  className="px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm text-[#17172B] dark:text-white sm:col-span-2"
                 />
                 <input
                   type="text"
                   placeholder="Eligibility (e.g. Undergraduate students)"
                   value={eligibility}
                   onChange={(e) => setEligibility(e.target.value)}
-                  className="px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white"
+                  className="px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm text-[#17172B] dark:text-white"
                 />
                 <div className="grid grid-cols-2 gap-3">
                   <select
                     value={locationType}
                     onChange={(e) => setLocationType(e.target.value as LocationType)}
-                    className="px-3 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white"
+                    className="px-3 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm text-[#17172B] dark:text-white"
                   >
                     <option value="remote">Online</option>
                     <option value="onsite">Offline</option>
@@ -339,7 +332,7 @@ export default function ContributorOpportunitiesDashboardPage() {
                     placeholder="Location / Venue"
                     value={locationText}
                     onChange={(e) => setLocationText(e.target.value)}
-                    className="px-3 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white"
+                    className="px-3 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm text-[#17172B] dark:text-white"
                   />
                 </div>
               </div>
@@ -347,7 +340,7 @@ export default function ContributorOpportunitiesDashboardPage() {
 
             {/* Media */}
             <div className="space-y-3">
-              <h2 className="text-base font-bold text-cyan-300 font-mono uppercase tracking-wider">
+              <h2 className="text-base font-bold text-cyan-700 dark:text-cyan-300 font-mono uppercase tracking-wider">
                 2. Media (Thumbnail / Cover Image)
               </h2>
               <div className="flex flex-wrap items-center gap-4">
@@ -362,7 +355,7 @@ export default function ContributorOpportunitiesDashboardPage() {
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={uploadingImage}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-violet-950/60 border border-violet-500/30 text-xs font-semibold text-violet-200 cursor-pointer"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-violet-50 dark:bg-violet-950/60 border border-violet-500/30 text-xs font-semibold text-violet-700 dark:text-violet-200 cursor-pointer"
                 >
                   {uploadingImage ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
                   <span>Upload Cover Image (PNG/JPEG/WebP, max 5MB)</span>
@@ -382,44 +375,44 @@ export default function ContributorOpportunitiesDashboardPage() {
 
             {/* Dates */}
             <div className="space-y-3">
-              <h2 className="text-base font-bold text-cyan-300 font-mono uppercase tracking-wider">
+              <h2 className="text-base font-bold text-cyan-700 dark:text-cyan-300 font-mono uppercase tracking-wider">
                 3. Dates
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div>
-                  <label className="text-[11px] font-mono text-slate-400 block mb-1">Registration Opens</label>
+                  <label className="text-[11px] font-mono text-[#424C63] dark:text-slate-400 block mb-1">Registration Opens</label>
                   <input
                     type="datetime-local"
                     value={registrationOpensAt}
                     onChange={(e) => setRegistrationOpensAt(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white"
+                    className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-[#17172B] dark:text-white"
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] font-mono text-slate-400 block mb-1">Application Deadline</label>
+                  <label className="text-[11px] font-mono text-[#424C63] dark:text-slate-400 block mb-1">Application Deadline</label>
                   <input
                     type="datetime-local"
                     value={deadlineAt}
                     onChange={(e) => setDeadlineAt(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white"
+                    className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-[#17172B] dark:text-white"
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] font-mono text-slate-400 block mb-1">Event Start Date</label>
+                  <label className="text-[11px] font-mono text-[#424C63] dark:text-slate-400 block mb-1">Event Start Date</label>
                   <input
                     type="datetime-local"
                     value={startsAt}
                     onChange={(e) => setStartsAt(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white"
+                    className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-[#17172B] dark:text-white"
                   />
                 </div>
                 <div>
-                  <label className="text-[11px] font-mono text-slate-400 block mb-1">Event End Date</label>
+                  <label className="text-[11px] font-mono text-[#424C63] dark:text-slate-400 block mb-1">Event End Date</label>
                   <input
                     type="datetime-local"
                     value={endsAt}
                     onChange={(e) => setEndsAt(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white"
+                    className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs text-[#17172B] dark:text-white"
                   />
                 </div>
               </div>
@@ -427,7 +420,7 @@ export default function ContributorOpportunitiesDashboardPage() {
 
             {/* Details */}
             <div className="space-y-3">
-              <h2 className="text-base font-bold text-cyan-300 font-mono uppercase tracking-wider">
+              <h2 className="text-base font-bold text-cyan-700 dark:text-cyan-300 font-mono uppercase tracking-wider">
                 4. Details & Tracks
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -436,49 +429,49 @@ export default function ContributorOpportunitiesDashboardPage() {
                   placeholder="Team Size (e.g. 2–4 members)"
                   value={teamSize}
                   onChange={(e) => setTeamSize(e.target.value)}
-                  className="px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white"
+                  className="px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm text-[#17172B] dark:text-white"
                 />
                 <input
                   type="text"
                   placeholder="Participation Fee / Prize Pool Note (e.g. Free Registration)"
                   value={compensationNote}
                   onChange={(e) => setCompensationNote(e.target.value)}
-                  className="px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white"
+                  className="px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm text-[#17172B] dark:text-white"
                 />
                 <input
                   type="text"
                   placeholder="Skills Required (comma separated, e.g. React, Python)"
                   value={skillsInput}
                   onChange={(e) => setSkillsInput(e.target.value)}
-                  className="px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white sm:col-span-2"
+                  className="px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm text-[#17172B] dark:text-white sm:col-span-2"
                 />
                 <textarea
                   rows={2}
                   placeholder="Tracks / Themes"
                   value={tracks}
                   onChange={(e) => setTracks(e.target.value)}
-                  className="px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white"
+                  className="px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm text-[#17172B] dark:text-white"
                 />
                 <textarea
                   rows={2}
                   placeholder="Benefits / Perks"
                   value={benefits}
                   onChange={(e) => setBenefits(e.target.value)}
-                  className="px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white"
+                  className="px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm text-[#17172B] dark:text-white"
                 />
                 <textarea
                   rows={2}
                   placeholder="Additional Instructions"
                   value={additionalInstructions}
                   onChange={(e) => setAdditionalInstructions(e.target.value)}
-                  className="px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white sm:col-span-2"
+                  className="px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm text-[#17172B] dark:text-white sm:col-span-2"
                 />
               </div>
             </div>
 
             {/* Links */}
             <div className="space-y-3">
-              <h2 className="text-base font-bold text-cyan-300 font-mono uppercase tracking-wider">
+              <h2 className="text-base font-bold text-cyan-700 dark:text-cyan-300 font-mono uppercase tracking-wider">
                 5. Verified Links
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -487,38 +480,38 @@ export default function ContributorOpportunitiesDashboardPage() {
                   placeholder="Registration URL *"
                   value={applicationUrl}
                   onChange={(e) => setApplicationUrl(e.target.value)}
-                  className="px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white"
+                  className="px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm text-[#17172B] dark:text-white"
                 />
                 <input
                   type="url"
                   placeholder="Official Website"
                   value={officialWebsite}
                   onChange={(e) => setOfficialWebsite(e.target.value)}
-                  className="px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white"
+                  className="px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm text-[#17172B] dark:text-white"
                 />
                 <input
                   type="url"
                   placeholder="Source URL"
                   value={sourceUrl}
                   onChange={(e) => setSourceUrl(e.target.value)}
-                  className="px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white"
+                  className="px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm text-[#17172B] dark:text-white"
                 />
                 <input
                   type="text"
                   placeholder="Organizer Contact URL or Email"
                   value={organizerContactUrl}
                   onChange={(e) => setOrganizerContactUrl(e.target.value)}
-                  className="px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-sm text-white"
+                  className="px-4 py-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-sm text-[#17172B] dark:text-white"
                 />
               </div>
             </div>
 
             {/* Form Actions */}
-            <div className="pt-4 border-t border-slate-800 flex flex-wrap items-center justify-end gap-3">
+            <div className="pt-4 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-end gap-3">
               <button
                 type="button"
                 onClick={() => setShowPreview(true)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-white cursor-pointer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-semibold text-[#17172B] dark:text-white cursor-pointer"
               >
                 <Eye className="w-4 h-4" />
                 <span>Preview</span>
@@ -527,7 +520,7 @@ export default function ContributorOpportunitiesDashboardPage() {
                 type="button"
                 disabled={submitting}
                 onClick={() => handleSaveOrSubmit(false)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-violet-950/80 border border-violet-500/40 text-xs font-semibold text-violet-200 cursor-pointer"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-violet-50 dark:bg-violet-950/80 border border-violet-500/40 text-xs font-semibold text-violet-700 dark:text-violet-200 cursor-pointer"
               >
                 <FileText className="w-4 h-4" />
                 <span>Save Draft</span>
@@ -550,8 +543,8 @@ export default function ContributorOpportunitiesDashboardPage() {
           <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
             <div className="max-w-2xl w-full rounded-3xl glass-card border border-violet-500/40 p-6 sm:p-8 space-y-4 max-h-[85vh] overflow-y-auto">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono uppercase text-cyan-300">Opportunity Preview</span>
-                <button type="button" onClick={() => setShowPreview(false)} className="text-slate-400 hover:text-white">
+                <span className="text-xs font-mono uppercase text-cyan-700 dark:text-cyan-300">Opportunity Preview</span>
+                <button type="button" onClick={() => setShowPreview(false)} className="text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-white">
                   <X className="w-5 h-5" />
                 </button>
               </div>
@@ -565,20 +558,20 @@ export default function ContributorOpportunitiesDashboardPage() {
                   className="w-full h-44 rounded-2xl"
                 />
               )}
-              <h3 className="text-2xl font-bold text-white">{title || "Untitled Opportunity"}</h3>
-              <p className="text-xs font-mono text-violet-300">
+              <h3 className="text-2xl font-bold text-[#17172B] dark:text-white">{title || "Untitled Opportunity"}</h3>
+              <p className="text-xs font-mono text-violet-700 dark:text-violet-300">
                 {organizerName || "Organizer"} • {oppType.toUpperCase()} • {locationType.toUpperCase()}
               </p>
-              <p className="text-sm text-slate-300 whitespace-pre-wrap">{description || summary}</p>
+              <p className="text-sm text-[#2F3A52] dark:text-slate-300 whitespace-pre-wrap">{description || summary}</p>
             </div>
           </div>
         )}
 
         {/* My Submissions Table */}
         <div className="space-y-4">
-          <h2 className="text-xl font-bold text-white">Your Submissions ({submissions.length})</h2>
+          <h2 className="text-xl font-bold text-[#17172B] dark:text-white">Your Submissions ({submissions.length})</h2>
           {submissions.length === 0 ? (
-            <div className="p-8 rounded-2xl glass-card border border-slate-800 text-center text-sm text-slate-400">
+            <div className="p-8 rounded-2xl glass-card border border-slate-200 dark:border-slate-800 text-center text-sm text-[#424C63] dark:text-slate-400">
               You have not created any opportunity submissions yet.
             </div>
           ) : (
@@ -590,16 +583,16 @@ export default function ContributorOpportunitiesDashboardPage() {
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2.5">
-                      <span className="font-bold text-white">{item.title}</span>
-                      <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-violet-950/70 border border-violet-500/30 text-cyan-300">
+                      <span className="font-bold text-[#17172B] dark:text-white">{item.title}</span>
+                      <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-violet-50 dark:bg-violet-950/70 border border-violet-500/30 text-cyan-700 dark:text-cyan-300">
                         {item.status}
                       </span>
                     </div>
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-[#424C63] dark:text-slate-400">
                       {item.organizer_name_override || item.organization?.name} • {item.type}
                     </p>
                     {item.rejection_reason && (
-                      <p className="text-xs text-red-400">Rejection reason: {item.rejection_reason}</p>
+                      <p className="text-xs text-red-600 dark:text-red-400">Rejection reason: {item.rejection_reason}</p>
                     )}
                   </div>
                   <div className="flex items-center gap-3">
@@ -607,7 +600,7 @@ export default function ContributorOpportunitiesDashboardPage() {
                       <button
                         type="button"
                         onClick={() => handleSubmitDraft(item.id)}
-                        className="px-4 py-2 rounded-xl bg-violet-600/20 border border-violet-500/40 text-xs font-semibold text-violet-200 hover:bg-violet-600/40 transition cursor-pointer"
+                        className="px-4 py-2 rounded-xl bg-violet-600/20 border border-violet-500/40 text-xs font-semibold text-violet-700 dark:text-violet-200 hover:bg-violet-600/40 transition cursor-pointer"
                       >
                         Submit for Review
                       </button>
@@ -617,7 +610,7 @@ export default function ContributorOpportunitiesDashboardPage() {
                         href={item.application_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs font-mono text-cyan-300 hover:underline inline-flex items-center gap-1"
+                        className="text-xs font-mono text-cyan-700 dark:text-cyan-300 hover:underline inline-flex items-center gap-1"
                       >
                         <span>Registration</span>
                         <ExternalLink className="w-3 h-3" />

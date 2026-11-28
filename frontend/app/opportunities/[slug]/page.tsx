@@ -145,9 +145,9 @@ export default function OpportunityDetailPage() {
   if (loading) {
     return (
       <div className="max-w-5xl mx-auto px-4 py-16 space-y-6">
-        <div className="h-8 w-40 rounded-xl bg-slate-900 animate-pulse" />
-        <div className="h-64 rounded-3xl bg-slate-900 animate-pulse" />
-        <div className="h-96 rounded-3xl bg-slate-900 animate-pulse" />
+        <div className="h-8 w-40 rounded-xl bg-white dark:bg-slate-900 animate-pulse" />
+        <div className="h-64 rounded-3xl bg-white dark:bg-slate-900 animate-pulse" />
+        <div className="h-96 rounded-3xl bg-white dark:bg-slate-900 animate-pulse" />
       </div>
     );
   }
@@ -155,14 +155,14 @@ export default function OpportunityDetailPage() {
   if (error || !opp) {
     return (
       <div className="max-w-xl mx-auto px-4 py-24 text-center space-y-4">
-        <div className="w-16 h-16 rounded-2xl bg-rose-950/60 border border-rose-900 flex items-center justify-center mx-auto text-rose-400">
+        <div className="w-16 h-16 rounded-2xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-900 flex items-center justify-center mx-auto text-rose-600 dark:text-rose-400">
           <ShieldAlert className="w-8 h-8" />
         </div>
-        <h2 className="text-2xl font-bold text-white">Posting Unavailable</h2>
-        <p className="text-sm text-slate-400">{error || "This posting does not exist or has been removed."}</p>
+        <h2 className="text-2xl font-bold text-[#17172B] dark:text-white">Posting Unavailable</h2>
+        <p className="text-sm text-[#424C63] dark:text-slate-400">{error || "This posting does not exist or has been removed."}</p>
         <Link
           href="/opportunities"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-sm font-semibold text-white hover:bg-slate-800 transition"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sm font-semibold text-[#17172B] dark:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to all opportunities
@@ -178,14 +178,14 @@ export default function OpportunityDetailPage() {
       {/* Back button */}
       <Link
         href="/opportunities"
-        className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition"
+        className="inline-flex items-center gap-2 text-xs font-semibold text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-white transition"
       >
         <ArrowLeft className="w-4 h-4" />
         Back to Catalog
       </Link>
 
       {/* Hero Banner Card */}
-      <div className="p-6 sm:p-8 rounded-3xl border border-slate-800/80 bg-slate-900/60 backdrop-blur-md shadow-xl space-y-6">
+      <div className="p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800/80 bg-white/90 dark:bg-slate-900/60 backdrop-blur-md shadow-xl space-y-6">
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-6">
           <div className="flex items-start gap-4">
             <Avatar
@@ -193,47 +193,47 @@ export default function OpportunityDetailPage() {
               name={opp.organization.name}
               size="fill"
               shape="rounded"
-              className="w-16 h-16 rounded-2xl bg-slate-800 border border-slate-700 text-slate-400 shadow-md"
+              className="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-[#424C63] dark:text-slate-400 shadow-md"
               fallback={<Building className="w-8 h-8" />}
             />
 
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-bold text-slate-300">
+                <span className="text-sm font-bold text-[#2F3A52] dark:text-slate-300">
                   {opp.organization.name}
                 </span>
 
                 {opp.verification_status === "verified" && (
-                  <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-950/80 text-emerald-400 border border-emerald-800/80">
+                  <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/80">
                     <ShieldCheck className="w-3.5 h-3.5" />
                     Verified Organization
                   </span>
                 )}
                 {opp.verification_status === "flagged" && (
-                  <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-950/80 text-amber-400 border border-amber-800/80">
+                  <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-50 dark:bg-amber-950/80 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800/80">
                     <ShieldAlert className="w-3.5 h-3.5" />
                     Community Flagged
                   </span>
                 )}
               </div>
 
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mt-1">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-[#17172B] dark:text-white tracking-tight mt-1">
                 {opp.title}
               </h1>
 
-              <div className="flex flex-wrap items-center gap-3 mt-3 text-xs text-slate-400">
+              <div className="flex flex-wrap items-center gap-3 mt-3 text-xs text-[#424C63] dark:text-slate-400">
                 <span className="flex items-center gap-1">
-                  <MapPin className="w-3.5 h-3.5 text-amber-400" />
+                  <MapPin className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
                   {opp.location_text || opp.location_type || "Remote"}
                 </span>
                 <span>•</span>
-                <span className="flex items-center gap-1 text-emerald-400 font-medium">
+                <span className="flex items-center gap-1 text-emerald-700 dark:text-emerald-400 font-medium">
                   <DollarSign className="w-3.5 h-3.5" />
                   {opp.compensation_note || opp.compensation_type}
                 </span>
                 <span>•</span>
-                <span className="flex items-center gap-1 text-slate-400">
-                  <Eye className="w-3.5 h-3.5 text-slate-400" />
+                <span className="flex items-center gap-1 text-[#424C63] dark:text-slate-400">
+                  <Eye className="w-3.5 h-3.5 text-[#424C63] dark:text-slate-400" />
                   {opp.view_count} views
                 </span>
               </div>
@@ -250,10 +250,10 @@ export default function OpportunityDetailPage() {
                   onMouseLeave={() => setShowTrustTooltip(false)}
                   className={`px-3 py-1 rounded-xl text-xs font-bold border transition flex items-center gap-1.5 ${
                     opp.trust_score >= 80
-                      ? "bg-emerald-950/80 text-emerald-300 border-emerald-700"
+                      ? "bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-700"
                       : opp.trust_score >= 50
-                      ? "bg-amber-950/80 text-amber-300 border-amber-700"
-                      : "bg-rose-950/80 text-rose-300 border-rose-700"
+                      ? "bg-amber-50 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-700"
+                      : "bg-rose-50 dark:bg-rose-950/80 text-rose-600 dark:text-rose-300 border-rose-200 dark:border-rose-700"
                   }`}
                 >
                   <ShieldCheck className="w-4 h-4" />
@@ -261,11 +261,11 @@ export default function OpportunityDetailPage() {
                 </button>
 
                 {showTrustTooltip && (
-                  <div className="absolute right-0 top-9 w-64 p-3 rounded-2xl bg-slate-950 border border-slate-800 text-xs text-slate-300 shadow-2xl z-30">
-                    <p className="font-bold text-white mb-1">
+                  <div className="absolute right-0 top-9 w-64 p-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs text-[#2F3A52] dark:text-slate-300 shadow-2xl z-30">
+                    <p className="font-bold text-[#17172B] dark:text-white mb-1">
                       Algorithmic Trust Evaluation
                     </p>
-                    <p className="leading-relaxed text-slate-400 text-[11px]">
+                    <p className="leading-relaxed text-[#424C63] dark:text-slate-400 text-[11px]">
                       This score evaluates organizer domain matching, automated DNS & registry verification, community feedback, and staff reviews to ensure posting integrity.
                     </p>
                   </div>
@@ -278,8 +278,8 @@ export default function OpportunityDetailPage() {
                 onClick={toggleSave}
                 className={`p-2.5 rounded-xl border transition ${
                   isSaved
-                    ? "bg-brand-950 text-brand-300 border-brand-700"
-                    : "bg-slate-900 border-slate-700 text-slate-300 hover:text-white"
+                    ? "bg-violet-50 dark:bg-brand-950 text-[#7552D9] dark:text-brand-300 border-violet-200 dark:border-brand-700"
+                    : "bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-700 text-[#2F3A52] dark:text-slate-300 hover:text-[#17172B] dark:hover:text-white"
                 }`}
                 title="Save opportunity"
               >
@@ -288,7 +288,7 @@ export default function OpportunityDetailPage() {
 
               <button
                 onClick={handleShare}
-                className="p-2.5 rounded-xl border border-slate-700 bg-slate-900 text-slate-300 hover:text-white transition"
+                className="p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-[#2F3A52] dark:text-slate-300 hover:text-[#17172B] dark:hover:text-white transition"
                 title="Share link"
               >
                 <Share2 className="w-4 h-4" />
@@ -296,7 +296,7 @@ export default function OpportunityDetailPage() {
 
               <button
                 onClick={() => setReportModalOpen(true)}
-                className="p-2.5 rounded-xl border border-slate-700 bg-slate-900 text-rose-400 hover:bg-rose-950/40 transition"
+                className="p-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition"
                 title="Report posting"
               >
                 <Flag className="w-4 h-4" />
@@ -307,9 +307,9 @@ export default function OpportunityDetailPage() {
 
         {/* Countdown Banner */}
         {countdown && (
-          <div className="p-3.5 rounded-2xl bg-brand-950/40 border border-brand-900/60 flex items-center justify-between text-xs text-brand-200">
+          <div className="p-3.5 rounded-2xl bg-violet-50 dark:bg-brand-950/40 border border-violet-200 dark:border-brand-900/60 flex items-center justify-between text-xs text-[#7552D9] dark:text-brand-200">
             <span className="flex items-center gap-2 font-medium">
-              <Clock className="w-4 h-4 text-brand-400" />
+              <Clock className="w-4 h-4 text-[#7552D9] dark:text-brand-400" />
               Application Countdown: <strong>{countdown}</strong>
             </span>
 
@@ -333,10 +333,10 @@ export default function OpportunityDetailPage() {
         <div className="lg:col-span-2 space-y-8">
           {opp.summary && (
             <div className="space-y-2">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-[#424C63] dark:text-slate-400">
                 Overview
               </h3>
-              <p className="text-slate-300 leading-relaxed text-sm bg-slate-900/30 p-5 rounded-2xl border border-slate-800/80">
+              <p className="text-[#2F3A52] dark:text-slate-300 leading-relaxed text-sm bg-white/90 dark:bg-slate-900/30 p-5 rounded-2xl border border-slate-200 dark:border-slate-800/80">
                 {opp.summary}
               </p>
             </div>
@@ -344,10 +344,10 @@ export default function OpportunityDetailPage() {
 
           {opp.description && (
             <div className="space-y-2">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-[#424C63] dark:text-slate-400">
                 Detailed Description
               </h3>
-              <div className="text-slate-300 leading-relaxed text-sm whitespace-pre-wrap bg-slate-900/30 p-5 rounded-2xl border border-slate-800/80">
+              <div className="text-[#2F3A52] dark:text-slate-300 leading-relaxed text-sm whitespace-pre-wrap bg-white/90 dark:bg-slate-900/30 p-5 rounded-2xl border border-slate-200 dark:border-slate-800/80">
                 {opp.description}
               </div>
             </div>
@@ -355,10 +355,10 @@ export default function OpportunityDetailPage() {
 
           {opp.eligibility && (
             <div className="space-y-2">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-[#424C63] dark:text-slate-400">
                 Eligibility
               </h3>
-              <div className="text-slate-300 leading-relaxed text-sm bg-slate-900/30 p-5 rounded-2xl border border-slate-800/80">
+              <div className="text-[#2F3A52] dark:text-slate-300 leading-relaxed text-sm bg-white/90 dark:bg-slate-900/30 p-5 rounded-2xl border border-slate-200 dark:border-slate-800/80">
                 {opp.eligibility}
               </div>
             </div>
@@ -366,13 +366,13 @@ export default function OpportunityDetailPage() {
 
           {opp.requirements && opp.requirements.length > 0 && (
             <div className="space-y-2">
-              <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400">
+              <h3 className="text-sm font-bold uppercase tracking-wider text-[#424C63] dark:text-slate-400">
                 Requirements & Prerequisites
               </h3>
-              <ul className="space-y-2 bg-slate-900/30 p-5 rounded-2xl border border-slate-800/80">
+              <ul className="space-y-2 bg-white/90 dark:bg-slate-900/30 p-5 rounded-2xl border border-slate-200 dark:border-slate-800/80">
                 {opp.requirements.map((req, idx) => (
-                  <li key={idx} className="flex items-start gap-2.5 text-sm text-slate-300">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
+                  <li key={idx} className="flex items-start gap-2.5 text-sm text-[#2F3A52] dark:text-slate-300">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-700 dark:text-emerald-400 mt-0.5 shrink-0" />
                     <span>{req}</span>
                   </li>
                 ))}
@@ -383,25 +383,25 @@ export default function OpportunityDetailPage() {
 
         {/* Right Sidebar: Key Facts & Dates */}
         <div className="space-y-6">
-          <div className="p-6 rounded-2xl border border-slate-800 bg-slate-900/40 space-y-4">
-            <h3 className="font-bold text-white text-sm">Key Information</h3>
+          <div className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/40 space-y-4">
+            <h3 className="font-bold text-[#17172B] dark:text-white text-sm">Key Information</h3>
 
             <div className="space-y-3 text-xs">
               <div>
                 <span className="text-slate-500 block">Opportunity Type</span>
-                <span className="font-medium text-slate-200 uppercase">{opp.type}</span>
+                <span className="font-medium text-[#17172B] dark:text-slate-200 uppercase">{opp.type}</span>
               </div>
 
               <div>
                 <span className="text-slate-500 block">Location Mode</span>
-                <span className="font-medium text-slate-200 capitalize">
+                <span className="font-medium text-[#17172B] dark:text-slate-200 capitalize">
                   {opp.location_type} ({opp.location_text || opp.country_code || "Global"})
                 </span>
               </div>
 
               <div>
                 <span className="text-slate-500 block">Application Deadline</span>
-                <span className="font-medium text-slate-200">
+                <span className="font-medium text-[#17172B] dark:text-slate-200">
                   {opp.is_rolling
                     ? "Rolling Basis"
                     : opp.deadline_at
@@ -418,7 +418,7 @@ export default function OpportunityDetailPage() {
               {opp.starts_at && (
                 <div>
                   <span className="text-slate-500 block">Event / Term Dates</span>
-                  <span className="font-medium text-slate-200">
+                  <span className="font-medium text-[#17172B] dark:text-slate-200">
                     {new Date(opp.starts_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })} -{" "}
                     {opp.ends_at
                       ? new Date(opp.ends_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
@@ -429,7 +429,7 @@ export default function OpportunityDetailPage() {
 
               <div>
                 <span className="text-slate-500 block">Compensation / Award</span>
-                <span className="font-medium text-emerald-400">
+                <span className="font-medium text-emerald-700 dark:text-emerald-400">
                   {opp.compensation_note || opp.compensation_type.toUpperCase()}
                 </span>
               </div>
@@ -450,14 +450,14 @@ export default function OpportunityDetailPage() {
 
           {/* Tags */}
           {opp.tags.length > 0 && (
-            <div className="p-6 rounded-2xl border border-slate-800 bg-slate-900/40 space-y-3">
-              <h3 className="font-bold text-white text-sm">Tags & Topics</h3>
+            <div className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/40 space-y-3">
+              <h3 className="font-bold text-[#17172B] dark:text-white text-sm">Tags & Topics</h3>
               <div className="flex flex-wrap gap-1.5">
                 {opp.tags.map((t) => (
                   <Link
                     key={t.slug}
                     href={`/opportunities?tag=${t.slug}`}
-                    className="px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-800 text-slate-300 hover:text-white border border-slate-700/80 transition"
+                    className="px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 text-[#2F3A52] dark:text-slate-300 hover:text-[#17172B] dark:hover:text-white border border-slate-300 dark:border-slate-700/80 transition"
                   >
                     #{t.name}
                   </Link>
@@ -470,8 +470,8 @@ export default function OpportunityDetailPage() {
 
       {/* Related items */}
       {related.length > 0 && (
-        <div className="pt-10 border-t border-slate-800 space-y-6">
-          <h2 className="text-xl font-bold text-white">Similar Opportunities</h2>
+        <div className="pt-10 border-t border-slate-200 dark:border-slate-800 space-y-6">
+          <h2 className="text-xl font-bold text-[#17172B] dark:text-white">Similar Opportunities</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {related.map((item) => (
               <OpportunityCard key={item.id} opportunity={item} />
@@ -483,15 +483,15 @@ export default function OpportunityDetailPage() {
       {/* Report Modal */}
       {reportModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl animate-in zoom-in-95">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <h3 className="font-bold text-white text-base flex items-center gap-2">
-                <Flag className="w-4 h-4 text-rose-400" />
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl animate-in zoom-in-95">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+              <h3 className="font-bold text-[#17172B] dark:text-white text-base flex items-center gap-2">
+                <Flag className="w-4 h-4 text-rose-600 dark:text-rose-400" />
                 Report this posting
               </h3>
               <button
                 onClick={() => setReportModalOpen(false)}
-                className="text-slate-400 hover:text-white"
+                className="text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-white"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -499,10 +499,10 @@ export default function OpportunityDetailPage() {
 
             <form onSubmit={handleReportSubmit} className="space-y-4">
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-slate-300 block">
+                <label className="text-xs font-semibold text-[#2F3A52] dark:text-slate-300 block">
                   Select Reason
                 </label>
-                <div className="space-y-1.5 text-xs text-slate-300">
+                <div className="space-y-1.5 text-xs text-[#2F3A52] dark:text-slate-300">
                   {[
                     { id: "scam", label: "Scam or fraudulent fee requested" },
                     { id: "expired", label: "Expired or dead link" },
@@ -513,7 +513,7 @@ export default function OpportunityDetailPage() {
                   ].map((opt) => (
                     <label
                       key={opt.id}
-                      className="flex items-center gap-2.5 p-2 rounded-xl bg-slate-950/50 border border-slate-800 hover:border-slate-700 cursor-pointer"
+                      className="flex items-center gap-2.5 p-2 rounded-xl bg-white/90 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 cursor-pointer"
                     >
                       <input
                         type="radio"
@@ -530,7 +530,7 @@ export default function OpportunityDetailPage() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-300 block">
+                <label className="text-xs font-semibold text-[#2F3A52] dark:text-slate-300 block">
                   Additional Details (Optional)
                 </label>
                 <textarea
@@ -538,7 +538,7 @@ export default function OpportunityDetailPage() {
                   onChange={(e) => setReportDetails(e.target.value)}
                   placeholder="Provide context to help moderators inspect this posting..."
                   rows={3}
-                  className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  className="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs text-[#17172B] dark:text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
               </div>
 
@@ -546,7 +546,7 @@ export default function OpportunityDetailPage() {
                 <button
                   type="button"
                   onClick={() => setReportModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-slate-700 text-xs font-medium text-slate-300 hover:text-white"
+                  className="px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 text-xs font-medium text-[#2F3A52] dark:text-slate-300 hover:text-[#17172B] dark:hover:text-white"
                 >
                   Cancel
                 </button>

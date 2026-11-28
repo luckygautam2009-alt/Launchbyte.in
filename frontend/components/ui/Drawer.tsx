@@ -35,7 +35,7 @@ export function Drawer({ isOpen, onClose, title, children }: DrawerProps) {
             animate="animate"
             exit="exit"
             onClick={onClose}
-            className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm"
+            className="fixed inset-0 bg-slate-900/40 dark:bg-slate-950/80 backdrop-blur-sm"
           />
 
           <motion.div
@@ -43,16 +43,16 @@ export function Drawer({ isOpen, onClose, title, children }: DrawerProps) {
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 28, stiffness: 300 }}
-            className="relative w-full sm:max-w-md rounded-t-3xl sm:rounded-2xl bg-slate-900 border border-slate-800 shadow-2xl p-6 z-10 max-h-[85vh] overflow-y-auto"
+            className="relative w-full sm:max-w-md rounded-t-3xl sm:rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl p-6 z-10 max-h-[85vh] overflow-y-auto"
           >
             {/* Grab handle for mobile */}
-            <div className="w-12 h-1.5 bg-slate-700/60 rounded-full mx-auto mb-4 sm:hidden" />
+            <div className="w-12 h-1.5 bg-slate-200 dark:bg-slate-700/60 rounded-full mx-auto mb-4 sm:hidden" />
 
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <h3 className="font-bold text-slate-100 text-lg">{title}</h3>
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+              <h3 className="font-bold text-[#17172B] dark:text-slate-100 text-lg">{title}</h3>
               <button
                 onClick={onClose}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+                className="p-1.5 rounded-lg text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition"
                 aria-label="Close drawer"
               >
                 <X className="w-5 h-5" />

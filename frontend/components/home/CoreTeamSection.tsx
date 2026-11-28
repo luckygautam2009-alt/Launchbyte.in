@@ -82,13 +82,13 @@ function TeamPortraitFrame({
 
   return (
     <div
-      className="group relative w-full max-w-[260px] sm:max-w-[340px] md:max-w-[390px] lg:max-w-[440px]"
+      className="group relative w-full max-w-[200px] sm:max-w-[260px] md:max-w-[300px] lg:max-w-[330px]"
       style={{ perspective: 1200 }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
       {/* Soft Ambient Purple/Cyan Glow Backdrop */}
-      <div className="absolute -inset-3 sm:-inset-6 rounded-3xl bg-gradient-to-tr from-violet-600/30 via-indigo-600/20 to-cyan-400/25 blur-2xl sm:blur-3xl opacity-50 group-hover:opacity-90 transition-opacity duration-700 pointer-events-none" />
+      <div className="absolute -inset-3 sm:-inset-6 rounded-3xl bg-gradient-to-tr from-violet-600/30 via-indigo-600/20 to-cyan-400/25 blur-xl sm:blur-2xl opacity-40 group-hover:opacity-90 transition-opacity duration-700 pointer-events-none" />
 
       {/* Floating 3D Portrait Frame with hairline gradient edge (flat on mobile touch devices) */}
       <div
@@ -172,12 +172,12 @@ function TeamMemberBlock({
     <div
       ref={blockRef}
       id={`crew-member-${index + 1}`}
-      className="lg:min-h-[76vh] flex items-center justify-center py-10 sm:py-14 lg:py-20 relative scroll-mt-20"
+      className="flex items-center justify-center py-6 sm:py-8 lg:py-10 relative scroll-mt-20"
     >
       <div
         className={`w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col ${
           isImageLeft ? "lg:flex-row" : "lg:flex-row-reverse"
-        } items-center justify-between gap-8 sm:gap-12 lg:gap-16 xl:gap-20`}
+        } items-center justify-between gap-6 sm:gap-8 lg:gap-12 xl:gap-14`}
       >
         {/* ================= 1. Portrait Column (40%–48%) ================= */}
         <motion.div
@@ -214,7 +214,7 @@ function TeamMemberBlock({
 
           {/* Name & Role */}
           <div className="space-y-2">
-            <h3 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-[#17172B] dark:text-[#F8FAFC] tracking-tight leading-[1.12]">
+            <h3 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-extrabold text-[#17172B] dark:text-[#F8FAFC] tracking-tight leading-[1.12]">
               {member.name}
             </h3>
             <p className="font-mono text-xs sm:text-sm uppercase tracking-wider font-semibold text-transparent bg-clip-text bg-gradient-to-r from-[#7552D9] via-indigo-600 to-cyan-600 dark:from-violet-400 dark:via-indigo-300 dark:to-cyan-300">
@@ -429,11 +429,11 @@ export default function CoreTeamSection({
   return (
     <section
       data-hide-journey="true"
-      className="relative py-20 sm:py-28 bg-transparent overflow-hidden"
+      className="relative py-12 sm:py-16 bg-transparent overflow-hidden"
     >
       {/* Background Cosmic Ambience */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[900px] h-[550px] bg-gradient-to-r from-violet-900/15 via-indigo-900/10 to-cyan-900/15 rounded-full blur-[170px] pointer-events-none" />
-      <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-to-r from-cyan-900/10 via-violet-900/10 to-indigo-900/10 rounded-full blur-[170px] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[900px] h-[550px] bg-gradient-to-r from-violet-900/15 via-indigo-900/10 to-cyan-900/15 rounded-full blur-[110px] pointer-events-none" />
+      <div className="absolute bottom-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-to-r from-cyan-900/10 via-violet-900/10 to-indigo-900/10 rounded-full blur-[110px] pointer-events-none" />
 
       {/* Section Top Header */}
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 sm:pb-14 text-center space-y-4">

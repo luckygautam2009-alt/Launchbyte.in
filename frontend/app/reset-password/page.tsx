@@ -22,13 +22,13 @@ function ResetPasswordForm() {
   if (!token) {
     return (
       <div className="text-center py-6 space-y-4">
-        <h3 className="text-lg font-bold text-rose-400">Missing Reset Token</h3>
-        <p className="text-sm text-slate-400">
+        <h3 className="text-lg font-bold text-rose-600 dark:text-rose-400">Missing Reset Token</h3>
+        <p className="text-sm text-[#424C63] dark:text-slate-400">
           No reset token was found in the link. Please request a new password reset.
         </p>
         <Link
           href="/forgot-password"
-          className="inline-block py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium transition"
+          className="inline-block py-2.5 px-4 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[#17172B] dark:text-white text-sm font-medium transition"
         >
           Request Reset Link
         </Link>
@@ -63,11 +63,11 @@ function ResetPasswordForm() {
 
   return success ? (
     <div className="py-6 space-y-4 text-center">
-      <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
+      <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 flex items-center justify-center mx-auto">
         <CheckCircle2 className="w-8 h-8" />
       </div>
-      <h3 className="text-xl font-semibold text-white">Password Reset Successful</h3>
-      <p className="text-sm text-slate-300">
+      <h3 className="text-xl font-semibold text-[#17172B] dark:text-white">Password Reset Successful</h3>
+      <p className="text-sm text-[#2F3A52] dark:text-slate-300">
         Your password has been securely updated. Older sessions have been invalidated.
       </p>
       <div className="pt-4">
@@ -83,13 +83,13 @@ function ResetPasswordForm() {
   ) : (
     <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
       {errorMsg && (
-        <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-sm text-center">
+        <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-sm text-center">
           {errorMsg}
         </div>
       )}
 
       <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+        <label className="block text-xs font-semibold uppercase tracking-wider text-[#424C63] dark:text-slate-400 mb-2">
           New Password (8+ characters)
         </label>
         <div className="relative">
@@ -101,13 +101,13 @@ function ResetPasswordForm() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
-            className="w-full pl-11 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition text-sm"
+            className="w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-[#17172B] dark:text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition text-sm"
           />
         </div>
       </div>
 
       <div>
-        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">
+        <label className="block text-xs font-semibold uppercase tracking-wider text-[#424C63] dark:text-slate-400 mb-2">
           Confirm New Password
         </label>
         <div className="relative">
@@ -119,7 +119,7 @@ function ResetPasswordForm() {
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder="••••••••"
-            className="w-full pl-11 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition text-sm"
+            className="w-full pl-11 pr-4 py-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl text-[#17172B] dark:text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition text-sm"
           />
         </div>
       </div>
@@ -148,20 +148,20 @@ function ResetPasswordForm() {
 export default function ResetPasswordPage() {
   return (
     <div className="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-slate-900/80 border border-slate-800 p-8 rounded-2xl shadow-2xl backdrop-blur-sm">
+      <div className="max-w-md w-full space-y-8 bg-white/90 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 p-8 rounded-2xl shadow-2xl backdrop-blur-sm">
         <div className="text-center">
-          <div className="inline-flex p-3 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 mb-4">
+          <div className="inline-flex p-3 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-700 dark:text-indigo-400 mb-4">
             <ShieldCheck className="w-8 h-8" />
           </div>
-          <h2 className="text-3xl font-extrabold text-white tracking-tight">
+          <h2 className="text-3xl font-extrabold text-[#17172B] dark:text-white tracking-tight">
             Create New Password
           </h2>
-          <p className="mt-2 text-sm text-slate-400">
+          <p className="mt-2 text-sm text-[#424C63] dark:text-slate-400">
             Choose a strong, unique password for your account
           </p>
         </div>
 
-        <Suspense fallback={<div className="text-slate-400 text-center">Loading reset session...</div>}>
+        <Suspense fallback={<div className="text-[#424C63] dark:text-slate-400 text-center">Loading reset session...</div>}>
           <ResetPasswordForm />
         </Suspense>
       </div>

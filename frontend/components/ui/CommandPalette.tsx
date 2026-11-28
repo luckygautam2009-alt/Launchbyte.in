@@ -26,16 +26,16 @@ import { useTheme } from "@/lib/theme-context";
 function getCategoryIcon(category: SearchCategory) {
   switch (category) {
     case "Opportunities":
-      return <Briefcase className="w-4 h-4 text-emerald-400" />;
+      return <Briefcase className="w-4 h-4 text-emerald-700 dark:text-emerald-400" />;
     case "Events":
-      return <Calendar className="w-4 h-4 text-indigo-400" />;
+      return <Calendar className="w-4 h-4 text-indigo-700 dark:text-indigo-400" />;
     case "Teams":
-      return <UsersRound className="w-4 h-4 text-cyan-400" />;
+      return <UsersRound className="w-4 h-4 text-cyan-700 dark:text-cyan-400" />;
     case "People":
-      return <UserSearch className="w-4 h-4 text-violet-400" />;
+      return <UserSearch className="w-4 h-4 text-violet-700 dark:text-violet-400" />;
     case "Quick Actions":
     default:
-      return <Sparkles className="w-4 h-4 text-violet-400" />;
+      return <Sparkles className="w-4 h-4 text-violet-700 dark:text-violet-400" />;
   }
 }
 
@@ -132,7 +132,7 @@ export function CommandPalette() {
             className={`relative w-full max-w-xl rounded-2xl border overflow-hidden z-10 ${
               mounted && isLight
                 ? "bg-white/95 border-slate-200 shadow-[0_24px_64px_-12px_rgba(0,0,0,0.18),0_0_32px_rgba(117,82,217,0.1)]"
-                : "bg-[#09091B]/95 border-violet-500/35 shadow-[0_24px_64px_-12px_rgba(0,0,0,0.9),0_0_40px_rgba(124,58,237,0.2)]"
+                : "bg-white/90 dark:bg-[#09091B]/95 border-violet-500/35 shadow-[0_24px_64px_-12px_rgba(0,0,0,0.9),0_0_40px_rgba(124,58,237,0.2)]"
             }`}
           >
             {/* Search Input Bar */}
@@ -173,7 +173,7 @@ export function CommandPalette() {
                 className={`px-2 py-1 rounded-lg text-xs font-mono border ${
                   mounted && isLight
                     ? "text-slate-600 bg-slate-100 border-slate-200 hover:bg-slate-200"
-                    : "text-slate-400 hover:text-white bg-white/[0.04] border-white/[0.06]"
+                    : "text-[#424C63] dark:text-slate-400 hover:text-[#17172B] dark:hover:text-white bg-white/[0.04] border-white/[0.06]"
                 }`}
                 aria-label="Close search"
               >
@@ -200,7 +200,7 @@ export function CommandPalette() {
                 </div>
               ) : flatItems.length === 0 ? (
                 <div className="p-8 text-center space-y-3">
-                  <p className="text-sm text-slate-300">
+                  <p className="text-sm text-[#2F3A52] dark:text-slate-300">
                     No matching results found for &ldquo;{query.trim()}&rdquo;.
                   </p>
                   {query.trim() && (
@@ -209,7 +209,7 @@ export function CommandPalette() {
                       onClick={() =>
                         handleSelect(`/opportunities?q=${encodeURIComponent(query.trim())}`)
                       }
-                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-violet-600/20 hover:bg-violet-600/30 border border-violet-500/40 text-xs font-medium text-violet-200 transition"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-violet-600/20 hover:bg-violet-600/30 border border-violet-500/40 text-xs font-medium text-violet-700 dark:text-violet-200 transition"
                     >
                       <span>Search all opportunities</span>
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -219,7 +219,7 @@ export function CommandPalette() {
               ) : (
                 groups.map((group) => (
                   <div key={group.category} className="space-y-1">
-                    <div className="px-2.5 pt-1 text-[10px] font-semibold tracking-wider uppercase text-slate-400">
+                    <div className="px-2.5 pt-1 text-[10px] font-semibold tracking-wider uppercase text-[#424C63] dark:text-slate-400">
                       {group.category}
                     </div>
                     {group.items.map((item: SearchResultItem) => {
@@ -240,7 +240,7 @@ export function CommandPalette() {
                                 : "bg-violet-600/20 border border-violet-500/40 text-white"
                               : mounted && isLight
                                 ? "text-slate-700 hover:bg-slate-100 border border-transparent"
-                                : "text-slate-300 hover:bg-white/[0.04] border border-transparent"
+                                : "text-[#2F3A52] dark:text-slate-300 hover:bg-white/[0.04] border border-transparent"
                           }`}
                         >
                           <div className="flex items-center gap-3 min-w-0">
@@ -255,7 +255,7 @@ export function CommandPalette() {
                               <div className={`p-2 rounded-lg shrink-0 border ${
                                 mounted && isLight
                                   ? "bg-slate-100 border-slate-200"
-                                  : "bg-slate-900/90 border-white/[0.06]"
+                                  : "bg-white/90 dark:bg-slate-900/90 border-white/[0.06]"
                               }`}>
                                 {getCategoryIcon(item.category)}
                               </div>
@@ -290,7 +290,7 @@ export function CommandPalette() {
             <div className={`px-4 py-2.5 border-t flex items-center justify-between text-[11px] font-mono ${
               mounted && isLight
                 ? "bg-slate-50 border-slate-200 text-slate-500"
-                : "bg-[#050512]/90 border-white/[0.06] text-slate-500"
+                : "bg-white/90 dark:bg-[#050512]/90 border-white/[0.06] text-slate-500"
             }`}>
               <div className="flex items-center gap-3">
                 <span>[↑↓] Navigate</span>

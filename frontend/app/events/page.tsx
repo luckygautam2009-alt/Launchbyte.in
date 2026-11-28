@@ -24,7 +24,7 @@ function EventCard({ event }: { event: EventListItem }) {
   return (
     <Link href={`/events/${event.slug}`} className="group block glass-card glow-hover rounded-2xl overflow-hidden transition-all duration-200">
       {/* Banner */}
-      <div className="relative h-44 bg-gradient-to-br from-slate-800 to-slate-900 overflow-hidden">
+      <div className="relative h-44 bg-gradient-to-br from-white dark:from-slate-800 to-white dark:to-slate-900 overflow-hidden">
         <Avatar
           src={event.banner_url}
           name={event.title}
@@ -34,11 +34,11 @@ function EventCard({ event }: { event: EventListItem }) {
           imgClassName="group-hover:scale-105 transition-transform duration-300"
           fallback={<Sparkles className="w-10 h-10 text-slate-700" />}
         />
-        <span className="absolute top-3 right-3 flex items-center gap-1 bg-slate-900/90 backdrop-blur text-slate-300 text-xs font-medium px-2.5 py-1 rounded-full border border-slate-700">
+        <span className="absolute top-3 right-3 flex items-center gap-1 bg-white/90 dark:bg-slate-900/90 backdrop-blur text-[#2F3A52] dark:text-slate-300 text-xs font-medium px-2.5 py-1 rounded-full border border-slate-300 dark:border-slate-700">
           {modeIcon} {modeLabel}
         </span>
         {event.organization.logo_url && (
-          <div className="absolute bottom-3 left-3 w-8 h-8 rounded-lg overflow-hidden bg-slate-800 border border-slate-700">
+          <div className="absolute bottom-3 left-3 w-8 h-8 rounded-lg overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700">
             <Avatar
               src={event.organization.logo_url}
               name={event.organization.name}
@@ -91,11 +91,11 @@ function EventCard({ event }: { event: EventListItem }) {
 function EventCardSkeleton() {
   return (
     <div className="glass-card rounded-2xl overflow-hidden animate-pulse">
-      <div className="h-44 bg-slate-800/60" />
+      <div className="h-44 bg-slate-100 dark:bg-slate-800/60" />
       <div className="p-4 space-y-2">
-        <div className="h-3 bg-slate-800 rounded w-1/3" />
-        <div className="h-4 bg-slate-800 rounded w-3/4" />
-        <div className="h-3 bg-slate-800 rounded w-1/2" />
+        <div className="h-3 bg-slate-100 dark:bg-slate-800 rounded w-1/3" />
+        <div className="h-4 bg-slate-100 dark:bg-slate-800 rounded w-3/4" />
+        <div className="h-3 bg-slate-100 dark:bg-slate-800 rounded w-1/2" />
       </div>
     </div>
   );
@@ -210,14 +210,14 @@ export default function EventsPage() {
             {Array.from({ length: 8 }).map((_, i) => <EventCardSkeleton key={i} />)}
           </div>
         ) : error ? (
-          <div className="text-center py-24 text-slate-400">
-            <p className="text-red-400 mb-2">{error}</p>
-            <button onClick={fetchEvents} className="text-indigo-400 hover:text-indigo-300 text-sm underline">Try again</button>
+          <div className="text-center py-24 text-[#424C63] dark:text-slate-400">
+            <p className="text-red-600 dark:text-red-400 mb-2">{error}</p>
+            <button onClick={fetchEvents} className="text-indigo-700 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 text-sm underline">Try again</button>
           </div>
         ) : events.length === 0 ? (
           <div className="text-center py-24">
             <Sparkles className="w-10 h-10 text-slate-700 mx-auto mb-4" />
-            <p className="text-slate-400">No events found. Check back soon!</p>
+            <p className="text-[#424C63] dark:text-slate-400">No events found. Check back soon!</p>
           </div>
         ) : (
           <>
@@ -229,17 +229,17 @@ export default function EventsPage() {
                 <button
                   onClick={() => setOffset(Math.max(0, offset - LIMIT))}
                   disabled={offset === 0}
-                  className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-xl text-sm text-slate-400 disabled:opacity-40 hover:border-slate-600 transition-colors"
+                  className="px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-[#424C63] dark:text-slate-400 disabled:opacity-40 hover:border-slate-300 dark:hover:border-slate-600 transition-colors"
                 >
                   Previous
                 </button>
-                <span className="px-4 py-2 text-sm text-slate-400">
+                <span className="px-4 py-2 text-sm text-[#424C63] dark:text-slate-400">
                   {Math.floor(offset / LIMIT) + 1} / {Math.ceil(total / LIMIT)}
                 </span>
                 <button
                   onClick={() => setOffset(offset + LIMIT)}
                   disabled={offset + LIMIT >= total}
-                  className="px-4 py-2 bg-slate-900 border border-slate-800 rounded-xl text-sm text-slate-400 disabled:opacity-40 hover:border-slate-600 transition-colors"
+                  className="px-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm text-[#424C63] dark:text-slate-400 disabled:opacity-40 hover:border-slate-300 dark:hover:border-slate-600 transition-colors"
                 >
                   Next
                 </button>
