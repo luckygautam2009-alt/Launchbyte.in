@@ -83,13 +83,13 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800/80 pb-6">
         <div>
-          <h1 className="text-3xl font-extrabold text-[#17172B] dark:text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#17172B] dark:text-white tracking-tight">
             Welcome back, {user.full_name || user.email.split("@")[0]}
           </h1>
-          <p className="text-[#424C63] dark:text-slate-400 mt-1 text-sm">
+          <p className="text-[#4B5565] dark:text-slate-300 mt-1 text-sm">
             Your LaunchByte builder hub — opportunities, squads, and projects.
           </p>
         </div>
@@ -97,7 +97,7 @@ export default function DashboardPage() {
         {!user.is_email_verified && (
           <Link
             href="/verify-email"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-sm font-medium hover:bg-amber-500/25 transition"
+            className="min-h-[44px] inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-800 dark:text-amber-300 text-sm font-medium hover:bg-amber-500/25 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/60"
           >
             <MailCheck className="w-4 h-4" />
             Verify your email
@@ -113,7 +113,7 @@ export default function DashboardPage() {
             <Link
               key={card.href}
               href={card.href}
-              className="group p-6 rounded-2xl bg-white/90 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 hover:border-violet-500/40 transition-all hover:-translate-y-0.5 flex flex-col justify-between gap-4"
+              className="group p-5 sm:p-6 rounded-2xl glass-card glow-hover transition-all hover:-translate-y-0.5 flex flex-col justify-between gap-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/60"
             >
               <div className="space-y-3">
                 <div className={`w-11 h-11 rounded-xl border flex items-center justify-center ${card.color}`}>
