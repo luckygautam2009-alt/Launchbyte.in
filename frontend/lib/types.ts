@@ -351,10 +351,16 @@ export interface ConnectionRead {
 
 export interface NetworkSuggestion {
   user: ConnectionUserBrief;
-  reasons: string[];
-  mutual_events_count: number;
-  shared_skills_count: number;
-  score: number;
+  /** Backend sends a single human-readable reason plus profile bits next to the user. */
+  reason?: string | null;
+  headline?: string | null;
+  institution?: string | null;
+  skills?: string[] | null;
+  /** Older / optional fields: never rely on them being present. */
+  reasons?: string[] | null;
+  mutual_events_count?: number;
+  shared_skills_count?: number;
+  score?: number | null;
 }
 
 export interface UserBlockRead {
