@@ -8,6 +8,7 @@ import { useAuth } from "@/lib/auth-context";
 import { useTheme } from "@/lib/theme-context";
 import { Avatar } from "@/components/ui/Avatar";
 import { NavbarSearch } from "@/components/NavbarSearch";
+import NotificationBell from "@/components/NotificationBell";
 import {
   Menu,
   X,
@@ -552,6 +553,8 @@ export default function Navbar() {
             </div>
           )}
 
+          <NotificationBell variant="desktop" />
+
           {/* Theme Toggle Button (Sun in Dark, Moon in Light) */}
           <button
             type="button"
@@ -574,6 +577,7 @@ export default function Navbar() {
 
         {/* Mobile Search + Theme Toggle + Hamburger Button */}
         <div className="flex md:hidden items-center gap-1.5">
+          <NotificationBell variant="mobile" />
           <button
             type="button"
             onClick={toggleTheme}

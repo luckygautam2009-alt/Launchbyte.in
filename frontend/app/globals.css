@@ -602,7 +602,11 @@ html.light .star {
    animations are paused for the same reason.
 --------------------------------------------------------------------------- */
 @media (max-width: 767px) {
-  [class*="blur-["]:not([class*="blur-[2px]"]),
+  /* Only real glow blurs (`blur-[120px]`, `sm:blur-[..]`), never `backdrop-blur-[..]`
+     (the light-mode navbar uses backdrop-blur-[14px] and must stay visible). */
+  [class^="blur-["]:not([class*="blur-[2px]"]),
+  [class*=" blur-["]:not([class*="blur-[2px]"]),
+  [class*=":blur-["]:not([class*="blur-[2px]"]),
   .blur-2xl,
   .blur-3xl {
     display: none !important;

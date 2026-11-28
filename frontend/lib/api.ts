@@ -514,6 +514,11 @@ class ApiClient {
     return this.request<Page<NotificationItem>>(`/notifications?limit=${limit}&offset=${offset}`);
   }
 
+  async getUnreadNotificationCount(): Promise<number> {
+    const res = await this.request<{ unread: number }>("/notifications/unread-count");
+    return typeof res?.unread === "number" ? res.unread : 0;
+  }
+
   async markNotificationRead(id: string): Promise<NotificationItem> {
     return this.request<NotificationItem>(`/notifications/${id}/read`, { method: "POST" });
   }
